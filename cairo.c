@@ -541,7 +541,7 @@ PHP_MINFO_FUNCTION(cairo)
 {
 	php_info_print_box_start(0);
 	php_printf("<p>Cairo Wrapper Extension</p>\n");
-	php_printf("<p>Version 0.2.2beta (2006-09-27)</p>\n");
+	php_printf("<p>Version 0.2.2beta (2006-11-15)</p>\n");
 	php_printf("<p><b>Authors:</b></p>\n");
 	php_printf("<p>Hartmut Holzgraefe &lt;hartmut@php.net&gt; (lead)</p>\n");
 	php_info_print_box_end();
