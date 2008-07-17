@@ -2,12 +2,12 @@
 #include <cairo.h>
 
 typedef struct _context_object {
-    zend_object std;
-    cairo_t *context;
+	zend_object std;
+	cairo_t *context;
 } context_object;
 
 typedef struct _surface_object {
-    zend_object std;
+	zend_object std;
 	cairo_surface_t *surface;
 } surface_object;
 
