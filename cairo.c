@@ -14,7 +14,7 @@
 
 /* $ Id: 1.0.1$ */ 
 
-#include "phpCairo_api.h"
+#include "php_cairo_api.h"
 #include "php_cairo.h"
 #include "CairoExceptionMacro.c"
 #include "CairoException.c"
@@ -31,8 +31,8 @@
 
 /* {{{ cairo_functions[] */
 function_entry cairo_functions[] = {
-	PHP_FE(cairoVersion       , cairo_version_arg_info)
-	PHP_FE(cairoVersionString, cairo_version_string_arg_info)
+	PHP_FE(cairo_version       , cairo_version_arg_info)
+	PHP_FE(cairo_version_string, cairo_version_string_arg_info)
 	{ NULL, NULL, NULL }
 };
 /* }}} */
@@ -287,9 +287,9 @@ PHP_MINFO_FUNCTION(cairo)
 /* }}} */
 
 
-/* {{{ proto int cairoVersion()
+/* {{{ proto int cairo_version()
    */
-PHP_FUNCTION(cairoVersion)
+PHP_FUNCTION(cairo_version)
 {
 
 
@@ -304,9 +304,9 @@ PHP_FUNCTION(cairoVersion)
 /* }}} cairo_version */
 
 
-/* {{{ proto string cairVersionString()
+/* {{{ proto string cairo_version_string()
    */
-PHP_FUNCTION(cairoVersionString)
+PHP_FUNCTION(cairo_version_string)
 {
 
 	char *a;
