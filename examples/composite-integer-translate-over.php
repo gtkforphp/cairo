@@ -1,0 +1,19 @@
+<?
+$sur = new CairoImageSurface(FORMAT_ARGB32,100, 100);
+$con = new CairoContext($sur);
+
+$s = new CairoImageSurface(FORMAT_ARGB32,1,1);
+$s->createFromPng("romedalen.png");
+
+$con->setSourceRgb(0,0,0);
+$con->rectangle(0,0,100,100);
+$con->fill();
+
+$con->translate(10,10);
+$con->setOperator(OPERATOR_OVER);
+$con->setSourceSurface($s,0,0);
+$con->rectangle(0,0,90,90);
+$con->fill();
+$sur->writeToPng("composite-integer-translate-over-php.png");
+?>
+

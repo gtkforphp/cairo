@@ -1,0 +1,47 @@
+%!PS-Adobe-3.0
+%%Creator: cairo 1.4.12 (http://cairographics.org)
+%%CreationDate: Sat Jun 28 23:12:18 2008
+%%Pages: 1
+%%BoundingBox: 0 0 60 60
+%%DocumentData: Clean7Bit
+%%LanguageLevel: 2
+%%EndComments
+%%BeginProlog
+/C{curveto}bind def
+/F{fill}bind def
+/G{setgray}bind def
+/L{lineto}bind def
+/M{moveto}bind def
+/P{closepath}bind def
+/R{setrgbcolor}bind def
+/S{show}bind def
+/xS{xshow}bind def
+/yS{yshow}bind def
+/xyS{xyshow}bind def
+%%EndProlog
+% _cairo_ps_surface_emit_font_subsets
+%%Page: 1 1
+%%BeginPageSetup
+%%PageBoundingBox: 0 0 60 60
+gsave 0 60 translate 1.0 -1.0 scale 
+%%EndPageSetup
+% _cairo_ps_surface_fill
+1 G
+0 0 moveto 30 0 lineto 30 30 lineto 0 30 lineto closepath
+0 0 moveto F
+% _cairo_ps_surface_fill
+1 0 0 R
+30 0 moveto 60 0 lineto 60 30 lineto 30 30 lineto closepath
+30 0 moveto F
+% _cairo_ps_surface_fill
+0 1 0 R
+0 30 moveto 30 30 lineto 30 60 lineto 0 60 lineto closepath
+0 30 moveto F
+% _cairo_ps_surface_fill
+0 0 1 R
+30 30 moveto 60 30 lineto 60 60 lineto 30 60 lineto closepath
+30 30 moveto F
+grestore
+showpage
+%%Trailer
+%%EOF
