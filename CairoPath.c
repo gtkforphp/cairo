@@ -40,9 +40,9 @@ PHP_METHOD(CairoPath, toStr)
 	
 	cairo_path_data_t *data;
 	int i, ret;
-	char buf[80];
+	char buf[200]; /* I think this is more than enough ... */
 	
-	for (i=0; i < path->num_data; i += path->data[i].header.length) {
+	for (i = 0; i < path->num_data; i += path->data[i].header.length) {
 		data = &path->data[i];
 		switch (data->header.type) {
 		case CAIRO_PATH_MOVE_TO:
@@ -64,7 +64,6 @@ PHP_METHOD(CairoPath, toStr)
 		}
 		}
 
-	//free(buf);
 }
 /* }}} str */
 
@@ -98,7 +97,7 @@ static zend_object_value CairoPath_object_new(zend_class_entry *ce)
 	path_object *path;
 	zval *temp;
 
-	path=emalloc(sizeof(path_object));
+	path = emalloc(sizeof(path_object));
 	memset(path,0,sizeof(path_object));
 	path->std.ce = ce;
 	ALLOC_HASHTABLE(path->std.properties);
@@ -117,7 +116,7 @@ static void class_init_CairoPath(void)
 	CairoPath_ce_ptr = zend_register_internal_class(&ce);
 	CairoPath_ce_ptr->create_object = CairoPath_object_new;
 	memcpy(&CairoPath_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	CairoPath_handlers.clone_obj=NULL;
+	CairoPath_handlers.clone_obj = NULL;
 
 }
 

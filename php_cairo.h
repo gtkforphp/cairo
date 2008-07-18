@@ -36,7 +36,8 @@ extern "C" {
 #include <ext/standard/info.h>
 #include <Zend/zend_extensions.h>
 #ifdef	__cplusplus
-} // extern "C" 
+} /* extern "C" */
+
 #endif
 #ifdef	__cplusplus
 extern "C" {
@@ -1359,7 +1360,7 @@ ZEND_END_ARG_INFO()
 #endif
 
 #ifdef	__cplusplus
-} // extern "C" 
+} /* extern "C" */
 #endif
 
 #endif /* PHP_HAVE_CAIRO */
@@ -1368,8 +1369,6 @@ ZEND_END_ARG_INFO()
 
 /* {{{ Proto's */
 
-//zend_class_entry* get_CairoSurface_ce_ptr(cairo_surface_t *);
-//zend_class_entry* get_CairoPattern_ce_ptr(cairo_pattern_t *);
 
 /* }}} */
 
@@ -1379,6 +1378,6 @@ ZEND_END_ARG_INFO()
  * tab-width: 4
  * c-basic-offset: 4
  * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
+ * vim600: noet sw = 4 ts = 4 fdm = marker
+ * vim<600: noet sw = 4 ts = 4
  */

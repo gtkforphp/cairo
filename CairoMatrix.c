@@ -277,7 +277,7 @@ static void class_init_CairoMatrix(void)
 	CairoMatrix_ce_ptr = zend_register_internal_class(&ce);
 	CairoMatrix_ce_ptr->create_object = CairoMatrix_object_new;
 	memcpy(&CairoMatrix_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	CairoMatrix_handlers.clone_obj=NULL;
+	CairoMatrix_handlers.clone_obj = NULL;
 
 }
 

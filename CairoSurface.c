@@ -9,12 +9,10 @@ _write_func(void *closure, const unsigned char *data, unsigned int length)
 	int written;
 	php_stream *zs = (php_stream *)closure ;
 	written = php_stream_write(zs, data, length);
-	//written = php_stream_write_string(zs, data);
 	if(written == length)
 		return CAIRO_STATUS_SUCCESS;
 	else {
 		printf("is it an error ?");
-	//	CAIRO_STATUS_WRITE_ERROR;
 	}
 }
 
@@ -23,7 +21,6 @@ _read_func(void *closure, const unsigned char *data, unsigned int length)
 {
 	int read;
 	php_stream *zs = (php_stream *)closure;
-	//data = emalloc(length);
 	read = php_stream_read(zs, data, length);
 	if(read == length)
 		return CAIRO_STATUS_SUCCESS;
@@ -86,7 +83,7 @@ PHP_METHOD(CairoSurface, createSimilar)
 	ce = get_CairoSurface_ce_ptr(sur);
 	object_init_ex(return_value, ce);
 	surface_object *sobj = (surface_object *)zend_objects_get_address(return_value TSRMLS_CC);
-	sobj->surface=sur;
+	sobj->surface = sur;
 
 }
 /* }}} createSimilar */
@@ -192,7 +189,7 @@ PHP_METHOD(CairoSurface, getFontOptions)
 	cairo_surface_get_font_options(curr->surface, options);
 	object_init_ex(return_value, CairoFontOptions_ce_ptr);
 	fontoptions_object *fobj = (fontoptions_object *)zend_objects_get_address(return_value TSRMLS_CC);
-	fobj->fontoptions=options;
+	fobj->fontoptions = options;
 
 }
 /* }}} getFontOptions */
@@ -351,12 +348,12 @@ static zend_object_value CairoSurface_object_new(zend_class_entry *ce)
 	surface = emalloc(sizeof(surface_object));
 	memset(surface,0,sizeof(surface_object));
 
-	surface->std.ce=ce;
+	surface->std.ce = ce;
 
 	ALLOC_HASHTABLE(surface->std.properties);
 	zend_hash_init(surface->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
 	zend_hash_copy(surface->std.properties, &ce->default_properties, (copy_ctor_func_t) zval_add_ref,(void *) &temp, sizeof(zval *));
-	retval.handle=zend_objects_store_put(surface, NULL, (zend_objects_free_object_storage_t)CairoSurface_object_dtor, NULL TSRMLS_CC);
+	retval.handle = zend_objects_store_put(surface, NULL, (zend_objects_free_object_storage_t)CairoSurface_object_dtor, NULL TSRMLS_CC);
 	retval.handlers = &CairoSurface_handlers;
 	return retval;
 }
@@ -447,14 +444,14 @@ PHP_METHOD(CairoImageSurface, createFromData)
 				stride = (width + 1) / 8;
 				break;
 			default:
-				php_error(E_ERROR, "Unknown format");
+				php_error(E_WARNING, "Unknown format");
 				return;
 				
 		}
 	}
 	/*
 	if (height * stride > buffer_len) {
-		php_error(E_ERROR,"buffer is not long enough");
+		php_error(E_WARNING,"buffer is not long enough");
 		return;
 	}
 	*/
@@ -627,7 +624,7 @@ static zend_function_entry CairoImageSurface_methods[] = {
 static zend_object_value CairoImageSurface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	retval=CairoSurface_object_new(ce TSRMLS_CC);
+	retval = CairoSurface_object_new(ce TSRMLS_CC);
 	retval.handlers = &CairoImageSurface_handlers;
 	return retval;
 }
@@ -667,8 +664,8 @@ PHP_METHOD(CairoPDFSurface, __construct)
 	zval ***args, *obj;
 
 	args = (zval ***)safe_emalloc(argc, sizeof(zval *),0);
-	if(ZEND_NUM_ARGS()== 0 ||
-		zend_get_parameters_array_ex(argc, args)== FAILURE) {
+	if(ZEND_NUM_ARGS() == 0 ||
+		zend_get_parameters_array_ex(argc, args) == FAILURE) {
 		printf("ERROR");
 		efree(args);
 		WRONG_PARAM_COUNT;
@@ -704,14 +701,14 @@ PHP_METHOD(CairoPDFSurface, __construct)
 
 	_this_zval = getThis();
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	obj = *(args[0]);
-	if(Z_TYPE_P(obj)==IS_STRING) {
+	if(Z_TYPE_P(obj) == IS_STRING) {
 		file = Z_STRVAL_P(obj);
 		curr->surface = cairo_pdf_surface_create(file, wpts, hpts);
 	}
-	else if(Z_TYPE_P(obj)==IS_RESOURCE)  {
+	else if(Z_TYPE_P(obj) == IS_RESOURCE)  {
 		zstream = obj;
 		php_stream_from_zval(stream, &zstream);	
 		curr->surface = cairo_pdf_surface_create_for_stream(_write_func, stream, wpts, hpts);
@@ -741,7 +738,7 @@ PHP_METHOD(CairoPDFSurface, setSize)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_pdf_surface_set_size(curr->surface, wpts, hpts);
 
 }
@@ -759,7 +756,7 @@ static zend_function_entry CairoPDFSurface_methods[] = {
 static zend_object_value CairoPDFSurface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	retval=CairoSurface_object_new(ce TSRMLS_CC);
+	retval = CairoSurface_object_new(ce TSRMLS_CC);
 	retval.handlers = &CairoPDFSurface_handlers;
 	return retval;
 }
@@ -799,8 +796,8 @@ PHP_METHOD(CairoPSSurface, __construct)
 	zval ***args, *obj;
 
 	args = (zval **)safe_emalloc(argc, sizeof(zval *),0);
-	if(ZEND_NUM_ARGS()== 0 ||
-		zend_get_parameters_array_ex(argc, args)== FAILURE) {
+	if(ZEND_NUM_ARGS() == 0 ||
+		zend_get_parameters_array_ex(argc, args) == FAILURE) {
 		printf("ERROR");
 		efree(args);
 		WRONG_PARAM_COUNT;
@@ -835,14 +832,14 @@ PHP_METHOD(CairoPSSurface, __construct)
 
 
 	_this_zval = getThis();
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	obj = *(args[0]);
-	if(Z_TYPE_P(obj)==IS_STRING) {
+	if(Z_TYPE_P(obj) == IS_STRING) {
 		file = Z_STRVAL_P(obj);
 		curr->surface = cairo_ps_surface_create(file, wpts, hpts);
 	}
-	else if(Z_TYPE_P(obj)==IS_RESOURCE)  {
+	else if(Z_TYPE_P(obj) == IS_RESOURCE)  {
 		zstream = obj;
 		php_stream_from_zval(stream, &zstream);	
 		curr->surface = cairo_ps_surface_create_for_stream(_write_func, stream, wpts, hpts);
@@ -873,7 +870,7 @@ PHP_METHOD(CairoPSSurface, dscBeginPageSetup)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoPSSurface_ce_ptr) == FAILURE) {
 		return;
 	}
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_ps_surface_dsc_begin_page_setup(curr->surface);
 	PHP_CAIRO_SURFACE_ERROR(curr->surface);
 
@@ -897,7 +894,7 @@ PHP_METHOD(CairoPSSurface, dscBeginSetup)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_ps_surface_dsc_begin_setup(curr->surface);
 	PHP_CAIRO_SURFACE_ERROR(curr->surface);
 
@@ -919,7 +916,7 @@ PHP_METHOD(CairoPSSurface, dscComment)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_ps_surface_dsc_comment(curr->surface);
 	PHP_CAIRO_SURFACE_ERROR(curr->surface);
 
@@ -941,7 +938,7 @@ PHP_METHOD(CairoPSSurface, getLevels)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 
 	array_init(return_value);
@@ -967,7 +964,7 @@ PHP_METHOD(CairoPSSurface, getLevelString)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 
 	do {
@@ -992,7 +989,7 @@ PHP_METHOD(CairoPSSurface, restrictToLevel)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 
 	do {
@@ -1016,7 +1013,7 @@ PHP_METHOD(CairoPSSurface, setEps)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 
 	do {
@@ -1042,7 +1039,7 @@ PHP_METHOD(CairoPSSurface, setSize)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_ps_surface_set_size(curr->surface, wpts, hpts);
 
 }
@@ -1067,7 +1064,7 @@ static zend_function_entry CairoPSSurface_methods[] = {
 static zend_object_value CairoPSSurface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	retval=CairoSurface_object_new(ce TSRMLS_CC);
+	retval = CairoSurface_object_new(ce TSRMLS_CC);
 	retval.handlers = &CairoPSSurface_handlers;
 	return retval;
 }
@@ -1108,10 +1105,10 @@ PHP_METHOD(CairoQuartzSurface, __construct)
 	}
 
 	_this_zval = getThis();
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 
-	php_error(E_ERROR, "CANNOT BE CALLED"); RETURN_FALSE;
+	php_error(E_WARNING, "CANNOT BE CALLED"); RETURN_FALSE;
 
 }
 /* }}} __construct */
@@ -1127,7 +1124,7 @@ static zend_function_entry CairoQuartzSurface_methods[] = {
 static zend_object_value CairoQuartzSurface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	retval=CairoSurface_object_new(ce TSRMLS_CC);
+	retval = CairoSurface_object_new(ce TSRMLS_CC);
 	retval.handlers = &CairoQuartzSurface_handlers;
 	return retval;
 }
@@ -1169,8 +1166,8 @@ PHP_METHOD(CairoSVGSurface, __construct)
 	zval ***args, *obj;
 
 	args = (zval **)safe_emalloc(argc, sizeof(zval *),0);
-	if(ZEND_NUM_ARGS()== 0 ||
-		zend_get_parameters_array_ex(argc, args)== FAILURE) {
+	if(ZEND_NUM_ARGS() == 0 ||
+		zend_get_parameters_array_ex(argc, args) == FAILURE) {
 		printf("ERROR");
 		efree(args);
 		WRONG_PARAM_COUNT;
@@ -1205,14 +1202,14 @@ PHP_METHOD(CairoSVGSurface, __construct)
 
 
 	_this_zval = getThis();
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	obj = *(args[0]);
-	if(Z_TYPE_P(obj)==IS_STRING) {
+	if(Z_TYPE_P(obj) == IS_STRING) {
 		file = Z_STRVAL_P(obj);
 		curr->surface = cairo_svg_surface_create(file, wpts, hpts);
 	}
-	else if(Z_TYPE_P(obj)==IS_RESOURCE)  {
+	else if(Z_TYPE_P(obj) == IS_RESOURCE)  {
 		zstream = obj;
 		php_stream_from_zval(stream, &zstream);	
 		curr->surface = cairo_svg_surface_create_for_stream(_write_func, stream, wpts, hpts);
@@ -1238,7 +1235,7 @@ static zend_function_entry CairoSVGSurface_methods[] = {
 static zend_object_value CairoSVGSurface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	retval=CairoSurface_object_new(ce TSRMLS_CC);
+	retval = CairoSurface_object_new(ce TSRMLS_CC);
 	retval.handlers = &CairoSVGSurface_handlers;
 	return retval;
 }
@@ -1279,7 +1276,7 @@ PHP_METHOD(CairoWin32Surface, __construct)
 	}
 
 	_this_zval = getThis();
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	curr->surface = cairo_win32_surface_create(hdc, NULL);
 }
 /* }}} __construct */
@@ -1295,7 +1292,7 @@ static zend_function_entry CairoWin32Surface_methods[] = {
 static zend_object_value CairoWin32Surface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	retval=CairoSurface_object_new(ce TSRMLS_CC);
+	retval = CairoSurface_object_new(ce TSRMLS_CC);
 	retval.handlers = &CairoWin32Surface_handlers;
 	return retval;
 }
@@ -1333,7 +1330,7 @@ PHP_METHOD(CairoXlibSurface, __construct)
 	}
 
 	_this_zval = getThis();
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	php_error(E_WARNING, "Cannot Be Initialized"); RETURN_FALSE;
 
@@ -1354,7 +1351,7 @@ PHP_METHOD(CairoXlibSurface, getDepth)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	RETURN_LONG(cairo_xlib_surface_get_depth(curr->surface));
 
@@ -1375,7 +1372,7 @@ PHP_METHOD(CairoXlibSurface, getHeight)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_xlib_surface_get_height(curr->surface));
 	
 }
@@ -1395,7 +1392,7 @@ PHP_METHOD(CairoXlibSurface, getWidth)
 		return;
 	}
 
-	surface_object *curr =(surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_xlib_surface_get_width(curr->surface));
 		
 }
@@ -1415,7 +1412,7 @@ static zend_function_entry CairoXlibSurface_methods[] = {
 static zend_object_value CairoXlibSurface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	retval=CairoSurface_object_new(ce TSRMLS_CC);
+	retval = CairoSurface_object_new(ce TSRMLS_CC);
 	retval.handlers = &CairoXlibSurface_handlers;
 	return retval;
 }
@@ -1464,7 +1461,7 @@ get_CairoSurface_ce_ptr(cairo_surface_t *surface)
 			type = CairoQuartzSurface_ce_ptr;
 			break;
 		default:
-			php_error(E_ERROR,"Unsupported Surface Type");
+			php_error(E_WARNING,"Unsupported Surface Type");
 			return NULL;
 	}
 	return type;

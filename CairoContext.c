@@ -23,8 +23,8 @@ PHP_METHOD(CairoContext, __construct)
 	surface_object *sobj = (surface_object *)zend_object_store_get_object(obj TSRMLS_CC);
 
 	surface = sobj->surface;
-	context_object *context=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	context->context=cairo_create(surface);
+	context_object *context = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context->context = cairo_create(surface);
 }
 /* }}} __construct */
 
@@ -44,7 +44,7 @@ PHP_METHOD(CairoContext, appendPath)
 	}
 
 	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	path_object *pobj=(path_object *)zend_objects_get_address(p TSRMLS_CC);
+	path_object *pobj = (path_object *)zend_objects_get_address(p TSRMLS_CC);
 	cairo_append_path(curr->context,pobj->path);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
 
@@ -71,7 +71,7 @@ PHP_METHOD(CairoContext, arc)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_arc(curr->context,xc,yc,radius,angle1,angle2);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
 
@@ -124,7 +124,7 @@ PHP_METHOD(CairoContext, clip)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_clip(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
 }
@@ -145,7 +145,7 @@ PHP_METHOD(CairoContext, clipExtents)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	cairo_clip_extents(curr->context, &x1, &y1, &x2, &y2);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
@@ -174,7 +174,7 @@ PHP_METHOD(CairoContext, clipPreserve)
 	}
 
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	cairo_clip_preserve(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
@@ -196,7 +196,7 @@ PHP_METHOD(CairoContext, closePath)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_close_path(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
@@ -221,7 +221,7 @@ PHP_METHOD(CairoContext, copyClipRectangleList)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
 		return;
 	}
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	rlist = cairo_copy_clip_rectangle_list(curr->context);
 	PHP_CAIRO_ERROR(rlist->status)
 	
@@ -230,14 +230,11 @@ PHP_METHOD(CairoContext, copyClipRectangleList)
 	array_init(temp_arr);
 
 	for(i = 0, r = rlist->rectangles; i < rlist->num_rectangles; i++, r++) {
-		//ALLOC_INIT_ZVAL(temp_arr);
-		//array_init(temp_arr);
 		add_assoc_double(temp_arr,"x",r->x);
 		add_assoc_double(temp_arr,"y",r->y);
 		add_assoc_double(temp_arr,"width",r->width);
 		add_assoc_double(temp_arr,"height",r->height);
 		add_next_index_zval(return_value,temp_arr);
-	//	zval_ptr_dtor(temp_arr);
 	}
 	
 	
@@ -262,7 +259,7 @@ PHP_METHOD(CairoContext, copyPage)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_copy_page(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
 
@@ -284,7 +281,7 @@ PHP_METHOD(CairoContext, copyPath)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	object_init_ex(return_value, CairoPath_ce_ptr);
 	path_object *pobj = (path_object *)zend_objects_get_address(return_value TSRMLS_CC);
@@ -307,7 +304,7 @@ PHP_METHOD(CairoContext, copyPathFlat)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	object_init_ex(return_value, CairoPath_ce_ptr);
 	path_object *pobj = (path_object *)zend_objects_get_address(return_value TSRMLS_CC);
@@ -337,7 +334,7 @@ PHP_METHOD(CairoContext, curveTo)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_curve_to(curr->context, x1, y1, x2, y2, x3, y3);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
@@ -362,7 +359,7 @@ PHP_METHOD(CairoContext, deviceToUser)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	cairo_device_to_user(curr->context, &x, &y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
@@ -391,7 +388,7 @@ PHP_METHOD(CairoContext, deviceToUserDistance)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_device_to_user_distance(curr->context, &x, &y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
 	array_init(return_value);
@@ -416,7 +413,7 @@ PHP_METHOD(CairoContext, fill)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_fill(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
 
@@ -439,7 +436,7 @@ PHP_METHOD(CairoContext, fillExtents)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_font_extents(curr->context, &e);
 	
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
@@ -467,7 +464,7 @@ PHP_METHOD(CairoContext, fillPreserve)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_fill_preserve(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
 
@@ -488,7 +485,7 @@ PHP_METHOD(CairoContext, fontExtents)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_font_extents(curr->context, &e);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context)
 		
@@ -514,7 +511,7 @@ PHP_METHOD(CairoContext, getAntialias)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_get_antialias(curr->context));
 
 }
@@ -535,7 +532,7 @@ PHP_METHOD(CairoContext, getCurrentPoint)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_get_current_point(curr->context, &x, &y);
 	array_init(return_value);
 	add_assoc_double(return_value, "x", x);
@@ -558,7 +555,7 @@ PHP_METHOD(CairoContext, getDash)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	count = cairo_get_dash_count(curr->context);
 	dashes = emalloc(count* sizeof(double));
 	if(dashes==NULL)
@@ -567,7 +564,7 @@ PHP_METHOD(CairoContext, getDash)
 
 	MAKE_STD_ZVAL(sub_array);
 	array_init(sub_array);
-	for(i=0; i<count; i++) {
+	for(i = 0; i < count; i++) {
 		add_next_index_double(sub_array,dashes[i]);
 	}
 	
@@ -591,7 +588,7 @@ PHP_METHOD(CairoContext, getDashCount)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_get_dash_count(curr->context));
 	
 }
@@ -611,7 +608,7 @@ PHP_METHOD(CairoContext, getFillRule)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_get_fill_rule(curr->context));
 
 }
@@ -630,7 +627,7 @@ PHP_METHOD(CairoContext, getFontFace)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	object_init_ex(return_value, CairoFontFace_ce_ptr);
 	fontface_object *ffobj = (fontface_object *)zend_objects_get_address(return_value TSRMLS_CC);
@@ -653,7 +650,7 @@ PHP_METHOD(CairoContext, getFontMatrix)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_get_font_matrix(curr->context, &matrix);
 
 	object_init_ex(return_value, CairoMatrix_ce_ptr);
@@ -677,7 +674,7 @@ PHP_METHOD(CairoContext, getFontOptions)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_get_font_options(curr->context, options);
 	
 	object_init_ex(return_value, CairoFontOptions_ce_ptr);
@@ -702,7 +699,7 @@ PHP_METHOD(CairoContext, getGroupTarget)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	sur = cairo_get_group_target(curr->context);
 
 	ce = get_CairoSurface_ce_ptr(sur);
@@ -728,7 +725,7 @@ PHP_METHOD(CairoContext, getLineCap)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_get_line_cap(curr->context));
 
 
@@ -749,7 +746,7 @@ PHP_METHOD(CairoContext, getLineJoin)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	RETURN_LONG(cairo_get_line_join(curr->context));
 }
@@ -771,7 +768,7 @@ PHP_METHOD(CairoContext, getLineWidth)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_DOUBLE(cairo_get_line_width(curr->context));
 
 }
@@ -792,7 +789,7 @@ PHP_METHOD(CairoContext, getMatrix)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_get_matrix(curr->context, &matrix);
 	object_init_ex(return_value, CairoMatrix_ce_ptr);
@@ -815,7 +812,7 @@ PHP_METHOD(CairoContext, getMiterLimit)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_DOUBLE(cairo_get_miter_limit(curr->context));
 
 }
@@ -835,7 +832,7 @@ PHP_METHOD(CairoContext, getOperator)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_get_operator(curr->context));
 
 }
@@ -856,7 +853,7 @@ PHP_METHOD(CairoContext, getScaledFont)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	object_init_ex(return_value, CairoScaledFont_ce_ptr);
 	scaledfont_object *sfobj = (scaledfont_object *)zend_objects_get_address(return_value TSRMLS_CC);
@@ -881,7 +878,7 @@ PHP_METHOD(CairoContext, getSource)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	pat = cairo_pattern_reference(cairo_get_source(curr->context));
 
@@ -908,7 +905,7 @@ PHP_METHOD(CairoContext, getTarget)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	sur = cairo_surface_reference(cairo_get_target(curr->context));
 
@@ -935,7 +932,7 @@ PHP_METHOD(CairoContext, getTolerance)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	RETURN_DOUBLE(cairo_get_tolerance(curr->context));
 }
@@ -951,7 +948,7 @@ PHP_METHOD(CairoContext, glyphExtents)
 	zval * _this_zval = NULL, **ppzval;
 	zval * obj = NULL;
 	long num = -1;
-	cairo_glyph_t **glyphs=NULL , **glyph;
+	cairo_glyph_t **glyphs = NULL , **glyph;
 	HashTable *obj_hash = NULL;
 	cairo_text_extents_t extents;
 
@@ -961,11 +958,11 @@ PHP_METHOD(CairoContext, glyphExtents)
 	obj_hash = HASH_OF(obj);
 	glyphs = emalloc(num*sizeof(cairo_glyph_t));
 
-	for(i=0 , glyph=glyphs; i<num; i++, glyph++) {
+	for(i = 0 , glyph = glyphs; i < num; i++, glyph++) {
 		zend_hash_get_current_data(obj_hash, (void **)&glyph);
 		zend_hash_move_forward(obj_hash);
 	}
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	cairo_glyph_extents(curr->context, glyphs, num, &extents);
 
@@ -991,7 +988,7 @@ PHP_METHOD(CairoContext, glyphPath)
 	zval * _this_zval = NULL;
 	zval * obh = NULL;
 	long num = 0;
-	cairo_glyph_t *glyphs=NULL , *glyph;
+	cairo_glyph_t *glyphs = NULL , *glyph;
 	HashTable *obj_hash = NULL;
 	cairo_text_extents_t extents;
 
@@ -999,11 +996,11 @@ PHP_METHOD(CairoContext, glyphPath)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	obj_hash = HASH_OF(obh);
 
 	glyphs = emalloc(num*sizeof(cairo_glyph_t));
-	for(i=0 , glyph=glyphs; i<num; i++, glyph++) {
+	for(i = 0 , glyph = glyphs; i < num; i++, glyph++) {
 		zend_hash_get_current_data(obj_hash, (void **)&glyph);
 		zend_hash_move_forward(obj_hash);
 	}
@@ -1028,7 +1025,7 @@ PHP_METHOD(CairoContext, hasCurrentPoint)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 
 	do {
@@ -1052,7 +1049,7 @@ PHP_METHOD(CairoContext, identityMatrix)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_identity_matrix(curr->context);
 
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -1070,14 +1067,13 @@ PHP_METHOD(CairoContext, inFill)
 	zval * _this_zval = NULL;
 	double x = 0.0;
 	double y = 0.0;
-//	int result;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &_this_zval, CairoContext_ce_ptr, &x, &y) == FAILURE) {
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	RETURN_BOOL(cairo_in_fill(curr->context, x, y));
 	
@@ -1101,14 +1097,13 @@ PHP_METHOD(CairoContext, inStroke)
 	zval * _this_zval = NULL;
 	double x = 0.0;
 	double y = 0.0;
-	//int result;
 	
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &_this_zval, CairoContext_ce_ptr, &x, &y) == FAILURE) {
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	RETURN_BOOL(cairo_in_stroke(curr->context, x, y));
 	/*
@@ -1137,7 +1132,7 @@ PHP_METHOD(CairoContext, lineTo)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	cairo_line_to(curr->context, x, y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -1161,7 +1156,7 @@ PHP_METHOD(CairoContext, mask)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	pattern_object *ptobj = (pattern_object *)zend_objects_get_address(p TSRMLS_CC);
 	cairo_mask(curr->context, ptobj->pattern);
@@ -1188,8 +1183,8 @@ PHP_METHOD(CairoContext, maskSurface)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	surface_object *sobj=(surface_object *)zend_objects_get_address(s TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *sobj = (surface_object *)zend_objects_get_address(s TSRMLS_CC);
 	cairo_mask_surface(curr->context, sobj->surface, surface_x, surface_y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 	
@@ -1214,7 +1209,7 @@ PHP_METHOD(CairoContext, moveTo)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	cairo_move_to(curr->context, x, y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -1237,7 +1232,7 @@ PHP_METHOD(CairoContext, newPath)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_new_path(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1259,7 +1254,7 @@ PHP_METHOD(CairoContext, newSubPath)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_new_sub_path(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -1281,7 +1276,7 @@ PHP_METHOD(CairoContext, paint)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_paint(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1305,7 +1300,7 @@ PHP_METHOD(CairoContext, paintWithAlpha)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_paint_with_alpha(curr->context, alpha);
 		
 
@@ -1328,7 +1323,7 @@ PHP_METHOD(CairoContext, pathExtents)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 
 	array_init(return_value);
@@ -1354,12 +1349,12 @@ PHP_METHOD(CairoContext, popGroup)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	pat = cairo_pop_group(curr->context);
 	ce = get_CairoPattern_ce_ptr(pat);
 	object_init_ex(return_value, ce);
-	pattern_object *ptobj=(pattern_object *)zend_objects_get_address(return_value TSRMLS_CC);
+	pattern_object *ptobj = (pattern_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	ptobj->pattern = pat;
 
 }
@@ -1380,7 +1375,7 @@ PHP_METHOD(CairoContext, popGroupToSource)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_pop_group_to_source(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1403,7 +1398,7 @@ PHP_METHOD(CairoContext, pushGroup)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_push_group(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1427,7 +1422,7 @@ PHP_METHOD(CairoContext, pushGroupWithContent)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_push_group_with_content(curr->context, content);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1453,7 +1448,7 @@ PHP_METHOD(CairoContext, rectangle)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_rectangle(curr->context, x, y, width, height);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 	
@@ -1482,7 +1477,7 @@ PHP_METHOD(CairoContext, relCurveTo)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_rel_curve_to(curr->context, x1, y1, x2, y2, x3, y3);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1506,7 +1501,7 @@ PHP_METHOD(CairoContext, relLineTo)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_rel_line_to(curr->context, x, y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1530,7 +1525,7 @@ PHP_METHOD(CairoContext, relMoveTo)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_rel_move_to(curr->context, x, y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 }
@@ -1551,7 +1546,7 @@ PHP_METHOD(CairoContext, resetClip)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_reset_clip(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1574,7 +1569,7 @@ PHP_METHOD(CairoContext, restore)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_restore(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -1599,7 +1594,7 @@ PHP_METHOD(CairoContext, rotate)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_rotate(curr->context, angle);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 	
@@ -1621,7 +1616,7 @@ PHP_METHOD(CairoContext, save)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_save(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -1646,7 +1641,7 @@ PHP_METHOD(CairoContext, scale)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_scale(curr->context, x, y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -1674,7 +1669,7 @@ PHP_METHOD(CairoContext, selectFontFace)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_select_font_face(curr->context, family, slant, weight);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1697,7 +1692,7 @@ PHP_METHOD(CairoContext, setAntialias)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_antialias(curr->context, antialias);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 		
@@ -1724,7 +1719,7 @@ PHP_METHOD(CairoContext, setDash)
 	}
 	dashes_hash = Z_ARRVAL_P(dashes);
 	das = emalloc(num_dashes * sizeof(double));
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	i = zend_hash_num_elements(dashes_hash);
 	if(i!=num_dashes)
 		printf("Problem !!!");
@@ -1761,7 +1756,7 @@ PHP_METHOD(CairoContext, setFillRule)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_fill_rule(curr->context, fill_rule);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 }
@@ -1783,7 +1778,7 @@ PHP_METHOD(CairoContext, setFontFace)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	if (obj != NULL) {
 		fontface_object *ffobj = (fontface_object *)zend_objects_get_address(obj TSRMLS_CC);
 		cairo_set_font_face(curr->context, ffobj->fontface);
@@ -1812,8 +1807,8 @@ PHP_METHOD(CairoContext, setFontMatrix)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	matrix_object *mobj=(matrix_object *)zend_objects_get_address(matrix TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	matrix_object *mobj = (matrix_object *)zend_objects_get_address(matrix TSRMLS_CC);
 	cairo_set_font_matrix(curr->context, &mobj->matrix);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1836,8 +1831,8 @@ PHP_METHOD(CairoContext, setFontOptions)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	fontoptions_object *foobj=(fontoptions_object *)zend_objects_get_address(options TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	fontoptions_object *foobj = (fontoptions_object *)zend_objects_get_address(options TSRMLS_CC);
 	cairo_set_font_options(curr->context, foobj->fontoptions);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);	
 	
@@ -1861,7 +1856,7 @@ PHP_METHOD(CairoContext, setFontSize)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_font_size(curr->context, size);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1884,7 +1879,7 @@ PHP_METHOD(CairoContext, setLineCap)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_line_cap(curr->context, line_cap);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1909,7 +1904,7 @@ PHP_METHOD(CairoContext, setLineJoin)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_set_line_join(curr->context, line_join);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -1954,8 +1949,8 @@ PHP_METHOD(CairoContext, setMatrix)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	matrix_object *mobj=(matrix_object *)zend_objects_get_address(matix TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	matrix_object *mobj = (matrix_object *)zend_objects_get_address(matix TSRMLS_CC);
 	cairo_set_matrix(curr->context, &mobj->matrix);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -1978,7 +1973,7 @@ PHP_METHOD(CairoContext, setMiterLimit)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_miter_limit(curr->context, limit);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 	
@@ -2001,7 +1996,7 @@ PHP_METHOD(CairoContext, setOperator)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_operator(curr->context, op);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2024,8 +2019,8 @@ PHP_METHOD(CairoContext, setSource)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	pattern_object *ptobj=(pattern_object *)zend_objects_get_address(p TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	pattern_object *ptobj = (pattern_object *)zend_objects_get_address(p TSRMLS_CC);
 	cairo_set_source(curr->context, ptobj->pattern);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2050,7 +2045,7 @@ PHP_METHOD(CairoContext, setSourceRgb)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_source_rgb(curr->context, red, green, blue);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2076,7 +2071,7 @@ PHP_METHOD(CairoContext, setSourceRgba)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_source_rgba(curr->context, red, green, blue, alpha);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 	
@@ -2101,8 +2096,8 @@ PHP_METHOD(CairoContext, setSourceSurface)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	surface_object *sobj=(surface_object *)zend_objects_get_address(surface TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	surface_object *sobj = (surface_object *)zend_objects_get_address(surface TSRMLS_CC);
 	cairo_set_source_surface(curr->context, sobj->surface, x, y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2125,7 +2120,7 @@ PHP_METHOD(CairoContext, setTolerance)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_set_tolerance(curr->context, tolerance);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2151,7 +2146,7 @@ PHP_METHOD(CairoContext, showGlyphs)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	obj_hash = HASH_OF(obj);
 
 	glyphs = emalloc(num_glyphs*sizeof(cairo_glyph_t));
@@ -2160,15 +2155,9 @@ PHP_METHOD(CairoContext, showGlyphs)
 		if (zend_hash_get_current_data(obj_hash, (void **)&ppzval) == FAILURE) {
 				continue; 
 			}
-//		  glyphs[i++] = Z_RESVAL_PP(ppzval);
 	}
 
 	
-/*	for(i=0 , glyph=glyphs; i<num_glyphs; i++, glyph++) {
-		zend_hash_get_current_data(obj_hash, (void **)&glyph);
-		zend_hash_move_forward(obj_hash);
-	}
-*/
 	cairo_show_glyphs(curr->context, glyphs, num_glyphs);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2190,7 +2179,7 @@ PHP_METHOD(CairoContext, showPage)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_show_page(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2214,7 +2203,7 @@ PHP_METHOD(CairoContext, showText)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_show_text(curr->context, obj);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 	
@@ -2252,7 +2241,7 @@ PHP_METHOD(CairoContext, strokeExtents)
 {
 
 	zval * _this_zval = NULL;
-	double x1=0, x2=0, y1=0, y2=0;
+	double x1 = 0, x2 = 0, y1 = 0, y2 = 0;
 
 
 
@@ -2260,7 +2249,7 @@ PHP_METHOD(CairoContext, strokeExtents)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_stroke_extents(curr->context, &x1, &y1, &x2, &y2);
 
 	array_init(return_value);
@@ -2287,7 +2276,7 @@ PHP_METHOD(CairoContext, strokePreserve)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_stroke_preserve(curr->context);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2303,7 +2292,7 @@ PHP_METHOD(CairoContext, textExtents)
 
 	zval * _this_zval = NULL;
 	const char * str = NULL;
-	long str_len=0;
+	long str_len = 0;
 	cairo_text_extents_t extents;
 
 
@@ -2311,7 +2300,7 @@ PHP_METHOD(CairoContext, textExtents)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_text_extents(curr->context, str, &extents);
 
@@ -2343,7 +2332,7 @@ PHP_METHOD(CairoContext, textPath)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_text_path(curr->context, obj);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
@@ -2366,7 +2355,7 @@ PHP_METHOD(CairoContext, transform)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	matrix_object *mobj = (matrix_object *)zend_objects_get_address(matrix TSRMLS_CC);
 	cairo_transform(curr->context, &mobj->matrix);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -2391,7 +2380,7 @@ PHP_METHOD(CairoContext, translate)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_translate(curr->context, tx, ty);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -2416,7 +2405,7 @@ PHP_METHOD(CairoContext, userToDevice)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_user_to_device(curr->context, &x, &y);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
@@ -2445,7 +2434,7 @@ PHP_METHOD(CairoContext, userToDeviceDistance)
 		return;
 	}
 
-	context_object *curr=(context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	context_object *curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_user_to_device_distance(curr->context, &dx, &dy);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 	
@@ -2587,7 +2576,7 @@ static zend_object_value CairoContext_object_new(zend_class_entry *ce)
 	context_object *context;
 	zval *temp;
 
-	context=emalloc(sizeof(context_object));
+	context = emalloc(sizeof(context_object));
 	memset(context,0,sizeof(context_object));
 	context->std.ce = ce;
 	ALLOC_HASHTABLE(context->std.properties);
@@ -2607,7 +2596,7 @@ static void class_init_CairoContext(void)
 	CairoContext_ce_ptr = zend_register_internal_class(&ce);
 	CairoContext_ce_ptr->create_object = CairoContext_object_new;
 	memcpy(&CairoContext_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	CairoContext_handlers.clone_obj=NULL;
+	CairoContext_handlers.clone_obj = NULL;
 }
 
 /* }}} Class CairoContext */

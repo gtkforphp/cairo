@@ -315,7 +315,7 @@ static zend_object_value CairoFontOptions_object_new(zend_class_entry *ce)
 	zend_object_value retval;
 	fontoptions_object *fontoptions;
 	zval *temp;
-	fontoptions=emalloc(sizeof(fontoptions_object));
+	fontoptions = emalloc(sizeof(fontoptions_object));
 	memset(fontoptions,0,sizeof(fontoptions_object));
 	fontoptions->std.ce = ce;
 	ALLOC_HASHTABLE(fontoptions->std.properties);
@@ -494,7 +494,7 @@ static zend_object_value CairoScaledFont_object_new(zend_class_entry *ce)
 	zend_object_value retval;
 	scaledfont_object *scaledfont;
 	zval *temp;
-	scaledfont=emalloc(sizeof(scaledfont_object));
+	scaledfont = emalloc(sizeof(scaledfont_object));
 	memset(scaledfont,0,sizeof(scaledfont_object));
 	scaledfont->std.ce = ce;
 	ALLOC_HASHTABLE(scaledfont->std.properties);

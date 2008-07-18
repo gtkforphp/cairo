@@ -19,7 +19,7 @@ PHP_METHOD(CairoPattern, __construct)
 	}
 
 
-	php_error(E_ERROR, "Pattern Cannot be initialized"); RETURN_FALSE;
+	php_error(E_WARNING, "Pattern Cannot be initialized"); RETURN_FALSE;
 
 }
 /* }}} __construct */
@@ -135,7 +135,7 @@ static zend_object_value CairoPattern_object_new(zend_class_entry *ce)
 	zend_object_value retval;
 	pattern_object *pattern;
 	zval *temp;
-	pattern=emalloc(sizeof(pattern_object));
+	pattern = emalloc(sizeof(pattern_object));
 	memset(pattern,0,sizeof(pattern_object));
 	pattern->std.ce = ce;
 	ALLOC_HASHTABLE(pattern->std.properties);
@@ -182,7 +182,7 @@ PHP_METHOD(CairoGradient, __construct)
 
 
 
-	php_error(E_ERROR, "Gradient cannot be initialized"); RETURN_FALSE;
+	php_error(E_WARNING, "Gradient cannot be initialized"); RETURN_FALSE;
 
 }
 /* }}} __construct */
@@ -692,7 +692,7 @@ get_CairoPattern_ce_ptr(cairo_pattern_t *pattern)
 			type = CairoRadialGradient_ce_ptr;
 			break;
 		default:
-			php_error(E_ERROR,"Unsupported Pattern");
+			php_error(E_WARNING,"Unsupported Pattern");
 			return NULL;
 	}
 	return type;
