@@ -1,6 +1,10 @@
+#include "php_cairo_api.h"
+#include "CairoContext.h"
+#include "CairoExceptionMacro.h"
+#include "php_cairo_ce_ptr.h"
+
 /* {{{ Class CairoContext */
 
-PHP_CAIRO_API static zend_class_entry * CairoContext_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -2589,7 +2593,7 @@ static zend_object_value CairoContext_object_new(zend_class_entry *ce)
 
 
 
-static void class_init_CairoContext(void)
+void class_init_CairoContext(void)
 {
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "CairoContext", CairoContext_methods);

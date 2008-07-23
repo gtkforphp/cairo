@@ -1,6 +1,10 @@
+#include "php_cairo_api.h"
+#include "CairoExceptionMacro.h"
+#include "php_cairo_ce_ptr.h"
+
 /* {{{ Class CairoException */
 
-static zend_class_entry * CairoException_ce_ptr = NULL;
+//static zend_class_entry * CairoException_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -10,7 +14,7 @@ static zend_function_entry CairoException_methods[] = {
 
 /* }}} Methods */
 
-static void class_init_CairoException(void)
+void class_init_CairoException(void)
 {
 	zend_class_entry ce;
 

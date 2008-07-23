@@ -1,6 +1,11 @@
+#include "php_cairo_api.h"
+#include "CairoMatrix.h"
+#include "CairoExceptionMacro.h"
+#include "php_cairo_ce_ptr.h"
+
 /* {{{ Class CairoMatrix */
 
-static zend_class_entry * CairoMatrix_ce_ptr = NULL;
+//static zend_class_entry * CairoMatrix_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -269,7 +274,7 @@ static zend_object_value CairoMatrix_object_new(zend_class_entry *ce)
 }
 
 
-static void class_init_CairoMatrix(void)
+void class_init_CairoMatrix(void)
 {
 	zend_class_entry ce;
 

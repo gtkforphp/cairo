@@ -16,14 +16,9 @@
 
 #include "php_cairo_api.h"
 #include "php_cairo.h"
-#include "CairoExceptionMacro.c"
-#include "CairoException.c"
-#include "CairoFont.c"
-#include "CairoMatrix.c"
-#include "CairoPath.c"
-#include "CairoSurface.c"
-#include "CairoPattern.c"
-#include "CairoContext.c"
+#include "CairoExceptionMacro.h"
+#include "php_cairo_ce_ptr.h"
+
 #if HAVE_CAIRO
 
 /* {{{ Class definitions */

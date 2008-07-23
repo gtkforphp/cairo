@@ -1,7 +1,11 @@
+#include "php_cairo_api.h"
+#include "CairoFont.h"
+#include "CairoExceptionMacro.h"
+#include "php_cairo_ce_ptr.h"
 
 /* {{{ Class CairoFontFace */
 
-static zend_class_entry * CairoFontFace_ce_ptr = NULL;
+//static zend_class_entry * CairoFontFace_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -66,7 +70,7 @@ static zend_object_value CairoFontFace_object_new(zend_class_entry *ce)
 }
 
 
-static void class_init_CairoFontFace(void)
+void class_init_CairoFontFace(void)
 {
 	zend_class_entry ce;
 
@@ -82,7 +86,7 @@ static void class_init_CairoFontFace(void)
 
 /* {{{ Class CairoFontOptions */
 
-static zend_class_entry * CairoFontOptions_ce_ptr = NULL;
+//istatic zend_class_entry * CairoFontOptions_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -327,7 +331,7 @@ static zend_object_value CairoFontOptions_object_new(zend_class_entry *ce)
 }
 
 
-static void class_init_CairoFontOptions(void)
+void class_init_CairoFontOptions(void)
 {
 	zend_class_entry ce;
 
@@ -343,7 +347,7 @@ static void class_init_CairoFontOptions(void)
 
 /* {{{ Class CairoScaledFont */
 
-static zend_class_entry * CairoScaledFont_ce_ptr = NULL;
+//static zend_class_entry * CairoScaledFont_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -506,7 +510,7 @@ static zend_object_value CairoScaledFont_object_new(zend_class_entry *ce)
 }
 
 
-static void class_init_CairoScaledFont(void)
+void class_init_CairoScaledFont(void)
 {
 	zend_class_entry ce;
 

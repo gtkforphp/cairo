@@ -1,6 +1,11 @@
+#include "php_cairo_api.h"
+#include "CairoPath.h"
+#include "CairoExceptionMacro.h"
+#include "php_cairo_ce_ptr.h"
+
 /* {{{ Class CairoPath */
 
-static zend_class_entry * CairoPath_ce_ptr = NULL;
+//static zend_class_entry * CairoPath_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -108,7 +113,7 @@ static zend_object_value CairoPath_object_new(zend_class_entry *ce)
 	return retval;
 }
 
-static void class_init_CairoPath(void)
+void class_init_CairoPath(void)
 {
 	zend_class_entry ce;
 

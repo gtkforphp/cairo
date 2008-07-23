@@ -1,6 +1,11 @@
+#include "php_cairo_api.h"
+#include "CairoSurface.h"
+#include "CairoExceptionMacro.h"
+#include "php_cairo_ce_ptr.h"
+
 /* {{{ Class CairoSurface */
 
-PHP_CAIRO_API static zend_class_entry * CairoSurface_ce_ptr = NULL;
+static zend_class_entry * CairoSurface_ce_ptr = NULL;
 static zend_object_handlers CairoSurface_handlers;
 
 static cairo_status_t
@@ -358,7 +363,7 @@ static zend_object_value CairoSurface_object_new(zend_class_entry *ce)
 	return retval;
 }
 
-static void class_init_CairoSurface(void)
+void class_init_CairoSurface(void)
 {
 	zend_class_entry ce;
 
@@ -630,7 +635,7 @@ static zend_object_value CairoImageSurface_object_new(zend_class_entry *ce TSRML
 }
 
 
-static void class_init_CairoImageSurface(void)
+void class_init_CairoImageSurface(void)
 {
 	zend_class_entry ce;
 
@@ -761,7 +766,7 @@ static zend_object_value CairoPDFSurface_object_new(zend_class_entry *ce TSRMLS_
 	return retval;
 }
 
-static void class_init_CairoPDFSurface(void)
+void class_init_CairoPDFSurface(void)
 {
 	zend_class_entry ce;
 
@@ -1069,7 +1074,7 @@ static zend_object_value CairoPSSurface_object_new(zend_class_entry *ce TSRMLS_D
 	return retval;
 }
 
-static void class_init_CairoPSSurface(void)
+void class_init_CairoPSSurface(void)
 {
 	zend_class_entry ce;
 
@@ -1129,7 +1134,7 @@ static zend_object_value CairoQuartzSurface_object_new(zend_class_entry *ce TSRM
 	return retval;
 }
 
-static void class_init_CairoQuartzSurface(void)
+void class_init_CairoQuartzSurface(void)
 {
 	zend_class_entry ce;
 
@@ -1240,7 +1245,7 @@ static zend_object_value CairoSVGSurface_object_new(zend_class_entry *ce TSRMLS_
 	return retval;
 }
 
-static void class_init_CairoSVGSurface(void)
+void class_init_CairoSVGSurface(void)
 {
 	zend_class_entry ce;
 
@@ -1297,7 +1302,7 @@ static zend_object_value CairoWin32Surface_object_new(zend_class_entry *ce TSRML
 	return retval;
 }
 
-static void class_init_CairoWin32Surface(void)
+void class_init_CairoWin32Surface(void)
 {
 	zend_class_entry ce;
 
@@ -1417,7 +1422,7 @@ static zend_object_value CairoXlibSurface_object_new(zend_class_entry *ce TSRMLS
 	return retval;
 }
 
-static void class_init_CairoXlibSurface(void)
+void class_init_CairoXlibSurface(void)
 {
 	zend_class_entry ce;
 
