@@ -4,7 +4,6 @@
 
 /* {{{ Class CairoException */
 
-//static zend_class_entry * CairoException_ce_ptr = NULL;
 
 /* {{{ Methods */
 

@@ -5,7 +5,6 @@
 
 /* {{{ Class CairoFontFace */
 
-//static zend_class_entry * CairoFontFace_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -86,7 +85,6 @@ void class_init_CairoFontFace(void)
 
 /* {{{ Class CairoFontOptions */
 
-//istatic zend_class_entry * CairoFontOptions_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -347,7 +345,6 @@ void class_init_CairoFontOptions(void)
 
 /* {{{ Class CairoScaledFont */
 
-//static zend_class_entry * CairoScaledFont_ce_ptr = NULL;
 
 /* {{{ Methods */
 

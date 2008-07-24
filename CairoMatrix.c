@@ -5,7 +5,6 @@
 
 /* {{{ Class CairoMatrix */
 
-//static zend_class_entry * CairoMatrix_ce_ptr = NULL;
 
 /* {{{ Methods */
 

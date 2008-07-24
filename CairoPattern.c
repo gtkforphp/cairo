@@ -5,7 +5,6 @@
 
 /* {{{ Class CairoPattern */
 
-//static zend_class_entry * CairoPattern_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -166,7 +165,6 @@ void class_init_CairoPattern(void)
 
 /* {{{ Class CairoGradient */
 
-//static zend_class_entry * CairoGradient_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -277,7 +275,6 @@ void class_init_CairoGradient(void)
 
 /* {{{ Class CairoLinearGradient */
 
-//static zend_class_entry * CairoLinearGradient_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -366,7 +363,6 @@ void class_init_CairoLinearGradient(void)
 
 /* {{{ Class CairoRadialGradient */
 
-//static zend_class_entry * CairoRadialGradient_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -457,7 +453,6 @@ void class_init_CairoRadialGradient(void)
 
 /* {{{ Class CairoSolidPattern */
 
-//static zend_class_entry * CairoSolidPattern_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -547,7 +542,6 @@ void class_init_CairoSolidPattern(void)
 
 /* {{{ Class CairoSurfacePattern */
 
-//static zend_class_entry * CairoSurfacePattern_ce_ptr = NULL;
 
 /* {{{ Methods */
 
