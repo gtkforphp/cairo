@@ -1,4 +1,4 @@
-<?
+<?php
 $Surface = new CairoImageSurface(0,256,256);
 $ctx = new CairoContext($Surface);
 $ctx->setAntialias(0);

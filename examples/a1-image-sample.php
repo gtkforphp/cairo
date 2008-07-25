@@ -1,14 +1,11 @@
-<?
+<?php
 $points = 10;
 $step = 1.0/ $points;
 $pad = 1;
 $width = ($pad + ($points*2) + $pad);
 $height = $width;
-//$n1 = array("255","255","0","0");
-//$n = implode($n1);
 $sur = new CairoImageSurface(FORMAT_ARGB32,$width,$height);
 $s = new CairoImageSurface(FORMAT_ARGB32,1,1);
-//$s->create_from_data($n, FORMAT_ARGB32, 1, 1, 4);
 $con = new CairoContext($sur);
 $c = new CairoContext($s);
 $c->setSourceRgb(0,0,0);

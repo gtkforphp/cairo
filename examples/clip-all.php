@@ -1,4 +1,4 @@
-<?
+<?php
 $sur = new CairoImageSurface(FORMAT_ARGB32, 10, 10);
 $con = new CairoContext($sur);
 $con->rectangle(0,0,10,10);

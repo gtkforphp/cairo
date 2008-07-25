@@ -1,4 +1,4 @@
-<?
+<?php
 
 function
 draw_pattern ($surface_size)

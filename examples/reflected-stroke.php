@@ -1,4 +1,4 @@
-<?
+<?php
 function draw_symbol ()
 {
     $dash = array(6.0, 3.0);

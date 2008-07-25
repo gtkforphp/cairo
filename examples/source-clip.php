@@ -1,4 +1,4 @@
-<?
+<?php
 	$sur = new CairoImageSurface(FORMAT_ARGB32, 12, 12);
 	$con = new CairoContext($sur);
     $source = $sur->createSimilar (

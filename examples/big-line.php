@@ -1,9 +1,8 @@
-<?
+<?php
 $width = 100;
 $height = 100;
 $sur = new CairoPSSurface("temp.ps", $width, $height);
 $con = new CairoContext($sur);
-//$path = new CairoPath($con);
 
 $con->setSourceRgb(0,0,1);
 $con->moveTo(50,50);

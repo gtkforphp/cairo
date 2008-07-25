@@ -1,4 +1,4 @@
-<?
+<?php
 $sur = new CairoImageSurface(FORMAT_ARGB32,3*(3+6+3), 8*(6+3) + 3);
 $con = new CairoContext($sur);
 

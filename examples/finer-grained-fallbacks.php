@@ -1,4 +1,4 @@
-<?
+<?php
 $cisize = 10;
 $pad = 2;
 $width = $cisize*6.5 + $pad;

@@ -1,4 +1,4 @@
-<?
+<?php
     $sur = new CairoImageSurface(FORMAT_ARGB32, 10 , 20);
     $con = new CairoContext($sur);
     $con->translate (1.0, 1.0);

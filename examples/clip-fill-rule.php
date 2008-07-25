@@ -1,9 +1,8 @@
-<?
+<?php
 $starsize = 20;
 $sur = new CairoImageSurface(FORMAT_ARGB32, $starsize * 2 + 2, $starsize+2);
 $con = new CairoContext($sur);
 $con->setSourceRgb(1,0,0);
-//$con->paint();
 $con->translate(1,1);
 $con->save();
 

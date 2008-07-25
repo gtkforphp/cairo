@@ -1,4 +1,4 @@
-<?
+<?php
 $linewidth = 10.0;
 $size = 5 * $linewidth;
 $pad = 2 * $linewidth;

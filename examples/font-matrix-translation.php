@@ -1,4 +1,4 @@
-<?
+<?php
 function box_text($str, $x, $y)
 {
 	global $con;

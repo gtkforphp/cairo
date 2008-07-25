@@ -1,4 +1,4 @@
-<?
+<?php
 
 $patwidth = 120;
 $patheight =120;

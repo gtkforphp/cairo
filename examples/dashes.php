@@ -1,4 +1,4 @@
-<?
+<?php
 $dashes = array(50.0,  /* ink */
                    10.0,  /* skip */
                    10.0,  /* ink */

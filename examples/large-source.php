@@ -1,4 +1,4 @@
-<?
+<?php
 $sur = new CairoImageSurface(FORMAT_ARGB32,20,20);
 $redmask = 0x5;
 $greenmask = 0x50;

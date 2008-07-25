@@ -1,4 +1,4 @@
-<?
+<?php
 	$TEXT_SIZE = 12;
 	$sur = new CairoImageSurface(FORMAT_ARGB32, 192, 16);
 	$con = new CairoContext($sur);

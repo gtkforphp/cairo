@@ -1,4 +1,4 @@
-<?
+<?php
 function spline_path ()
 {
     global $spline,$con;

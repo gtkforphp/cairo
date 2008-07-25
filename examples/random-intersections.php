@@ -1,4 +1,4 @@
-<?
+<?php
 function uniform_random($minval, $maxval)
 {
 	global $state;

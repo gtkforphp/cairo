@@ -1,4 +1,4 @@
-<?
+<?php
 $size = 40;
 $pad = 2;
 $width = ($pad + $size + $pad);

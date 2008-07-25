@@ -1,4 +1,4 @@
-<?
+<?php
 	$size = 20;
 	$pad = 2;
 	$surface_size = sqrt(($size - 2*$pad)*($size-2*$pad)/2);

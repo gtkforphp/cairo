@@ -1,4 +1,4 @@
-<?
+<?php
 function little_star_path()
 {
 	global $con;

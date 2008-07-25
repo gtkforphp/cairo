@@ -1,4 +1,4 @@
-<?
+<?php
     $width = 60;
     $height = 60;
     $sur = new CairoImageSurface(FORMAT_ARGB32, $width, $height);

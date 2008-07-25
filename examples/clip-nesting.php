@@ -1,4 +1,4 @@
-<?
+<?php
 $size = 100;
 $border = 10;
 $linewidth = 20;

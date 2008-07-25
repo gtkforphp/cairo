@@ -1,4 +1,4 @@
-<?
+<?php
 $char = "Cairo";
 $sur = new CairoImageSurface(0,500,500);
 $con = new CairoContext($sur);
