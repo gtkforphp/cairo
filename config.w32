@@ -1,0 +1,10 @@
+ARG_WITH("cairo", "Cairo OO extension", "no");
+
+if (PHP_CAIRO != "no") {
+	if (CHECK_LIB("cairo_a.lib;cairo.lib", "cairo", PHP_CAIRO) &&
+		CHECK_HEADER_ADD_INCLUDE("cairo/cairo.h", "CFLAGS_CAIRO", null, null, true)) {
+		EXTENSION("cairo", "cairo.c CairoContext.c CairoException.c CairoFont.c CairoMatrix.c CairoPath.c CairoPattern.c CairoSurface.c");
+
+AC_DEFINE("HAVE_CAIRO", 1);
+	}
+}
