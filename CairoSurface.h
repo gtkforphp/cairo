@@ -139,6 +139,7 @@ ZEND_END_ARG_INFO()
 
 PHP_METHOD(CairoPSSurface, dscComment);
 ZEND_BEGIN_ARG_INFO_EX(CairoPSSurface__dsc_comment_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+  ZEND_ARG_INFO(0, comment)	
 ZEND_END_ARG_INFO()
 
 PHP_METHOD(CairoPSSurface, getLevels);

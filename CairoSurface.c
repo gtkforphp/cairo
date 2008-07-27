@@ -654,8 +654,8 @@ void class_init_CairoImageSurface(void)
 
 /* }}} Class CairoImageSurface */
 
-#ifdef CAIRO_HAS_PDF_SURFACE
-
+#if CAIRO_HAS_PDF_SURFACE
+#include<cairo-pdf.h>
 /* {{{ Class CairoPDFSurface */
 
 static zend_class_entry * CairoPDFSurface_ce_ptr = NULL;
@@ -789,8 +789,8 @@ void class_init_CairoPDFSurface(void)
 
 #endif
 
-#ifdef CAIRO_HAS_PS_SURFACE
-
+#if CAIRO_HAS_PS_SURFACE
+#include<cairo-ps.h>
 /* {{{ Class CairoPSSurface */
 
 static zend_class_entry * CairoPSSurface_ce_ptr = NULL;
@@ -920,21 +920,23 @@ PHP_METHOD(CairoPSSurface, dscBeginSetup)
 
 
 
-/* {{{ proto void dscComment()
+/* {{{ proto void dscComment(string comment)
    */
 PHP_METHOD(CairoPSSurface, dscComment)
 {
 
 	zval * _this_zval = NULL;
 	surface_object *curr;
+	const char *comment = NULL;
+	int comment_len = 0;
 
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoPSSurface_ce_ptr) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Os", &_this_zval, CairoPSSurface_ce_ptr, &comment, &comment_len) == FAILURE) {
 		return;
 	}
 
 	curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	cairo_ps_surface_dsc_comment(curr->surface);
+	cairo_ps_surface_dsc_comment(curr->surface, comment);
 	PHP_CAIRO_SURFACE_ERROR(curr->surface);
 
 }
@@ -1100,8 +1102,8 @@ void class_init_CairoPSSurface(void)
 
 #endif
 
-#ifdef CAIRO_HAS_QUARTZ_SURFACE
-
+#if CAIRO_HAS_QUARTZ_SURFACE
+#include<cairo-quartz.h>
 /* {{{ Class CairoQuartzSurface */
 
 static zend_class_entry * CairoQuartzSurface_ce_ptr = NULL;
@@ -1165,8 +1167,8 @@ void class_init_CairoQuartzSurface(void)
 
 #endif
 
-#ifdef CAIRO_HAS_SVG_SURFACE
-
+#if CAIRO_HAS_SVG_SURFACE
+#include<cairo-svg.h>
 /* {{{ Class CairoSVGSurface */
 
 static zend_class_entry * CairoSVGSurface_ce_ptr = NULL;
@@ -1280,8 +1282,8 @@ void class_init_CairoSVGSurface(void)
 
 #endif
 
-#ifdef CAIRO_HAS_WIN32_SURFACE
-
+#if CAIRO_HAS_WIN32_SURFACE
+#include<cairo-win32.h>
 /* {{{ Class CairoWin32Surface*/
 
 static zend_class_entry * CairoWin32Surface_ce_ptr = NULL;
@@ -1341,8 +1343,8 @@ void class_init_CairoWin32Surface(void)
 
 #endif
 
-#ifdef CAIRO_HAS_XLIB_SURFACE
-
+#if CAIRO_HAS_XLIB_SURFACE
+#include<cairo-xlib.h>
 /* {{{ Class CairoXlibSurface */
 
 static zend_class_entry * CairoXlibSurface_ce_ptr = NULL;
