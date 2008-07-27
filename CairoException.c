@@ -24,9 +24,9 @@ void class_init_CairoException(TSRMLS_D)
 
 /* }}} Class CairoException */
 
-void phpCairoCheckStatus(cairo_status_t status)
+void phpCairoCheckStatus(cairo_status_t status TSRMLS_DC)
 {
-	zend_throw_exception(CairoException_ce_ptr, cairo_status_to_string(status) TSRMLS_DC);
+	zend_throw_exception(CairoException_ce_ptr, cairo_status_to_string(status), status TSRMLS_CC);
 	return;
 
 	/*
