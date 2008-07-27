@@ -50,7 +50,7 @@ static void CairoFontFace_object_dtor(void *object)
 	efree(object);
 }	
 
-static zend_object_value CairoFontFace_object_new(zend_class_entry *ce)
+static zend_object_value CairoFontFace_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	fontface_object *fontface;
@@ -312,7 +312,7 @@ static void CairoFontOptions_object_dtor(void *object)
 	efree(object);
 }	
 
-static zend_object_value CairoFontOptions_object_new(zend_class_entry *ce)
+static zend_object_value CairoFontOptions_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	fontoptions_object *fontoptions;
@@ -497,7 +497,7 @@ static void CairoScaledFont_object_dtor(void *object)
 	efree(object);
 }	
 
-static zend_object_value CairoScaledFont_object_new(zend_class_entry *ce)
+static zend_object_value CairoScaledFont_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	scaledfont_object *scaledfont;

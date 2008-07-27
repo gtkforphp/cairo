@@ -18,6 +18,7 @@ _write_func(void *closure, const unsigned char *data, unsigned int length)
 		return CAIRO_STATUS_SUCCESS;
 	else {
 		printf("is it an error ?");
+		return CAIRO_STATUS_WRITE_ERROR;
 	}
 }
 
@@ -31,6 +32,7 @@ _read_func(void *closure, unsigned char *data, unsigned int length)
 		return CAIRO_STATUS_SUCCESS;
 	else {
 		printf("is it an error");
+		return CAIRO_STATUS_READ_ERROR;
 	}
 
 }
@@ -53,7 +55,6 @@ PHP_METHOD(CairoSurface, __construct)
 
 	if (ZEND_NUM_ARGS()>0)	{
 		WRONG_PARAM_COUNT;
-		php_print("wtf");
 		return;
 	}
 
@@ -812,7 +813,7 @@ PHP_METHOD(CairoPSSurface, __construct)
 	zval ***args, *obj;
 	surface_object *curr;
 	int argc = ZEND_NUM_ARGS();	
-	args = (zval **)safe_emalloc(argc, sizeof(zval *),0);
+	args = (zval ***)safe_emalloc(argc, sizeof(zval *),0);
 	if(ZEND_NUM_ARGS() == 0 ||
 		zend_get_parameters_array_ex(argc, args) == FAILURE) {
 		printf("ERROR");

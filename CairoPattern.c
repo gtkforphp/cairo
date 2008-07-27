@@ -134,7 +134,7 @@ static void CairoPattern_object_dtor(void *object)
 	efree(object);
 }
 
-static zend_object_value CairoPattern_object_new(zend_class_entry *ce)
+static zend_object_value CairoPattern_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	pattern_object *pattern;

@@ -960,10 +960,11 @@ PHP_METHOD(CairoContext, getTolerance)
 
 
 
-/* {{{ proto array glyphExtents(array obj,int num) --need to check
+/* {{{ proto array glyphExtents(array obj,int num) --TODO
    */
 PHP_METHOD(CairoContext, glyphExtents)
 {
+/*
 	int i;
 	zval * _this_zval = NULL;
 	zval * obj = NULL;
@@ -996,15 +997,17 @@ PHP_METHOD(CairoContext, glyphExtents)
 	add_assoc_double(return_value, "y_advance", extents.y_advance);
 	efree(glyphs);
 
+*/
 }
 /* }}} glyphExtents */
 
 
 
-/* {{{ proto void glyphPath(array obh , int num])
+/* {{{ proto void glyphPath(array obh , int num]) - TODO
    */
 PHP_METHOD(CairoContext, glyphPath)
 {
+/*
 	int i;
 	zval * _this_zval = NULL;
 	zval * obh = NULL;
@@ -1029,7 +1032,9 @@ PHP_METHOD(CairoContext, glyphPath)
 	cairo_glyph_path(curr->context, glyphs, num);
 	PHP_CAIRO_CONTEXT_ERROR(curr->context);
 
+*/
 }
+
 /* }}} glyphPath */
 
 
@@ -2601,7 +2606,7 @@ static void CairoContext_object_dtor(void *object)
 	efree(object);
 }
 
-static zend_object_value CairoContext_object_new(zend_class_entry *ce)
+static zend_object_value CairoContext_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	context_object *context;

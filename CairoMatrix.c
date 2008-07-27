@@ -259,7 +259,7 @@ static void CairoMatrix_object_dtor(void *object)
 }
 
 
-static zend_object_value CairoMatrix_object_new(zend_class_entry *ce)
+static zend_object_value CairoMatrix_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	matrix_object *matrix;

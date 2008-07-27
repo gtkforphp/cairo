@@ -99,7 +99,7 @@ static void CairoPath_object_dtor(void *object)
 	efree(object);
 }
 
-static zend_object_value CairoPath_object_new(zend_class_entry *ce)
+static zend_object_value CairoPath_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	path_object *path;
