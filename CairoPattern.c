@@ -156,7 +156,7 @@ void class_init_CairoPattern(void)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoPattern", CairoPattern_methods);
-	CairoPattern_ce_ptr = zend_register_internal_class(&ce);
+	CairoPattern_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
 	CairoPattern_ce_ptr->create_object = CairoPattern_object_new;
 	memcpy(&CairoPattern_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	CairoPattern_handlers.clone_obj = NULL;

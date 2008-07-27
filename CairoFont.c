@@ -72,7 +72,7 @@ void class_init_CairoFontFace(void)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoFontFace", CairoFontFace_methods);
-	CairoFontFace_ce_ptr = zend_register_internal_class(&ce);
+	CairoFontFace_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
 	CairoFontFace_ce_ptr->create_object = CairoFontFace_object_new;
 	memcpy(&CairoFontFace_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	CairoFontFace_handlers.clone_obj = NULL;
@@ -334,7 +334,7 @@ void class_init_CairoFontOptions(void)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoFontOptions", CairoFontOptions_methods);
-	CairoFontOptions_ce_ptr = zend_register_internal_class(&ce);
+	CairoFontOptions_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
 	CairoFontOptions_ce_ptr->create_object = CairoFontOptions_object_new;
 	memcpy(&CairoFontOptions_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	CairoFontOptions_handlers.clone_obj = NULL;
@@ -519,7 +519,7 @@ void class_init_CairoScaledFont(void)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoScaledFont", CairoScaledFont_methods);
-	CairoScaledFont_ce_ptr = zend_register_internal_class(&ce);
+	CairoScaledFont_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
 	CairoScaledFont_ce_ptr->create_object = CairoScaledFont_object_new;
 	memcpy(&CairoScaledFont_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	CairoScaledFont_handlers.clone_obj = NULL;

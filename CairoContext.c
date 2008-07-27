@@ -2629,7 +2629,7 @@ void class_init_CairoContext(void)
 {
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "CairoContext", CairoContext_methods);
-	CairoContext_ce_ptr = zend_register_internal_class(&ce);
+	CairoContext_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
 	CairoContext_ce_ptr->create_object = CairoContext_object_new;
 	memcpy(&CairoContext_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	CairoContext_handlers.clone_obj = NULL;

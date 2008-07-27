@@ -373,7 +373,7 @@ void class_init_CairoSurface(void)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoSurface", CairoSurface_methods);
-	CairoSurface_ce_ptr = zend_register_internal_class(&ce);
+	CairoSurface_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
 	CairoSurface_ce_ptr->create_object = CairoSurface_object_new;
 	memcpy(&CairoSurface_handlers, zend_get_std_object_handlers(),sizeof(zend_object_handlers));
 	CairoSurface_handlers.clone_obj = NULL;

@@ -121,7 +121,7 @@ void class_init_CairoPath(void)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoPath", CairoPath_methods);
-	CairoPath_ce_ptr = zend_register_internal_class(&ce);
+	CairoPath_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
 	CairoPath_ce_ptr->create_object = CairoPath_object_new;
 	memcpy(&CairoPath_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	CairoPath_handlers.clone_obj = NULL;
