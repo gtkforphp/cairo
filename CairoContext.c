@@ -570,7 +570,7 @@ PHP_METHOD(CairoContext, getDash)
 	dashes = emalloc(count* sizeof(double));
 	if(dashes==NULL)
 		return;
-	cairo_get_dashes(curr->context, dashes, &offset);
+	cairo_get_dash(curr->context, dashes, &offset);
 
 	MAKE_STD_ZVAL(sub_array);
 	array_init(sub_array);
@@ -758,7 +758,7 @@ PHP_METHOD(CairoContext, getLineJoin)
 	zval * _this_zval = NULL;
 	context_object *curr;
 
-	if (end_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
 		return;
 	}
 

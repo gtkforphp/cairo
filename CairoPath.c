@@ -36,15 +36,19 @@ PHP_METHOD(CairoPath, toStr)
 
 	zval * _this_zval = NULL;
 	path_object *curr;
-	_this_zval = getThis();
-	curr = (path_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-
-	cairo_path_t *path = curr->path;
-	array_init(return_value);
-	
+	cairo_path_t *path;
 	cairo_path_data_t *data;
 	int i;
 	char buf[200]; /* I think this is more than enough ... */
+
+
+	_this_zval = getThis();
+
+	curr = (path_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+
+	path = curr->path;
+	array_init(return_value);
+	
 	
 	for (i = 0; i < path->num_data; i += path->data[i].header.length) {
 		data = &path->data[i];
