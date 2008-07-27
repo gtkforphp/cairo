@@ -1,6 +1,6 @@
 #define PHP_CAIRO_ERROR(status) \
 	if (status != CAIRO_STATUS_SUCCESS) { \
-		phpCairoCheckStatus(status); \
+		phpCairoCheckStatus(status TSRMLS_CC); \
 		return; \
 	}
 

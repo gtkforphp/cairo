@@ -43,8 +43,8 @@ extern "C" {
 extern "C" {
 #endif
 
-extern zend_module_entry phpCairo_module_entry;
-#define phpext_phpCairo_ptr &phpCairo_module_entry
+extern zend_module_entry cairo_module_entry;
+#define phpext_cairo_ptr &cairo_module_entry
 
 #ifdef PHP_WIN32
 #define PHP_CAIRO_API __declspec(dllexport)

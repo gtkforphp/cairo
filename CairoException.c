@@ -1,6 +1,7 @@
 #include "php_cairo_api.h"
 #include "CairoExceptionMacro.h"
 #include "php_cairo_ce_ptr.h"
+#include <zend_exceptions.h>
 
 /* {{{ Class CairoException */
 
@@ -18,14 +19,14 @@ void class_init_CairoException(TSRMLS_D)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoException", CairoException_methods);
-	CairoException_ce_ptr = zend_register_internal_class_ex(&ce, zend_exception_get_default(), "Exception" TSRMLS_CC);
+	CairoException_ce_ptr = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), "Exception" TSRMLS_CC);
 }
 
 /* }}} Class CairoException */
 
 void phpCairoCheckStatus(cairo_status_t status)
 {
-	zend_throw_exception(CairoException_ce_ptr, cairo_status_to_string(status));
+	zend_throw_exception(CairoException_ce_ptr, cairo_status_to_string(status) TSRMLS_DC);
 	return;
 
 	/*
