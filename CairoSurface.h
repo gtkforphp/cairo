@@ -105,6 +105,8 @@ PHP_METHOD(CairoImageSurface, getWidth);
 ZEND_BEGIN_ARG_INFO_EX(CairoImageSurface__get_width_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
 ZEND_END_ARG_INFO()
 
+#ifdef CAIRO_HAS_PDF_SURFACE
+
 PHP_METHOD(CairoPDFSurface, __construct);
 ZEND_BEGIN_ARG_INFO_EX(CairoPDFSurface____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
   ZEND_ARG_INFO(0, wpts)
@@ -116,6 +118,10 @@ ZEND_BEGIN_ARG_INFO_EX(CairoPDFSurface__set_size_args, ZEND_SEND_BY_VAL, ZEND_RE
   ZEND_ARG_INFO(0, wpts)
   ZEND_ARG_INFO(0, hpts)
 ZEND_END_ARG_INFO()
+
+#endif
+
+#ifdef CAIRO_HAS_PS_SURFACE
 
 PHP_METHOD(CairoPSSurface, __construct);
 ZEND_BEGIN_ARG_INFO_EX(CairoPSSurface____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
@@ -158,11 +164,19 @@ ZEND_BEGIN_ARG_INFO_EX(CairoPSSurface__set_size_args, ZEND_SEND_BY_VAL, ZEND_RET
   ZEND_ARG_INFO(0, hpts)
 ZEND_END_ARG_INFO()
 
+#endif
+
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+
 PHP_METHOD(CairoQuartzSurface, __construct);
 ZEND_BEGIN_ARG_INFO_EX(CairoQuartzSurface____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
   ZEND_ARG_INFO(0, hpixels)
   ZEND_ARG_INFO(0, format)
 ZEND_END_ARG_INFO()
+
+#endif
+
+#ifdef CAIRO_HAS_SVG_SURFACE
 
 PHP_METHOD(CairoSVGSurface, __construct);
 ZEND_BEGIN_ARG_INFO_EX(CairoSVGSurface____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
@@ -170,9 +184,17 @@ ZEND_BEGIN_ARG_INFO_EX(CairoSVGSurface____construct_args, ZEND_SEND_BY_VAL, ZEND
   ZEND_ARG_INFO(0, hpts)
 ZEND_END_ARG_INFO()
 
+#endif
+
+#ifdef CAIRO_HAS_WIN32_SURFACE
+
 PHP_METHOD(CairoWin32Surface, __construct);
 ZEND_BEGIN_ARG_INFO_EX(CairoWin32Surface____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
 ZEND_END_ARG_INFO()
+
+#endif
+
+#ifdef CAIRO_HAS_XLIB_SURFACE
 
 PHP_METHOD(CairoXlibSurface, __construct);
 ZEND_BEGIN_ARG_INFO_EX(CairoXlibSurface____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
@@ -189,3 +211,5 @@ ZEND_END_ARG_INFO()
 PHP_METHOD(CairoXlibSurface, getWidth);
 ZEND_BEGIN_ARG_INFO_EX(CairoXlibSurface__get_width_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
 ZEND_END_ARG_INFO()
+
+#endif

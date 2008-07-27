@@ -81,7 +81,9 @@ PHP_FUNCTION(cairo_version_string);
 ZEND_BEGIN_ARG_INFO_EX(cairo_version_string_arg_info, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
 ZEND_END_ARG_INFO()
 
-
+PHP_FUNCTION(cairo_available_surfaces);
+ZEND_BEGIN_ARG_INFO_EX(cairo_available_surfaces_arg_info, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+ZEND_END_ARG_INFO()
 
 
 

@@ -11,7 +11,7 @@ static zend_object_handlers CairoSurface_handlers;
 static cairo_status_t
 _write_func(void *closure, const unsigned char *data, unsigned int length)
 {
-	int written;
+	unsigned int written;
 	php_stream *zs = (php_stream *)closure ;
 	written = php_stream_write(zs, data, length);
 	if(written == length)
@@ -22,9 +22,9 @@ _write_func(void *closure, const unsigned char *data, unsigned int length)
 }
 
 static cairo_status_t
-_read_func(void *closure, const unsigned char *data, unsigned int length)
+_read_func(void *closure, unsigned char *data, unsigned int length)
 {
-	int read;
+	unsigned int read;
 	php_stream *zs = (php_stream *)closure;
 	read = php_stream_read(zs, data, length);
 	if(read == length)
@@ -50,9 +50,6 @@ typedef struct _surface_object {
    */
 PHP_METHOD(CairoSurface, __construct)
 {
-	zval * _this_zval;
-
-
 
 	if (ZEND_NUM_ARGS()>0)	{
 		WRONG_PARAM_COUNT;
@@ -60,7 +57,7 @@ PHP_METHOD(CairoSurface, __construct)
 		return;
 	}
 
-	php_print("No direct call for this constructor");
+	php_error(E_WARNING,"No direct call for this constructor");
 
 
 }
@@ -300,12 +297,10 @@ PHP_METHOD(CairoSurface, writeToPng)
 	*/
 PHP_METHOD(CairoSurface, writeToPngStream)
 {
-	FILE *file;
 	zval *_this_zval = NULL;
 	cairo_status_t status;
 	zval *zstream;
 	php_stream *stream;
-	int err;
 	surface_object *curr;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Or", &_this_zval, CairoSurface_ce_ptr, &zstream)) {
@@ -425,7 +420,7 @@ PHP_METHOD(CairoImageSurface, createFromData)
 {
 
 	zval * _this_zval = NULL;
-	const char * buffer = NULL;
+	char * buffer = NULL;
 	int buffer_len = 0;
 	long format = 0;
 	long width = 0;
@@ -659,6 +654,8 @@ void class_init_CairoImageSurface(void)
 
 /* }}} Class CairoImageSurface */
 
+#ifdef CAIRO_HAS_PDF_SURFACE
+
 /* {{{ Class CairoPDFSurface */
 
 static zend_class_entry * CairoPDFSurface_ce_ptr = NULL;
@@ -789,6 +786,10 @@ void class_init_CairoPDFSurface(void)
 }
 
 /* }}} Class CairoPDFSurface */
+
+#endif
+
+#ifdef CAIRO_HAS_PS_SURFACE
 
 /* {{{ Class CairoPSSurface */
 
@@ -1097,6 +1098,10 @@ void class_init_CairoPSSurface(void)
 
 /* }}} Class CairoPSSurface */
 
+#endif
+
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+
 /* {{{ Class CairoQuartzSurface */
 
 static zend_class_entry * CairoQuartzSurface_ce_ptr = NULL;
@@ -1157,6 +1162,10 @@ void class_init_CairoQuartzSurface(void)
 }
 
 /* }}} Class CairoQuartzSurface */
+
+#endif
+
+#ifdef CAIRO_HAS_SVG_SURFACE
 
 /* {{{ Class CairoSVGSurface */
 
@@ -1269,6 +1278,10 @@ void class_init_CairoSVGSurface(void)
 
 /* }}} Class CairoSVGSurface */
 
+#endif
+
+#ifdef CAIRO_HAS_WIN32_SURFACE
+
 /* {{{ Class CairoWin32Surface*/
 
 static zend_class_entry * CairoWin32Surface_ce_ptr = NULL;
@@ -1325,6 +1338,10 @@ void class_init_CairoWin32Surface(void)
 }
 
 /* }}} Class CairoWin32Surface */
+
+#endif
+
+#ifdef CAIRO_HAS_XLIB_SURFACE
 
 /* {{{ Class CairoXlibSurface */
 
@@ -1446,6 +1463,8 @@ void class_init_CairoXlibSurface(void)
 
 /* }}} Class CairoXlibSurface */
 
+#endif
+
 /* {{{ Helper Functions */
 zend_class_entry * 
 get_CairoSurface_ce_ptr(cairo_surface_t *surface)
@@ -1458,24 +1477,36 @@ get_CairoSurface_ce_ptr(cairo_surface_t *surface)
 		case CAIRO_SURFACE_TYPE_IMAGE:
 			type = CairoImageSurface_ce_ptr;
 			break;
+#ifdef CAIRO_HAS_PDF_SURFACE
 		case CAIRO_SURFACE_TYPE_PDF:
 			type = CairoPDFSurface_ce_ptr;
 			break;
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
 		case CAIRO_SURFACE_TYPE_PS:
 			type = CairoPSSurface_ce_ptr;
 			break;
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
 		case CAIRO_SURFACE_TYPE_SVG:
 			type = CairoSVGSurface_ce_ptr;
 			break;
+#endif
+#ifdef CAIRO_HAS_WIN32_SURFACE
 		case CAIRO_SURFACE_TYPE_WIN32:
 			type = CairoWin32Surface_ce_ptr;
 			break;
+#endif
+#ifdef CAIRO_HAS_XLIB_SURFACE
 		case CAIRO_SURFACE_TYPE_XLIB:
 			type = CairoXlibSurface_ce_ptr;
 			break;
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
 		case CAIRO_SURFACE_TYPE_QUARTZ:
 			type = CairoQuartzSurface_ce_ptr;
 			break;
+#endif
 		default:
 			php_error(E_WARNING,"Unsupported Surface Type");
 			return NULL;

@@ -28,6 +28,7 @@
 function_entry cairo_functions[] = {
 	PHP_FE(cairo_version	   , cairo_version_arg_info)
 	PHP_FE(cairo_version_string, cairo_version_string_arg_info)
+	PHP_FE(cairo_available_surfaces, cairo_available_surfaces_arg_info)
 	{ NULL, NULL, NULL }
 };
 /* }}} */
@@ -71,12 +72,24 @@ PHP_MINIT_FUNCTION(cairo)
 	class_init_CairoScaledFont();
 	class_init_CairoSurface();
 	class_init_CairoImageSurface();
+#ifdef CAIRO_HAS_PDF_SURFACE
 	class_init_CairoPDFSurface();
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
 	class_init_CairoPSSurface();
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
 	class_init_CairoQuartzSurface();
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
 	class_init_CairoSVGSurface();
+#endif
+#ifdef CAIRO_HAS_WIN32_SURFACE
 	class_init_CairoWin32Surface();
+#endif
+#ifdef CAIRO_HAS_XLIB_SURFACE
 	class_init_CairoXlibSurface();
+#endif
 	class_init_CairoException();
 
 	/* add your stuff here */
@@ -277,6 +290,45 @@ PHP_FUNCTION(cairo_version_string)
 	RETURN_STRING(cairo_version_string(), 1);
 }
 /* }}} cairo_version_string */
+
+
+/* {{{ proto string cairo_available_surfaces()
+ *    */
+PHP_FUNCTION(cairo_available_surfaces)
+{
+
+    if (ZEND_NUM_ARGS()>0)  {
+	        WRONG_PARAM_COUNT;
+    }
+
+    array_init(return_value);
+
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+	add_next_index_string(return_value,"PNG SUPPORT",1);
+#endif
+
+#ifdef CAIRO_HAS_PDF_SURFACE
+    add_next_index_string(return_value,"PDF SUPPORT",1);
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
+   	add_next_index_string(return_value,"PS SUPPORT",1);
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
+    add_next_index_string(return_value,"SVG SUPPORT",1);
+#endif
+#ifdef CAIRO_HAS_XLIB_SURFACE
+    add_next_index_string(return_value,"XLIB SUPPORT",1);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+    add_next_index_string(return_value,"QUARTZ SUPPORT",1);
+#endif
+#ifdef CAIRO_HAS_WIN32_SURFACE
+    add_next_index_string(return_value,"WIN32 SUPPORT",1);
+#endif
+
+}
+					/* }}} cairo_version_string */
+
 
 #endif /* HAVE_CAIRO */
 

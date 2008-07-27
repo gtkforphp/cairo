@@ -33,10 +33,22 @@ extern   void  class_init_CairoSurfacePattern();
 extern   void  class_init_CairoScaledFont();
 extern   void  class_init_CairoSurface();
 extern   void  class_init_CairoImageSurface();
+#ifdef CAIRO_HAS_PDF_SURFACE
 extern   void  class_init_CairoPDFSurface();
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
 extern   void  class_init_CairoPSSurface();
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
 extern   void  class_init_CairoQuartzSurface();
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
 extern   void  class_init_CairoSVGSurface();
+#endif
+#ifdef CAIRO_HAS_WIN32_SURFACE
 extern   void  class_init_CairoWin32Surface();
+#endif
+#ifdef CAIRO_HAS_XLIB_SURFACE
 extern   void  class_init_CairoXlibSurface();
+#endif
 extern   void  class_init_CairoException();
