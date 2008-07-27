@@ -44,4 +44,4 @@ typedef struct _scaledfont_object {
 
 extern zend_class_entry* get_CairoSurface_ce_ptr(cairo_surface_t *);
 extern zend_class_entry* get_CairoContext_ce_ptr();
-
+extern void phpCairoCheckStatus(cairo_status_t);
