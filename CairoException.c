@@ -13,7 +13,7 @@ static zend_function_entry CairoException_methods[] = {
 
 /* }}} Methods */
 
-void class_init_CairoException(void)
+void class_init_CairoException(TSRMLS_D)
 {
 	zend_class_entry ce;
 

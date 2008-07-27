@@ -2625,7 +2625,7 @@ static zend_object_value CairoContext_object_new(zend_class_entry *ce TSRMLS_DC)
 
 
 
-void class_init_CairoContext(void)
+void class_init_CairoContext(TSRMLS_D)
 {
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "CairoContext", CairoContext_methods);

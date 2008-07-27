@@ -13,6 +13,7 @@ _write_func(void *closure, const unsigned char *data, unsigned int length)
 {
 	unsigned int written;
 	php_stream *zs = (php_stream *)closure ;
+	TSRMLS_FETCH();
 	written = php_stream_write(zs, data, length);
 	if(written == length)
 		return CAIRO_STATUS_SUCCESS;
@@ -27,6 +28,7 @@ _read_func(void *closure, unsigned char *data, unsigned int length)
 {
 	unsigned int read;
 	php_stream *zs = (php_stream *)closure;
+	TSRMLS_FETCH();
 	read = php_stream_read(zs, data, length);
 	if(read == length)
 		return CAIRO_STATUS_SUCCESS;
@@ -349,7 +351,7 @@ static void CairoSurface_object_dtor(void *object)
 	efree(object);
 }
 
-static zend_object_value CairoSurface_object_new(zend_class_entry *ce)
+static zend_object_value CairoSurface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	surface_object *surface;
@@ -368,7 +370,7 @@ static zend_object_value CairoSurface_object_new(zend_class_entry *ce)
 	return retval;
 }
 
-void class_init_CairoSurface(void)
+void class_init_CairoSurface(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -643,7 +645,7 @@ static zend_object_value CairoImageSurface_object_new(zend_class_entry *ce TSRML
 }
 
 
-void class_init_CairoImageSurface(void)
+void class_init_CairoImageSurface(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -775,7 +777,7 @@ static zend_object_value CairoPDFSurface_object_new(zend_class_entry *ce TSRMLS_
 	return retval;
 }
 
-void class_init_CairoPDFSurface(void)
+void class_init_CairoPDFSurface(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -1089,7 +1091,7 @@ static zend_object_value CairoPSSurface_object_new(zend_class_entry *ce TSRMLS_D
 	return retval;
 }
 
-void class_init_CairoPSSurface(void)
+void class_init_CairoPSSurface(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -1153,7 +1155,7 @@ static zend_object_value CairoQuartzSurface_object_new(zend_class_entry *ce TSRM
 	return retval;
 }
 
-void class_init_CairoQuartzSurface(void)
+void class_init_CairoQuartzSurface(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -1268,7 +1270,7 @@ static zend_object_value CairoSVGSurface_object_new(zend_class_entry *ce TSRMLS_
 	return retval;
 }
 
-void class_init_CairoSVGSurface(void)
+void class_init_CairoSVGSurface(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -1329,7 +1331,7 @@ static zend_object_value CairoWin32Surface_object_new(zend_class_entry *ce TSRML
 	return retval;
 }
 
-void class_init_CairoWin32Surface(void)
+void class_init_CairoWin32Surface(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -1453,7 +1455,7 @@ static zend_object_value CairoXlibSurface_object_new(zend_class_entry *ce TSRMLS
 	return retval;
 }
 
-void class_init_CairoXlibSurface(void)
+void class_init_CairoXlibSurface(TSRMLS_D)
 {
 	zend_class_entry ce;
 

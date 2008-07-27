@@ -116,7 +116,7 @@ static zend_object_value CairoPath_object_new(zend_class_entry *ce TSRMLS_DC)
 	return retval;
 }
 
-void class_init_CairoPath(void)
+void class_init_CairoPath(TSRMLS_D)
 {
 	zend_class_entry ce;
 

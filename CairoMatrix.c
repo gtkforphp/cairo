@@ -276,7 +276,7 @@ static zend_object_value CairoMatrix_object_new(zend_class_entry *ce TSRMLS_DC)
 }
 
 
-void class_init_CairoMatrix(void)
+void class_init_CairoMatrix(TSRMLS_D)
 {
 	zend_class_entry ce;
 

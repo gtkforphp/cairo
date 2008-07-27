@@ -151,7 +151,7 @@ static zend_object_value CairoPattern_object_new(zend_class_entry *ce TSRMLS_DC)
 }
 
 
-void class_init_CairoPattern(void)
+void class_init_CairoPattern(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -254,7 +254,7 @@ static zend_function_entry CairoGradient_methods[] = {
 
 static zend_object_handlers CairoGradient_handlers;
 
-static zend_object_value CairoGradient_object_new(zend_class_entry *ce TSRMLS_CC)
+static zend_object_value CairoGradient_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	retval = CairoPattern_object_new(ce TSRMLS_CC);
@@ -262,7 +262,7 @@ static zend_object_value CairoGradient_object_new(zend_class_entry *ce TSRMLS_CC
 	return retval;
 }
 
-void class_init_CairoGradient(void)
+void class_init_CairoGradient(TSRMLS_D)
 {
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "CairoGradient", CairoGradient_methods);
@@ -342,7 +342,7 @@ static zend_function_entry CairoLinearGradient_methods[] = {
 
 static zend_object_handlers CairoLinearGradient_handlers;
 
-static zend_object_value CairoLinearGradient_object_new(zend_class_entry *ce TSRMLS_CC)
+static zend_object_value CairoLinearGradient_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	retval = CairoGradient_object_new(ce TSRMLS_CC);
@@ -350,7 +350,7 @@ static zend_object_value CairoLinearGradient_object_new(zend_class_entry *ce TSR
 	return retval;
 }
 
-void class_init_CairoLinearGradient(void)
+void class_init_CairoLinearGradient(TSRMLS_D)
 {
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "CairoLinearGradient", CairoLinearGradient_methods);
@@ -433,7 +433,7 @@ static zend_function_entry CairoRadialGradient_methods[] = {
 
 static zend_object_handlers CairoRadialGradient_handlers;
 
-static zend_object_value CairoRadialGradient_object_new(zend_class_entry *ce TSRMLS_CC)
+static zend_object_value CairoRadialGradient_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	retval = CairoGradient_object_new(ce TSRMLS_CC);
@@ -441,7 +441,7 @@ static zend_object_value CairoRadialGradient_object_new(zend_class_entry *ce TSR
 	return retval;
 }
 
-void class_init_CairoRadialGradient(void)
+void class_init_CairoRadialGradient(TSRMLS_D)
 {
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "CairoRadialGradient", CairoRadialGradient_methods);
@@ -520,7 +520,7 @@ static zend_function_entry CairoSolidPattern_methods[] = {
 
 static zend_object_handlers CairoSolidPattern_handlers;
 
-static zend_object_value CairoSolidPattern_object_new(zend_class_entry *ce TSRMLS_CC)
+static zend_object_value CairoSolidPattern_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	retval = CairoPattern_object_new(ce TSRMLS_CC);
@@ -529,7 +529,7 @@ static zend_object_value CairoSolidPattern_object_new(zend_class_entry *ce TSRML
 
 }
 
-void class_init_CairoSolidPattern(void)
+void class_init_CairoSolidPattern(TSRMLS_D)
 {
 	zend_class_entry ce;
 
@@ -651,7 +651,7 @@ static zend_function_entry CairoSurfacePattern_methods[] = {
 
 static zend_object_handlers CairoSurfacePattern_handlers;
 
-static zend_object_value CairoSurfacePattern_object_new(zend_class_entry *ce TSRMLS_CC)
+static zend_object_value CairoSurfacePattern_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	retval = CairoPattern_object_new(ce TSRMLS_CC);
@@ -659,7 +659,7 @@ static zend_object_value CairoSurfacePattern_object_new(zend_class_entry *ce TSR
 	return retval;
 }
 
-void class_init_CairoSurfacePattern(void)
+void class_init_CairoSurfacePattern(TSRMLS_D)
 {
 	zend_class_entry ce;
 	INIT_CLASS_ENTRY(ce, "CairoSurfacePattern", CairoSurfacePattern_methods);
