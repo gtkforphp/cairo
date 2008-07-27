@@ -13,15 +13,6 @@
    */
 PHP_METHOD(CairoPattern, __construct)
 {
-	zval * _this_zval;
-
-
-
-	if (ZEND_NUM_ARGS()>0)	{
-		WRONG_PARAM_COUNT;
-	}
-
-
 	php_error(E_WARNING, "Pattern Cannot be initialized"); RETURN_FALSE;
 
 }

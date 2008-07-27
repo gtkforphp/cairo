@@ -13,14 +13,6 @@
    */
 PHP_METHOD(CairoPath, __construct)
 {
-	zval * _this_zval;
-
-
-
-	if (ZEND_NUM_ARGS()>0)	{
-		WRONG_PARAM_COUNT;
-	}
-
 
 	php_error(E_WARNING, "Can not call directly"); RETURN_FALSE;
 

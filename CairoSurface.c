@@ -1195,7 +1195,7 @@ PHP_METHOD(CairoSVGSurface, __construct)
 	surface_object *curr;
 	zval ***args, *obj;
 	int argc = ZEND_NUM_ARGS();
-	args = (zval **)safe_emalloc(argc, sizeof(zval *),0);
+	args = (zval ***)safe_emalloc(argc, sizeof(zval *),0);
 	if(ZEND_NUM_ARGS() == 0 ||
 		zend_get_parameters_array_ex(argc, args) == FAILURE) {
 		printf("ERROR");
@@ -1311,7 +1311,7 @@ PHP_METHOD(CairoWin32Surface, __construct)
 
 	_this_zval = getThis();
 	curr = (surface_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	curr->surface = cairo_win32_surface_create(hdc, NULL);
+	/*curr->surface = cairo_win32_surface_create(hdc, NULL); -TODO */ 
 }
 /* }}} __construct */
 
