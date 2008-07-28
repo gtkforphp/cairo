@@ -26,7 +26,7 @@
                 FONT_SLANT_NORMAL,
                 FONT_WEIGHT_NORMAL);
     $con->showText ( " i-am-mono");
-	$sur->writeToPng("select-font-face-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/select-font-face-php.png");
 
 
 ?>

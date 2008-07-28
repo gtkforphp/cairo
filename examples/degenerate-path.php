@@ -77,5 +77,5 @@ $con = new CairoContext($sur);
 
 	$con->translate ( 3+6+3, 0);
     }
-$sur->writeToPng("degenerate-path-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/degenerate-path-php.png");
 ?>

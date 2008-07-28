@@ -20,7 +20,7 @@ for($i = 0; $i < $points; $i++)
 		$con->rectangle($t1, $t2, 1, 1);
 		$con->fill();
 	}
-$sur->writeToPng('a1-traps-sample-php.png');
+$sur->writeToPng(dirname(__FILE__)  . '/a1-traps-sample-php.png');
 ?>
 
 

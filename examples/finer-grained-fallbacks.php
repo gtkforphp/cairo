@@ -43,6 +43,6 @@ $con->setOperator(OPERATOR_ADD);
 $con->translate(0, $cisize*2);
 draw_circles();
 
-$sur->writeToPng("finer-grained-fallbacks-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/finer-grained-fallbacks-php.png");
 ?>
 

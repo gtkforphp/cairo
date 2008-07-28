@@ -15,6 +15,6 @@ $con->lineTo(176,0);
 $con->lineTo(176,110);
 $con->closePath();
 $con->fill();
-$sur->writeToPng("fill-degenerate-sort-order-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/fill-degenerate-sort-order-php.png");
 ?>
 

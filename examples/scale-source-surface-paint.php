@@ -59,5 +59,5 @@ $pat = $con->getSource();
 $pat->setFilter( FILTER_NEAREST);
 $con->paint();
 
-$sur->writeToPng("scale-source-surface-paint-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/scale-source-surface-paint-php.png");
 ?>

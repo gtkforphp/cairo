@@ -40,5 +40,5 @@
     $con->setSourceRgb ( 1., 1., 0);
     $con->rectangle ( $width+$width/4, $height+$height/4, -$width, -$height);
     $con->stroke ();
-    $sur->writeToPng("leaky-dashed-rectangle-php.png");
+    $sur->writeToPng(dirname(__FILE__)  . "/leaky-dashed-rectangle-php.png");
 ?>

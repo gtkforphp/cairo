@@ -24,5 +24,5 @@ $ctx->arc(.5, .5, .3, 0, 2*3.14);
 //$ctx->stroke();
 $ctx->fill();
 $check = $ctx->getTarget();
-$check->writeToPng("image.png");
+$check->writeToPng(dirname(__FILE__) . "/sphere-image.png");
 ?>

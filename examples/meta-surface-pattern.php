@@ -72,5 +72,5 @@ $con = new CairoContext($sur);
 
     $con->setSource ( $pattern);
     $con->paint ();
-	$sur->writeToPng("meta-surface-pattern-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/meta-surface-pattern-php.png");
 ?>

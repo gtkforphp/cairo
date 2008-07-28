@@ -16,5 +16,5 @@ $con->paint();
 $con->popGroupToSource();
 $con->paint();
 
-$sur->writeToPng("clip-push-group-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/clip-push-group-php.png");
 ?>

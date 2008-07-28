@@ -23,6 +23,6 @@ $con->setSourceRgba(0,1,0,0.5);
 
 $con->fill();
 
-$sur->writeToPng("over-above-source-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/over-above-source-php.png");
 ?>
 

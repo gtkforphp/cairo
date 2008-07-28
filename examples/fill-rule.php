@@ -39,7 +39,7 @@ $con->translate(81,0);
 big_star_path();
 $con->setFillRule(FILL_RULE_EVEN_ODD);
 $con->fill();
-$sur->writeToPng("fill-rule-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/fill-rule-php.png");
 ?>
 
 

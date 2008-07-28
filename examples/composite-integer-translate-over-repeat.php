@@ -28,7 +28,7 @@ $con->setOperator(OPERATOR_OVER);
 $con->setSource($pat);
 $con->rectangle(0,0,90,90);
 $con->fill();
-$sur->writeToPng("composite-integer-translate-over-repeat-php.png");
+$sur->writeToPng(dirname(__FILE__) . "/composite-integer-translate-over-repeat-php.png");
 ?>
 
 

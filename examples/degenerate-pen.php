@@ -86,5 +86,5 @@ $con->setSourceRgb ( 1, 1, 1);
 	$con->stroke ();
     }
     $con->restore ();
-	$sur->writeToPng("degenerate-pen-php.png"); 
+	$sur->writeToPng(dirname(__FILE__)  . "/degenerate-pen-php.png"); 
 ?>

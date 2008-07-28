@@ -12,6 +12,6 @@ $pat = new CairoRadialGradient(0,0,0,1,1,1);
 $con->setSource($pat);
 $con->paint();
 
-$sur->writeToPng("gradient-zero-stops-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/gradient-zero-stops-php.png");
 ?>
 

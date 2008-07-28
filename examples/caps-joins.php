@@ -56,7 +56,7 @@ $con->relLineTo(0,3*$linewidth);
 $con->setLineCap(LINE_CAP_SQUARE);
 $con->setLineJoin(LINE_JOIN_MITER);
 $con->stroke();
-$sur->writeToPng("caps-joins-php.png");
+$sur->writeToPng(dirname(__FILE__) . "/caps-joins-php.png");
 ?>
 
 

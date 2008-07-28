@@ -10,6 +10,6 @@ $con->popGroupToSource();
 $con->setOperator(OPERATOR_SOURCE);
 $con->paint();
 
-$sur->writeToPng("group-paint-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/group-paint-php.png");
 ?>
 

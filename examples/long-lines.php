@@ -34,7 +34,7 @@ $con->setLineWidth(1);
 //$con->set_source_rgb(0,0,0,);
 $con->stroke();
 
-$sur->writeToPng("long-lines-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/long-lines-php.png");
 ?>
 
 

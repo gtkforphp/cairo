@@ -25,5 +25,5 @@ $con->paint();
 
 $con->setSourceRgb(1,0,0);
 $con->maskSurface($s,0,0);
-$sur->writeToPng("a8-mask-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/a8-mask-php.png");
 ?>

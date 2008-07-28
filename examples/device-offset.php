@@ -22,6 +22,6 @@ $c->fill();
 $con->setSourceSurface($s1, 0, 0);
 $con->paint();
 
-$sur->writeToPng("device-offset-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/device-offset-php.png");
 
 ?>

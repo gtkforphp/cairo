@@ -19,7 +19,7 @@ $con->relLineTo(0, -1*$ext["height"]);
 $con->relLineTo($ext["width"], 0);
 $con->relLineTo($ext["x_bearing"], -1*$ext["y_bearing"]);
 $con->stroke();
-$sur->writeToPng("image_text_extents.png");
+$sur->writeToPng(dirname(__FILE__) . "/image_text_extents.png");
 ?>
 
 

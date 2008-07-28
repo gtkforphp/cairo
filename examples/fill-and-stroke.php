@@ -13,6 +13,6 @@ $con->fillPreserve();
 $con->setSourceRgb(0,0,1);
 $con->stroke();
 
-$sur->writeToPng("fill-and-stroke-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/fill-and-stroke-php.png");
 ?>
 

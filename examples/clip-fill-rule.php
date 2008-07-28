@@ -31,6 +31,6 @@ $con->clip ();
 $con->paint ();
 
 $con->restore();
-$sur->writeToPng("clip-fill-rule-php.png");
+$sur->writeToPng(dirname(__FILE__) . "/clip-fill-rule-php.png");
 ?>
 

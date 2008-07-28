@@ -96,7 +96,7 @@ for($i=0; $i < 4; $i++) {
 		$con->restore();
 	}
 }
-$sur->writeToPng("clip-operator-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/clip-operator-php.png");
 ?>		
 		
 

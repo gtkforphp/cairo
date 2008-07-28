@@ -23,6 +23,6 @@ $con->newPath();
 $con->appendPath($path);
 $con->fill();
 
-$sur->writeToPng("close-path-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/close-path-php.png");
 ?>
 

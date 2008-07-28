@@ -33,5 +33,5 @@ $con->setSourceRgb(1,0,0);
 $con->arc(20,20,2,0,2*M_PI);
 $con->fill();
 
-$sur->writeToPng("degenerate-arc-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/degenerate-arc-php.png");
 ?>

@@ -44,7 +44,7 @@
 	$pat->setFilter(FILTER_NEAREST);
     $con->setSource($pat);
 	$con->paint ();
-	$sur->writeToPng("rotate-image-surface-paint-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/rotate-image-surface-paint-php.png");
 
 
 ?>

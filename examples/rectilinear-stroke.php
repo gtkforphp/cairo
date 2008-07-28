@@ -97,5 +97,5 @@
     $con->relLineTo (+2.5, +2.5);
 
     $con->stroke ();
-	$sur->writeToPng("rectilinear-stroke-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/rectilinear-stroke-php.png");
 ?>

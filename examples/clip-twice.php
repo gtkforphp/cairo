@@ -32,5 +32,5 @@ $con->setSourceRgb(1,1,0);
 $con->paint();
 
 
-$sur->writeToPng("clip-twice-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/clip-twice-php.png");
 ?>

@@ -29,7 +29,7 @@ $con->setSourceRgb(1,1,1);
 $con->rectangle($border, $border, $linewidth, $size - 2 * $border);
 $con->fill();
 
-$sur->writeToPng("clip-nesting-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/clip-nesting-php.png");
 
 
 

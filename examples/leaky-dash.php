@@ -20,5 +20,5 @@
     $con->setDash ( $dash, 2, 9.0);
 
     $con->stroke ();
-    $sur->writeToPng("leaky-dash-php.png");
+    $sur->writeToPng(dirname(__FILE__)  . "/leaky-dash-php.png");
 ?>

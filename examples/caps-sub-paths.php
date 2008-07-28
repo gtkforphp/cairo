@@ -17,5 +17,5 @@ $con->moveTo(16,4);
 $con->lineTo(16,16);
 
 $con->stroke();
-$sur->writeToPng("caps-sub-paths-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/caps-sub-paths-php.png");
 ?>

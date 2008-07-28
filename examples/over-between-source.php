@@ -33,6 +33,6 @@ $con->setSourceRgba(1,0,0,0.5);
 
 $con->fill();
 
-$sur->writeToPng("over-between-source-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/over-between-source-php.png");
 ?>
 

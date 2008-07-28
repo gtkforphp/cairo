@@ -34,6 +34,6 @@ $con->setFontMatrix($mat);
 $con->setSourceRgb(0,0,1);
 box_text("text", 0, -$ext["y_bearing"]);
 
-$sur->writeToPng("font-matrix-translation-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/font-matrix-translation-php.png");
 ?>
 

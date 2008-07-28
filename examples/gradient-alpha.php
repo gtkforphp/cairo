@@ -8,5 +8,5 @@ $pat->addColorStopRgba(1,0,0,1,0.5);
 $con->setSource($pat);
 $con->paint();
 
-$sur->writeToPng("gradient-alpha-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/gradient-alpha-php.png");
 ?>

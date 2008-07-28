@@ -17,6 +17,6 @@ $con->rectangle( 12, 12, 1, 1);
 $con->setSourceRgb( 0, 0, 0);
 $con->fill();
 
-$sur->writeToPng("rectangle-rounding-error-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/rectangle-rounding-error-php.png");
 ?>
 

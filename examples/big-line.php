@@ -24,5 +24,5 @@ $con->moveTo(50,50);
 $con->lineTo(-50000,-50000);
 $con->stroke();
 
-$sur->writeToPng("big-line-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/big-line-php.png");
 ?>

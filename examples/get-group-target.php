@@ -23,7 +23,7 @@ $con->fill();
 $con->popGroupToSource();
 $con->paint();
 
-$sur->writeToPng("get-group-target-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/get-group-target-php.png");
 
 ?>
 

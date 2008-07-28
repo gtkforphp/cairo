@@ -29,7 +29,7 @@ $con->translate(2,2);
 $con->maskSurface($s,4,4);
 
 
-$sur->writeToPng("mask-surface-ctm-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/mask-surface-ctm-php.png");
 ?>
 
 

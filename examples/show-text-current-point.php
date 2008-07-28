@@ -19,7 +19,7 @@
     $con->showText ( "Hello from the ");
     $con->showText ( "show-text-current-point-php");
     $con->showText ( " test.");
-	$sur->writeToPng("show-text-current-point-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/show-text-current-point-php.png");
 
 
 ?>

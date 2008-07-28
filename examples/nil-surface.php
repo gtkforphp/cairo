@@ -16,5 +16,5 @@ $con2->setSource($pat);
 $con2->paint();
 
 
-$sur->writeToPng("nil-surface-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/nil-surface-php.png");
 ?>

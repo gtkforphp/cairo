@@ -25,5 +25,5 @@ for ($xscale = 1; $xscale <= 1000; $xscale += 999)
         $con->stroke ();
         $con->restore ();
     }
-$sur->writeToPng("miter-precision-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/miter-precision-php.png");
 ?>

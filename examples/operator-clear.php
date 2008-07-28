@@ -157,5 +157,5 @@ $con = new CairoContext($sur);
 	}
     }
 
-$sur->writeToPng("operator-clear-php.png");
+$sur->writeToPng(dirname(__FILE__) . "/operator-clear-php.png");
 ?>

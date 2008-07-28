@@ -31,5 +31,5 @@ $s->createFromData($data,FORMAT_A1,$width, $height, $stride);
 $con->setSourceRgb(0,1,0);
 $con->maskSurface($s,0,0);
 
-$sur->writeToPng("large-source-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/large-source-php.png");
 ?>

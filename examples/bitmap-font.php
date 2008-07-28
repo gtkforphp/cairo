@@ -48,6 +48,6 @@ $con->showText(" fox");
 $con->textPath(" jumps over");
 $con->textPath(" a lazy dog");
 $con->fill();
-$sur->writeToPng("bitmap-font-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/bitmap-font-php.png");
 ?>
 

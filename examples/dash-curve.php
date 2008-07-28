@@ -26,6 +26,6 @@ for($c=0; $c<5; $c++) {
 	$con->stroke();
 }
 
-$sur->writeToPng("dash-curve-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/dash-curve-php.png");
 ?>
 

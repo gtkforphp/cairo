@@ -17,7 +17,7 @@ draw_pattern ($surface_size)
     $con->setSourceRgb ( 0, 0, 1);
     $con->rectangle ($surface_size / 2, $surface_size / 2, $surface_size / 2, $surface_size / 2);
     $con->fill ();
-//	$s->writeToPng("temp1.png");
+//	$s->writeToPng(dirname(__FILE__)  . "temp1.png");
 }
 
 $size = 90;
@@ -31,9 +31,9 @@ $con->paint();
 $surface_size = $size - 30;
 $s = new CairoPSSurface("temp.pdf", $surface_size, $surface_size);
 draw_pattern($surface_size);
-$s->writeToPng("temp1.png");
+$s->writeToPng(dirname(__FILE__)  . "/temp1.png");
 $con->setSourceSurface($s, 15.0, 15.0);
 $con->paint();
-$sur->writeToPng("ps-surface-source-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/ps-surface-source-php.png");
 ?>
 

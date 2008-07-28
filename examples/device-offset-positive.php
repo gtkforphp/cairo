@@ -21,6 +21,6 @@ $s1->setDeviceOffset($size/2, $size/2);
 $con->setSourceSurface($s1, $size/2, $size/2);
 $con->paint();
 
-$sur->writeToPng("device-offset-positive-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/device-offset-positive-php.png");
 
 ?>

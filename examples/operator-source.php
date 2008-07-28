@@ -42,7 +42,7 @@ function set_surface_pattern($x, $y)
 	$con2->setSourceRgb(1,1,1);
     $con2->arc ( 0.5 * $wi, 0.5 * $he, 0.5 * $he, 0, 2 * M_PI);
 	$con2->fill();
-	$s->writeToPng("temp1.png");
+	$s->writeToPng(dirname(__FILE__)  . "/temp1.png");
 	$con->setSourceSurface($s,$x,$y);
 	unset($s);
 	//unset($con2);
@@ -191,5 +191,5 @@ $con = new CairoContext($sur);
 	}
     }
 
-$sur->writeToPng("operator-source-php.png");
+$sur->writeToPng(dirname(__FILE__) . "/operator-source-php.png");
 ?>

@@ -19,6 +19,6 @@ $con->lineTo ( 18500, 13400);
 $con->lineTo ( 18928, 13400);
 $con->lineTo ( 18928, 13843);
 $con->stroke ();
-$sur->writeToPng("infinite-join-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/infinite-join-php.png");
 ?>
 

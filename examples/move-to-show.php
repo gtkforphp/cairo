@@ -45,5 +45,5 @@ for($i =0 ; $i<4;$i++)
 }
 
 
-$sur->writeToPng("move-to-show-surface-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/move-to-show-surface-php.png");
 ?>

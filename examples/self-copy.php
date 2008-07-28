@@ -36,6 +36,6 @@
 		     $size / 4,     $size / 4);
     $con->clip ();
     $con->paint ();
-	$sur->writeToPng("self-copy-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/self-copy-php.png");
 
 ?>

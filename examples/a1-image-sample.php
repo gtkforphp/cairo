@@ -26,7 +26,7 @@ for($i = 0; $i < $points; $i++)
 		$pat->setFilter(FILTER_NEAREST);
 		$con->paint();
 	}
-$sur->writeToPng('a1-image-sample-php.png');
+$sur->writeToPng(dirname(__FILE__)  . '/a1-image-sample-php.png');
 ?>
 
 

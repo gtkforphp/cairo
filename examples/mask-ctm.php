@@ -29,7 +29,7 @@ $con->mask($pat);
 $con->translate(2,2);
 $con->mask($pat);
 
-$sur->writeToPng("mask-ctm-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/mask-ctm-php.png");
 ?>
 
 

@@ -146,5 +146,5 @@ $con->setLineJoin(LINE_JOIN_MITER);
 $con->stroke();
 $con->restore();
 
-$sur->writeToPng("dash-scale-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/dash-scale-php.png");
 ?>

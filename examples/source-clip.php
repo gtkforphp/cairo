@@ -29,7 +29,7 @@
     /* Now draw the source surface onto the destination surface */
     $con->setSourceSurface ( $source, 0, 0);
     $con->paint ();
-	$sur->writeToPng("source-clip-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/source-clip-php.png");
 	
 
 ?>

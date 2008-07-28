@@ -62,7 +62,7 @@ for($i = 0; $i<2 ; $i++) {
 	$con->translate(0,$size+$pad);
 	$dashoff = 0;
 	}
-	$sur->writeToPng("dash-caps-joins-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/dash-caps-joins-php.png");
 ?>
 	
 

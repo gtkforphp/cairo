@@ -16,6 +16,6 @@ $con->rectangle ( 0.0, 0.0, $width, $height);
 $con->fill ();
 $con->restore ();
 
-$sur->writeToPng("linear-gradient-reflect-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/linear-gradient-reflect-php.png");
 ?>
 

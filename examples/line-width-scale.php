@@ -104,7 +104,7 @@ function scale_path_not_line_width ()
 	}
 $con->restore();
 }
-$sur->writeToPng("line-width-scale-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/line-width-scale-php.png");
 ?>
 
 

@@ -33,6 +33,6 @@ default:
 $con->rectangle($i,0,1,5);
 $con->fill();
 }
-$sur->writeToPng("set-source-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/set-source-php.png");
 ?>
 

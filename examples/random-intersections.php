@@ -39,5 +39,5 @@ $con->setSourceRgb(0,1,0);
 $con->setLineWidth(0.5);
 $con->stroke();
 
-$sur->writeToPng("random-intersection-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/random-intersection-php.png");
 ?>

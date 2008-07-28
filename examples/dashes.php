@@ -15,5 +15,5 @@ $con->lineTo ( 230.4, 230.4);
 $con->relLineTo ( -102.4, 0.0);
 $con->curveTo ( 51.2, 230.4, 51.2, 128.0, 128.0, 128.0);
 $con->stroke ();
-$sur->writeToPng("image_dash.png");
+$sur->writeToPng(dirname(__FILE__)  . "/image_dash.png");
 ?>

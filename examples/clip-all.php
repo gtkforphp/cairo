@@ -25,4 +25,4 @@ $con->fill();
 $con->selectFontFace("Bitstream Vera Sans", FONT_SLANT_NORMAL, FONT_WEIGHT_NORMAL);
 $con->moveTo(0,10);
 $con->showText("cairo");
-$sur->writeToPng("clip-all-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/clip-all-php.png");

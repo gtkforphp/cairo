@@ -18,7 +18,7 @@ $con->translate(0.5,0.5);
 $con->setSourceSurface($s,0,0);
 $con->paint();
 $con->restore();
-$sur->writeToPng("filter-bilinear-extents-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/filter-bilinear-extents-php.png");
 ?>
 
 

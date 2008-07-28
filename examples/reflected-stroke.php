@@ -51,6 +51,6 @@ function draw_symbol ()
     $con->scale ( 1, -1);
     draw_symbol ();
     $con->restore ();
-	$sur->writeToPng("reflected-stroke-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/reflected-stroke-php.png");
 
 ?>

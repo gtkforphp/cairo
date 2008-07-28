@@ -40,7 +40,7 @@
     $con->clip ();
 	$con->setSource($pattern);
     $con->paint ();
-	$sur->writeToPng("extend-pad-php.png");
+	$sur->writeToPng(dirname(__FILE__)  . "/extend-pad-php.png");
 
 
 

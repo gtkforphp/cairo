@@ -33,5 +33,5 @@ $con->paint();
 $con->setSourceSurface($s,0,0);
 //$con->mask_surface($s,0,0);
 $con->paint();
-$sur->writeToPng("bilevel-image-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/bilevel-image-php.png");
 ?>

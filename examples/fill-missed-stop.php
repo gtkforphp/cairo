@@ -11,6 +11,6 @@ $con->lineTo(50,25);
 $con->lineTo(0,25);
 $con->closePath();
 $con->fill();
-$sur->writeToPng("fill-missed-stop-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/fill-missed-stop-php.png");
 ?>
 

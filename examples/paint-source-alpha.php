@@ -56,5 +56,5 @@ $pat = $con->getSource();
 $pat->setFilter( FILTER_NEAREST);
 $con->paint();
 
-$sur->writeToPng("paint-source-alpha-php.png");
+$sur->writeToPng(dirname(__FILE__)  . "/paint-source-alpha-php.png");
 ?>

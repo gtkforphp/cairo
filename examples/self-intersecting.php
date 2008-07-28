@@ -25,6 +25,6 @@
 
     $con->setLineWidth (1.0);
     $con->stroke ();
-    $sur->writeToPng("self-intersecting-php.png");
+    $sur->writeToPng(dirname(__FILE__)  . "/self-intersecting-php.png");
 
 ?>
