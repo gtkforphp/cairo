@@ -5,7 +5,7 @@
 
 /* {{{ Class CairoPath */
 
-
+static zend_class_entry *CairoPath_ce_ptr = NULL;
 /* {{{ Methods */
 
 
@@ -121,3 +121,11 @@ void class_init_CairoPath(TSRMLS_D)
 }
 
 /* }}} Class CairoPath */
+
+zend_class_entry *
+get_CairoPath_ce_ptr()
+{
+	return CairoPath_ce_ptr;
+}
+
+

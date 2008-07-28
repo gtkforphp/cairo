@@ -89,7 +89,7 @@ PHP_METHOD(CairoSurface, createSimilar)
 	ce = get_CairoSurface_ce_ptr(sur);
 	object_init_ex(return_value, ce);
 	sobj = (surface_object *)zend_objects_get_address(return_value TSRMLS_CC);
-	sobj->surface = sur;
+	sobj->surface = cairo_surface_reference(sur);
 
 }
 /* }}} createSimilar */
@@ -423,7 +423,7 @@ PHP_METHOD(CairoImageSurface, createFromData)
 {
 
 	zval * _this_zval = NULL;
-	char * buffer = NULL;
+	const char * buffer = NULL;
 	int buffer_len = 0;
 	long format = 0;
 	long width = 0;

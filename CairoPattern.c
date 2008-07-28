@@ -29,6 +29,7 @@ PHP_METHOD(CairoPattern, getMatrix)
 	cairo_matrix_t matrix;
 	pattern_object *curr;
 	matrix_object *mobj;
+	zend_class_entry *ce;
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoPattern_ce_ptr) == FAILURE) {
 		return;
 	}
@@ -36,7 +37,8 @@ PHP_METHOD(CairoPattern, getMatrix)
 	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_pattern_get_matrix(curr->pattern, &matrix);
-	object_init_ex(return_value, CairoMatrix_ce_ptr);
+	ce = get_CairoMatrix_ce_ptr();
+	object_init_ex(return_value, ce);
 	mobj = (matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	mobj->matrix = matrix;
 }

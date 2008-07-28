@@ -277,7 +277,7 @@ PHP_METHOD(CairoContext, copyPage)
    */
 PHP_METHOD(CairoContext, copyPath)
 {
-
+	zend_class_entry *ce;
 	zval * _this_zval = NULL;
 	context_object *curr;
 	path_object *pobj;
@@ -287,8 +287,8 @@ PHP_METHOD(CairoContext, copyPath)
 	}
 
 	curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-
-	object_init_ex(return_value, CairoPath_ce_ptr);
+	ce = get_CairoPath_ce_ptr();
+	object_init_ex(return_value, ce);
 	pobj = (path_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	pobj->path = cairo_copy_path(curr->context);
 }
@@ -304,7 +304,7 @@ PHP_METHOD(CairoContext, copyPathFlat)
 	zval * _this_zval = NULL;
 	context_object *curr;
 	path_object *pobj;
-
+	zend_class_entry *ce;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
@@ -312,10 +312,13 @@ PHP_METHOD(CairoContext, copyPathFlat)
 	}
 
 	curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-
-	object_init_ex(return_value, CairoPath_ce_ptr);
+	ce = get_CairoPath_ce_ptr();
+	if(ce==NULL)
+		printf("wtf");
+	object_init_ex(return_value, ce);
 	pobj = (path_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	pobj->path = cairo_copy_path_flat(curr->context);
+	printf("Check");
 
 }
 /* }}} copyPathFlat */
@@ -658,6 +661,7 @@ PHP_METHOD(CairoContext, getFontMatrix)
 	cairo_matrix_t matrix;
 	context_object *curr;
 	matrix_object *matobj;
+	zend_class_entry *ce;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
 		return;
@@ -665,8 +669,9 @@ PHP_METHOD(CairoContext, getFontMatrix)
 
 	curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_get_font_matrix(curr->context, &matrix);
-
-	object_init_ex(return_value, CairoMatrix_ce_ptr);
+	
+	ce = get_CairoMatrix_ce_ptr();
+	object_init_ex(return_value, ce);
 	matobj = (matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	matobj->matrix = matrix;
 }
@@ -801,6 +806,7 @@ PHP_METHOD(CairoContext, getMatrix)
 	context_object *curr;
 	cairo_matrix_t matrix;
 	matrix_object *mobj;
+	zend_class_entry *ce;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
 		return;
@@ -809,7 +815,8 @@ PHP_METHOD(CairoContext, getMatrix)
 	curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_get_matrix(curr->context, &matrix);
-	object_init_ex(return_value, CairoMatrix_ce_ptr);
+	ce = get_CairoMatrix_ce_ptr();
+	object_init_ex(return_value, ce);
 	mobj = (matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	mobj->matrix = matrix;
 }
@@ -933,7 +940,7 @@ PHP_METHOD(CairoContext, getTarget)
 	object_init_ex(return_value, ce);
 
 	sobj = (surface_object *)zend_objects_get_address(return_value TSRMLS_CC);
-	sobj->surface = cairo_surface_reference(sur);
+	sobj->surface = sur;
 
 }
 /* }}} getTarget */
