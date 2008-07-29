@@ -423,7 +423,7 @@ PHP_METHOD(CairoImageSurface, createFromData)
 {
 
 	zval * _this_zval = NULL;
-	const char * buffer = NULL;
+	char * buffer = NULL;
 	int buffer_len = 0;
 	long format = 0;
 	long width = 0;
