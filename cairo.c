@@ -145,37 +145,37 @@ PHP_FUNCTION(cairo_version_string)
 
 
 /* {{{ proto string cairo_available_surfaces()
- *    */
+ *	  */
 PHP_FUNCTION(cairo_available_surfaces)
 {
 
-    if (ZEND_NUM_ARGS()>0)  {
-	        WRONG_PARAM_COUNT;
-    }
+	if (ZEND_NUM_ARGS()>0)	{
+			WRONG_PARAM_COUNT;
+	}
 
-    array_init(return_value);
+	array_init(return_value);
 
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
 	add_next_index_string(return_value,"PNG SUPPORT",1);
 #endif
 
 #ifdef CAIRO_HAS_PDF_SURFACE
-    add_next_index_string(return_value,"PDF SUPPORT",1);
+	add_next_index_string(return_value,"PDF SUPPORT",1);
 #endif
 #ifdef CAIRO_HAS_PS_SURFACE
-   	add_next_index_string(return_value,"PS SUPPORT",1);
+	add_next_index_string(return_value,"PS SUPPORT",1);
 #endif
 #ifdef CAIRO_HAS_SVG_SURFACE
-    add_next_index_string(return_value,"SVG SUPPORT",1);
+	add_next_index_string(return_value,"SVG SUPPORT",1);
 #endif
 #ifdef CAIRO_HAS_XLIB_SURFACE
-    add_next_index_string(return_value,"XLIB SUPPORT",1);
+	add_next_index_string(return_value,"XLIB SUPPORT",1);
 #endif
 #ifdef CAIRO_HAS_QUARTZ_SURFACE
-    add_next_index_string(return_value,"QUARTZ SUPPORT",1);
+	add_next_index_string(return_value,"QUARTZ SUPPORT",1);
 #endif
 #ifdef CAIRO_HAS_WIN32_SURFACE
-    add_next_index_string(return_value,"WIN32 SUPPORT",1);
+	add_next_index_string(return_value,"WIN32 SUPPORT",1);
 #endif
 
 }

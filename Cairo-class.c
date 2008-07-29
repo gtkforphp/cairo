@@ -8,17 +8,13 @@
 
 static zend_class_entry *Cairo_ce_ptr;
 
-static zend_object_handlers Cairo_handlers;
 
-void class_init_Cairo(void)
+void class_init_Cairo(TSRMLS_D)
 {
-    zend_class_entry ce;
-    INIT_CLASS_ENTRY(ce, "Cairo", NULL);
-    Cairo_ce_ptr = zend_register_internal_class(&ce);
-    //Cairo_ce_ptr->create_object = Cairo_object_new;
+	zend_class_entry ce;
+	INIT_CLASS_ENTRY(ce, "Cairo", NULL);
+	Cairo_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
 	Cairo_ce_ptr->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL_CLASS;
-	memcpy(&Cairo_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-    Cairo_handlers.clone_obj = NULL;
 	/* constants */
 #if HAS_ATSUI_FONT
 	REGISTER_CAIRO_LONG_CONST( "HAS_ATSUI_FONT", 1 );
