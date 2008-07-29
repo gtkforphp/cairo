@@ -19,20 +19,21 @@ static zend_class_entry * CairoFontFace_ce_ptr = NULL;
 //static zend_class_entry * CairoMatrix_ce_ptr = NULL;
 static zend_class_entry * CairoException_ce_ptr = NULL;
 
-extern void  class_init_CairoContext();
-extern  void  class_init_CairoFontFace();
-extern   void  class_init_CairoFontOptions();
-extern   void  class_init_CairoMatrix();
-extern   void  class_init_CairoPath();
-extern   void  class_init_CairoPattern();
-extern   void  class_init_CairoGradient();
-extern   void  class_init_CairoLinearGradient();
-extern   void  class_init_CairoRadialGradient();
-extern   void  class_init_CairoSolidPattern();
-extern   void  class_init_CairoSurfacePattern();
-extern   void  class_init_CairoScaledFont();
-extern   void  class_init_CairoSurface();
-extern   void  class_init_CairoImageSurface();
+extern void class_init_Cairo();
+extern void class_init_CairoContext();
+extern void class_init_CairoFontFace();
+extern void class_init_CairoFontOptions();
+extern void class_init_CairoMatrix();
+extern void class_init_CairoPath();
+extern void class_init_CairoPattern();
+extern void class_init_CairoGradient();
+extern void class_init_CairoLinearGradient();
+extern void class_init_CairoRadialGradient();
+extern void class_init_CairoSolidPattern();
+extern void class_init_CairoSurfacePattern();
+extern void class_init_CairoScaledFont();
+extern void class_init_CairoSurface();
+extern void class_init_CairoImageSurface();
 #ifdef CAIRO_HAS_PDF_SURFACE
 extern   void  class_init_CairoPDFSurface();
 #endif

@@ -24,7 +24,7 @@ if test "$PHP_CAIRO" != "no"; then
   PHP_SUBST(CAIRO_SHARED_LIBADD)
   AC_DEFINE(HAVE_CAIRO, 1, [ ])
 
-  PHP_NEW_EXTENSION(cairo, cairo.c CairoContext.c CairoException.c CairoFont.c CairoMatrix.c CairoPath.c CairoPattern.c CairoSurface.c, $ext_shared)
+  PHP_NEW_EXTENSION(cairo, cairo.c CairoContext.c CairoException.c CairoFont.c CairoMatrix.c CairoPath.c CairoPattern.c CairoSurface.c Cairo-class.c, $ext_shared)
 
   if test "$PHP_CAIRO" != "no"; then
       CAIRO_CHECK_DIR=$PHP_CAIRO
