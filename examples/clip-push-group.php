@@ -2,7 +2,7 @@
 $size = 10;
 $pad = 2;
 
-$sur = new CairoImageSurface(FORMAT_ARGB32, $size, $size);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $size, $size);
 $con = new CairoContext($sur);
 
 $con->setSourceRgb(1,0,0);

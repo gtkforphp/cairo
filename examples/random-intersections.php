@@ -12,7 +12,7 @@ $size = 512;
 $numseg = 128;
 $width = $size+3;
 $height = $size + 3;
-$sur = new CairoImageSurface(FORMAT_ARGB32, $size+3, $size + 3);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $size+3, $size + 3);
 $con = new CairoContext($sur);
 
 $con->setSourceRgb(0,0,0);
@@ -21,7 +21,7 @@ $con->paint();
 $state = 0x123456;
 
 $con->translate(1,1);
-$con->setFillRule(FILL_RULE_EVEN_ODD);
+$con->setFillRule(Cairo::FILL_RULE_EVEN_ODD);
 $con->moveTo(0,0);
 
 for($i=0; $i<$numseg;$i++) {

@@ -1,9 +1,9 @@
 <?php
-$sur = new CairoImageSurface(FORMAT_ARGB32, 1, 1);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 1, 1);
 $con = new CairoContext($sur);
 
 $con2 = new CairoContext($sur);
-$s = new CairoImageSurface(FORMAT_ARGB32, 0, 0);
+$s = new CairoImageSurface(Cairo::FORMAT_ARGB32, 0, 0);
 $s->createFromPng("__THIS_FILE_DOES_NOT_EXIST");
 $pat = new CairoSurfacePattern($s);
 

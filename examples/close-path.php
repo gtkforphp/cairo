@@ -1,5 +1,5 @@
 <?php
-$sur = new CairoImageSurface(FORMAT_ARGB32, 32, 16);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 32, 16);
 $con = new CairoContext($sur);
 
 $con->save();

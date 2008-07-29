@@ -1,7 +1,7 @@
 <?php
-$sur = new CairoImageSurface(FORMAT_RGB24, 2, 2);
+$sur = new CairoImageSurface(Cairo::FORMAT_RGB24, 2, 2);
 $con = new CairoContext($sur);
-$s = new CairoImageSurface(FORMAT_RGB24, 2, 2);
+$s = new CairoImageSurface(Cairo::FORMAT_RGB24, 2, 2);
 $c = array();
 
 $color="";
@@ -39,7 +39,7 @@ $c[3] = $color;
 
 for($i =0 ; $i<4;$i++)
 {
-	$s ->createFromData($c[$i], FORMAT_RGB24, 1 , 1, 4);
+	$s ->createFromData($c[$i], Cairo::FORMAT_RGB24, 1 , 1, 4);
 	$con->setSourceSurface($s, $i%2, $i/2);
 	$con->paint();
 }

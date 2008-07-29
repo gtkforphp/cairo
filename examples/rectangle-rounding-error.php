@@ -1,10 +1,10 @@
 <?php
-$sur = new CairoImageSurface(FORMAT_ARGB32, 76,76);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 76,76);
 $con = new CairoContext($sur);
 
 $con->setSourceRgb ( 1, 1, 1);
 $con->paint ();
-$con->setAntialias (ANTIALIAS_NONE);
+$con->setAntialias (Cairo::ANTIALIAS_NONE);
 $con->setSourceRgb ( 0, 0, 0);
 
 $con->translate( -300, -300);

@@ -4,8 +4,8 @@ $step = 1.0/ $points;
 $pad = 1;
 $width = ($pad + ($points*2) + $pad);
 $height = $width;
-$sur = new CairoImageSurface(FORMAT_ARGB32,$width,$height);
-$s = new CairoImageSurface(FORMAT_ARGB32,1,1);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32,$width,$height);
+$s = new CairoImageSurface(Cairo::FORMAT_ARGB32,1,1);
 $con = new CairoContext($sur);
 $c = new CairoContext($s);
 $c->setSourceRgb(0,0,0);
@@ -15,7 +15,7 @@ $con->paint();
 
 $con->setSourceRgb(0,0,0);
 $con->translate($pad, $pad);
-$con->setAntialias(ANTIALIAS_NONE);
+$con->setAntialias(Cairo::ANTIALIAS_NONE);
 
 for($i = 0; $i < $points; $i++)
 	for($j = 0; $j < $points; $j++) {
@@ -23,7 +23,7 @@ for($i = 0; $i < $points; $i++)
 		$t2 = (2 * $j) + (($j+1) * $step);
 		$con->setSourceSurface($s, $t1, $t2);
 		$pat = $con->getSource();
-		$pat->setFilter(FILTER_NEAREST);
+		$pat->setFilter(Cairo::FILTER_NEAREST);
 		$con->paint();
 	}
 $sur->writeToPng(dirname(__FILE__)  . '/a1-image-sample-php.png');

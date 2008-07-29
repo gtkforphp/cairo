@@ -1,12 +1,12 @@
 <?php
-	$sur = new CairoImageSurface(FORMAT_ARGB32,90, 90);
+	$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32,90, 90);
 	$con = new CairoContext($sur);
 
     $surface_size = (90 - 30) / 10;
     $con->setSourceRgba ( 0, 0, 0, 1);
     $con->rectangle ( 0, 0, 90, 90);
     $con->fill ();
-    $surface = new CairoImageSurface(FORMAT_RGB24,
+    $surface = new CairoImageSurface(Cairo::FORMAT_RGB24,
 					  $surface_size, $surface_size);
     $con2 = new CairoContext($surface);
     $con2->setSourceRgb ( 1, 1, 1);
@@ -35,7 +35,7 @@
     
     /* Using EXTEND_REFLECT makes this test pass for image and xlib backends */
 	$pattern = $con->getSource();
-    $pattern->setExtend(EXTEND_PAD);
+    $pattern->setExtend(Cairo::EXTEND_PAD);
     $con->rectangle ( 1.5, 1.5, 6, 6);
     $con->clip ();
 	$con->setSource($pattern);

@@ -20,7 +20,7 @@ function draw_symbol ()
     $con->stroke ();
     $con->restore ();
 }
-	$sur = new CairoImageSurface(FORMAT_ARGB32,200,200);
+	$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32,200,200);
 	$con = new CairoContext($sur);
 
     $con->setSourceRgb ( 1, 1, 1);

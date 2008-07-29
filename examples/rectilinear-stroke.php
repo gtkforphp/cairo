@@ -1,6 +1,6 @@
 <?php
 	$size = 25;
-	$sur = new CairoImageSurface(FORMAT_ARGB32, $size, $size);
+	$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $size, $size);
 	$con = new CairoContext($sur);
 /* Paint background white, then draw in black. */
     $con->setSourceRgb (1.0, 1.0, 1.0); /* white */
@@ -11,7 +11,7 @@
     $con->translate (1, 1);
 
     /* Draw everything first with square caps. */
-    $con->setLineCap (LINE_CAP_SQUARE);
+    $con->setLineCap (Cairo::LINE_CAP_SQUARE);
 
     /* Draw horizontal and vertical segments, each in both
      * directions. */
@@ -52,7 +52,7 @@
     $con->translate (12, 0);
 
     /* Now draw the same results, but with butt caps. */
-    $con->setLineCap (LINE_CAP_BUTT);
+    $con->setLineCap (Cairo::LINE_CAP_BUTT);
 
     /* Draw horizontal and vertical segments, each in both
      * directions. */

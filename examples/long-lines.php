@@ -1,7 +1,7 @@
 <?php
 $width = 10;
 $height = 8;
-$sur = new CairoImageSurface(FORMAT_ARGB32, 70, 70);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 70, 70);
 $con = new CairoContext($sur);
 
 $line[0] = array("len"=>100.0, "r"=>1, "g"=>0, "b"=>0);

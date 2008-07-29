@@ -1,7 +1,7 @@
 <?php
 $width = 64;
 $height = 64;
-$sur = new CairoImageSurface(FORMAT_ARGB32, $width, $height);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
 $con = new CairoContext($sur);
 $con->newPath();
 $con->arc($width/2, $height/2, $width/3, 0, 2 * M_PI);

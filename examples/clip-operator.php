@@ -2,16 +2,16 @@
 $width = 16;
 $height = 16;
 $pad = 2;
-$noperator = 1 + OPERATOR_SATURATE - OPERATOR_CLEAR;
+$noperator = 1 + Cairo::OPERATOR_SATURATE - Cairo::OPERATOR_CLEAR;
 $imagewidth = $noperator * ($width + $pad) + $pad;
 $imageheight = 4 * ($height + $pad) + $pad; 
-$sur = new CairoImageSurface(FORMAT_ARGB32, $imagewidth, $imageheight);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $imagewidth, $imageheight);
 $con = new CairoContext($sur);
 $con->selectFontFace("Bitstream Vera Sans");
 $con->setFontSize(0.9 * $height);
 
 for($i=0; $i < 4; $i++) {
-	for($op = OPERATOR_CLEAR; $op < $noperator; $op++) {
+	for($op = Cairo::OPERATOR_CLEAR; $op < $noperator; $op++) {
 		$x = $op *($width + $pad) + $pad;
 		$y = $i * ($height + $pad) + $pad;
 
@@ -38,12 +38,12 @@ for($i=0; $i < 4; $i++) {
 			$y += 0.05 * $height;
 			
 			//$stemp = $con->get_group_target();
-			$msur = $sur->createSimilar(CONTENT_ALPHA, $wi, $he);
+			$msur = $sur->createSimilar(Cairo::CONTENT_ALPHA, $wi, $he);
 			
 			$c2 = new CairoContext($msur);
 			$c2->save();
 			$c2->setSourceRgba(0,0,0,0);
-			$c2->setOperator(OPERATOR_SOURCE);
+			$c2->setOperator(Cairo::OPERATOR_SOURCE);
 			$c2->paint();
 			$c2->restore();
 

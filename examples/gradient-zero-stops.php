@@ -1,5 +1,5 @@
 <?php
-$sur = new CairoImageSurface(FORMAT_ARGB32, 2, 2);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 2, 2);
 $con = new CairoContext($sur);
 
 $pat = new CairoLinearGradient(0,0,1,1);

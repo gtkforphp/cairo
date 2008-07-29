@@ -1,9 +1,9 @@
 <?php
-$sur = new CairoImageSurface(FORMAT_ARGB32,3*(3+6+3), 8*(6+3) + 3);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32,3*(3+6+3), 8*(6+3) + 3);
 $con = new CairoContext($sur);
 
 
-    $cap = array(LINE_CAP_ROUND, LINE_CAP_SQUARE, LINE_CAP_BUTT);
+    $cap = array(Cairo::LINE_CAP_ROUND, Cairo::LINE_CAP_SQUARE, Cairo::LINE_CAP_BUTT);
     
     $dash = array(2.0, 2.0);
     $dash_long = array(6.0, 6.0);

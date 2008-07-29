@@ -1,9 +1,9 @@
 <?php
 $width = 8;
 $height = 8;
-$sur = new CairoImageSurface(FORMAT_ARGB32, $width, $height);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
 $con = new CairoContext($sur);
-$s = new CairoImageSurface(FORMAT_A8,$width,$height);
+$s = new CairoImageSurface(Cairo::FORMAT_A8,$width,$height);
 $str="";
 $stride = $s->getStride();
 
@@ -19,7 +19,7 @@ for($i=0; $i<8; $i++) {
 }
 
 echo $str;
-$s->createFromData($str, FORMAT_A8, $width, $height);
+$s->createFromData($str, Cairo::FORMAT_A8, $width, $height);
 $con->setSourceRgb(0,0,1);
 $con->paint();
 

@@ -1,10 +1,10 @@
 <?php
-$sur = new CairoImageSurface(FORMAT_ARGB32, 40, 40);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 40, 40);
 $con = new CairoContext($sur);
 
 $con->setSourceRgb(1,1,1);
 $con->paint();
-$con->setLineCap(LINE_CAP_ROUND);
+$con->setLineCap(Cairo::LINE_CAP_ROUND);
 $con->setLineWidth(5);
 
 $con->setSourceRgb(0,1,0);

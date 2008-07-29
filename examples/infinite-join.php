@@ -1,12 +1,12 @@
 <?php
-$sur = new CairoImageSurface(FORMAT_ARGB32, 8, 8);
+$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 8, 8);
 $con = new CairoContext($sur);
 
 $con->setSourceRgb(1,1,1);
 $con->paint();
 
 $con->setSourceRgb(0,0,0);
-$con->setLineJoin(LINE_JOIN_ROUND);
+$con->setLineJoin(Cairo::LINE_JOIN_ROUND);
 $con->scale(20.0/100.0, 20/100.);
 $con->scale(1./20, 1./20);
 $con->setLineWidth(20);

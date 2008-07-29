@@ -1,7 +1,7 @@
 <?php
     $width = 71;
     $height = 28;
-    $sur = new CairoImageSurface(FORMAT_ARGB32, $width, $height);
+    $sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
     $con = new CairoContext($sur);
  
     $dash = array(8.0, 2.0);
