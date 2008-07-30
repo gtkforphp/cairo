@@ -637,14 +637,15 @@ PHP_METHOD(CairoContext, getFontFace)
 	zval * _this_zval = NULL;
 	context_object *curr;
 	fontface_object *ffobj;
+	zend_class_entry *ce;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
 		return;
 	}
 
 	curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-
-	object_init_ex(return_value, CairoFontFace_ce_ptr);
+	ce = get_CairoFontFace_ce_ptr();
+	object_init_ex(return_value, ce);
 	ffobj = (fontface_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	ffobj->fontface = cairo_font_face_reference (cairo_get_font_face(curr->context));
 }
@@ -687,8 +688,8 @@ PHP_METHOD(CairoContext, getFontOptions)
 	zval * _this_zval = NULL;
 	context_object *curr;
 	fontoptions_object *foobj;
+	zend_class_entry *ce;
 	cairo_font_options_t *options = cairo_font_options_create();	
-
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
 		return;
@@ -696,8 +697,8 @@ PHP_METHOD(CairoContext, getFontOptions)
 
 	curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_get_font_options(curr->context, options);
-	
-	object_init_ex(return_value, CairoFontOptions_ce_ptr);
+    ce = get_CairoFontOptions_ce_ptr();
+	object_init_ex(return_value, ce);
 	foobj = (fontoptions_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	foobj->fontoptions = options;
 	
@@ -872,15 +873,15 @@ PHP_METHOD(CairoContext, getScaledFont)
 	zval * _this_zval = NULL;
 	context_object *curr;
 	scaledfont_object *sfobj;
-
+	zend_class_entry *ce;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoContext_ce_ptr) == FAILURE) {
 		return;
 	}
 
 	curr = (context_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-
-	object_init_ex(return_value, CairoScaledFont_ce_ptr);
+    ce = get_CairoScaledFont_ce_ptr();
+	object_init_ex(return_value, ce);
 	sfobj = (scaledfont_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	
 	sfobj->scaledfont = cairo_scaled_font_reference(cairo_get_scaled_font(curr->context));
@@ -2647,4 +2648,9 @@ void class_init_CairoContext(TSRMLS_D)
 zend_class_entry* get_CairoContext_ce_ptr()
 {
 	return CairoContext_ce_ptr;
+}
+
+void php_cairo_context_reference(cairo_t *con)
+{
+	cairo_reference(con);
 }

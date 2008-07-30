@@ -42,9 +42,18 @@ typedef struct _scaledfont_object {
 } scaledfont_object;
 
 
-PHP_CAIRO_API extern zend_class_entry* get_CairoSurface_ce_ptr(cairo_surface_t *);
-PHP_CAIRO_API extern zend_class_entry* get_CairoContext_ce_ptr();
-PHP_CAIRO_API extern zend_class_entry* get_CairoPattern_ce_ptr(cairo_pattern_t *);
-PHP_CAIRO_API extern zend_class_entry* get_CairoPath_ce_ptr();
-PHP_CAIRO_API extern zend_class_entry* get_CairoMatrix_ce_ptr();
-PHP_CAIRO_API extern void phpCairoCheckStatus(cairo_status_t TSRMLS_DC);
+extern zend_class_entry* get_CairoSurface_ce_ptr(cairo_surface_t *);
+extern zend_class_entry* get_CairoContext_ce_ptr();
+extern zend_class_entry* get_CairoPattern_ce_ptr(cairo_pattern_t *);
+extern zend_class_entry* get_CairoPath_ce_ptr();
+extern zend_class_entry* get_CairoMatrix_ce_ptr();
+extern zend_class_entry* get_CairoFontOptions_ce_ptr();
+extern zend_class_entry* get_CairoFontFace_ce_ptr();
+extern zend_class_entry* get_CairoScaledFont_ce_ptr();
+extern void phpCairoCheckStatus(cairo_status_t TSRMLS_DC);
+
+
+/* Specifically for php-gtk */
+extern cairo_font_options_t* cairo_copy_fontoptions(cairo_font_options_t *); 
+extern void php_cairo_context_reference(cairo_t *);
+

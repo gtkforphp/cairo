@@ -2,9 +2,6 @@
  */ 
 
 static zend_class_entry * CairoContext_ce_ptr = NULL;
-static zend_class_entry * CairoFontOptions_ce_ptr = NULL;
-static zend_class_entry * CairoScaledFont_ce_ptr = NULL;
-//static zend_class_entry * CairoPath_ce_ptr = NULL;
 static zend_class_entry * CairoPattern_ce_ptr = NULL;
 static zend_class_entry * CairoGradient_ce_ptr = NULL;
 static zend_class_entry * CairoLinearGradient_ce_ptr = NULL;
@@ -15,8 +12,6 @@ static zend_class_entry * CairoSurfacePattern_ce_ptr = NULL;
  * They are not called directly and get_CairoSurface_ce_ptr() has to be used.
  */
 
-static zend_class_entry * CairoFontFace_ce_ptr = NULL;
-//static zend_class_entry * CairoMatrix_ce_ptr = NULL;
 static zend_class_entry * CairoException_ce_ptr = NULL;
 
 extern void class_init_Cairo();

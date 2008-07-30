@@ -5,7 +5,7 @@
 
 /* {{{ Class CairoFontFace */
 
-//static zend_class_entry * CairoFontFace_ce_ptr = NULL;
+static zend_class_entry * CairoFontFace_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -78,12 +78,18 @@ void class_init_CairoFontFace(TSRMLS_D)
 	CairoFontFace_handlers.clone_obj = NULL;
 }
 
+zend_class_entry *
+get_CairoFontFace_ce_ptr()
+{
+	return CairoFontFace_ce_ptr;
+}
+
 /* }}} Class CairoFontFace */
 
 
 /* {{{ Class CairoFontOptions */
 
-//istatic zend_class_entry * CairoFontOptions_ce_ptr = NULL;
+static zend_class_entry * CairoFontOptions_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -340,12 +346,17 @@ void class_init_CairoFontOptions(TSRMLS_D)
 	CairoFontOptions_handlers.clone_obj = NULL;
 }
 
+zend_class_entry *
+get_CairoFontOptions_ce_ptr()
+{
+	return CairoFontOptions_ce_ptr;
+}
 /* }}} Class CairoFontOptions */
 
 
 /* {{{ Class CairoScaledFont */
 
-//static zend_class_entry * CairoScaledFont_ce_ptr = NULL;
+static zend_class_entry * CairoScaledFont_ce_ptr = NULL;
 
 /* {{{ Methods */
 
@@ -525,4 +536,15 @@ void class_init_CairoScaledFont(TSRMLS_D)
 	CairoScaledFont_handlers.clone_obj = NULL;
 }
 
+zend_class_entry *
+get_CairoScaledFont_ce_ptr()
+{
+	return CairoScaledFont_ce_ptr;
+}
 /* }}} Class CairoScaledFont */
+
+cairo_font_options_t * cairo_copy_fontoptions(cairo_font_options_t *fo)
+{
+	return cairo_font_options_copy(fo);
+}
+	
