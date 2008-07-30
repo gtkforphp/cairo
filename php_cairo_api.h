@@ -42,10 +42,9 @@ typedef struct _scaledfont_object {
 } scaledfont_object;
 
 
-extern zend_class_entry* get_CairoSurface_ce_ptr(cairo_surface_t *);
-extern zend_class_entry* get_CairoContext_ce_ptr();
-extern zend_class_entry* get_CairoPattern_ce_ptr(cairo_pattern_t *);
-extern zend_class_entry* get_CairoPath_ce_ptr();
-extern zend_class_entry* get_CairoMatrix_ce_ptr();
-extern void phpCairoCheckStatus(cairo_status_t TSRMLS_DC);
-
+PHP_CAIRO_API extern zend_class_entry* get_CairoSurface_ce_ptr(cairo_surface_t *);
+PHP_CAIRO_API extern zend_class_entry* get_CairoContext_ce_ptr();
+PHP_CAIRO_API extern zend_class_entry* get_CairoPattern_ce_ptr(cairo_pattern_t *);
+PHP_CAIRO_API extern zend_class_entry* get_CairoPath_ce_ptr();
+PHP_CAIRO_API extern zend_class_entry* get_CairoMatrix_ce_ptr();
+PHP_CAIRO_API extern void phpCairoCheckStatus(cairo_status_t TSRMLS_DC);
