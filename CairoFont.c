@@ -346,8 +346,7 @@ void class_init_CairoFontOptions(TSRMLS_D)
 	CairoFontOptions_handlers.clone_obj = NULL;
 }
 
-zend_class_entry *
-get_CairoFontOptions_ce_ptr()
+PHP_CAIRO_API zend_class_entry * get_CairoFontOptions_ce_ptr()
 {
 	return CairoFontOptions_ce_ptr;
 }
@@ -536,14 +535,13 @@ void class_init_CairoScaledFont(TSRMLS_D)
 	CairoScaledFont_handlers.clone_obj = NULL;
 }
 
-zend_class_entry *
-get_CairoScaledFont_ce_ptr()
+PHP_CAIRO_API zend_class_entry * get_CairoScaledFont_ce_ptr()
 {
 	return CairoScaledFont_ce_ptr;
 }
 /* }}} Class CairoScaledFont */
 
-cairo_font_options_t * cairo_copy_fontoptions(cairo_font_options_t *fo)
+PHP_CAIRO_API cairo_font_options_t * cairo_copy_fontoptions(cairo_font_options_t *fo)
 {
 	return cairo_font_options_copy(fo);
 }

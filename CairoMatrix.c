@@ -289,8 +289,7 @@ void class_init_CairoMatrix(TSRMLS_D)
 }
 
 /* }}} Class CairoMatrix */
-zend_class_entry *
-get_CairoMatrix_ce_ptr()
+PHP_CAIRO_API zend_class_entry * get_CairoMatrix_ce_ptr()
 {
 	return CairoMatrix_ce_ptr;
 }

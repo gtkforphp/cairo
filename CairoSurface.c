@@ -1472,8 +1472,7 @@ void class_init_CairoXlibSurface(TSRMLS_D)
 #endif
 
 /* {{{ Helper Functions */
-zend_class_entry * 
-get_CairoSurface_ce_ptr(cairo_surface_t *surface)
+PHP_CAIRO_API zend_class_entry *  get_CairoSurface_ce_ptr(cairo_surface_t *surface)
 {
 	zend_class_entry *type;
 	if(surface == NULL)

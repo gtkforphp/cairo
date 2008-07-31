@@ -46,12 +46,6 @@ extern "C" {
 extern zend_module_entry cairo_module_entry;
 #define phpext_cairo_ptr &cairo_module_entry
 
-#ifdef PHP_WIN32
-#define PHP_CAIRO_API __declspec(dllexport)
-#else
-#define PHP_CAIRO_API
-#endif
-
 PHP_MINIT_FUNCTION(cairo);
 PHP_MINFO_FUNCTION(cairo);
 
@@ -84,13 +78,6 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(cairo_available_surfaces);
 ZEND_BEGIN_ARG_INFO_EX(cairo_available_surfaces_arg_info, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
 ZEND_END_ARG_INFO()
-
-
-
-
-
-
-
 
 #ifdef	__cplusplus
 } /* extern "C" */

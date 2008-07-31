@@ -666,8 +666,7 @@ void class_init_CairoSurfacePattern(TSRMLS_D)
 
 /* {{{ Helper functions */
 
-zend_class_entry *
-get_CairoPattern_ce_ptr(cairo_pattern_t *pattern)
+PHP_CAIRO_API zend_class_entry * get_CairoPattern_ce_ptr(cairo_pattern_t *pattern)
 {
 	zend_class_entry *type;
 	if(pattern == NULL)

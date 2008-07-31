@@ -122,8 +122,7 @@ void class_init_CairoPath(TSRMLS_D)
 
 /* }}} Class CairoPath */
 
-zend_class_entry *
-get_CairoPath_ce_ptr()
+PHP_CAIRO_API zend_class_entry * get_CairoPath_ce_ptr()
 {
 	return CairoPath_ce_ptr;
 }
