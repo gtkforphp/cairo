@@ -1,11 +1,78 @@
-#include "php_cairo_api.h"
-#include "CairoMatrix.h"
-#include "CairoExceptionMacro.h"
-#include "php_cairo_ce_ptr.h"
+/*
+  +----------------------------------------------------------------------+
+  | PHP Version 5                                                        |
+  +----------------------------------------------------------------------+
+  | Copyright (c) 1997-2008 The PHP Group                                |
+  +----------------------------------------------------------------------+
+  | This source file is subject to version 3.01 of the PHP license,      |
+  | that is bundled with this package in the file LICENSE, and is        |
+  | available through the world-wide-web at the following url:           |
+  | http://www.php.net/license/3_01.txt                                  |
+  | If you did not receive a copy of the PHP license and are unable to   |
+  | obtain it through the world-wide-web, please send a note to          |
+  | license@php.net so we can mail you a copy immediately.               |
+  +----------------------------------------------------------------------+
+  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
+  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  +----------------------------------------------------------------------+
+*/
 
-/* {{{ Class CairoMatrix */
+/* $Id$ */
+
+#include "php_cairo_api.h"
+#include "php_cairo_internal.h"
 
 static zend_class_entry * CairoMatrix_ce_ptr = NULL;
+
+/* helper functions */
+PHP_CAIRO_API zend_class_entry * get_CairoMatrix_ce_ptr()
+{
+	return CairoMatrix_ce_ptr;
+}
+
+/* {{{ arginfo */
+ZEND_BEGIN_ARG_INFO_EX(CairoMatrix____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
+  ZEND_ARG_INFO(0, yx)
+  ZEND_ARG_INFO(0, xy)
+  ZEND_ARG_INFO(0, yy)
+  ZEND_ARG_INFO(0, x0)
+  ZEND_ARG_INFO(0, y0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoMatrix__init_rotate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_INFO(0, radians)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoMatrix__multiply_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_OBJ_INFO(0, o2, CairoMatrix, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoMatrix__rotate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_INFO(0, radians)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoMatrix__scale_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_INFO(0, sx)
+  ZEND_ARG_INFO(0, xy)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoMatrix__transform_distance_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_INFO(0, dx)
+  ZEND_ARG_INFO(0, dy)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoMatrix__transform_point_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_INFO(0, x)
+  ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoMatrix__translate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_INFO(0, tx)
+  ZEND_ARG_INFO(0, ty)
+ZEND_END_ARG_INFO()
+/* }}} */
+
+/* {{{ Class CairoMatrix */
 
 /* {{{ Methods */
 
@@ -22,7 +89,7 @@ PHP_METHOD(CairoMatrix, __construct)
 	double yy = 1.0;
 	double x0 = 0.0;
 	double y0 = 0.0;
-	matrix_object *curr;
+	cairo_matrix_object *curr;
 
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|dddddd", &xx, &yx, &xy, &yy, &x0, &y0) == FAILURE) {
@@ -30,7 +97,7 @@ PHP_METHOD(CairoMatrix, __construct)
 	}
 
 	_this_zval = getThis();
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_matrix_init(&curr->matrix, xx, yx, xy, yy, x0, y0);
 	
 }
@@ -46,7 +113,7 @@ PHP_METHOD(CairoMatrix, initRotate)
 	zval * _this_zval = NULL;
 	cairo_matrix_t matrix;
 	double radians = 0.0;
-	matrix_object *curr, *mobj;
+	cairo_matrix_object *curr, *mobj;
 
 
 
@@ -54,10 +121,10 @@ PHP_METHOD(CairoMatrix, initRotate)
 		return;
 	}
 
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_matrix_init_rotate(&matrix, radians);
 	object_init_ex(return_value, CairoMatrix_ce_ptr);
-	mobj = (matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
+	mobj = (cairo_matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	mobj->matrix = matrix;
 }
 /* }}} initRotate */
@@ -71,16 +138,16 @@ PHP_METHOD(CairoMatrix, invert)
 
 	zval * _this_zval = NULL;
 	cairo_status_t status;
-	matrix_object *curr;
+	cairo_matrix_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoMatrix_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	status = cairo_matrix_invert(&curr->matrix);
-	PHP_CAIRO_ERROR(status);	
+	cairo_throw_exception(status TSRMLS_CC);	
 }
 /* }}} invert */
 
@@ -94,7 +161,7 @@ PHP_METHOD(CairoMatrix, multiply)
 	zval * _this_zval = NULL;
 	zval * o2 = NULL;
 	cairo_matrix_t result;
-	matrix_object *curr, *mobj, *mret;
+	cairo_matrix_object *curr, *mobj, *mret;
 
 
 
@@ -102,11 +169,11 @@ PHP_METHOD(CairoMatrix, multiply)
 		return;
 	}
 
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	mobj = (matrix_object *)zend_objects_get_address(o2 TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	mobj = (cairo_matrix_object *)zend_objects_get_address(o2 TSRMLS_CC);
 	cairo_matrix_multiply(&result, &curr->matrix, &mobj->matrix);
 	object_init_ex(return_value, CairoMatrix_ce_ptr);
-	mret = (matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
+	mret = (cairo_matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	mret->matrix = result;
 }
 /* }}} multiply */
@@ -120,7 +187,7 @@ PHP_METHOD(CairoMatrix, rotate)
 
 	zval * _this_zval = NULL;
 	double radians = 0.0;
-	matrix_object *curr;
+	cairo_matrix_object *curr;
 
 
 
@@ -128,7 +195,7 @@ PHP_METHOD(CairoMatrix, rotate)
 		return;
 	}
 
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_matrix_rotate(&curr->matrix, radians);
 
 }
@@ -144,14 +211,14 @@ PHP_METHOD(CairoMatrix, scale)
 	zval * _this_zval = NULL;
 	double sx = 1.0;
 	double xy = 1.0;
-	matrix_object *curr;
+	cairo_matrix_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &_this_zval, CairoMatrix_ce_ptr, &sx, &xy) == FAILURE) {
 		return;
 	}
 
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_matrix_scale(&curr->matrix, sx, xy);
 
 }
@@ -167,13 +234,13 @@ PHP_METHOD(CairoMatrix, transformDistance)
 	zval * _this_zval = NULL;
 	double dx = 0.0;
 	double dy = 0.0;
-	matrix_object *curr;
+	cairo_matrix_object *curr;
 	
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &_this_zval, CairoMatrix_ce_ptr, &dx, &dy) == FAILURE) {
 		return;
 	}
 
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_matrix_transform_distance(&curr->matrix, &dx, &dy);
 
 	array_init(return_value);
@@ -193,7 +260,7 @@ PHP_METHOD(CairoMatrix, transformPoint)
 	zval * _this_zval = NULL;
 	double x = 0.0;
 	double y = 0.0;
-	matrix_object *curr;
+	cairo_matrix_object *curr;
 	
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &_this_zval, CairoMatrix_ce_ptr, &x, &y) == FAILURE) {
@@ -201,7 +268,7 @@ PHP_METHOD(CairoMatrix, transformPoint)
 	}
 
 
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_matrix_transform_point(&curr->matrix, &x, &y);
 	array_init(return_value);
 	add_assoc_double(return_value, "x", x);
@@ -220,13 +287,13 @@ PHP_METHOD(CairoMatrix, translate)
 	zval * _this_zval = NULL;
 	double tx = 0.0;
 	double ty = 0.0;
-	matrix_object *curr;
+	cairo_matrix_object *curr;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &_this_zval, CairoMatrix_ce_ptr, &tx, &ty) == FAILURE) {
 		return;
 	}
 
-	curr = (matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_matrix_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_matrix_translate(&curr->matrix, tx, ty);
 
 }
@@ -234,15 +301,15 @@ PHP_METHOD(CairoMatrix, translate)
 
 
 static zend_function_entry CairoMatrix_methods[] = {
-	PHP_ME(CairoMatrix, __construct, CairoMatrix____construct_args, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(CairoMatrix, initRotate, CairoMatrix__init_rotate_args, /**/ZEND_ACC_PRIVATE)
-	PHP_ME(CairoMatrix, invert, NULL, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoMatrix, multiply, CairoMatrix__multiply_args, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoMatrix, rotate, CairoMatrix__rotate_args, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoMatrix, scale, CairoMatrix__scale_args, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoMatrix, transformDistance, CairoMatrix__transform_distance_args, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoMatrix, transformPoint, CairoMatrix__transform_point_args, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoMatrix, translate, CairoMatrix__translate_args, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoMatrix, __construct, CairoMatrix____construct_args, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoMatrix, initRotate, CairoMatrix__init_rotate_args, ZEND_ACC_PRIVATE)
+	PHP_ME(CairoMatrix, invert, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoMatrix, multiply, CairoMatrix__multiply_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoMatrix, rotate, CairoMatrix__rotate_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoMatrix, scale, CairoMatrix__scale_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoMatrix, transformDistance, CairoMatrix__transform_distance_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoMatrix, transformPoint, CairoMatrix__transform_point_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoMatrix, translate, CairoMatrix__translate_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -250,9 +317,9 @@ static zend_function_entry CairoMatrix_methods[] = {
 
 static zend_object_handlers CairoMatrix_handlers;
 
-static void CairoMatrix_object_dtor(void *object)
+static void CairoMatrix_object_dtor(void *object TSRMLS_DC)
 {
-	matrix_object *matrix = (matrix_object *)object;
+	cairo_matrix_object *matrix = (cairo_matrix_object *)object;
 	zend_hash_destroy(matrix->std.properties);
 	FREE_HASHTABLE(matrix->std.properties);
 	efree(object);
@@ -262,10 +329,10 @@ static void CairoMatrix_object_dtor(void *object)
 static zend_object_value CairoMatrix_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	matrix_object *matrix;
+	cairo_matrix_object *matrix;
 	zval *temp;
-	matrix = emalloc(sizeof(matrix_object));
-	memset(matrix,0,sizeof(matrix_object));
+	matrix = emalloc(sizeof(cairo_matrix_object));
+	memset(matrix,0,sizeof(cairo_matrix_object));
 	matrix->std.ce = ce;
 	ALLOC_HASHTABLE(matrix->std.properties);
 	zend_hash_init(matrix->std.properties, 0, NULL, ZVAL_PTR_DTOR,0);
@@ -289,7 +356,12 @@ void class_init_CairoMatrix(TSRMLS_D)
 }
 
 /* }}} Class CairoMatrix */
-PHP_CAIRO_API zend_class_entry * get_CairoMatrix_ce_ptr()
-{
-	return CairoMatrix_ce_ptr;
-}
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw = 4 ts = 4 fdm = marker
+ * vim<600: noet sw = 4 ts = 4
+ */

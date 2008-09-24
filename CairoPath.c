@@ -1,11 +1,37 @@
+/*
+  +----------------------------------------------------------------------+
+  | PHP Version 5                                                        |
+  +----------------------------------------------------------------------+
+  | Copyright (c) 1997-2008 The PHP Group                                |
+  +----------------------------------------------------------------------+
+  | This source file is subject to version 3.01 of the PHP license,      |
+  | that is bundled with this package in the file LICENSE, and is        |
+  | available through the world-wide-web at the following url:           |
+  | http://www.php.net/license/3_01.txt                                  |
+  | If you did not receive a copy of the PHP license and are unable to   |
+  | obtain it through the world-wide-web, please send a note to          |
+  | license@php.net so we can mail you a copy immediately.               |
+  +----------------------------------------------------------------------+
+  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
+  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  +----------------------------------------------------------------------+
+*/
+
+/* $Id$ */
+
 #include "php_cairo_api.h"
-#include "CairoPath.h"
-#include "CairoExceptionMacro.h"
-#include "php_cairo_ce_ptr.h"
+#include "php_cairo_internal.h"
+#include <zend_exceptions.h>
 
 /* {{{ Class CairoPath */
 
 static zend_class_entry *CairoPath_ce_ptr = NULL;
+
+PHP_CAIRO_API zend_class_entry * get_CairoPath_ce_ptr()
+{
+	return CairoPath_ce_ptr;
+}
+
 /* {{{ Methods */
 
 
@@ -13,13 +39,9 @@ static zend_class_entry *CairoPath_ce_ptr = NULL;
    */
 PHP_METHOD(CairoPath, __construct)
 {
-
-	php_error(E_WARNING, "Can not call directly"); RETURN_FALSE;
-
+	zend_throw_exception(CairoException_ce_ptr, "CairoPath cannot be constructed", 0 TSRMLS_CC);
 }
 /* }}} __construct */
-
-
 
 /* {{{ proto array toStr()
    */
@@ -27,7 +49,7 @@ PHP_METHOD(CairoPath, toStr)
 {
 
 	zval * _this_zval = NULL;
-	path_object *curr;
+	cairo_path_object *curr;
 	cairo_path_t *path;
 	cairo_path_data_t *data;
 	int i;
@@ -36,7 +58,7 @@ PHP_METHOD(CairoPath, toStr)
 
 	_this_zval = getThis();
 
-	curr = (path_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_path_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	path = curr->path;
 	array_init(return_value);
@@ -69,8 +91,8 @@ PHP_METHOD(CairoPath, toStr)
 
 
 static zend_function_entry CairoPath_methods[] = {
-	PHP_ME(CairoPath, __construct, NULL, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(CairoPath, toStr, NULL, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoPath, __construct, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoPath, toStr, NULL, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -79,9 +101,9 @@ static zend_function_entry CairoPath_methods[] = {
 static zend_object_handlers CairoPath_handlers;
 
 
-static void CairoPath_object_dtor(void *object)
+static void CairoPath_object_dtor(void *object TSRMLS_DC)
 {
-	path_object *path = (path_object *)object;
+	cairo_path_object *path = (cairo_path_object *)object;
 	zend_hash_destroy(path->std.properties);
 	FREE_HASHTABLE(path->std.properties);
 
@@ -94,11 +116,11 @@ static void CairoPath_object_dtor(void *object)
 static zend_object_value CairoPath_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	path_object *path;
+	cairo_path_object *path;
 	zval *temp;
 
-	path = emalloc(sizeof(path_object));
-	memset(path,0,sizeof(path_object));
+	path = emalloc(sizeof(cairo_path_object));
+	memset(path,0,sizeof(cairo_path_object));
 	path->std.ce = ce;
 	ALLOC_HASHTABLE(path->std.properties);
 	zend_hash_init(path->std.properties, 0, NULL, ZVAL_PTR_DTOR,0);
@@ -122,9 +144,11 @@ void class_init_CairoPath(TSRMLS_D)
 
 /* }}} Class CairoPath */
 
-PHP_CAIRO_API zend_class_entry * get_CairoPath_ce_ptr()
-{
-	return CairoPath_ce_ptr;
-}
-
-
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw = 4 ts = 4 fdm = marker
+ * vim<600: noet sw = 4 ts = 4
+ */

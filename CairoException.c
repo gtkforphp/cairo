@@ -1,6 +1,26 @@
+/*
+  +----------------------------------------------------------------------+
+  | PHP Version 5                                                        |
+  +----------------------------------------------------------------------+
+  | Copyright (c) 1997-2008 The PHP Group                                |
+  +----------------------------------------------------------------------+
+  | This source file is subject to version 3.01 of the PHP license,      |
+  | that is bundled with this package in the file LICENSE, and is        |
+  | available through the world-wide-web at the following url:           |
+  | http://www.php.net/license/3_01.txt                                  |
+  | If you did not receive a copy of the PHP license and are unable to   |
+  | obtain it through the world-wide-web, please send a note to          |
+  | license@php.net so we can mail you a copy immediately.               |
+  +----------------------------------------------------------------------+
+  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
+  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  +----------------------------------------------------------------------+
+*/
+
+/* $Id$ */
+
 #include "php_cairo_api.h"
-#include "CairoExceptionMacro.h"
-#include "php_cairo_ce_ptr.h"
+#include "php_cairo_internal.h"
 #include <zend_exceptions.h>
 
 /* {{{ Class CairoException */
@@ -24,31 +44,23 @@ void class_init_CairoException(TSRMLS_D)
 
 /* }}} Class CairoException */
 
-void phpCairoCheckStatus(cairo_status_t status TSRMLS_DC)
+void cairo_throw_exception(cairo_status_t status TSRMLS_DC)
 {
 	char * error_message;
+
+	if (status == CAIRO_STATUS_SUCCESS) {
+		return;
+	}
 	error_message = estrdup(cairo_status_to_string(status));
 	zend_throw_exception(CairoException_ce_ptr, error_message, status TSRMLS_CC);
 	return;
-
-	/*
-	switch(status) {
-	case CAIRO_STATUS_SUCCESS:
-	return 0;
-	case CAIRO_STATUS_NO_MEMORY:
-	zend_throw_exception(CairoException_ce_ptr,"No memory", NULL);
-	break;
-	case CAIRO_STATUS_READ_ERROR:
-	case CAIRO_STATUS_WRITE_ERROR:
-	zend_throw_exception(CairoException_ce_ptr, cairo_status_to_string(status), NULL);
-	break;
-	case CAIRO_STATUS_INVALID_RESTORE:
-	zend_throw_expetion(CairoException_ce_ptr, "Invalid restore", NULL);
-	break;
-	case CAIRO_STATUS_INVALID_POP_GROUP:
-	zend_throw_exception(CairoException_ce_ptr, "Pop group error", NULL);
-	break;
-	} */
 }
 
-
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw = 4 ts = 4 fdm = marker
+ * vim<600: noet sw = 4 ts = 4
+ */

@@ -1,0 +1,9 @@
+CairoPath needs some help, toStr should be a __toString, there are a bunch of functions missing and
+it should probably have iteration implemented for it
+
+Tests and documentation need to be written
+
+when 1.7 is released new toys need to be added, at the same time the build system will probably need
+versioning added so we know what version of cairo we're building against
+
+Individual surfaces need a once over and there are some unimplemented or partially implemented functions (a list?)

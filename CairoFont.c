@@ -1,11 +1,85 @@
+/*
+  +----------------------------------------------------------------------+
+  | PHP Version 5                                                        |
+  +----------------------------------------------------------------------+
+  | Copyright (c) 1997-2008 The PHP Group                                |
+  +----------------------------------------------------------------------+
+  | This source file is subject to version 3.01 of the PHP license,      |
+  | that is bundled with this package in the file LICENSE, and is        |
+  | available through the world-wide-web at the following url:           |
+  | http://www.php.net/license/3_01.txt                                  |
+  | If you did not receive a copy of the PHP license and are unable to   |
+  | obtain it through the world-wide-web, please send a note to          |
+  | license@php.net so we can mail you a copy immediately.               |
+  +----------------------------------------------------------------------+
+  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
+  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  +----------------------------------------------------------------------+
+*/
+
+/* $Id$ */
+
 #include "php_cairo_api.h"
-#include "CairoFont.h"
-#include "CairoExceptionMacro.h"
-#include "php_cairo_ce_ptr.h"
+#include "php_cairo_internal.h"
+#include <zend_exceptions.h>
+
+static zend_class_entry * CairoFontFace_ce_ptr = NULL;
+static zend_class_entry * CairoFontOptions_ce_ptr = NULL;
+static zend_class_entry * CairoScaledFont_ce_ptr = NULL;
+
+/* Helper Functions */
+
+PHP_CAIRO_API zend_class_entry * get_CairoFontFace_ce_ptr()
+{
+	return CairoFontFace_ce_ptr;
+}
+
+PHP_CAIRO_API zend_class_entry * get_CairoFontOptions_ce_ptr()
+{
+	return CairoFontOptions_ce_ptr;
+}
+
+PHP_CAIRO_API cairo_font_options_t * cairo_copy_fontoptions(cairo_font_options_t *fo)
+{
+	return cairo_font_options_copy(fo);
+}
+
+PHP_CAIRO_API zend_class_entry * get_CairoScaledFont_ce_ptr()
+{
+	return CairoScaledFont_ce_ptr;
+}
+
+/* {{{ arginfo */
+ZEND_BEGIN_ARG_INFO_EX(CairoFontOptions__set_antialias_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+  ZEND_ARG_INFO(0, aa)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoFontOptions__set_hint_metrics_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+  ZEND_ARG_INFO(0, hm)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoFontOptions__set_hint_style_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+  ZEND_ARG_INFO(0, hs)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoFontOptions__set_subpixel_order_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+  ZEND_ARG_INFO(0, so)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoScaledFont____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+  ZEND_ARG_OBJ_INFO(0, mx1, CairoMatrix, 1)
+  ZEND_ARG_OBJ_INFO(0, mx2, CairoMatrix, 1)
+  ZEND_ARG_OBJ_INFO(0, fo, CairoFontOptions, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoScaledFont__text_extents_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_INFO(0, str)
+ZEND_END_ARG_INFO()
+/* }}} */
 
 /* {{{ Class CairoFontFace */
 
-static zend_class_entry * CairoFontFace_ce_ptr = NULL;
+
 
 /* {{{ Methods */
 
@@ -14,33 +88,22 @@ static zend_class_entry * CairoFontFace_ce_ptr = NULL;
    */
 PHP_METHOD(CairoFontFace, __construct)
 {
-
-	if (ZEND_NUM_ARGS()>0)	{
-		WRONG_PARAM_COUNT;
-	}
-
-
-	php_error(E_WARNING,"Please use Context.get_font_face()");
+	zend_throw_exception(CairoException_ce_ptr, "CairoFontFace cannot be constructed, please use CairoContext::getFontFace", 0 TSRMLS_CC);
 }
 /* }}} __construct */
 
-
-
-
-
 static zend_function_entry CairoFontFace_methods[] = {
-	PHP_ME(CairoFontFace, __construct, NULL, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoFontFace, __construct, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 	{ NULL, NULL, NULL }
 };
 
 /* }}} Methods */
 
-
 static zend_object_handlers CairoFontFace_handlers;
 
-static void CairoFontFace_object_dtor(void *object)
+static void CairoFontFace_object_dtor(void *object TSRMLS_DC)
 {
-	fontface_object *fontface = (fontface_object *)object;
+	cairo_fontface_object *fontface = (cairo_fontface_object *)object;
 	zend_hash_destroy(fontface->std.properties);
 	FREE_HASHTABLE(fontface->std.properties);
 		
@@ -53,10 +116,10 @@ static void CairoFontFace_object_dtor(void *object)
 static zend_object_value CairoFontFace_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	fontface_object *fontface;
+	cairo_fontface_object *fontface;
 	zval *temp;
-	fontface = emalloc(sizeof(fontface_object));
-	memset(fontface,0,sizeof(fontface_object));
+	fontface = emalloc(sizeof(cairo_fontface_object));
+	memset(fontface,0,sizeof(cairo_fontface_object));
 	fontface->std.ce = ce;
 	ALLOC_HASHTABLE(fontface->std.properties);
 	zend_hash_init(fontface->std.properties, 0, NULL, ZVAL_PTR_DTOR,0);
@@ -78,18 +141,12 @@ void class_init_CairoFontFace(TSRMLS_D)
 	CairoFontFace_handlers.clone_obj = NULL;
 }
 
-zend_class_entry *
-get_CairoFontFace_ce_ptr()
-{
-	return CairoFontFace_ce_ptr;
-}
-
 /* }}} Class CairoFontFace */
 
 
 /* {{{ Class CairoFontOptions */
 
-static zend_class_entry * CairoFontOptions_ce_ptr = NULL;
+
 
 /* {{{ Methods */
 
@@ -99,14 +156,14 @@ static zend_class_entry * CairoFontOptions_ce_ptr = NULL;
 PHP_METHOD(CairoFontOptions, __construct)
 {
 	zval * _this_zval;
-	fontoptions_object *curr;
+	cairo_fontoptions_object *curr;
 
 
 	if (ZEND_NUM_ARGS()>0)	{
 		WRONG_PARAM_COUNT;
 	}
 	_this_zval = getThis();
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	curr->fontoptions = cairo_font_options_create();
 
 }
@@ -120,13 +177,13 @@ PHP_METHOD(CairoFontOptions, getAntialias)
 {
 
 	zval * _this_zval = NULL;
-	fontoptions_object *curr;	
+	cairo_fontoptions_object *curr;	
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoFontOptions_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_font_options_get_antialias(curr->fontoptions));
 
 }
@@ -140,14 +197,14 @@ PHP_METHOD(CairoFontOptions, getHintMetrics)
 {
 
 	zval * _this_zval = NULL;
-	fontoptions_object *curr;
+	cairo_fontoptions_object *curr;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoFontOptions_ce_ptr) == FAILURE) {
 		return;
 	}
 
 
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	RETURN_LONG(cairo_font_options_get_hint_metrics(curr->fontoptions));
 }
@@ -161,13 +218,13 @@ PHP_METHOD(CairoFontOptions, getHintStyle)
 {
 
 	zval * _this_zval = NULL;
-	fontoptions_object *curr;
+	cairo_fontoptions_object *curr;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoFontOptions_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	RETURN_LONG(cairo_font_options_get_hint_style(curr->fontoptions));
 }
@@ -181,14 +238,14 @@ PHP_METHOD(CairoFontOptions, getSubpixelOrder)
 {
 
 	zval * _this_zval = NULL;
-	fontoptions_object *curr;
+	cairo_fontoptions_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoFontOptions_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	
 	RETURN_LONG(cairo_font_options_get_subpixel_order(curr->fontoptions));
 }
@@ -203,14 +260,14 @@ PHP_METHOD(CairoFontOptions, setAntialias)
 
 	zval * _this_zval = NULL;
 	cairo_antialias_t aa = CAIRO_ANTIALIAS_DEFAULT;
-	fontoptions_object *curr;
+	cairo_fontoptions_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|l", &_this_zval, CairoFontOptions_ce_ptr, &aa) == FAILURE) {
 		return;
 	}
 
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_font_options_set_antialias(curr->fontoptions, aa);
 	PHP_CAIRO_FONTOPTIONS_ERROR(curr->fontoptions);
 
@@ -226,7 +283,7 @@ PHP_METHOD(CairoFontOptions, setHintMetrics)
 
 	zval * _this_zval = NULL;
 	cairo_hint_metrics_t hm = CAIRO_HINT_METRICS_DEFAULT;
-	fontoptions_object *curr;
+	cairo_fontoptions_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|l", &_this_zval, CairoFontOptions_ce_ptr, &hm) == FAILURE) {
@@ -234,7 +291,7 @@ PHP_METHOD(CairoFontOptions, setHintMetrics)
 	}
 
 
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_font_options_set_hint_metrics(curr->fontoptions, hm);
 	PHP_CAIRO_FONTOPTIONS_ERROR(curr->fontoptions);
 
@@ -250,14 +307,14 @@ PHP_METHOD(CairoFontOptions, setHintStyle)
 
 	zval * _this_zval = NULL;
 	cairo_hint_style_t hs = CAIRO_HINT_STYLE_DEFAULT;
-	fontoptions_object *curr;
+	cairo_fontoptions_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|l", &_this_zval, CairoFontOptions_ce_ptr, &hs) == FAILURE) {
 		return;
 	}
 
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_font_options_set_hint_style(curr->fontoptions, hs);
 	PHP_CAIRO_FONTOPTIONS_ERROR(curr->fontoptions);
 
@@ -273,14 +330,14 @@ PHP_METHOD(CairoFontOptions, setSubpixelOrder)
 
 	zval * _this_zval = NULL;
 	cairo_subpixel_order_t so = CAIRO_SUBPIXEL_ORDER_DEFAULT;
-	fontoptions_object *curr;
+	cairo_fontoptions_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|l", &_this_zval, CairoFontOptions_ce_ptr, &so) == FAILURE) {
 		return;
 	}
 
-	curr = (fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_fontoptions_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_font_options_set_subpixel_order(curr->fontoptions, so);
 	PHP_CAIRO_FONTOPTIONS_ERROR(curr->fontoptions);
 
@@ -306,9 +363,9 @@ static zend_function_entry CairoFontOptions_methods[] = {
 
 static zend_object_handlers CairoFontOptions_handlers;
 
-static void CairoFontOptions_object_dtor(void *object)
+static void CairoFontOptions_object_dtor(void *object TSRMLS_DC)
 {
-	fontoptions_object *fontoptions = (fontoptions_object *)object;
+	cairo_fontoptions_object *fontoptions = (cairo_fontoptions_object *)object;
 	zend_hash_destroy(fontoptions->std.properties);
 	FREE_HASHTABLE(fontoptions->std.properties);
 	
@@ -321,10 +378,10 @@ static void CairoFontOptions_object_dtor(void *object)
 static zend_object_value CairoFontOptions_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	fontoptions_object *fontoptions;
+	cairo_fontoptions_object *fontoptions;
 	zval *temp;
-	fontoptions = emalloc(sizeof(fontoptions_object));
-	memset(fontoptions,0,sizeof(fontoptions_object));
+	fontoptions = emalloc(sizeof(cairo_fontoptions_object));
+	memset(fontoptions,0,sizeof(cairo_fontoptions_object));
 	fontoptions->std.ce = ce;
 	ALLOC_HASHTABLE(fontoptions->std.properties);
 	zend_hash_init(fontoptions->std.properties, 0, NULL, ZVAL_PTR_DTOR,0);
@@ -346,16 +403,13 @@ void class_init_CairoFontOptions(TSRMLS_D)
 	CairoFontOptions_handlers.clone_obj = NULL;
 }
 
-PHP_CAIRO_API zend_class_entry * get_CairoFontOptions_ce_ptr()
-{
-	return CairoFontOptions_ce_ptr;
-}
+
 /* }}} Class CairoFontOptions */
 
 
 /* {{{ Class CairoScaledFont */
 
-static zend_class_entry * CairoScaledFont_ce_ptr = NULL;
+
 
 /* {{{ Methods */
 
@@ -370,22 +424,21 @@ PHP_METHOD(CairoScaledFont, __construct)
 	zval * mx1 = NULL;
 	zval * mx2 = NULL;
 	zval * fo = NULL;
-	fontface_object *ffobj;
-	scaledfont_object *curr;
-	matrix_object *mobj1;
-	matrix_object *mobj2;
-	fontoptions_object *foobj;
+	cairo_fontface_object *ffobj;
+	cairo_scaledfont_object *curr;
+	cairo_matrix_object *mobj1, *mobj2;
+	cairo_fontoptions_object *foobj;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "oooo", &ff, &mx1, &mx2, &fo) == FAILURE) {
 		return;
 	}
 
 	_this_zval = getThis();
-	curr = (scaledfont_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	ffobj = (fontface_object *)zend_objects_get_address(ff TSRMLS_CC);
-	mobj1 = (matrix_object *)zend_objects_get_address(mx1 TSRMLS_CC);
-	mobj2 = (matrix_object *)zend_objects_get_address(mx2 TSRMLS_CC);
-	foobj = (fontoptions_object *)zend_objects_get_address(fo TSRMLS_CC);
+	curr = (cairo_scaledfont_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	ffobj = (cairo_fontface_object *)zend_objects_get_address(ff TSRMLS_CC);
+	mobj1 = (cairo_matrix_object *)zend_objects_get_address(mx1 TSRMLS_CC);
+	mobj2 = (cairo_matrix_object *)zend_objects_get_address(mx2 TSRMLS_CC);
+	foobj = (cairo_fontoptions_object *)zend_objects_get_address(fo TSRMLS_CC);
 	curr->scaledfont = cairo_scaled_font_create(ffobj->fontface, &mobj1->matrix, &mobj2->matrix, foobj->fontoptions);
 
 }
@@ -401,13 +454,13 @@ PHP_METHOD(CairoScaledFont, extents)
 	zval * _this_zval = NULL;
 
 	cairo_font_extents_t e;
-	scaledfont_object *curr;
+	cairo_scaledfont_object *curr;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoScaledFont_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (scaledfont_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_scaledfont_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_scaled_font_extents(curr->scaledfont, &e);
 	
 	PHP_CAIRO_SCALEDFONT_ERROR(curr->scaledfont);
@@ -429,18 +482,18 @@ PHP_METHOD(CairoScaledFont, getFontFace)
 {
 
 	zval * _this_zval = NULL;
-	scaledfont_object *curr;
-	fontface_object *ffobj;
+	cairo_scaledfont_object *curr;
+	cairo_fontface_object *ffobj;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoScaledFont_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (scaledfont_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_scaledfont_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	object_init_ex(return_value, CairoFontFace_ce_ptr);
-	ffobj = (fontface_object *)zend_objects_get_address(return_value TSRMLS_CC);
+	ffobj = (cairo_fontface_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	ffobj->fontface = cairo_font_face_reference(cairo_scaled_font_get_font_face(curr->scaledfont));
 
 }
@@ -457,7 +510,7 @@ PHP_METHOD(CairoScaledFont, textExtents)
 	const char * str = NULL;
 	int str_len = 0;
 	cairo_text_extents_t extents;
-	scaledfont_object *curr;
+	cairo_scaledfont_object *curr;
 
 
 
@@ -465,7 +518,7 @@ PHP_METHOD(CairoScaledFont, textExtents)
 		return;
 	}
 
-	curr = (scaledfont_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_scaledfont_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_scaled_font_text_extents(curr->scaledfont, str, &extents);
 	PHP_CAIRO_SCALEDFONT_ERROR(curr->scaledfont);
@@ -483,10 +536,10 @@ PHP_METHOD(CairoScaledFont, textExtents)
 
 
 static zend_function_entry CairoScaledFont_methods[] = {
-	PHP_ME(CairoScaledFont, __construct, CairoScaledFont____construct_args, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(CairoScaledFont, extents, NULL, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoScaledFont, getFontFace, NULL, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoScaledFont, textExtents, CairoScaledFont__text_extents_args, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoScaledFont, __construct, CairoScaledFont____construct_args, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoScaledFont, extents, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoScaledFont, getFontFace, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoScaledFont, textExtents, CairoScaledFont__text_extents_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -495,9 +548,9 @@ static zend_function_entry CairoScaledFont_methods[] = {
 
 static zend_object_handlers CairoScaledFont_handlers;
 
-static void CairoScaledFont_object_dtor(void *object)
+static void CairoScaledFont_object_dtor(void *object TSRMLS_DC)
 {
-	scaledfont_object *scaledfont = (scaledfont_object *)object;
+	cairo_scaledfont_object *scaledfont = (cairo_scaledfont_object *)object;
 	zend_hash_destroy(scaledfont->std.properties);
 	FREE_HASHTABLE(scaledfont->std.properties);
 			
@@ -510,10 +563,10 @@ static void CairoScaledFont_object_dtor(void *object)
 static zend_object_value CairoScaledFont_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	scaledfont_object *scaledfont;
+	cairo_scaledfont_object *scaledfont;
 	zval *temp;
-	scaledfont = emalloc(sizeof(scaledfont_object));
-	memset(scaledfont,0,sizeof(scaledfont_object));
+	scaledfont = emalloc(sizeof(cairo_scaledfont_object));
+	memset(scaledfont,0,sizeof(cairo_scaledfont_object));
 	scaledfont->std.ce = ce;
 	ALLOC_HASHTABLE(scaledfont->std.properties);
 	zend_hash_init(scaledfont->std.properties, 0, NULL, ZVAL_PTR_DTOR,0);
@@ -534,15 +587,13 @@ void class_init_CairoScaledFont(TSRMLS_D)
 	memcpy(&CairoScaledFont_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	CairoScaledFont_handlers.clone_obj = NULL;
 }
-
-PHP_CAIRO_API zend_class_entry * get_CairoScaledFont_ce_ptr()
-{
-	return CairoScaledFont_ce_ptr;
-}
 /* }}} Class CairoScaledFont */
-
-PHP_CAIRO_API cairo_font_options_t * cairo_copy_fontoptions(cairo_font_options_t *fo)
-{
-	return cairo_font_options_copy(fo);
-}
 	
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw = 4 ts = 4 fdm = marker
+ * vim<600: noet sw = 4 ts = 4
+ */

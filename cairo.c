@@ -1,123 +1,31 @@
 /*
-   +----------------------------------------------------------------------+
-   | This source file is subject to version 3.01 of the PHP license,	   |
-   | that is bundled with this package in the file LICENSE, and is		  |
-   | available through the world-wide-web at the following url:			  |
-   | http://www.php.net/license/3_01.txt.								   |
-   | If you did not receive a copy of the PHP license and are unable to   |
-   | obtain it through the world-wide-web, please send a note to		  |
-   | license@php.net so we can mail you a copy immediately.				  |
-   +----------------------------------------------------------------------+
-   | Authors: Akshat Gupta <g.akshat@gmail.com>							  |
-   +----------------------------------------------------------------------+
+  +----------------------------------------------------------------------+
+  | PHP Version 5                                                        |
+  +----------------------------------------------------------------------+
+  | Copyright (c) 1997-2008 The PHP Group                                |
+  +----------------------------------------------------------------------+
+  | This source file is subject to version 3.01 of the PHP license,      |
+  | that is bundled with this package in the file LICENSE, and is        |
+  | available through the world-wide-web at the following url:           |
+  | http://www.php.net/license/3_01.txt                                  |
+  | If you did not receive a copy of the PHP license and are unable to   |
+  | obtain it through the world-wide-web, please send a note to          |
+  | license@php.net so we can mail you a copy immediately.               |
+  +----------------------------------------------------------------------+
+  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
+  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  +----------------------------------------------------------------------+
 */
 
-/* $ Id: 1.0.1$ */ 
+/* $Id$ */
 
-#include "php_cairo_api.h"
 #include "php_cairo.h"
-#include "CairoExceptionMacro.h"
-#include "php_cairo_ce_ptr.h"
+#include "php_cairo_api.h"
+#include "php_cairo_internal.h"
 
 #if HAVE_CAIRO
 
-/* {{{ Class definitions */
-/* }}} Class definitions*/
-
-/* {{{ cairo_functions[] */
-function_entry cairo_functions[] = {
-	PHP_FE(cairo_version	   , cairo_version_arg_info)
-	PHP_FE(cairo_version_string, cairo_version_string_arg_info)
-	PHP_FE(cairo_available_surfaces, cairo_available_surfaces_arg_info)
-	{ NULL, NULL, NULL }
-};
-/* }}} */
-
-
-/* {{{ cairo_module_entry
- */
-zend_module_entry cairo_module_entry = {
-	STANDARD_MODULE_HEADER,
-	"cairo",
-	cairo_functions,
-	PHP_MINIT(cairo),	  /* Replace with NULL if there is nothing to do at php startup   */ 
-	NULL, /* Replace with NULL if there is nothing to do at php shutdown  */
-	NULL,	  /* Replace with NULL if there is nothing to do at request start */
-	NULL, /* Replace with NULL if there is nothing to do at request end   */
-	PHP_MINFO(cairo),
-	PHP_CAIRO_VERSION, 
-	STANDARD_MODULE_PROPERTIES
-};
-/* }}} */
-
-#ifdef COMPILE_DL_CAIRO
-ZEND_GET_MODULE(cairo)
-#endif
-
-
-/* {{{ PHP_MINIT_FUNCTION */
-PHP_MINIT_FUNCTION(cairo)
-{
-	class_init_Cairo();
-	class_init_CairoContext();
-	class_init_CairoFontFace();
-	class_init_CairoFontOptions();
-	class_init_CairoMatrix();
-	class_init_CairoPath();
-	class_init_CairoPattern();
-	class_init_CairoGradient();
-	class_init_CairoLinearGradient();
-	class_init_CairoRadialGradient();
-	class_init_CairoSolidPattern();
-	class_init_CairoSurfacePattern();
-	class_init_CairoScaledFont();
-	class_init_CairoSurface();
-	class_init_CairoImageSurface();
-#ifdef CAIRO_HAS_PDF_SURFACE
-	class_init_CairoPDFSurface();
-#endif
-#ifdef CAIRO_HAS_PS_SURFACE
-	class_init_CairoPSSurface();
-#endif
-#ifdef CAIRO_HAS_QUARTZ_SURFACE
-	class_init_CairoQuartzSurface();
-#endif
-#ifdef CAIRO_HAS_SVG_SURFACE
-	class_init_CairoSVGSurface();
-#endif
-#ifdef CAIRO_HAS_WIN32_SURFACE
-	class_init_CairoWin32Surface();
-#endif
-#ifdef CAIRO_HAS_XLIB_SURFACE
-	class_init_CairoXlibSurface();
-#endif
-	class_init_CairoException();
-
-	/* add your stuff here */
-	
-
-	return SUCCESS;
-}
-/* }}} */
-
-
-/* {{{ PHP_MINFO_FUNCTION */
-PHP_MINFO_FUNCTION(cairo)
-{
-	php_info_print_box_start(0);
-	php_printf("<p>PHP bindings for Cairo Graphic Library</p>\n");
-	php_printf(PHP_CAIRO_VERSION);
-	php_printf("<p><b>Authors:</b></p>\n");
-	php_printf("<p>Akshat Gupta &lt;g.akshat@gmail.com&gt; (lead)</p>\n");
-	php_info_print_box_end();
-	/* add your stuff here */
-
-}
-/* }}} */
-
-
-/* {{{ proto int cairo_version()
-   */
+/* {{{ proto int cairo_version(void) */
 PHP_FUNCTION(cairo_version)
 {
 	if (ZEND_NUM_ARGS()>0)	{
@@ -179,8 +87,254 @@ PHP_FUNCTION(cairo_available_surfaces)
 #endif
 
 }
-					/* }}} cairo_version_string */
+/* }}} cairo_version_string */
 
+/* {{{ Class Cairo */
+#define REGISTER_CAIRO_LONG_CONST(const_name, value) \
+	zend_declare_class_constant_long(Cairo_ce_ptr, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC);
+
+static zend_class_entry *Cairo_ce_ptr;
+
+void class_init_Cairo(TSRMLS_D)
+{
+	zend_class_entry ce;
+	INIT_CLASS_ENTRY(ce, "Cairo", NULL);
+	Cairo_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
+	Cairo_ce_ptr->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL_CLASS;
+	/* constants */
+#if HAS_ATSUI_FONT
+	REGISTER_CAIRO_LONG_CONST( "HAS_ATSUI_FONT", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_ATSUI_FONT", 0 );
+#endif
+#if HAS_FT_FONT
+	REGISTER_CAIRO_LONG_CONST( "HAS_FT_FONT", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_FT_FONT", 0 );
+#endif
+#if HAS_GLITZ_SURFACE
+	REGISTER_CAIRO_LONG_CONST( "HAS_GLITZ_SURFACE", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_GLITZ_SURFACE", 0 );
+#endif
+#if HAS_PDF_SURFACE
+	REGISTER_CAIRO_LONG_CONST( "HAS_PDF_SURFACE", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_PDF_SURFACE", 0 );
+#endif
+#if HAS_PNG_FUNCTIONS
+	REGISTER_CAIRO_LONG_CONST( "HAS_PNG_FUNCTIONS", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_PNG_FUNCTIONS", 0 );
+#endif
+#if HAS_PS_SURFACE
+	REGISTER_CAIRO_LONG_CONST( "HAS_PS_SURFACE", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_PS_SURFACE", 0 );
+#endif
+#if HAS_SVG_SURFACE
+	REGISTER_CAIRO_LONG_CONST( "HAS_SVG_SURFACE", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_SVG_SURFACE", 0 );
+#endif
+#if HAS_QUARTZ_SURFACE
+	REGISTER_CAIRO_LONG_CONST( "HAS_QUARTZ_SURFACE", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_QUARTZ_SURFACE", 0 );
+#endif
+#if HAS_WIN32_FONT
+	REGISTER_CAIRO_LONG_CONST( "HAS_WIN32_FONT", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_WIN32_FONT", 0 );
+#endif
+#if HAS_WIN32_SURFACE
+	REGISTER_CAIRO_LONG_CONST( "HAS_WIN32_SURFACE", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_WIN32_SURFACE", 0 );
+#endif
+#if HAS_XCB_SURFACE
+	REGISTER_CAIRO_LONG_CONST( "HAS_XCB_SURFACE", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_XCB_SURFACE", 0 );
+#endif
+#if HAS_XLIB_SURFACE
+	REGISTER_CAIRO_LONG_CONST( "HAS_XLIB_SURFACE", 1 );
+#else
+	REGISTER_CAIRO_LONG_CONST( "HAS_XLIB_SURFACE", 0 );
+#endif
+
+#define CONSTANT(x) REGISTER_CAIRO_LONG_CONST( #x, CAIRO_##x)
+	CONSTANT(ANTIALIAS_DEFAULT);
+	CONSTANT(ANTIALIAS_NONE);
+	CONSTANT(ANTIALIAS_GRAY);
+	CONSTANT(ANTIALIAS_SUBPIXEL);
+
+	CONSTANT(CONTENT_COLOR);
+	CONSTANT(CONTENT_ALPHA);
+	CONSTANT(CONTENT_COLOR_ALPHA);
+
+	CONSTANT(EXTEND_NONE);
+	CONSTANT(EXTEND_REPEAT);
+	CONSTANT(EXTEND_REFLECT);
+	CONSTANT(EXTEND_PAD);
+
+	CONSTANT(FILL_RULE_WINDING);
+	CONSTANT(FILL_RULE_EVEN_ODD);
+
+	CONSTANT(FILTER_FAST);
+	CONSTANT(FILTER_GOOD);
+	CONSTANT(FILTER_BEST);
+	CONSTANT(FILTER_NEAREST);
+	CONSTANT(FILTER_BILINEAR);
+	CONSTANT(FILTER_GAUSSIAN);
+
+	CONSTANT(FONT_WEIGHT_NORMAL);
+	CONSTANT(FONT_WEIGHT_BOLD);
+
+	CONSTANT(FONT_SLANT_NORMAL);
+	CONSTANT(FONT_SLANT_ITALIC);
+	CONSTANT(FONT_SLANT_OBLIQUE);
+
+	CONSTANT(FORMAT_ARGB32);
+	CONSTANT(FORMAT_RGB24);
+	CONSTANT(FORMAT_A8);
+	CONSTANT(FORMAT_A1);
+	CONSTANT(FORMAT_RGB16_565);
+
+	CONSTANT(HINT_METRICS_DEFAULT);
+	CONSTANT(HINT_METRICS_OFF);
+	CONSTANT(HINT_METRICS_ON);
+
+	CONSTANT(HINT_STYLE_DEFAULT);
+	CONSTANT(HINT_STYLE_NONE);
+	CONSTANT(HINT_STYLE_SLIGHT);
+	CONSTANT(HINT_STYLE_MEDIUM);
+	CONSTANT(HINT_STYLE_FULL);
+
+	CONSTANT(LINE_CAP_BUTT);
+	CONSTANT(LINE_CAP_ROUND);
+	CONSTANT(LINE_CAP_SQUARE);
+
+	CONSTANT(LINE_JOIN_MITER);
+	CONSTANT(LINE_JOIN_ROUND);
+	CONSTANT(LINE_JOIN_BEVEL);
+
+	CONSTANT(OPERATOR_CLEAR);
+
+	CONSTANT(OPERATOR_SOURCE);
+	CONSTANT(OPERATOR_OVER);
+	CONSTANT(OPERATOR_IN);
+	CONSTANT(OPERATOR_OUT);
+	CONSTANT(OPERATOR_ATOP);
+
+	CONSTANT(OPERATOR_DEST);
+	CONSTANT(OPERATOR_DEST_OVER);
+	CONSTANT(OPERATOR_DEST_IN);
+	CONSTANT(OPERATOR_DEST_OUT);
+	CONSTANT(OPERATOR_DEST_ATOP);
+
+	CONSTANT(OPERATOR_XOR);
+	CONSTANT(OPERATOR_ADD);
+	CONSTANT(OPERATOR_SATURATE);
+
+	CONSTANT(PATH_MOVE_TO);
+	CONSTANT(PATH_LINE_TO);
+	CONSTANT(PATH_CURVE_TO);
+	CONSTANT(PATH_CLOSE_PATH);
+
+	CONSTANT(SUBPIXEL_ORDER_DEFAULT);
+	CONSTANT(SUBPIXEL_ORDER_RGB);
+	CONSTANT(SUBPIXEL_ORDER_BGR);
+	CONSTANT(SUBPIXEL_ORDER_VRGB);
+	CONSTANT(SUBPIXEL_ORDER_VBGR);
+#undef CONSTANT
+
+}
+
+/* }}} Class Cairo */
+
+/* {{{ cairo_functions[] */
+function_entry cairo_functions[] = {
+	PHP_FE(cairo_version	   , NULL)
+	PHP_FE(cairo_version_string, NULL)
+	PHP_FE(cairo_available_surfaces, NULL)
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
+
+/* {{{ cairo_module_entry */
+zend_module_entry cairo_module_entry = {
+	STANDARD_MODULE_HEADER,
+	"cairo",
+	cairo_functions,
+	PHP_MINIT(cairo),
+	NULL,
+	NULL,
+	NULL,
+	PHP_MINFO(cairo),
+	PHP_CAIRO_VERSION, 
+	STANDARD_MODULE_PROPERTIES
+};
+/* }}} */
+
+#ifdef COMPILE_DL_CAIRO
+ZEND_GET_MODULE(cairo)
+#endif
+
+/* {{{ PHP_MINIT_FUNCTION */
+PHP_MINIT_FUNCTION(cairo)
+{
+	class_init_Cairo(TSRMLS_C);
+	class_init_CairoContext(TSRMLS_C);
+	class_init_CairoFontFace(TSRMLS_C);
+	class_init_CairoFontOptions(TSRMLS_C);
+	class_init_CairoMatrix(TSRMLS_C);
+	class_init_CairoPath(TSRMLS_C);
+	class_init_CairoPattern(TSRMLS_C);
+	class_init_CairoGradient(TSRMLS_C);
+	class_init_CairoLinearGradient(TSRMLS_C);
+	class_init_CairoRadialGradient(TSRMLS_C);
+	class_init_CairoSolidPattern(TSRMLS_C);
+	class_init_CairoSurfacePattern(TSRMLS_C);
+	class_init_CairoScaledFont(TSRMLS_C);
+	class_init_CairoSurface(TSRMLS_C);
+	class_init_CairoImageSurface(TSRMLS_C);
+#ifdef CAIRO_HAS_PDF_SURFACE
+	class_init_CairoPDFSurface(TSRMLS_C);
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
+	class_init_CairoPSSurface(TSRMLS_C);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+	class_init_CairoQuartzSurface(TSRMLS_C);
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
+	class_init_CairoSVGSurface(TSRMLS_C);
+#endif
+#ifdef CAIRO_HAS_WIN32_SURFACE
+	class_init_CairoWin32Surface(TSRMLS_C);
+#endif
+#ifdef CAIRO_HAS_XLIB_SURFACE
+	class_init_CairoXlibSurface(TSRMLS_C);
+#endif
+	class_init_CairoException(TSRMLS_C);
+	return SUCCESS;
+}
+/* }}} */
+
+/* {{{ PHP_MINFO_FUNCTION */
+PHP_MINFO_FUNCTION(cairo)
+{
+	php_info_print_box_start(0);
+	php_printf("<p>PHP bindings for Cairo Graphic Library</p>\n");
+	php_printf(PHP_CAIRO_VERSION);
+	php_printf("<p><b>Authors:</b></p>\n");
+	php_printf("<p>Akshat Gupta &lt;g.akshat@gmail.com&gt; (lead)</p>\n");
+	php_info_print_box_end();
+
+}
+/* }}} */
 
 #endif /* HAVE_CAIRO */
 

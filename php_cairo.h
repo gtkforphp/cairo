@@ -1,20 +1,25 @@
 /*
-   +----------------------------------------------------------------------+
-   | This source file is subject to version 3.01 of the PHP license,	  |
-   | that is bundled with this package in the file LICENSE, and is		  |
-   | available through the world-wide-web at the following url:			  |
-   | http://www.php.net/license/3_01.txt.								  |
-   | If you did not receive a copy of the PHP license and are unable to   |
-   | obtain it through the world-wide-web, please send a note to		  |
-   | license@php.net so we can mail you a copy immediately.				  |
-   +----------------------------------------------------------------------+
-   | Authors: Akshat Gupta <g.akshat@gmail.com>							  |
-   +----------------------------------------------------------------------+
+  +----------------------------------------------------------------------+
+  | PHP Version 5                                                        |
+  +----------------------------------------------------------------------+
+  | Copyright (c) 1997-2008 The PHP Group                                |
+  +----------------------------------------------------------------------+
+  | This source file is subject to version 3.01 of the PHP license,      |
+  | that is bundled with this package in the file LICENSE, and is        |
+  | available through the world-wide-web at the following url:           |
+  | http://www.php.net/license/3_01.txt                                  |
+  | If you did not receive a copy of the PHP license and are unable to   |
+  | obtain it through the world-wide-web, please send a note to          |
+  | license@php.net so we can mail you a copy immediately.               |
+  +----------------------------------------------------------------------+
+  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
+  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  +----------------------------------------------------------------------+
 */
 
-/* $ Id: $ */ 
+/* $Id$ */
 
-#define PHP_CAIRO_VERSION "1.01"
+#define PHP_CAIRO_VERSION "1.0.0-dev"
 
 #ifndef PHP_CAIRO_H
 #define PHP_CAIRO_H
@@ -66,19 +71,6 @@ PHP_MINFO_FUNCTION(cairo);
 #define PROP_SET_STRING(name, s) zend_update_property_string(_this_ce, _this_zval, #name, strlen(#name), s TSRMLS_CC)
 #define PROP_SET_STRINGL(name, s, l) zend_update_property_stringl(_this_ce, _this_zval, #name, strlen(#name), s, l TSRMLS_CC)
 
-
-PHP_FUNCTION(cairo_version);
-ZEND_BEGIN_ARG_INFO_EX(cairo_version_arg_info, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
-ZEND_END_ARG_INFO()
-
-PHP_FUNCTION(cairo_version_string);
-ZEND_BEGIN_ARG_INFO_EX(cairo_version_string_arg_info, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
-ZEND_END_ARG_INFO()
-
-PHP_FUNCTION(cairo_available_surfaces);
-ZEND_BEGIN_ARG_INFO_EX(cairo_available_surfaces_arg_info, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
-ZEND_END_ARG_INFO()
-
 #ifdef	__cplusplus
 } /* extern "C" */
 #endif
@@ -86,12 +78,6 @@ ZEND_END_ARG_INFO()
 #endif /* PHP_HAVE_CAIRO */
 
 #endif /* PHP_CAIRO_H */
-
-/* {{{ Proto's */
-
-
-/* }}} */
-
 
 /*
  * Local variables:

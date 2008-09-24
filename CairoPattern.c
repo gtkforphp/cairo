@@ -1,7 +1,77 @@
+/*
+  +----------------------------------------------------------------------+
+  | PHP Version 5                                                        |
+  +----------------------------------------------------------------------+
+  | Copyright (c) 1997-2008 The PHP Group                                |
+  +----------------------------------------------------------------------+
+  | This source file is subject to version 3.01 of the PHP license,      |
+  | that is bundled with this package in the file LICENSE, and is        |
+  | available through the world-wide-web at the following url:           |
+  | http://www.php.net/license/3_01.txt                                  |
+  | If you did not receive a copy of the PHP license and are unable to   |
+  | obtain it through the world-wide-web, please send a note to          |
+  | license@php.net so we can mail you a copy immediately.               |
+  +----------------------------------------------------------------------+
+  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
+  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  +----------------------------------------------------------------------+
+*/
+
+/* $Id$ */
+
 #include "php_cairo_api.h"
-#include "CairoPattern.h"
-#include "CairoExceptionMacro.h"
-#include "php_cairo_ce_ptr.h"
+#include "php_cairo_internal.h"
+#include <zend_exceptions.h>
+
+/* {{{ arginfo */
+ZEND_BEGIN_ARG_INFO_EX(CairoPattern__set_matrix_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_OBJ_INFO(0, m, CairoMatrix, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoGradient__add_color_stop_rgb_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+  ZEND_ARG_INFO(0, offset)
+  ZEND_ARG_INFO(0, red)
+  ZEND_ARG_INFO(0, green)
+  ZEND_ARG_INFO(0, blue)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoGradient__add_color_stop_rgba_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
+  ZEND_ARG_INFO(0, offset)
+  ZEND_ARG_INFO(0, red)
+  ZEND_ARG_INFO(0, green)
+  ZEND_ARG_INFO(0, blue)
+  ZEND_ARG_INFO(0, alpha)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoLinearGradient____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+  ZEND_ARG_INFO(0, y0)
+  ZEND_ARG_INFO(0, x1)
+  ZEND_ARG_INFO(0, y1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoRadialGradient____constuct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 6)
+  ZEND_ARG_INFO(0, cx0)
+  ZEND_ARG_INFO(0, cy0)
+  ZEND_ARG_INFO(0, radius0)
+  ZEND_ARG_INFO(0, cx1)
+  ZEND_ARG_INFO(0, cy1)
+  ZEND_ARG_INFO(0, radius1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoSolidPattern____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_INFO(0, g)
+  ZEND_ARG_INFO(0, b)
+  ZEND_ARG_INFO(0, a)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoPattern__set_extend_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_INFO(0, extend)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(CairoSurfacePattern__set_filter_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_INFO(0, filter)
+ZEND_END_ARG_INFO()
+/* }}} */
 
 /* {{{ Class CairoPattern */
 
@@ -13,12 +83,9 @@
    */
 PHP_METHOD(CairoPattern, __construct)
 {
-	php_error(E_WARNING, "Pattern Cannot be initialized"); RETURN_FALSE;
-
+	zend_throw_exception(CairoException_ce_ptr, "CairoPattern cannot be constructed", 0 TSRMLS_CC);
 }
 /* }}} __construct */
-
-
 
 /* {{{ proto object getMatrix()
    */
@@ -27,19 +94,19 @@ PHP_METHOD(CairoPattern, getMatrix)
 
 	zval * _this_zval = NULL;
 	cairo_matrix_t matrix;
-	pattern_object *curr;
-	matrix_object *mobj;
+	cairo_pattern_object *curr;
+	cairo_matrix_object *mobj;
 	zend_class_entry *ce;
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoPattern_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_pattern_get_matrix(curr->pattern, &matrix);
 	ce = get_CairoMatrix_ce_ptr();
 	object_init_ex(return_value, ce);
-	mobj = (matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
+	mobj = (cairo_matrix_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	mobj->matrix = matrix;
 }
 /* }}} getMatrix */
@@ -53,15 +120,15 @@ PHP_METHOD(CairoPattern, setMatrix)
 
 	zval * _this_zval = NULL;
 	zval * m = NULL;
-	pattern_object *curr;
-	matrix_object *mobj;
+	cairo_pattern_object *curr;
+	cairo_matrix_object *mobj;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oo", &_this_zval, CairoPattern_ce_ptr, &m) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	mobj = (matrix_object *)zend_objects_get_address(m TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	mobj = (cairo_matrix_object *)zend_objects_get_address(m TSRMLS_CC);
 	cairo_pattern_set_matrix(curr->pattern, &mobj->matrix);
 }
 /* }}} setMatrix */
@@ -72,12 +139,12 @@ PHP_METHOD(CairoPattern, setMatrix)
 PHP_METHOD(CairoPattern, setExtend)
 {
 	long extend;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 	zval * _this_zval = NULL;
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &_this_zval, CairoPattern_ce_ptr, &extend) == FAILURE) {
 			return;
 	}
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_pattern_set_extend(curr->pattern, extend);
 	PHP_CAIRO_PATTERN_ERROR(curr->pattern);
 	
@@ -91,12 +158,12 @@ PHP_METHOD(CairoPattern, setExtend)
 PHP_METHOD(CairoPattern, getExtend)
 {
 	long extend;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 	zval * _this_zval = NULL;
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoPattern_ce_ptr) == FAILURE) {
 		return;
 	}
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	extend = cairo_pattern_get_extend(curr->pattern);
 	RETURN_LONG(extend);
 }
@@ -104,11 +171,11 @@ PHP_METHOD(CairoPattern, getExtend)
 
 
 static zend_function_entry CairoPattern_methods[] = {
-	PHP_ME(CairoPattern, __construct, NULL, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(CairoPattern, getMatrix, NULL, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoPattern, setMatrix, CairoPattern__set_matrix_args, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoPattern, getExtend, NULL, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoPattern, setExtend, CairoPattern__set_extend_args, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoPattern, __construct, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoPattern, getMatrix, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoPattern, setMatrix, CairoPattern__set_matrix_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoPattern, getExtend, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoPattern, setExtend, CairoPattern__set_extend_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -116,9 +183,9 @@ static zend_function_entry CairoPattern_methods[] = {
 
 static zend_object_handlers CairoPattern_handlers;
 
-static void CairoPattern_object_dtor(void *object)
+static void CairoPattern_object_dtor(void *object TSRMLS_DC)
 {
-	pattern_object *pattern = (pattern_object *)object;
+	cairo_pattern_object *pattern = (cairo_pattern_object *)object;
 	zend_hash_destroy(pattern->std.properties);
 	FREE_HASHTABLE(pattern->std.properties);
 	if(pattern->pattern){
@@ -130,10 +197,10 @@ static void CairoPattern_object_dtor(void *object)
 static zend_object_value CairoPattern_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
-	pattern_object *pattern;
+	cairo_pattern_object *pattern;
 	zval *temp;
-	pattern = emalloc(sizeof(pattern_object));
-	memset(pattern,0,sizeof(pattern_object));
+	pattern = emalloc(sizeof(cairo_pattern_object));
+	memset(pattern,0,sizeof(cairo_pattern_object));
 	pattern->std.ce = ce;
 	ALLOC_HASHTABLE(pattern->std.properties);
 	zend_hash_init(pattern->std.properties, 0, NULL, ZVAL_PTR_DTOR,0);
@@ -167,19 +234,7 @@ void class_init_CairoPattern(TSRMLS_D)
    */
 PHP_METHOD(CairoGradient, __construct)
 {
-
-	zval * _this_zval = NULL;
-
-
-
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoGradient_ce_ptr) == FAILURE) {
-		return;
-	}
-
-
-
-	php_error(E_WARNING, "Gradient cannot be initialized"); RETURN_FALSE;
-
+	zend_throw_exception(CairoException_ce_ptr, "CairoGradient cannot be constructed", 0 TSRMLS_CC);
 }
 /* }}} __construct */
 
@@ -195,14 +250,14 @@ PHP_METHOD(CairoGradient, addColorStopRgb)
 	double red = 0.0;
 	double green = 0.0;
 	double blue = 0.0;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odddd", &_this_zval, CairoGradient_ce_ptr, &offset, &red, &green, &blue) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_pattern_add_color_stop_rgb(curr->pattern, offset, red, green, blue);
 	PHP_CAIRO_PATTERN_ERROR(curr->pattern);
 }
@@ -221,14 +276,14 @@ PHP_METHOD(CairoGradient, addColorStopRgba)
 	double green = 0.0;
 	double blue = 0.0;
 	double alpha = 0.0;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oddddd", &_this_zval, CairoGradient_ce_ptr, &offset, &red, &green, &blue, &alpha) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_pattern_add_color_stop_rgba(curr->pattern, offset, red, green, blue, alpha);
 	PHP_CAIRO_PATTERN_ERROR(curr->pattern);
 }
@@ -237,9 +292,9 @@ PHP_METHOD(CairoGradient, addColorStopRgba)
 
 
 static zend_function_entry CairoGradient_methods[] = {
-	PHP_ME(CairoGradient, __construct, NULL, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(CairoGradient, addColorStopRgb, CairoGradient__add_color_stop_rgb_args, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoGradient, addColorStopRgba, CairoGradient__add_color_stop_rgba_args, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoGradient, __construct, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoGradient, addColorStopRgb, CairoGradient__add_color_stop_rgb_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoGradient, addColorStopRgba, CairoGradient__add_color_stop_rgba_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -283,7 +338,7 @@ PHP_METHOD(CairoLinearGradient, __construct)
 	double y0 = 0.0;
 	double x1 = 0.0;
 	double y1 = 0.0;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x0, &y0, &x1, &y1) == FAILURE) {
@@ -291,7 +346,7 @@ PHP_METHOD(CairoLinearGradient, __construct)
 	}
 
 	_this_zval = getThis();
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	curr->pattern = cairo_pattern_create_linear(x0, y0, x1, y1);
 
 }
@@ -306,13 +361,13 @@ PHP_METHOD(CairoLinearGradient, getLinearPoints)
 
 	zval * _this_zval = NULL;
 	double x0, y0, x1, y1;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoLinearGradient_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_pattern_get_linear_points(curr->pattern, &x0, &y0, &x1, &y1);
 
 	array_init(return_value);
@@ -326,8 +381,8 @@ PHP_METHOD(CairoLinearGradient, getLinearPoints)
 
 
 static zend_function_entry CairoLinearGradient_methods[] = {
-	PHP_ME(CairoLinearGradient, __construct, CairoLinearGradient____construct_args, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(CairoLinearGradient, getLinearPoints, NULL, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoLinearGradient, __construct, CairoLinearGradient____construct_args, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoLinearGradient, getLinearPoints, NULL, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -373,14 +428,14 @@ PHP_METHOD(CairoRadialGradient, __construct)
 	double cx1 = 0.0;
 	double cy1 = 0.0;
 	double radius1 = 0.0;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odddddd", &_this_zval, CairoRadialGradient_ce_ptr, &cx0, &cy0, &radius0, &cx1, &cy1, &radius1) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	curr->pattern = cairo_pattern_create_radial(cx0, cy0, radius0, cx1, cy1, radius1);
 
 }
@@ -395,13 +450,13 @@ PHP_METHOD(CairoRadialGradient, getRadialCircles)
 
 	zval * _this_zval = NULL;
 	double x0, y0, r0, x1, y1, r1;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoRadialGradient_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_pattern_get_radial_circles(curr->pattern, &x0, &y0, &r0, &x1, &y1, &r1);
 
 	array_init(return_value);
@@ -417,8 +472,8 @@ PHP_METHOD(CairoRadialGradient, getRadialCircles)
 
 
 static zend_function_entry CairoRadialGradient_methods[] = {
-	PHP_ME(CairoRadialGradient, __construct, CairoRadialGradient____constuct_args, /**/ZEND_ACC_PUBLIC| ZEND_ACC_CTOR)
-	PHP_ME(CairoRadialGradient, getRadialCircles, NULL, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoRadialGradient, __construct, CairoRadialGradient____constuct_args, ZEND_ACC_PUBLIC| ZEND_ACC_CTOR)
+	PHP_ME(CairoRadialGradient, getRadialCircles, NULL, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -461,7 +516,7 @@ PHP_METHOD(CairoSolidPattern, __construct)
 	double g = 0.0;
 	double b = 0.0;
 	double a = 1.0;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|d", &r, &g, &b, &a) == FAILURE) {
@@ -469,7 +524,7 @@ PHP_METHOD(CairoSolidPattern, __construct)
 	}
 
 	_this_zval = getThis();
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	curr->pattern = cairo_pattern_create_rgba(r, g, b, a);
 
 }
@@ -484,13 +539,13 @@ PHP_METHOD(CairoSolidPattern, getRgba)
 
 	zval * _this_zval = NULL;
 	double r,g,b,a;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoSolidPattern_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	cairo_pattern_get_rgba(curr->pattern, &r, &g, &b, &a);
 
 	array_init(return_value);
@@ -504,8 +559,8 @@ PHP_METHOD(CairoSolidPattern, getRgba)
 
 
 static zend_function_entry CairoSolidPattern_methods[] = {
-	PHP_ME(CairoSolidPattern, __construct, CairoSolidPattern____construct_args, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(CairoSolidPattern, getRgba, NULL, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoSolidPattern, __construct, CairoSolidPattern____construct_args, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoSolidPattern, getRgba, NULL, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -547,8 +602,8 @@ PHP_METHOD(CairoSurfacePattern, __construct)
 	zval * _this_zval;
 
 	zval * s = NULL;
-	pattern_object *curr;
-	surface_object *sobj;
+	cairo_pattern_object *curr;
+	cairo_surface_object *sobj;
 
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &s) == FAILURE) {
@@ -556,8 +611,8 @@ PHP_METHOD(CairoSurfacePattern, __construct)
 	}
 
 	_this_zval = getThis();
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
-	sobj = (surface_object *)zend_objects_get_address(s TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	sobj = (cairo_surface_object *)zend_objects_get_address(s TSRMLS_CC);
 	curr->pattern = cairo_pattern_create_for_surface(sobj->surface);
 	
 }
@@ -569,14 +624,14 @@ PHP_METHOD(CairoSurfacePattern, __construct)
 PHP_METHOD(CairoSurfacePattern, getFilter)
 {
 	zval * _this_zval = NULL;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoSurfacePattern_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 	RETURN_LONG(cairo_pattern_get_filter(curr->pattern));
 }
 /* }}} getFilter */
@@ -590,26 +645,23 @@ PHP_METHOD(CairoSurfacePattern, getSurface)
 	zend_class_entry *surface_ce;
 	cairo_surface_t *surface;
 	zval * _this_zval = NULL;
-	pattern_object *curr;
-	surface_object *sobj;
+	cairo_pattern_object *curr;
+	cairo_surface_object *sobj;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &_this_zval, CairoSurfacePattern_ce_ptr) == FAILURE) {
 		return;
 	}
 
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);	
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);	
 	cairo_pattern_get_surface(curr->pattern, &surface);
 	surface_ce = get_CairoSurface_ce_ptr(surface);
 
 	object_init_ex(return_value,surface_ce);
-	sobj = (surface_object *)zend_objects_get_address(return_value TSRMLS_CC);
+	sobj = (cairo_surface_object *)zend_objects_get_address(return_value TSRMLS_CC);
 	sobj->surface = cairo_surface_reference(surface);
 }
 /* }}} getSurface */
-
-
-
 
 /* {{{ proto void setFilter(int filter)
    */
@@ -618,14 +670,14 @@ PHP_METHOD(CairoSurfacePattern, setFilter)
 
 	zval * _this_zval = NULL;
 	long filter = 0;
-	pattern_object *curr;
+	cairo_pattern_object *curr;
 
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &_this_zval, CairoSurfacePattern_ce_ptr, &filter) == FAILURE) {
 		return;
 	}
 	
-	curr = (pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
+	curr = (cairo_pattern_object *)zend_objects_get_address(_this_zval TSRMLS_CC);
 
 	cairo_pattern_set_filter(curr->pattern, filter);
 }
@@ -633,10 +685,10 @@ PHP_METHOD(CairoSurfacePattern, setFilter)
 
 
 static zend_function_entry CairoSurfacePattern_methods[] = {
-	PHP_ME(CairoSurfacePattern, __construct, NULL, /**/ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(CairoSurfacePattern, getFilter, NULL, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoSurfacePattern, getSurface, NULL, /**/ZEND_ACC_PUBLIC)
-	PHP_ME(CairoSurfacePattern, setFilter, CairoSurfacePattern__set_filter_args, /**/ZEND_ACC_PUBLIC)
+	PHP_ME(CairoSurfacePattern, __construct, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(CairoSurfacePattern, getFilter, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoSurfacePattern, getSurface, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoSurfacePattern, setFilter, CairoSurfacePattern__set_filter_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -692,3 +744,11 @@ PHP_CAIRO_API zend_class_entry * get_CairoPattern_ce_ptr(cairo_pattern_t *patter
 }
 /* }}} Helper functions */	
 
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw = 4 ts = 4 fdm = marker
+ * vim<600: noet sw = 4 ts = 4
+ */
