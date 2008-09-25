@@ -346,7 +346,7 @@ void class_init_CairoPSSurface(TSRMLS_D)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoPSSurface", CairoPSSurface_methods);
-	CairoPSSurface_ce_ptr = zend_register_internal_class_ex(&ce, CairoSurface_ce_ptr, "CairoSurface" TSRMLS_CC);
+	CairoPSSurface_ce_ptr = zend_register_internal_class_ex(&ce, get_CairoSurface_ce_ptr(NULL), "CairoSurface" TSRMLS_CC);
 	CairoPSSurface_ce_ptr->create_object = CairoPSSurface_object_new;
 	memcpy(&CairoPSSurface_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 }

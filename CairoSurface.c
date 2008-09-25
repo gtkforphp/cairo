@@ -723,7 +723,7 @@ PHP_CAIRO_API zend_class_entry *  get_CairoSurface_ce_ptr(cairo_surface_t *surfa
 {
 	zend_class_entry *type;
 	if(surface == NULL)
-		return NULL;
+		return CairoSurface_ce_ptr;
 	
 	switch(cairo_surface_get_type(surface)) {
 		case CAIRO_SURFACE_TYPE_IMAGE:

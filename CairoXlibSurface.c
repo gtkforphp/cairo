@@ -137,7 +137,7 @@ void class_init_CairoXlibSurface(TSRMLS_D)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoXlibSurface", CairoXlibSurface_methods);
-	CairoXlibSurface_ce_ptr = zend_register_internal_class_ex(&ce, CairoSurface_ce_ptr, "CairoSurface" TSRMLS_CC);
+	CairoXlibSurface_ce_ptr = zend_register_internal_class_ex(&ce, get_CairoSurface_ce_ptr(NULL), "CairoSurface" TSRMLS_CC);
 	CairoXlibSurface_ce_ptr->create_object = CairoXlibSurface_object_new;
 	memcpy(&CairoXlibSurface_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 

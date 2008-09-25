@@ -68,7 +68,7 @@ void class_init_CairoQuartzSurface(TSRMLS_D)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "CairoQuartzSurface", CairoQuartzSurface_methods);
-	CairoQuartzSurface_ce_ptr = zend_register_internal_class_ex(&ce, CairoSurface_ce_ptr, "CairoSurface" TSRMLS_CC);
+	CairoQuartzSurface_ce_ptr = zend_register_internal_class_ex(&ce, get_CairoSurface_ce_ptr(NULL), "CairoSurface" TSRMLS_CC);
 	CairoQuartzSurface_ce_ptr->create_object = CairoQuartzSurface_object_new;
 	memcpy(&CairoQuartzSurface_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
