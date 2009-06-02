@@ -8,7 +8,7 @@ $ndash  = count($dashes);
 $offset = -50.0;
 $sur = new CairoImageSurface(0,500,500);
 $con = new CairoContext($sur);
-$con->setDash ($dashes, $ndash, $offset);
+$con->setDash ($dashes, $offset);
 $con->setLineWidth (10.0);
 $con->moveTo (128.0, 25.6);
 $con->lineTo ( 230.4, 230.4);

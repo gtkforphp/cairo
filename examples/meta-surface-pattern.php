@@ -7,15 +7,15 @@ $pad =2;
 $width =($pad + $size + $pad);
 $height =$width;
 
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
 $con = new CairoContext($sur);
-//$s = new CairoImageSurface(FORMAT_ARGB32, $width, $height);
+//$s = new CairoImageSurface(FORMATARGB32, $width, $height);
 
 
     $con->translate ( $pad, $pad);
 
     $pat_surface = $sur->createSimilar (
-						Cairo::CONTENT_COLOR_ALPHA,
+						CairoContent::COLOR_ALPHA,
 						$patwidth, $patheight);
 
     $cr2 = new CairoContext($pat_surface);
@@ -68,7 +68,7 @@ $con = new CairoContext($sur);
     $mat->rotate ( 1);
     $mat->translate ( -$patwidth/4.0, -$patwidth/2.0);
     $pattern->setMatrix ( $mat);
-    $pattern->setExtend ( Cairo::EXTEND_NONE);
+    $pattern->setExtend ( CairoExtend::NONE);
 
     $con->setSource ( $pattern);
     $con->paint ();

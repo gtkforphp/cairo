@@ -13,7 +13,7 @@ function box_text($str, $x, $y)
 	$con->showText($str);
 	$con->restore();
 }
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 38, 34);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 38, 34);
 $con = new CairoContext($sur);
 
 $con->setSourceRgb(1,1,1);

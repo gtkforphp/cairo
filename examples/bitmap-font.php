@@ -1,12 +1,12 @@
 <?php
 $width = 247;
 $height = 26;
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
 $con = new CairoContext($sur);
 $con->selectFontFace("6x13.pcf");
 $con->setFontSize(11.5);
 $fo = new CairoFontOptions();
-$fo->setHintMetrics(Cairo::HINT_METRICS_ON);
+$fo->setHintMetrics(CairoHintMetrics::METRICS_ON);
 $con->setFontOptions($fo);
 $fe = $con->fontExtents();
 $con->moveTo(1,$fe["ascent"] - 1);
@@ -31,7 +31,7 @@ $con->translate($width, $height);
 $con->rotate(M_PI);
 
 $con->moveTo(1, $fe["height"]-$fe["descent"]-1);
-$fo->setHintMetrics(Cairo::HINT_METRICS_OFF);
+$fo->setHintMetrics(CairoHintMetrics::METRICS_OFF);
 $fo->setHintStyle(Cairo::HINT_STYLE_NONE);
 $con->setFontOptions($fo);
 $con->showText("the ");

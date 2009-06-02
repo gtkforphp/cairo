@@ -13,14 +13,14 @@ function draw_symbol ()
     $con->stroke ();
 
     $con->save ();
-    $con->setDash ( $dash, 2, 0.);
+    $con->setDash ( $dash, 0.);
     $con->moveTo ( 0, 0);
     $con->arc ( 0, 0, 12.5, 0, 3 * M_PI / 2);
     $con->closePath ();
     $con->stroke ();
     $con->restore ();
 }
-	$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32,200,200);
+	$sur = new CairoImageSurface(CairoFormat::ARGB32,200,200);
 	$con = new CairoContext($sur);
 
     $con->setSourceRgb ( 1, 1, 1);

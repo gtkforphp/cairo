@@ -35,7 +35,7 @@ function set_surface_pattern($x, $y)
 	$he = floor(0.6*$height);
 	$x+=0.2 * $width;
 	$y+=0.2 * $height;
-	$s = $sur->createSimilar(Cairo::CONTENT_COLOR_ALPHA, $wi, $he);
+	$s = $sur->createSimilar(CairoContent::COLOR_ALPHA, $wi, $he);
 	$con2 = new CairoContext($s);
 	$con2->setSourceRgb(1,0,0);
 	$con2->paint();
@@ -57,9 +57,9 @@ function draw_mask ($x, $y)
     $he = floor(0.9 * $height);
     $x += 0.05 * $width;
     $y += 0.05 * $height;
-    $s = new CairoImageSurface(Cairo::FORMAT_ARGB32, 1, 1);
+    $s = new CairoImageSurface(CairoFormat::ARGB32, 1, 1);
     $s = $sur->createSimilar (
-						 Cairo::CONTENT_ALPHA,
+						 CairoContent::ALPHA,
 						 $wi, $he);
     $con2 = new CairoContext($s);
 
@@ -128,12 +128,12 @@ function draw_rects ($x, $y)
 $imwidth = 4*($width+$pad) + $pad;
 $imheight = 4*($height+$pad) + $pad;
 
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $imwidth, $imheight);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, $imwidth, $imheight);
 $con = new CairoContext($sur);
 
     $con->selectFontFace ( "Bitstream Vera Sans",
-			    Cairo::FONT_SLANT_NORMAL,
-			    Cairo::FONT_WEIGHT_NORMAL);
+			    CairoFontSlant::NORMAL,
+			    CairoFontWeight::NORMAL);
 
     for ($j = 0; $j < 4; $j++) {
 	for ($i = 0; $i < 4; $i++) {
@@ -155,7 +155,7 @@ $con = new CairoContext($sur);
 	    $con->fillPreserve ();
 	    $con->clip ();
 
-	    $con->setOperator (Cairo::OPERATOR_SOURCE);
+	    $con->setOperator (CairoOperator::SOURCE);
 	    //pattern_funcs[i] ($x, $y);
 	    switch($i) {
 		case 0: 

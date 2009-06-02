@@ -1,5 +1,5 @@
 <?php
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 5, 5);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 5, 5);
 $con = new CairoContext($sur);
 
 $color = "";
@@ -8,11 +8,11 @@ $color.= chr(0x33);
 $color.= chr(0x19);
 $color.= chr(0x80);
 
-$s = new CairoImageSurface(Cairo::FORMAT_ARGB32, 1, 1);
-$s->createFromData($color, Cairo::FORMAT_ARGB32, 1,1,4);
+$s = new CairoImageSurface(CairoFormat::ARGB32, 1, 1);
+$s->createForData($color, CairoFormat::ARGB32, 1,1,4);
 
 $pat = new CairoSurfacePattern($s);
-$pat->setExtend(Cairo::EXTEND_REPEAT);
+$pat->setExtend(CairoExtend::REPEAT);
 
 for($i=0; $i<5; $i++) {
 switch($i) {

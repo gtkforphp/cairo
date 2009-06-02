@@ -1,5 +1,5 @@
 <?php
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 25*60, 4*60);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 25*60, 4*60);
 $con = new CairoContext($sur);
 //$con->save();
 $dash = array(20.0,20.0);
@@ -15,14 +15,14 @@ for($c=0; $c<5; $c++) {
 	$con->relCurveTo(0, $b*10, 0, $b*10, $c*10, $b*10);
 	$con->setSourceRgb(1,1,1);
 	$con->setLineWidth(8);
-	$con->setLineCap(Cairo::LINE_CAP_ROUND);
-	$con->setDash($dash, 2, $a*10);
+	$con->setLineCap(CairoLineCap::ROUND);
+	$con->setDash($dash, $a*10);
 	$con->strokePreserve();
 	$con->setSourceRgb(0,0.5,1);
 	$con->setLineWidth(2);
 	$con->setLineCap(2);
 	$ar = array(8.0,8.0);
-	$con->setDash($ar,2,0);
+	$con->setDash($ar,0);
 	$con->stroke();
 }
 

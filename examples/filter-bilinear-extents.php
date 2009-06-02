@@ -1,7 +1,7 @@
 <?
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 36, 36);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 36, 36);
 $con = new CairoContext($sur);
-$s = new CairoImageSurface(Cairo::FORMAT_ARGB32, 2, 2);
+$s = new CairoImageSurface(CairoFormat::ARGB32, 2, 2);
 $con2 = new CairoContext($s);
 $con2->setSourceRgb(1,0,0);
 $con2->paint();

@@ -3,7 +3,7 @@ $linewidth = 10.0;
 $size = 5*$linewidth;
 $pad = 2*$linewidth;
 
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 3 * ($pad+$size) + $pad, 3*$pad+2*$size);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 3 * ($pad+$size) + $pad, 3*$pad+2*$size);
 $con = new CairoContext($sur);
 
 $dash = array($linewidth, 1.5*$linewidth);
@@ -17,7 +17,7 @@ $con->restore();
 for($i = 0; $i<2 ; $i++) {
 	$con->save();
 	$con->setLineWidth($linewidth);
-	$con->setDash($dash, 2, $dashoff);
+	$con->setDash($dash, $dashoff);
 	$con->translate($pad, $pad);
 
 	$con->moveTo(0,0);
@@ -28,8 +28,8 @@ for($i = 0; $i<2 ; $i++) {
 	$con->relLineTo(3*$linewidth, 0);
 	$con->relLineTo(0,3*$linewidth);
 
-	$con->setLineCap(Cairo::LINE_CAP_BUTT);
-	$con->setLineJoin(Cairo::LINE_JOIN_BEVEL);
+	$con->setLineCap(CairoLineCap::BUTT);
+	$con->setLineJoin(CairoLineJoin::BEVEL);
 	$con->stroke();
 
 	$con->translate($size+$pad, 0);
@@ -42,8 +42,8 @@ for($i = 0; $i<2 ; $i++) {
     $con->relLineTo(3*$linewidth, 0);
     $con->relLineTo(0,3*$linewidth);
 
-    $con->setLineCap(Cairo::LINE_CAP_ROUND);
-    $con->setLineJoin(Cairo::LINE_JOIN_ROUND);
+    $con->setLineCap(CairoLineCap::ROUND);
+    $con->setLineJoin(CairoLineJoin::ROUND);
     $con->stroke();
     $con->translate($size+$pad, 0);
 				
@@ -55,8 +55,8 @@ for($i = 0; $i<2 ; $i++) {
     $con->relLineTo(3*$linewidth, 0);
     $con->relLineTo(0,3*$linewidth);
 
-	$con->setLineCap(Cairo::LINE_CAP_SQUARE);
-    $con->setLineJoin(Cairo::LINE_JOIN_MITER);
+	$con->setLineCap(CairoLineCap::SQUARE);
+    $con->setLineJoin(CairoLineJoin::MITER);
     $con->stroke();
 	$con->restore();
 	$con->translate(0,$size+$pad);

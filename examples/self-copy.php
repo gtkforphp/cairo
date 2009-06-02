@@ -1,6 +1,6 @@
 <?php
 	$size = 40;
-	$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $size, $size);
+	$sur = new CairoImageSurface(CairoFormat::ARGB32, $size, $size);
     $con = new CairoContext($sur);
 	$con->setSourceRgb ( 1, 1, 1);	/* White */
     $con->paint ();

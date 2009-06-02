@@ -1,9 +1,9 @@
 <?
 $width = 12;
 $height = 4;
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
 $con = new CairoContext($sur);
-$s = new CairoImageSurface(Cairo::FORMAT_ARGB32,$width,$height);
+$s = new CairoImageSurface(CairoFormat::ARGB32,$width,$height);
 $str="";
 $stride = $s->getStride();
 for($i=0; $i<12; $i++) {
@@ -25,7 +25,7 @@ for($i=0; $i<12; $i++) {
     $str=$str . chr(0xff);
 }
 
-$s->createFromData($str, Cairo::FORMAT_ARGB32, $width, $height);
+$s->createForData($str, CairoFormat::ARGB32, $width, $height);
 $wid = $s->getHeight();
 $con->setSourceRgb(1,1,1);
 $con->paint();

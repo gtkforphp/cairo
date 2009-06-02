@@ -2,9 +2,9 @@
 	$size = 20;
 	$pad = 2;
 	$surface_size = sqrt(($size - 2*$pad)*($size-2*$pad)/2);
-	$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $size, $size);
+	$sur = new CairoImageSurface(CairoFormat::ARGB32, $size, $size);
     $con = new CairoContext($sur);
-	$s = new CairoImageSurface(Cairo::FORMAT_RGB24,
+	$s = new CairoImageSurface(CairoFormat::RGB24,
 					  $surface_size, $surface_size);
     $con2 = new CairoContext($s);
     $con2->setSourceRgb ( 1, 1, 1);
@@ -41,7 +41,7 @@
     $con->setSourceSurface ( $s, 0, 0);
     $pat = $con->getSource();
 
-	$pat->setFilter(Cairo::FILTER_NEAREST);
+	$pat->setFilter(CairoFilter::NEAREST);
     $con->setSource($pat);
 	$con->paint ();
 	$sur->writeToPng(dirname(__FILE__)  . "/rotate-image-surface-paint-php.png");

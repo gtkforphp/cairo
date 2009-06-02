@@ -1,11 +1,11 @@
 <?php
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 256 + 32*2, 192+ 32*2);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 256 + 32*2, 192+ 32*2);
 $con = new CairoContext($sur);
-$s = new CairoImageSurface(Cairo::FORMAT_ARGB32,100, 100);
+$s = new CairoImageSurface(CairoFormat::ARGB32,100, 100);
 $s->createFromPng(dirname(__FILE__)  . "/romedalen.png");
 $con->setSourceSurface($s,32,32);
 $pat = $con->getSource();
-$pat->setExtend(Cairo::EXTEND_REPEAT);
+$pat->setExtend(CairoExtend::REPEAT);
 $con->setSource($pat);
 $con->paint();
 

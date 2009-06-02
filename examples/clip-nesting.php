@@ -2,7 +2,7 @@
 $size = 100;
 $border = 10;
 $linewidth = 20;
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $size, $size);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, $size, $size);
 $con = new CairoContext($sur);
 $s = $con->getGroupTarget();
 $c = new CairoContext($s);

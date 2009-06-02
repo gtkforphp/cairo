@@ -76,7 +76,7 @@ function scale_path_not_line_width ()
  $yscale  = 2.0;
  $width = ($xscale * $spline * 6.0);
  $height = ($yscale * $spline * 2.0);    
- $sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
+ $sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
  $con = new CairoContext($sur);
  $con->setSourceRgb ( 1.0, 1.0, 1.0); /* white */
  $con->paint ();

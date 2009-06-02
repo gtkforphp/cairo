@@ -1,6 +1,6 @@
 <?php
 $starsize = 20;
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $starsize * 2 + 2, $starsize+2);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, $starsize * 2 + 2, $starsize+2);
 $con = new CairoContext($sur);
 $con->setSourceRgb(1,0,0);
 $con->translate(1,1);
@@ -12,7 +12,7 @@ $con->relLineTo ( -16, -12);
 $con->relLineTo ( 20, 0);
 $con->relLineTo ( -16, 12);
 
-$con->setFillRule (Cairo::FILL_RULE_WINDING);
+$con->setFillRule (CairoFillRule::WINDING);
 $con->clip ();
 $con->paint ();
 
@@ -26,7 +26,7 @@ $con->relLineTo ( -16, -12);
 $con->relLineTo ( 20, 0);
 $con->relLineTo ( -16, 12);
 
-$con->setFillRule (Cairo::FILL_RULE_EVEN_ODD);
+$con->setFillRule (CairoFillRule::EVEN_ODD);
 $con->clip ();
 $con->paint ();
 

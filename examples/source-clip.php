@@ -1,8 +1,8 @@
 <?php
-	$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 12, 12);
+	$sur = new CairoImageSurface(CairoFormat::ARGB32, 12, 12);
 	$con = new CairoContext($sur);
     $source = $sur->createSimilar (
-                       Cairo::CONTENT_COLOR_ALPHA,
+                       CairoContent::COLOR_ALPHA,
                        12, 12);
 
     $con2 = new CairoContext($source);

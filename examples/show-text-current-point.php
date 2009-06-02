@@ -1,7 +1,7 @@
 <?php 
 
 
-    $sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 300, 16);
+    $sur = new CairoImageSurface(CairoFormat::ARGB32, 300, 16);
 	$con = new CairoContext($sur);
 	$con->save ();
     $con->setSourceRgb ( 1.0, 1.0, 1.0); /* white */
@@ -9,8 +9,8 @@
     $con->restore ();
 
     $con->selectFontFace ( "Bitstream Vera Sans",
-                Cairo::FONT_SLANT_NORMAL,
-                Cairo::FONT_WEIGHT_NORMAL);
+                CairoFontSlant::NORMAL,
+                CairoFontWeight::NORMAL);
     $con->setFontSize (12);
 
     $con->setSourceRgb ( 0, 0, 0); /* black */

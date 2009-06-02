@@ -1,7 +1,7 @@
 <?php
 $width = 800;
 $height = 800;
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
 $con = new CairoContext($sur);
 $con->setSourceRgb(1,1,1);
 $con->paint();

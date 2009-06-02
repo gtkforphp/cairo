@@ -1,7 +1,7 @@
 <?php
     $width = 71;
     $height = 28;
-    $sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
+    $sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
     $con = new CairoContext($sur);
  
     $dash = array(8.0, 2.0);
@@ -17,7 +17,7 @@
     /* First check simple rectangles */
     $con->rectangle (2,2,67,24);
 
-    $con->setDash ( $dash, 2, 9.0);
+    $con->setDash ( $dash, 9.0);
 
     $con->stroke ();
     $sur->writeToPng(dirname(__FILE__)  . "/leaky-dash-php.png");

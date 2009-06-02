@@ -1,9 +1,9 @@
 <?php
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 2, 2);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 2, 2);
 $con = new CairoContext($sur);
-$s = new CairoImageSurface(Cairo::FORMAT_ARGB32, 2, 2);
+$s = new CairoImageSurface(CairoFormat::ARGB32, 2, 2);
 $file = fopen(dirname(__FILE__)  ."/create-from-png-ref.png","r");
-$s->createFromPngStream($file);
+$s->createFromPng($file);
 $con->setSourceSurface($s);
 $con->paint();
 

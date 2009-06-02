@@ -1,9 +1,9 @@
 <?php
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32,3*(3+6+3), 8*(6+3) + 3);
+$sur = new CairoImageSurface(CairoFormat::ARGB32,3*(3+6+3), 8*(6+3) + 3);
 $con = new CairoContext($sur);
 
 
-    $cap = array(Cairo::LINE_CAP_ROUND, Cairo::LINE_CAP_SQUARE, Cairo::LINE_CAP_BUTT);
+    $cap = array(CairoLineCap::ROUND, CairoLineCap::SQUARE, CairoLineCap::BUTT);
     
     $dash = array(2.0, 2.0);
     $dash_long = array(6.0, 6.0);
@@ -27,7 +27,7 @@ $con = new CairoContext($sur);
 	$con->stroke ();
 
 	/* degenerate paths starting with dash on */
-	$con->setDash ( $dash, 2, 0.);
+	$con->setDash ( $dash, 0.);
 
 	$con->translate ( 0, 3*3);
 	$con->moveTo ( 6, 6);
@@ -41,7 +41,7 @@ $con = new CairoContext($sur);
 
 	/* degenerate paths starting with dash off */
 	/* these should not draw anything */
-	$con->setDash ( $dash, 2, 2.);
+	$con->setDash ( $dash, 2.);
 
 	$con->translate ( 0, 3*3);
 	$con->moveTo ( 6, 6);
@@ -55,7 +55,7 @@ $con = new CairoContext($sur);
 
 	/* this should draw a single degenerate sub-path
 	 * at the end of the path */
-	$con->setDash ( $dash_long, 2, 6.);
+	$con->setDash ( $dash_long, 6.);
 
 	$con->translate ( 0, 3*3);
 	$con->moveTo ( 6 + 6.0, 6);
@@ -65,7 +65,7 @@ $con = new CairoContext($sur);
 	/* this should draw a single degenerate sub-path
 	 * at the end of the path. The difference between this
 	 * and the above is that this ends with a degenerate sub-path*/
-	$con->setDash ( $dash_long, 2, 6.);
+	$con->setDash ( $dash_long, 6.);
 
 	$con->translate ( 0, 3*3);
 	$con->moveTo ( 6 + 6.0, 6);

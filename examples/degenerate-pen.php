@@ -1,5 +1,5 @@
 <?php
-$sur = new CairoImageSurface(Cairo::FORMAT_RGB24,165, 30);
+$sur = new CairoImageSurface(CairoFormat::RGB24,165, 30);
 $con = new CairoContext($sur);
 $con->moveTo(0,0);
 
@@ -48,7 +48,7 @@ $con->setSourceRgb ( 1, 1, 1);
     $con->paint ();
 
     $con->setSourceRgb ( 0, 0, 0);
-    $con->setLineJoin (Cairo::LINE_JOIN_ROUND);
+    $con->setLineJoin (CairoLineJoin::ROUND);
 
     $con->translate ( 5, 5);
 

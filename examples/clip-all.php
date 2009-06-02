@@ -1,5 +1,5 @@
 <?php
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 10, 10);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 10, 10);
 $con = new CairoContext($sur);
 $con->rectangle(0,0,10,10);
 $con->setSourceRgb(0,0,1);
@@ -22,7 +22,7 @@ $con->clip();
 $con->rectangle(0,0,10,10);
 $con->setSourceRgb(1,1,0);
 $con->fill();
-$con->selectFontFace("Bitstream Vera Sans", Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL);
+$con->selectFontFace("Bitstream Vera Sans", CairoFontSlant::NORMAL, CairoFontWeight::NORMAL);
 $con->moveTo(0,10);
 $con->showText("cairo");
 $sur->writeToPng(dirname(__FILE__)  . "/clip-all-php.png");

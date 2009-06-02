@@ -1,5 +1,5 @@
 <?php
-$sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, 53, 53);
+$sur = new CairoImageSurface(CairoFormat::ARGB32, 53, 53);
 $con = new CairoContext($sur);
 
 $con->setSourceRgb(1,0,0);

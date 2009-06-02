@@ -1,7 +1,7 @@
 <?php
     $width = 60;
     $height = 60;
-    $sur = new CairoImageSurface(Cairo::FORMAT_ARGB32, $width, $height);
+    $sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
     $con = new CairoContext($sur);
  
     $dash = array(4.0, 2.0);
@@ -25,7 +25,7 @@
     $con->rectangle ( $width+$width/4, $height+$height/4, -$width, -$height);
     $con->stroke ();
 
-    $con->setDash ( $dash, 2, 0);
+    $con->setDash ( $dash, 0);
 
     /* And now dashed. */
     $con->setSourceRgb ( 1., 0., 0);
