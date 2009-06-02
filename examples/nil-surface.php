@@ -4,9 +4,9 @@ $con = new CairoContext($sur);
 
 $con2 = new CairoContext($sur);
 $s = new CairoImageSurface(CairoFormat::ARGB32, 0, 0);
-$s->createFromPng("__THIS_FILE_DOES_NOT_EXIST");
-$pat = new CairoSurfacePattern($s);
+$s->createFromPng('__THIS_FILE_DOES_NOT_EXIST');
 
+$pat = new CairoSurfacePattern($s);
 $con2->setSource($pat);
 $con2->paint();
 
@@ -15,6 +15,4 @@ $pat = new CairoSurfacePattern(NULL);
 $con2->setSource($pat);
 $con2->paint();
 
-
-$sur->writeToPng(dirname(__FILE__)  . "/nil-surface-php.png");
-?>
+$sur->writeToPng(dirname(__FILE__)  . '/nil-surface-php.png');

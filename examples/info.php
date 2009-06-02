@@ -1,3 +1,2 @@
 <?php
-echo phpversion("cairo");
-?>
+echo phpversion('cairo');

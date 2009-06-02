@@ -10,19 +10,14 @@ $pat->addColorStopRgba(1, 0, 0, 0, 1);
 $pat->addColorStopRgba(0, 1, 1, 1, 1);
 $ctx->rectangle(0,0,1,1);
 $ctx->setSource($pat);
-//$ctx->stroke();
 $ctx->fill();
 
-$pat = new CairoRadialGradient(0.45, 0.4, 0.1,
-0.4, 0.4, 0.5);
+$pat = new CairoRadialGradient(0.45, 0.4, 0.1, 0.4, 0.4, 0.5);
 $pat->addColorStopRgba(0, 1, 1, 1, 1);
 $pat->addColorStopRgba(1, 0, 0, 0, 1);
 $ctx->setSource($pat);
 $ctx->arc(.5, .5, .3, 0, 2*3.14);
-//$ctx->fill();
-
-//$ctx->stroke();
 $ctx->fill();
+
 $check = $ctx->getTarget();
-$check->writeToPng(dirname(__FILE__) . "/sphere-image.png");
-?>
+$check->writeToPng(dirname(__FILE__) . '/sphere.png');
