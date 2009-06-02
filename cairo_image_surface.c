@@ -100,7 +100,7 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 	/* NOTE: we have to keep the data buffer around, so we put it in the cairo_surface_object */
 	char *data, *buffer;
 	int data_len;
-	long format, width, height, stride;
+	long format, width, height, stride = -1;
 	cairo_surface_object *surface_object;
 
 	PHP_CAIRO_ERROR_HANDLING

@@ -453,7 +453,7 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_dsc_comment_args, ZEND_SEND_BY_VAL, ZEND
 	ZEND_ARG_INFO(0, comment)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_select_font_face_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+ZEND_BEGIN_ARG_INFO_EX(cairo_select_font_face_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, family)
 	ZEND_ARG_INFO(0, slant)

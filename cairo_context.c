@@ -148,7 +148,7 @@ ZEND_BEGIN_ARG_INFO(CairoContext_glyphPath_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_ARRAY_INFO(0, glyphs, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO(CairoContext_selectFontFace_args, ZEND_SEND_BY_VAL)
+ZEND_BEGIN_ARG_INFO_EX(CairoContext_selectFontFace_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
 	ZEND_ARG_INFO(0, family)
 	ZEND_ARG_INFO(0, slant)
 	ZEND_ARG_INFO(0, weight)
@@ -2176,12 +2176,12 @@ PHP_FUNCTION(cairo_path_extents)
 PHP_FUNCTION(cairo_select_font_face)
 {
 	zval *context_zval = NULL;
-	int slant, weight, family_len;
+	int slant = CAIRO_FONT_SLANT_NORMAL, weight = CAIRO_FONT_WEIGHT_NORMAL, family_len;
 	char *family, *cairo_family;
 	cairo_context_object *context_object;
 
 	PHP_CAIRO_ERROR_HANDLING
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Osll", 
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Os|ll", 
 				&context_zval, cairo_ce_cairocontext,
 				&family, &family_len,
 				&slant, &weight) == FAILURE) {
