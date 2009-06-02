@@ -1,0 +1,46 @@
+Ignored Cairo Symbols With Explanations 
+
+Cairo -
+cairo_debug_reset_static_data (not needed)
+
+CairoContext - 
+cairo_reference (not needed - referencing all handled by PHP)
+cairo_destroy (use unset - unreferencing handled by PHP)
+cairo_get_reference_count (not needed - referencing all handled by PHP)
+cairo_set_user_data (not needed - adding info handled by PHP)
+cairo_get_user_data (not needed - adding info handled by PHP)
+cairo_rectangle_list_destroy (list is changed to multi-dim-array and implicitly freed)
+
+CairoPath -
+cairo_path_destroy (not needed - referencing and destruction all handled by PHP)
+
+CairoPattern -
+cairo_pattern_reference (not needed - referencing all handled by PHP)
+cairo_pattern_destroy (use unset - unreferencing handled by PHP)
+cairo_pattern_get_reference_count (not needed - referencing all handled by PHP)
+cairo_pattern_set_user_data (not needed - adding info handled by PHP)
+cairo_pattern_get_user_data (not needed - adding info handled by PHP)
+
+CairoSurface - 
+cairo_surface_reference (not needed - referencing all handled by PHP)
+cairo_surface_destroy (use unset - unreferencing handled by PHP)
+cairo_surface_get_reference_count (not needed - referencing all handled by PHP)
+cairo_surface_set_user_data (not needed - adding info handled by PHP)
+cairo_surface_get_user_data (not needed - adding info handled by PHP)
+cairo_surface_write_to_png_stream (wrapped into cairo_surface_write_to_png, use php streams)
+
+CairoImageSurface -
+cairo_image_surface_create_from_png_stream (wrapped into cairo_image_surface_create_from_png, use php streams)
+
+CairoSvgSurface -
+cairo_svg_surface_create_for_stream (wrapped into cairo_svg_surface_create, use php streams)
+
+CairoPdfSurface -
+cairo_pdf_surface_create_for_stream (wrapped into cairo_pdf_surface_create, use php streams)
+
+CairoFontFace -
+cairo_font_face_reference (not needed - referencing all handled by PHP)
+cairo_font_face_destroy (use unset - unreferencing handled by PHP)
+cairo_font_face_get_reference_count (not needed - referencing all handled by PHP)
+cairo_font_face_get_user_data  (not needed - adding info handled by PHP)
+cairo_font_face_set_user_data  (not needed - adding info handled by PHP)

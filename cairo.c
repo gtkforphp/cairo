@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2008 The PHP Group                                |
+  | Copyright (c) 1997-2009 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -12,256 +12,749 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
-  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  | Author: Elizabeth Smith <auroraeosrose@php.net>                      |
+  |         Michael Maclean <mgdm@php.net>
+  |         Akshat Gupta <g.akshat@gmail.com>                            |                              |
   +----------------------------------------------------------------------+
 */
 
 /* $Id$ */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <cairo.h>
+
+#include "php.h"
+#include "ext/standard/info.h"
 #include "php_cairo.h"
-#include "php_cairo_api.h"
-#include "php_cairo_internal.h"
 
-#if HAVE_CAIRO
+zend_class_entry *cairo_ce_cairo;
+zend_object_handlers cairo_std_object_handlers;
 
-/* {{{ proto int cairo_version(void) */
-PHP_FUNCTION(cairo_version)
-{
-	if (ZEND_NUM_ARGS()>0)	{
-		WRONG_PARAM_COUNT;
-	}
+/* Cairo Functions */
+ZEND_BEGIN_ARG_INFO(cairo_status_to_string_args, ZEND_SEND_BY_VAL)
+  ZEND_ARG_INFO(0, status)
+ZEND_END_ARG_INFO()
 
-	
-	RETURN_LONG(cairo_version());
-}
-/* }}} cairo_version */
+/* Cairo Context Functions */
+ZEND_BEGIN_ARG_INFO(cairo_create_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(cairo_context_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+ZEND_END_ARG_INFO()
 
-/* {{{ proto string cairo_version_string()
-   */
-PHP_FUNCTION(cairo_version_string)
-{
+ZEND_BEGIN_ARG_INFO(cairo_push_group_with_content_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, content)
+ZEND_END_ARG_INFO()
 
-	if (ZEND_NUM_ARGS()>0)	{
-		WRONG_PARAM_COUNT;
-	}
+ZEND_BEGIN_ARG_INFO(cairo_set_source_rgb_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, red)
+	ZEND_ARG_INFO(0, green)
+	ZEND_ARG_INFO(0, blue)
+ZEND_END_ARG_INFO()
 
-	RETURN_STRING(cairo_version_string(), 1);
-}
-/* }}} cairo_version_string */
+ZEND_BEGIN_ARG_INFO(cairo_set_source_rgba_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, red)
+	ZEND_ARG_INFO(0, green)
+	ZEND_ARG_INFO(0, blue)
+	ZEND_ARG_INFO(0, alpha)
+ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(cairo_set_source_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_OBJ_INFO(0, pattern, CairoPattern, 0)
+ZEND_END_ARG_INFO()
 
-/* {{{ proto string cairo_available_surfaces()
- *	  */
-PHP_FUNCTION(cairo_available_surfaces)
-{
+ZEND_BEGIN_ARG_INFO_EX(cairo_set_source_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
 
-	if (ZEND_NUM_ARGS()>0)	{
-			WRONG_PARAM_COUNT;
-	}
+ZEND_BEGIN_ARG_INFO_EX(cairo_set_antialias_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, antialias)
+ZEND_END_ARG_INFO()
 
-	array_init(return_value);
+ZEND_BEGIN_ARG_INFO_EX(cairo_set_dash_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_ARRAY_INFO(0, dashes, 0)
+	ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO()
 
-#ifdef CAIRO_HAS_PNG_FUNCTIONS
-	add_next_index_string(return_value,"PNG SUPPORT",1);
-#endif
+ZEND_BEGIN_ARG_INFO(cairo_set_fill_rule_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, setting)
+ZEND_END_ARG_INFO()
 
-#ifdef CAIRO_HAS_PDF_SURFACE
-	add_next_index_string(return_value,"PDF SUPPORT",1);
-#endif
-#ifdef CAIRO_HAS_PS_SURFACE
-	add_next_index_string(return_value,"PS SUPPORT",1);
-#endif
-#ifdef CAIRO_HAS_SVG_SURFACE
-	add_next_index_string(return_value,"SVG SUPPORT",1);
-#endif
-#ifdef CAIRO_HAS_XLIB_SURFACE
-	add_next_index_string(return_value,"XLIB SUPPORT",1);
-#endif
-#ifdef CAIRO_HAS_QUARTZ_SURFACE
-	add_next_index_string(return_value,"QUARTZ SUPPORT",1);
-#endif
-#ifdef CAIRO_HAS_WIN32_SURFACE
-	add_next_index_string(return_value,"WIN32 SUPPORT",1);
-#endif
+ZEND_BEGIN_ARG_INFO_EX(cairo_set_line_width_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, width)
+ZEND_END_ARG_INFO()
 
-}
-/* }}} cairo_version_string */
+ZEND_BEGIN_ARG_INFO_EX(cairo_set_miter_limit_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, limit)
+ZEND_END_ARG_INFO()
 
-/* {{{ Class Cairo */
-#define REGISTER_CAIRO_LONG_CONST(const_name, value) \
-	zend_declare_class_constant_long(Cairo_ce_ptr, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC);
+ZEND_BEGIN_ARG_INFO_EX(cairo_set_tolerance_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, tolerance)
+ZEND_END_ARG_INFO()
 
-static zend_class_entry *Cairo_ce_ptr;
+ZEND_BEGIN_ARG_INFO_EX(cairo_paint_with_alpha_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, alpha)
+ZEND_END_ARG_INFO()
 
-void class_init_Cairo(TSRMLS_D)
-{
-	zend_class_entry ce;
-	INIT_CLASS_ENTRY(ce, "Cairo", NULL);
-	Cairo_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
-	Cairo_ce_ptr->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL_CLASS;
-	/* constants */
-#if HAS_ATSUI_FONT
-	REGISTER_CAIRO_LONG_CONST( "HAS_ATSUI_FONT", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_ATSUI_FONT", 0 );
-#endif
-#if HAS_FT_FONT
-	REGISTER_CAIRO_LONG_CONST( "HAS_FT_FONT", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_FT_FONT", 0 );
-#endif
-#if HAS_GLITZ_SURFACE
-	REGISTER_CAIRO_LONG_CONST( "HAS_GLITZ_SURFACE", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_GLITZ_SURFACE", 0 );
-#endif
-#if HAS_PDF_SURFACE
-	REGISTER_CAIRO_LONG_CONST( "HAS_PDF_SURFACE", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_PDF_SURFACE", 0 );
-#endif
-#if HAS_PNG_FUNCTIONS
-	REGISTER_CAIRO_LONG_CONST( "HAS_PNG_FUNCTIONS", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_PNG_FUNCTIONS", 0 );
-#endif
-#if HAS_PS_SURFACE
-	REGISTER_CAIRO_LONG_CONST( "HAS_PS_SURFACE", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_PS_SURFACE", 0 );
-#endif
-#if HAS_SVG_SURFACE
-	REGISTER_CAIRO_LONG_CONST( "HAS_SVG_SURFACE", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_SVG_SURFACE", 0 );
-#endif
-#if HAS_QUARTZ_SURFACE
-	REGISTER_CAIRO_LONG_CONST( "HAS_QUARTZ_SURFACE", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_QUARTZ_SURFACE", 0 );
-#endif
-#if HAS_WIN32_FONT
-	REGISTER_CAIRO_LONG_CONST( "HAS_WIN32_FONT", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_WIN32_FONT", 0 );
-#endif
-#if HAS_WIN32_SURFACE
-	REGISTER_CAIRO_LONG_CONST( "HAS_WIN32_SURFACE", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_WIN32_SURFACE", 0 );
-#endif
-#if HAS_XCB_SURFACE
-	REGISTER_CAIRO_LONG_CONST( "HAS_XCB_SURFACE", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_XCB_SURFACE", 0 );
-#endif
-#if HAS_XLIB_SURFACE
-	REGISTER_CAIRO_LONG_CONST( "HAS_XLIB_SURFACE", 1 );
-#else
-	REGISTER_CAIRO_LONG_CONST( "HAS_XLIB_SURFACE", 0 );
-#endif
+/* Context Transformations */
+ZEND_BEGIN_ARG_INFO_EX(cairo_translate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
 
-#define CONSTANT(x) REGISTER_CAIRO_LONG_CONST( #x, CAIRO_##x)
-	CONSTANT(ANTIALIAS_DEFAULT);
-	CONSTANT(ANTIALIAS_NONE);
-	CONSTANT(ANTIALIAS_GRAY);
-	CONSTANT(ANTIALIAS_SUBPIXEL);
+ZEND_BEGIN_ARG_INFO_EX(cairo_rotate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, angle)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(CONTENT_COLOR);
-	CONSTANT(CONTENT_ALPHA);
-	CONSTANT(CONTENT_COLOR_ALPHA);
+ZEND_BEGIN_ARG_INFO_EX(cairo_transform_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(EXTEND_NONE);
-	CONSTANT(EXTEND_REPEAT);
-	CONSTANT(EXTEND_REFLECT);
-	CONSTANT(EXTEND_PAD);
+/* Context and Path */
+ZEND_BEGIN_ARG_INFO_EX(cairo_append_path_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_OBJ_INFO(0, path, CairoPath, 0)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(FILL_RULE_WINDING);
-	CONSTANT(FILL_RULE_EVEN_ODD);
+ZEND_BEGIN_ARG_INFO_EX(cairo_arc_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 6)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, radius)
+	ZEND_ARG_INFO(0, angle1)
+	ZEND_ARG_INFO(0, angle2)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(FILTER_FAST);
-	CONSTANT(FILTER_GOOD);
-	CONSTANT(FILTER_BEST);
-	CONSTANT(FILTER_NEAREST);
-	CONSTANT(FILTER_BILINEAR);
-	CONSTANT(FILTER_GAUSSIAN);
+ZEND_BEGIN_ARG_INFO_EX(cairo_curve_to_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 7)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, x1)
+	ZEND_ARG_INFO(0, y1)
+	ZEND_ARG_INFO(0, x2)
+	ZEND_ARG_INFO(0, y2)
+	ZEND_ARG_INFO(0, x3)
+	ZEND_ARG_INFO(0, y3)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(FONT_WEIGHT_NORMAL);
-	CONSTANT(FONT_WEIGHT_BOLD);
+ZEND_BEGIN_ARG_INFO_EX(cairo_line_to_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(FONT_SLANT_NORMAL);
-	CONSTANT(FONT_SLANT_ITALIC);
-	CONSTANT(FONT_SLANT_OBLIQUE);
+ZEND_BEGIN_ARG_INFO_EX(cairo_rectangle_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(FORMAT_ARGB32);
-	CONSTANT(FORMAT_RGB24);
-	CONSTANT(FORMAT_A8);
-	CONSTANT(FORMAT_A1);
-	CONSTANT(FORMAT_RGB16_565);
+ZEND_BEGIN_ARG_INFO_EX(cairo_glyph_path_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_ARRAY_INFO(0, glyphs, 0)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(HINT_METRICS_DEFAULT);
-	CONSTANT(HINT_METRICS_OFF);
-	CONSTANT(HINT_METRICS_ON);
+ZEND_BEGIN_ARG_INFO_EX(cairo_text_path_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, text)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(HINT_STYLE_DEFAULT);
-	CONSTANT(HINT_STYLE_NONE);
-	CONSTANT(HINT_STYLE_SLIGHT);
-	CONSTANT(HINT_STYLE_MEDIUM);
-	CONSTANT(HINT_STYLE_FULL);
+/* Pattern Functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, pattern, CairoPattern, 0)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(LINE_CAP_BUTT);
-	CONSTANT(LINE_CAP_ROUND);
-	CONSTANT(LINE_CAP_SQUARE);
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_set_matrix_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, pattern, CairoPattern, 0)
+	ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(LINE_JOIN_MITER);
-	CONSTANT(LINE_JOIN_ROUND);
-	CONSTANT(LINE_JOIN_BEVEL);
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_rgb_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_INFO(0, red)
+	ZEND_ARG_INFO(0, green)
+	ZEND_ARG_INFO(0, blue)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(OPERATOR_CLEAR);
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_rgba_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+	ZEND_ARG_INFO(0, red)
+	ZEND_ARG_INFO(0, green)
+	ZEND_ARG_INFO(0, blue)
+	ZEND_ARG_INFO(0, alpha)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(OPERATOR_SOURCE);
-	CONSTANT(OPERATOR_OVER);
-	CONSTANT(OPERATOR_IN);
-	CONSTANT(OPERATOR_OUT);
-	CONSTANT(OPERATOR_ATOP);
+ZEND_BEGIN_ARG_INFO_EX(cairo_solidpattern_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, pattern, CairoSolidPattern, 0)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(OPERATOR_DEST);
-	CONSTANT(OPERATOR_DEST_OVER);
-	CONSTANT(OPERATOR_DEST_IN);
-	CONSTANT(OPERATOR_DEST_OUT);
-	CONSTANT(OPERATOR_DEST_ATOP);
+ZEND_BEGIN_ARG_INFO_EX(cairo_surfacepattern_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, pattern, CairoSurfacePattern, 0)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(OPERATOR_XOR);
-	CONSTANT(OPERATOR_ADD);
-	CONSTANT(OPERATOR_SATURATE);
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_set_filter_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, pattern, CairoSurfacePattern, 0)
+	ZEND_ARG_INFO(0, filter)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(PATH_MOVE_TO);
-	CONSTANT(PATH_LINE_TO);
-	CONSTANT(PATH_CURVE_TO);
-	CONSTANT(PATH_CLOSE_PATH);
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_set_extend_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, pattern, CairoSurfacePattern, 0)
+	ZEND_ARG_INFO(0, extend)
+ZEND_END_ARG_INFO()
 
-	CONSTANT(SUBPIXEL_ORDER_DEFAULT);
-	CONSTANT(SUBPIXEL_ORDER_RGB);
-	CONSTANT(SUBPIXEL_ORDER_BGR);
-	CONSTANT(SUBPIXEL_ORDER_VRGB);
-	CONSTANT(SUBPIXEL_ORDER_VBGR);
-#undef CONSTANT
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_add_color_stop_rgb_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
+  ZEND_ARG_OBJ_INFO(0, pattern, CairoGradientPattern, 0)
+  ZEND_ARG_INFO(0, offset)
+  ZEND_ARG_INFO(0, red)
+  ZEND_ARG_INFO(0, green)
+  ZEND_ARG_INFO(0, blue)
+ZEND_END_ARG_INFO()
 
-}
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_add_color_stop_rgba_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 6)
+  ZEND_ARG_OBJ_INFO(0, pattern, CairoGradientPattern, 0)
+  ZEND_ARG_INFO(0, offset)
+  ZEND_ARG_INFO(0, red)
+  ZEND_ARG_INFO(0, green)
+  ZEND_ARG_INFO(0, blue)
+  ZEND_ARG_INFO(0, alpha)
+ZEND_END_ARG_INFO()
 
-/* }}} Class Cairo */
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_get_color_stop_rgba_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_OBJ_INFO(0, pattern, CairoGradientPattern, 0)
+  ZEND_ARG_INFO(0, index)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_gradientpattern_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_OBJ_INFO(0, pattern, CairoGradientPattern, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_linear_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+  ZEND_ARG_INFO(0, x0)
+  ZEND_ARG_INFO(0, y0)
+  ZEND_ARG_INFO(0, x1)
+  ZEND_ARG_INFO(0, y1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_lineargradient_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_OBJ_INFO(0, pattern, CairoLinearGradient, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_radial_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 6)
+  ZEND_ARG_INFO(0, x0)
+  ZEND_ARG_INFO(0, y0)
+  ZEND_ARG_INFO(0, r0)
+  ZEND_ARG_INFO(0, x1)
+  ZEND_ARG_INFO(0, y1)
+  ZEND_ARG_INFO(0, r1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_radialgradient_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_OBJ_INFO(0, pattern, CairoRadialGradient, 0)
+ZEND_END_ARG_INFO()
+
+/* Matrix Functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_init_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+  ZEND_ARG_INFO(0, yx)
+  ZEND_ARG_INFO(0, xy)
+  ZEND_ARG_INFO(0, yy)
+  ZEND_ARG_INFO(0, x0)
+  ZEND_ARG_INFO(0, y0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_init_translate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_INFO(0, tx)
+  ZEND_ARG_INFO(0, ty)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_init_scale_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_INFO(0, sx)
+  ZEND_ARG_INFO(0, sy)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_init_rotate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_INFO(0, radians)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_translate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+  ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+  ZEND_ARG_INFO(0, tx)
+  ZEND_ARG_INFO(0, ty)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_scale_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+  ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+  ZEND_ARG_INFO(0, sx)
+  ZEND_ARG_INFO(0, sy)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_rotate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+  ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+  ZEND_ARG_INFO(0, radians)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_invert_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+  ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_multiply_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+  ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+  ZEND_ARG_OBJ_INFO(0, matrix1, CairoMatrix, 1)
+  ZEND_ARG_OBJ_INFO(0, matrix2, CairoMatrix, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_transform_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+  ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+  ZEND_ARG_INFO(0, dx)
+  ZEND_ARG_INFO(0, dy)
+ZEND_END_ARG_INFO()
+
+/* Surface Functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_surface_create_similar_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, content)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_surface_mark_dirty_rectangle_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_surface_set_fallback_resolution_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_surface_write_to_png_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+/* Image Surface Functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_image_create_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_INFO(0, format)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_format_stride_for_width_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_INFO(0, format)
+	ZEND_ARG_INFO(0, width)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_image_surface_create_for_data_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+	ZEND_ARG_INFO(0, data)
+	ZEND_ARG_INFO(0, format)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+	ZEND_ARG_INFO(0, stride)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_image_surface_create_from_png_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, file)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_image_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoImageSurface, 0)
+ZEND_END_ARG_INFO()
+
+/* SVG surface functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_svg_surface_create_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_INFO(0, file)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_svg_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSvgSurface, 0)
+	ZEND_ARG_INFO(0, version)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_svg_surface_version_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, version)
+ZEND_END_ARG_INFO()
+
+/* PDF surface functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_pdf_surface_create_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_INFO(0, file)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_pdf_surface_set_size_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPdfSurface, 0)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+/* PS surface functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_create_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_INFO(0, file)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_set_size_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_restrict_to_level_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+	ZEND_ARG_INFO(0, level)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_set_eps_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+	ZEND_ARG_INFO(0, level)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_ps_level_to_string_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, level)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_dsc_comment_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+	ZEND_ARG_INFO(0, comment)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_select_font_face_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, family)
+	ZEND_ARG_INFO(0, slant)
+	ZEND_ARG_INFO(0, weight)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_set_font_size_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, size)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_text_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, text)
+ZEND_END_ARG_INFO()
+
+/* Font Options functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_font_options_fontoptions_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, other, CairoFontOptions, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_font_options_set_long_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, other, CairoFontOptions, 0)
+	ZEND_ARG_INFO(0, antialias)
+ZEND_END_ARG_INFO()
 
 /* {{{ cairo_functions[] */
-function_entry cairo_functions[] = {
-	PHP_FE(cairo_version	   , NULL)
+static const function_entry cairo_functions[] = {
+	/* Cairo Functions */
+	PHP_FE(cairo_version, NULL)
 	PHP_FE(cairo_version_string, NULL)
 	PHP_FE(cairo_available_surfaces, NULL)
+	PHP_FE(cairo_available_fonts, NULL)
+	PHP_FE(cairo_status_to_string, cairo_status_to_string_args)
+
+	/* Context Functions */
+	PHP_FE(cairo_create, cairo_create_args)
+	PHP_FE(cairo_status, cairo_context_args)
+	PHP_FE(cairo_save, cairo_context_args)
+	PHP_FE(cairo_restore, cairo_context_args)
+	PHP_FE(cairo_get_target, cairo_context_args)
+	PHP_FE(cairo_push_group, cairo_context_args)
+	PHP_FE(cairo_push_group_with_content, cairo_push_group_with_content_args)
+	PHP_FE(cairo_pop_group, cairo_context_args)
+	PHP_FE(cairo_pop_group_to_source, cairo_context_args)
+	PHP_FE(cairo_get_group_target, cairo_context_args)
+	PHP_FE(cairo_set_source_rgb, cairo_set_source_rgb_args)
+	PHP_FE(cairo_set_source_rgba, cairo_set_source_rgba_args)
+	PHP_FE(cairo_set_source, cairo_set_source_args)
+	PHP_FE(cairo_set_source_surface, cairo_set_source_surface_args)
+	PHP_FE(cairo_get_source, cairo_context_args)
+	PHP_FE(cairo_set_antialias, cairo_set_antialias_args)
+	PHP_FE(cairo_get_antialias, cairo_context_args)
+	PHP_FE(cairo_set_dash, cairo_set_dash_args)
+	PHP_FE(cairo_get_dash_count, cairo_context_args)
+	PHP_FE(cairo_get_dash, cairo_context_args)
+	PHP_FE(cairo_set_fill_rule, cairo_set_fill_rule_args)
+	PHP_FE(cairo_get_fill_rule, cairo_context_args)
+	PHP_FE(cairo_set_line_cap, cairo_set_fill_rule_args)
+	PHP_FE(cairo_get_line_cap, cairo_context_args)
+	PHP_FE(cairo_set_line_join, cairo_set_fill_rule_args)
+	PHP_FE(cairo_get_line_join, cairo_context_args)
+	PHP_FE(cairo_set_line_width, cairo_set_line_width_args)
+	PHP_FE(cairo_get_line_width, cairo_context_args)
+	PHP_FE(cairo_set_miter_limit, cairo_set_miter_limit_args)
+	PHP_FE(cairo_get_miter_limit, cairo_context_args)
+	PHP_FE(cairo_set_operator, cairo_set_fill_rule_args)
+	PHP_FE(cairo_get_operator, cairo_context_args)
+	PHP_FE(cairo_set_tolerance, cairo_set_tolerance_args)
+	PHP_FE(cairo_get_tolerance, cairo_context_args)
+	PHP_FE(cairo_clip, cairo_context_args)
+	PHP_FE(cairo_clip_preserve, cairo_context_args)
+	PHP_FE(cairo_clip_extents, cairo_context_args)
+	PHP_FE(cairo_reset_clip, cairo_context_args)
+	PHP_FE(cairo_clip_rectangle_list, cairo_context_args)
+	PHP_FE(cairo_fill, cairo_context_args)
+	PHP_FE(cairo_fill_preserve, cairo_context_args)
+	PHP_FE(cairo_fill_extents, cairo_context_args)
+	PHP_FE(cairo_in_fill, cairo_translate_args)
+	PHP_FE(cairo_mask, cairo_set_source_args)
+	PHP_FE(cairo_mask_surface, cairo_set_source_surface_args)
+	PHP_FE(cairo_paint, cairo_context_args)
+	PHP_FE(cairo_paint_with_alpha, cairo_paint_with_alpha_args)
+	PHP_FE(cairo_stroke, cairo_context_args)
+	PHP_FE(cairo_stroke_preserve, cairo_context_args)
+	PHP_FE(cairo_stroke_extents, cairo_context_args)
+	PHP_FE(cairo_in_stroke, cairo_translate_args)
+	PHP_FE(cairo_copy_page, cairo_context_args)
+	PHP_FE(cairo_show_page, cairo_context_args)
+
+	/* Context Transformations */
+	PHP_FE(cairo_translate, cairo_translate_args)
+	PHP_FE(cairo_scale, cairo_translate_args)
+	PHP_FE(cairo_rotate, cairo_rotate_args)
+	PHP_FE(cairo_transform, cairo_transform_args)
+	PHP_FE(cairo_set_matrix, cairo_transform_args)
+	PHP_FE(cairo_get_matrix, cairo_context_args)
+	PHP_FE(cairo_identity_matrix, cairo_context_args)
+	PHP_FE(cairo_user_to_device, cairo_translate_args)
+	PHP_FE(cairo_user_to_device_distance, cairo_translate_args)
+	PHP_FE(cairo_device_to_user, cairo_translate_args)
+	PHP_FE(cairo_device_to_user_distance, cairo_translate_args)
+
+	/* Context and Paths */
+	PHP_FE(cairo_copy_path, cairo_context_args)
+	PHP_FE(cairo_copy_path_flat, cairo_context_args)
+	PHP_FE(cairo_append_path, cairo_append_path_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+	PHP_FE(cairo_has_current_point, cairo_context_args)
+#endif
+	PHP_FE(cairo_get_current_point, cairo_context_args)
+	PHP_FE(cairo_new_path, cairo_context_args)
+	PHP_FE(cairo_new_sub_path, cairo_context_args)
+	PHP_FE(cairo_close_path, cairo_context_args)
+	PHP_FE(cairo_arc, cairo_arc_args)
+	PHP_FE(cairo_arc_negative, cairo_arc_args)
+	PHP_FE(cairo_curve_to, cairo_curve_to_args)
+	PHP_FE(cairo_line_to, cairo_line_to_args)
+	PHP_FE(cairo_move_to, cairo_line_to_args)
+	PHP_FE(cairo_rectangle, cairo_rectangle_args)
+	PHP_FE(cairo_glyph_path, cairo_glyph_path_args)
+	PHP_FE(cairo_text_path, cairo_text_path_args)
+	PHP_FE(cairo_rel_curve_to, cairo_curve_to_args)
+	PHP_FE(cairo_rel_line_to, cairo_line_to_args)
+	PHP_FE(cairo_rel_move_to, cairo_line_to_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+	PHP_FE(cairo_path_extents, cairo_context_args)
+#endif
+	PHP_FE(cairo_select_font_face, cairo_select_font_face_args)
+	PHP_FE(cairo_set_font_size, cairo_set_font_size_args)
+	PHP_FE(cairo_text_extents, cairo_text_args)
+	PHP_FE(cairo_show_text, cairo_text_args)
+
+	/* Pattern Functions */
+	PHP_FE(cairo_pattern_get_type, cairo_pattern_args)
+	PHP_FE(cairo_pattern_status, cairo_pattern_args)
+	PHP_FE(cairo_pattern_get_matrix, cairo_pattern_args)
+	PHP_FE(cairo_pattern_set_matrix, cairo_pattern_set_matrix_args)
+	PHP_FE(cairo_pattern_create_rgb, cairo_pattern_create_rgb_args)
+	PHP_FE(cairo_pattern_create_rgba, cairo_pattern_create_rgba_args)
+	PHP_FE(cairo_pattern_get_rgba, cairo_solidpattern_args)
+	PHP_FE(cairo_pattern_create_for_surface, cairo_create_args)
+	PHP_FE(cairo_pattern_get_surface, cairo_surfacepattern_args)
+	PHP_FE(cairo_pattern_set_filter, cairo_pattern_set_filter_args)
+	PHP_FE(cairo_pattern_get_filter, cairo_surfacepattern_args)
+	PHP_FE(cairo_pattern_set_extend, cairo_pattern_set_extend_args)
+	PHP_FE(cairo_pattern_get_extend, cairo_surfacepattern_args)
+	PHP_FE(cairo_pattern_add_color_stop_rgb, cairo_pattern_add_color_stop_rgb_args)
+	PHP_FE(cairo_pattern_add_color_stop_rgba, cairo_pattern_add_color_stop_rgba_args)
+	PHP_FE(cairo_pattern_get_color_stop_rgba, cairo_pattern_get_color_stop_rgba_args)
+	PHP_FE(cairo_pattern_get_color_stop_count, cairo_gradientpattern_args)
+	PHP_FE(cairo_pattern_create_linear, cairo_pattern_create_linear_args)
+	PHP_FE(cairo_pattern_get_linear_points, cairo_lineargradient_args)
+	PHP_FE(cairo_pattern_create_radial, cairo_pattern_create_radial_args)
+	PHP_FE(cairo_pattern_get_radial_circles, cairo_radialgradient_args)
+
+	/* Matrix Functions */
+	PHP_FE(cairo_matrix_init, cairo_matrix_init_args)
+	PHP_FE(cairo_matrix_init_identity, NULL)
+	PHP_FE(cairo_matrix_init_translate, cairo_matrix_init_translate_args)
+	PHP_FE(cairo_matrix_init_scale, cairo_matrix_init_scale_args)
+	PHP_FE(cairo_matrix_init_rotate, cairo_matrix_init_rotate_args)
+	PHP_FE(cairo_matrix_translate, cairo_matrix_translate_args)
+	PHP_FE(cairo_matrix_scale, cairo_matrix_scale_args)
+	PHP_FE(cairo_matrix_rotate, cairo_matrix_rotate_args)
+	PHP_FE(cairo_matrix_invert, cairo_matrix_invert_args)
+	PHP_FE(cairo_matrix_multiply, cairo_matrix_multiply_args)
+	PHP_FE(cairo_matrix_transform_distance, cairo_matrix_transform_args)
+	PHP_FE(cairo_matrix_transform_point, cairo_matrix_transform_args)
+	
+	/* User Font Functions 
+#ifdef CAIRO_HAS_USER_FONT
+	PHP_FE(cairo_user_font_face_create, cairo_user_font_face_create_args)
+	PHP_FE(cairo_user_font_face_set_init_func, cairo_user_font_face_set_init_func_args)
+	PHP_FE(cairo_user_font_face_get_init_func, cairo_user_font_face_get_init_func_args)
+	PHP_FE(cairo_user_font_face_set_render_glyph_func, cairo_user_font_face_set_render_glyph_func_args)
+	PHP_FE(cairo_user_font_face_get_render_glyph_func, cairo_user_font_face_get_render_glyph_func_args)
+	cairo_user_font_face_set_unicode_to_glyph_func
+	cairo_user_font_face_get_unicode_to_glyph_func
+	cairo_user_font_face_set_text_to_glyphs_func
+	cairo_user_font_face_get_text_to_glyphs_func
+#endif*/
+
+	/* Font Options Functions */
+	PHP_FE(cairo_font_options_create, NULL)
+	PHP_FE(cairo_font_options_status, NULL)
+	PHP_FE(cairo_font_options_merge, cairo_font_options_fontoptions_args)
+	PHP_FE(cairo_font_options_hash, NULL)
+	PHP_FE(cairo_font_options_equal, cairo_font_options_fontoptions_args)
+	PHP_FE(cairo_font_options_set_antialias, cairo_font_options_set_long_args)
+	PHP_FE(cairo_font_options_get_antialias, cairo_font_options_fontoptions_args)
+	PHP_FE(cairo_font_options_set_subpixel_order, cairo_font_options_set_long_args)
+	PHP_FE(cairo_font_options_get_subpixel_order, cairo_font_options_fontoptions_args)
+	PHP_FE(cairo_font_options_set_hint_style, cairo_font_options_set_long_args)
+	PHP_FE(cairo_font_options_get_hint_style, cairo_font_options_fontoptions_args)
+	PHP_FE(cairo_font_options_set_hint_metrics, cairo_font_options_set_long_args)
+	PHP_FE(cairo_font_options_get_hint_metrics, cairo_font_options_fontoptions_args)
+
+	/* Generic Surface Functions */
+	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)
+	PHP_FE(cairo_surface_status, cairo_surface_args)
+	PHP_FE(cairo_surface_finish, cairo_surface_args)
+	PHP_FE(cairo_surface_flush, cairo_surface_args)
+	PHP_FE(cairo_surface_get_font_options, cairo_surface_args)
+	PHP_FE(cairo_surface_get_content, cairo_surface_args)
+	PHP_FE(cairo_surface_mark_dirty, cairo_surface_args)
+	PHP_FE(cairo_surface_mark_dirty_rectangle, cairo_surface_mark_dirty_rectangle_args)
+	PHP_FE(cairo_surface_set_device_offset, cairo_surface_set_fallback_resolution_args)
+	PHP_FE(cairo_surface_get_device_offset, cairo_surface_args)
+	PHP_FE(cairo_surface_set_fallback_resolution, cairo_surface_set_fallback_resolution_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+	PHP_FE(cairo_surface_get_fallback_resolution, cairo_surface_args)
+#endif
+	PHP_FE(cairo_surface_get_type, cairo_surface_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+	PHP_FE(cairo_surface_copy_page, cairo_surface_args)
+	PHP_FE(cairo_surface_show_page, cairo_surface_args)
+#endif
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+	PHP_FE(cairo_surface_has_show_text_glyphs, cairo_surface_args)
+#endif
+
+	/* Image Surface Functions */
+	PHP_FE(cairo_image_surface_create, cairo_image_create_surface_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+	PHP_FE(cairo_format_stride_for_width, cairo_format_stride_for_width_args)
+#endif
+	PHP_FE(cairo_image_surface_create_for_data, cairo_image_surface_create_for_data_args)
+	PHP_FE(cairo_image_surface_get_data, cairo_image_surface_args)
+	PHP_FE(cairo_image_surface_get_format, cairo_image_surface_args)
+	PHP_FE(cairo_image_surface_get_width, cairo_image_surface_args)
+	PHP_FE(cairo_image_surface_get_height, cairo_image_surface_args)
+	PHP_FE(cairo_image_surface_get_stride, cairo_image_surface_args)
+
+	/* PNG support Functions */
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+	PHP_FE(cairo_image_surface_create_from_png, cairo_image_surface_create_from_png_args)
+	PHP_FE(cairo_surface_write_to_png, cairo_surface_write_to_png_args)  
+#endif
+
+	/* SVG Surface Functions */
+#ifdef CAIRO_HAS_SVG_SURFACE
+	PHP_FE(cairo_svg_surface_create, cairo_svg_surface_create_args)
+	PHP_FE(cairo_svg_surface_restrict_to_version, cairo_svg_surface_args)
+	PHP_FE(cairo_svg_get_versions, NULL)
+	PHP_FE(cairo_svg_version_to_string, cairo_svg_surface_version_args)    
+#endif
+
+	/* PDF Surface Functions */
+#ifdef CAIRO_HAS_PDF_SURFACE
+	PHP_FE(cairo_pdf_surface_create, cairo_pdf_surface_create_args)
+	PHP_FE(cairo_pdf_surface_set_size, cairo_pdf_surface_set_size_args)  
+#endif
+
+	/* PS Surface Functions */
+#ifdef CAIRO_HAS_PS_SURFACE
+	PHP_FE(cairo_ps_surface_create, cairo_ps_surface_create_args)
+	PHP_FE(cairo_ps_surface_set_size, cairo_ps_surface_set_size_args)  
+	PHP_FE(cairo_ps_surface_restrict_to_level, cairo_ps_surface_restrict_to_level_args)  
+	PHP_FE(cairo_ps_surface_set_eps, cairo_ps_surface_set_eps_args)  
+	PHP_FE(cairo_ps_surface_get_eps, cairo_ps_surface_args)
+	PHP_FE(cairo_ps_get_levels, NULL)
+	PHP_FE(cairo_ps_level_to_string, cairo_ps_level_to_string_args)
+	PHP_FE(cairo_ps_surface_dsc_begin_setup, cairo_ps_surface_args)
+	PHP_FE(cairo_ps_surface_dsc_begin_page_setup, cairo_ps_surface_args)
+	PHP_FE(cairo_ps_surface_dsc_comment, cairo_ps_surface_dsc_comment_args)
+#endif
+
+	/* Win32 Surface Functions 
+#ifdef CAIRO_HAS_WIN32_SURFACE
+	PHP_FE(cairo_win32_surface_create, NULL)
+	PHP_FE(cairo_win32_surface_create_with_dib, NULL)
+	PHP_FE(cairo_win32_surface_create_with_ddb, NULL)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+	PHP_FE(cairo_win32_printing_surface_create, NULL)
+#endif
+	PHP_FE(cairo_win32_surface_get_dc, NULL)
+	PHP_FE(cairo_win32_surface_get_image, NULL)    
+#endif*/
+
+	/* Compatibility with cairo_wrapper */
+#if PHP_VERSION_ID >= 50300
+	ZEND_FENTRY(cairo_matrix_create_scale, ZEND_FN(cairo_matrix_init_scale), cairo_matrix_init_scale_args, ZEND_ACC_DEPRECATED)
+	ZEND_FENTRY(cairo_matrix_create_translate, ZEND_FN(cairo_matrix_init_translate), cairo_matrix_init_translate_args, ZEND_ACC_DEPRECATED)
+#else
+	PHP_FALIAS(cairo_matrix_create_scale, cairo_matrix_init_scale, cairo_matrix_init_scale_args)
+	PHP_FALIAS(cairo_matrix_create_translate, cairo_matrix_init_translate, cairo_matrix_init_translate_args)
+#endif
+
 	{ NULL, NULL, NULL }
 };
 /* }}} */
 
+/* {{{ cairo_class_functions[] */
+const zend_function_entry cairo_methods[] = {
+	PHP_ME_MAPPING(version, cairo_version, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME_MAPPING(versionString, cairo_version_string, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME_MAPPING(availableSurfaces, cairo_available_surfaces, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME_MAPPING(availableFonts, cairo_available_fonts, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME_MAPPING(statusToString, cairo_status_to_string, cairo_status_to_string_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	{NULL, NULL, NULL}
+};
+/* }}} */
 
 /* {{{ cairo_module_entry */
 zend_module_entry cairo_module_entry = {
@@ -269,11 +762,11 @@ zend_module_entry cairo_module_entry = {
 	"cairo",
 	cairo_functions,
 	PHP_MINIT(cairo),
-	NULL,
+	PHP_MSHUTDOWN(cairo),
 	NULL,
 	NULL,
 	PHP_MINFO(cairo),
-	PHP_CAIRO_VERSION, 
+	PHP_CAIRO_VERSION,
 	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
@@ -285,65 +778,280 @@ ZEND_GET_MODULE(cairo)
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo)
 {
-	class_init_Cairo(TSRMLS_C);
-	class_init_CairoContext(TSRMLS_C);
-	class_init_CairoFontFace(TSRMLS_C);
-	class_init_CairoFontOptions(TSRMLS_C);
-	class_init_CairoMatrix(TSRMLS_C);
-	class_init_CairoPath(TSRMLS_C);
-	class_init_CairoPattern(TSRMLS_C);
-	class_init_CairoGradient(TSRMLS_C);
-	class_init_CairoLinearGradient(TSRMLS_C);
-	class_init_CairoRadialGradient(TSRMLS_C);
-	class_init_CairoSolidPattern(TSRMLS_C);
-	class_init_CairoSurfacePattern(TSRMLS_C);
-	class_init_CairoScaledFont(TSRMLS_C);
-	class_init_CairoSurface(TSRMLS_C);
-	class_init_CairoImageSurface(TSRMLS_C);
+	zend_class_entry ce;
+
+	INIT_CLASS_ENTRY(ce, "Cairo", cairo_methods);
+	cairo_ce_cairo = zend_register_internal_class(&ce TSRMLS_CC);
+	cairo_ce_cairo->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL_CLASS;
+
+	memcpy(&cairo_std_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	cairo_std_object_handlers.clone_obj = NULL;
+
+	PHP_MINIT(cairo_error)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_context)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_pattern)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_path)(INIT_FUNC_ARGS_PASSTHRU);
+
+	PHP_MINIT(cairo_font)(INIT_FUNC_ARGS_PASSTHRU);
+#ifdef CAIRO_HAS_FT_FONT
+	//PHP_MINIT(cairo_ft_font)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+#ifdef CAIRO_HAS_WIN32_FONT
+	//PHP_MINIT(cairo_win32_font)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_FONT
+	//PHP_MINIT(cairo_quartz_font)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+#ifdef CAIRO_HAS_USER_FONT
+	//PHP_MINIT(cairo_svg_surface)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+
+	PHP_MINIT(cairo_surface)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_image_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #ifdef CAIRO_HAS_PDF_SURFACE
-	class_init_CairoPDFSurface(TSRMLS_C);
+	PHP_MINIT(cairo_pdf_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 #ifdef CAIRO_HAS_PS_SURFACE
-	class_init_CairoPSSurface(TSRMLS_C);
-#endif
-#ifdef CAIRO_HAS_QUARTZ_SURFACE
-	class_init_CairoQuartzSurface(TSRMLS_C);
-#endif
-#ifdef CAIRO_HAS_SVG_SURFACE
-	class_init_CairoSVGSurface(TSRMLS_C);
+	PHP_MINIT(cairo_ps_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 #ifdef CAIRO_HAS_WIN32_SURFACE
-	class_init_CairoWin32Surface(TSRMLS_C);
+	//PHP_MINIT(cairo_win32_surface)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
+	PHP_MINIT(cairo_svg_surface)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+	//PHP_MINIT(cairo_quartz_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 #ifdef CAIRO_HAS_XLIB_SURFACE
-	class_init_CairoXlibSurface(TSRMLS_C);
+	//PHP_MINIT(cairo_xlib_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
-	class_init_CairoException(TSRMLS_C);
+
 	return SUCCESS;
 }
 /* }}} */
 
+/* {{{ PHP_MSHUTDOWN_FUNCTION */
+PHP_MSHUTDOWN_FUNCTION(cairo)
+{
+#ifdef ZEND_DEBUG
+	cairo_debug_reset_static_data();
+#endif
+
+	return SUCCESS;
+}
+
 /* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION(cairo)
 {
-	php_info_print_box_start(0);
-	php_printf("<p>PHP bindings for Cairo Graphic Library</p>\n");
-	php_printf(PHP_CAIRO_VERSION);
-	php_printf("<p><b>Authors:</b></p>\n");
-	php_printf("<p>Akshat Gupta &lt;g.akshat@gmail.com&gt; (lead)</p>\n");
-	php_info_print_box_end();
-
+	php_info_print_table_start();
+	php_info_print_table_header(2, "Cairo Graphics Library Bindings", "enabled");
+	php_info_print_table_colspan_header(2,
+#ifdef COMPILE_DL_CAIRO
+		"compiled as dynamic module"
+#else
+		"compiled as static module"
+#endif
+        );
+	php_info_print_table_row(2, "Cairo Library Version", CAIRO_VERSION_STRING);
+	php_info_print_table_row(2, "Extension Version", PHP_CAIRO_VERSION);
+	php_info_print_table_colspan_header(2, "Surface Backends Available");
+	php_info_print_table_row(2, "Image Surface", "enabled");
+	php_info_print_table_row(2, "PNG Support",
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "PDF Surface",
+#ifdef CAIRO_HAS_PDF_SURFACE
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "PS Surface",
+#ifdef CAIRO_HAS_PS_SURFACE
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "Xlib (X11, X.org) Surface",
+#ifdef CAIRO_HAS_XLIB_SURFACE
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "Quartz (MacOSX) Surface",
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "SVG Surface",
+#ifdef CAIRO_HAS_SVG_SURFACE
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "Win32 Surface",
+#ifdef CAIRO_HAS_WIN32_SURFACE
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_colspan_header(2, "Font Backends Available");
+	php_info_print_table_row(2, "Freetype Fonts",
+#ifdef CAIRO_HAS_FT_FONT
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "Quartz Fonts",
+#ifdef CAIRO_HAS_QUARTZ_FONT
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "Win32 Fonts",
+#ifdef CAIRO_HAS_WIN32_FONT
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "User Fonts",
+#ifdef CAIRO_HAS_USER_FONT
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_end();
 }
 /* }}} */
 
-#endif /* HAVE_CAIRO */
+/* {{{ proto int cairo_version(void) 
+   Returns an integer version number of the cairo library being used */
+PHP_FUNCTION(cairo_version)
+{
+	PHP_CAIRO_ERROR_HANDLING
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS
 
+	RETURN_LONG(cairo_version());
+}
+/* }}} cairo_version */
+
+
+/* {{{ proto string cairo_version_string()
+   Returns a string version of the cairo library being used */
+PHP_FUNCTION(cairo_version_string)
+{
+	PHP_CAIRO_ERROR_HANDLING
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS
+
+	RETURN_STRING(cairo_version_string(), 1);
+}
+/* }}} cairo_version_string */
+
+/* {{{ proto array cairo_available_surfaces()
+   Returns an array of available Cairo backend surfaces */
+PHP_FUNCTION(cairo_available_surfaces)
+{
+	PHP_CAIRO_ERROR_HANDLING
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS
+
+	array_init(return_value);
+	add_next_index_string(return_value,"IMAGE",1);
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+	add_next_index_string(return_value,"PNG",1);
+#endif
+#ifdef CAIRO_HAS_PDF_SURFACE
+	add_next_index_string(return_value,"PDF",1);
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
+	add_next_index_string(return_value,"PS",1);
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
+	add_next_index_string(return_value,"SVG",1);
+#endif
+#ifdef CAIRO_HAS_XLIB_SURFACE
+	add_next_index_string(return_value,"XLIB",1);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+	add_next_index_string(return_value,"QUARTZ",1);
+#endif
+#ifdef CAIRO_HAS_WIN32_SURFACE
+	add_next_index_string(return_value,"WIN32",1);
+#endif
+}
+/* }}} cairo_available_surfaces */
+
+/* {{{ proto array cairo_available_fonts()
+   Returns an array of available Cairo font backends */
+PHP_FUNCTION(cairo_available_fonts)
+{
+	PHP_CAIRO_ERROR_HANDLING
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS
+
+	array_init(return_value);
+#ifdef CAIRO_HAS_FT_FONT
+	add_next_index_string(return_value,"FREETYPE",1);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_FONT
+	add_next_index_string(return_value,"QUARTZ",1);
+#endif
+#ifdef CAIRO_HAS_WIN32_FONT
+	add_next_index_string(return_value,"WIN32",1);
+#endif
+#ifdef CAIRO_HAS_USER_FONT
+	add_next_index_string(return_value,"USER",1);
+#endif
+}
+/* }}} cairo_available_fonts */
+
+/* {{{ proto string cairo_status_to_string()
+   Returns a string interpretation of the integer status passed */
+PHP_FUNCTION(cairo_status_to_string)
+{
+	long status;
+
+	PHP_CAIRO_ERROR_HANDLING
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &status) == FAILURE) {
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS
+
+	RETURN_STRING(cairo_status_to_string(status), 1);
+}
+/* }}} cairo_status_to_string */
 
 /*
  * Local variables:
  * tab-width: 4
  * c-basic-offset: 4
  * End:
- * vim600: noet sw = 4 ts = 4 fdm = marker
- * vim<600: noet sw = 4 ts = 4
+ * vim600: noet sw=4 ts=4 fdm=marker
+ * vim<600: noet sw=4 ts=4
  */

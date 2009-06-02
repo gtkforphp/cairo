@@ -2,4 +2,4 @@ Cairo OO Extension
 ================
 
 Object Oriented interface to Cairo Graphics library
-Requires Cairo 1.6 or higher
+Requires Cairo 1.4 or higher
