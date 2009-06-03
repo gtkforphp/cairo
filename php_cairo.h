@@ -35,6 +35,23 @@ extern zend_module_entry cairo_module_entry;
 #	define PHP_CAIRO_API
 #endif
 
+/* 5.2 is stupid and needs some additional stuff */
+#ifndef zend_parse_parameters_none
+#define zend_parse_parameters_none()										\
+	zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "")
+#endif
+
+/* refcount macros */
+#ifndef Z_ADDREF_P
+#define Z_ADDREF_P(pz)                (pz)->refcount++
+#endif
+
+#ifndef Z_DELREF_P
+#define Z_DELREF_P(pz)                (pz)->refcount--
+#endif
+
+
+
 typedef struct _stream_closure {
 	php_stream *stream;
 #ifdef ZTS
