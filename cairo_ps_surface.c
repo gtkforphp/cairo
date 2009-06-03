@@ -64,7 +64,7 @@ PHP_METHOD(CairoPsSurface, __construct)
 {
 	zval *stream_zval = NULL;
 	stream_closure *closure;
-	php_stream *stream;
+	php_stream *stream = NULL;
 	double width, height;
 	cairo_surface_object *surface_object;
 
@@ -114,7 +114,7 @@ PHP_FUNCTION(cairo_ps_surface_create)
 {
 	zval *stream_zval = NULL;
 	stream_closure *closure;
-	php_stream *stream;
+	php_stream *stream = NULL;
 	double width, height;
 	cairo_surface_object *surface_object;
 

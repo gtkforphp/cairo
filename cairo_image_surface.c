@@ -277,7 +277,7 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 	cairo_surface_object *surface_object;
 	zval *stream_zval = NULL;
 	stream_closure *closure;
-	php_stream *stream;
+	php_stream *stream = NULL;
 	zend_bool owned_stream = 0;
 
 	PHP_CAIRO_ERROR_HANDLING

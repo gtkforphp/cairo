@@ -426,7 +426,7 @@ PHP_FUNCTION(cairo_surface_write_to_png)
 	cairo_surface_object *surface_object;
 	zval *stream_zval = NULL;
 	stream_closure *closure;
-	php_stream *stream;
+	php_stream *stream = NULL;
 	zend_bool owned_stream = 0;
 
 	PHP_CAIRO_ERROR_HANDLING
