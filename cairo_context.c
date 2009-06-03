@@ -705,6 +705,7 @@ PHP_FUNCTION(cairo_get_dash)
 	for(i = 0; i < num_dashes; i++) {
 		add_next_index_double(sub_array, dashes[i]);
 	}
+	efree(dashes);
 	
 	/* Put dashes and offset into return */
 	array_init(return_value);
