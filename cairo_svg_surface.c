@@ -55,7 +55,7 @@ PHP_METHOD(CairoSvgSurface, __construct)
 {
 	zval *stream_zval = NULL;
 	stream_closure *closure;
-	php_stream *stream;
+	php_stream *stream = NULL;
 	double width, height;
 	cairo_surface_object *surface_object;
 

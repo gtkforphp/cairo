@@ -9,10 +9,10 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = new CairoSvgSurface(NULL, 50, 50);
 var_dump($surface);
 
-$surface = new CairoSvgSurface(__DIR__ . '/nametest.svg', 50, 50);
+$surface = new CairoSvgSurface(dirname(__FILE__) . '/nametest.svg', 50, 50);
 var_dump($surface);
 
-$fp = fopen(__DIR__ . '/streamtest.svg', 'wb');
+$fp = fopen(dirname(__FILE__) . '/streamtest.svg', 'wb');
 $surface = new CairoSvgSurface($fp, 50, 50);
 var_dump($surface);
 
@@ -25,8 +25,8 @@ try {
 ?>
 --CLEAN--
 <?php
-unlink(__DIR__ . '/nametest.svg');
-unlink(__DIR__ . '/streamtest.svg');
+unlink(dirname(__FILE__) . '/nametest.svg');
+unlink(dirname(__FILE__) . '/streamtest.svg');
 ?>
 --EXPECTF--
 object(CairoSvgSurface)#%d (0) {
