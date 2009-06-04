@@ -495,6 +495,12 @@ PHP_FUNCTION(cairo_set_source)
 	cairo_set_source(context_object->context, pattern_object->pattern);
 	PHP_CAIRO_ERROR(cairo_status(context_object->context));
 
+	/* If there's already a pattern, then we deref and remove it */
+	if(context_object->pattern) {
+		Z_DELREF_P(context_object->pattern);
+		context_object->pattern = NULL;
+	}
+
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->pattern = pattern_zval;
 	Z_ADDREF_P(pattern_zval);
