@@ -50,7 +50,9 @@ extern zend_module_entry cairo_module_entry;
 #define Z_DELREF_P(pz)                (pz)->refcount--
 #endif
 
-
+#ifndef Z_SET_REFCOUNT_P
+#define Z_SET_REFCOUNT_P(pz, rc)      (pz)->refcount = rc
+#endif
 
 typedef struct _stream_closure {
 	php_stream *stream;
