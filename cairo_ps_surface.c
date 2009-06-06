@@ -244,7 +244,7 @@ PHP_FUNCTION(cairo_ps_surface_get_eps)
 /* }}} */
 
 /* {{{ proto void cairo_ps_surface_dsc_begin_setup(CairoPsSurface surface)
-       proto void CairoPsSurface->beginDscSetup(void)
+       proto void CairoPsSurface->dscBeginSetup(void)
        This function indicates that subsequent calls to cairo_ps_surface_dsc_comment() should
        direct comments to the Setup section of the PostScript output. */
 PHP_FUNCTION(cairo_ps_surface_dsc_begin_setup)
@@ -264,7 +264,7 @@ PHP_FUNCTION(cairo_ps_surface_dsc_begin_setup)
 /* }}} */
 
 /* {{{ proto void cairo_ps_surface_dsc_begin_page_setup(CairoPsSurface surface)
-       proto void CairoPsSurface->beginDscPageSetup(void)
+       proto void CairoPsSurface->dscBeginPageSetup(void)
        This indicates that subsequent calls to cairo_ps_surface_dsc_comment()
        should direct comments to the PageSetup section of the PostScript output.
 
@@ -309,7 +309,7 @@ PHP_FUNCTION(cairo_ps_surface_dsc_comment)
 	cairo_ps_surface_dsc_comment(surface_object->surface, cairo_comment);
 	efree(cairo_comment);
 
-	php_cairo_trigger_error(cairo_surface_status(surface_object->surface) TSRMLS_CC);
+	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
 }
 /* }}} */
 

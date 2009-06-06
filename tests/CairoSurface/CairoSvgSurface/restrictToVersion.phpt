@@ -37,7 +37,7 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoSvgSurface)#1 (0) {
+object(CairoSvgSurface)#%d (0) {
 }
 CairoSvgSurface::restrictToVersion() expects exactly 1 parameter, 0 given
 CairoSvgSurface::restrictToVersion() expects exactly 1 parameter, 2 given
