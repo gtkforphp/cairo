@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2008 The PHP Group                                |
+  | Copyright (c) 1997-2009 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -81,7 +81,6 @@ PHP_METHOD(CairoPsSurface, __construct)
 	   notice it uses the regular create cairo method, not create for stream */
 	if(Z_TYPE_P(stream_zval) == IS_NULL) {
 		surface_object->surface = cairo_ps_surface_create(NULL, width, height);
-		surface_object->owned_stream = 1;
 	/* Otherwise it can be a filename or a PHP stream */
 	} else {
 		if(Z_TYPE_P(stream_zval) == IS_STRING) {
@@ -91,6 +90,7 @@ PHP_METHOD(CairoPsSurface, __construct)
 			php_stream_from_zval(stream, &stream_zval);
 		} else {
 			zend_throw_exception(cairo_ce_cairoexception, "CairoPsSurface::__construct() expects parameter 1 to be null, a string, or a stream resource", 0 TSRMLS_CC);
+			return;
 		}
 
 		/* Pack TSRMLS info and stream into struct */

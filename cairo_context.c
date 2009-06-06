@@ -298,10 +298,10 @@ PHP_FUNCTION(cairo_get_target)
 
 	/* If we have a surface object stored, grab that zval to use */
 	if(context_object->surface) {
-	//	zval_dtor(return_value);
+		zval_dtor(return_value);
 		*return_value = *context_object->surface;
 		zval_copy_ctor(return_value);
-                Z_SET_REFCOUNT_P(return_value, 1);
+		Z_SET_REFCOUNT_P(return_value, 1);
 	/* Otherwise we spawn a new object */
 	} else {
 		ce = php_cairo_get_surface_ce(surface TSRMLS_CC);

@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2008 The PHP Group                                |
+  | Copyright (c) 1997-2009 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -66,6 +66,7 @@ PHP_METHOD(CairoSvgSurface, __construct)
 	PHP_CAIRO_RESTORE_ERRORS
 
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	surface_object->owned_stream = 0;
 
 	/* special case - a NULL file is like an "in memory" svg */
 	if(Z_TYPE_P(stream_zval) == IS_NULL) {
@@ -74,10 +75,12 @@ PHP_METHOD(CairoSvgSurface, __construct)
 	} else {
 		if(Z_TYPE_P(stream_zval) == IS_STRING) {
 			stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "w+b", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
+			surface_object->owned_stream = 1;
 		} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 			php_stream_from_zval(stream, &stream_zval);	
 		} else {
 			zend_throw_exception(cairo_ce_cairoexception, "CairoSvgSurface::__construct() expects parameter 1 to be null, a string, or a stream resource", 0 TSRMLS_CC);
+			return;
 		}
 
 		/* Pack TSRMLS info and stream into struct*/
@@ -86,7 +89,7 @@ PHP_METHOD(CairoSvgSurface, __construct)
 #ifdef ZTS
 		closure->TSRMLS_C = TSRMLS_C;
 #endif
-
+		surface_object->closure = closure;
 		surface_object->surface = cairo_svg_surface_create_for_stream(php_cairo_write_func, (void *)closure, width, height);
 	}
 
