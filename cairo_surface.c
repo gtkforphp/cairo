@@ -606,12 +606,13 @@ zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface TSRMLS_DC)
 			type = cairo_ce_cairosvgsurface;
 			break;
 #endif
-			/*
+
 #ifdef CAIRO_HAS_PS_SURFACE
 		case CAIRO_SURFACE_TYPE_PS:
-			type = get_CairoPsSurface_ce_ptr();
+			type = cairo_ce_cairopssurface;
 			break;
 #endif
+			/*
 #ifdef CAIRO_HAS_WIN32_SURFACE
 		case CAIRO_SURFACE_TYPE_WIN32:
 			type = get_CairoWin32Surface_ce_ptr();

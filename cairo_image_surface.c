@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2008 The PHP Group                                |
+  | Copyright (c) 1997-2009 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -278,7 +278,6 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 	zval *stream_zval = NULL;
 	stream_closure *closure;
 	php_stream *stream = NULL;
-	zend_bool owned_stream = 0;
 
 	PHP_CAIRO_ERROR_HANDLING
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &stream_zval) == FAILURE) {
@@ -286,32 +285,30 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 	}
 	PHP_CAIRO_RESTORE_ERRORS
 
+	object_init_ex(return_value, cairo_ce_cairoimagesurface);
+	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	surface_object->owned_stream = 0;
+
 	if(Z_TYPE_P(stream_zval) == IS_STRING) {
-		stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "w+b", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
-		owned_stream = 1;
+		stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "rw+b", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
+		surface_object->owned_stream = 1;
 	} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 		php_stream_from_zval(stream, &stream_zval);	
 	} else {
 		zend_error(E_WARNING, "CairoImageSurface::createFromPng() expects parameter 1 to be a string or a stream resource");
+		RETURN_NULL();
 	}
 
-	// Pack TSRMLS info and stream into struct
-	closure = emalloc(sizeof(stream_closure));
-	memset(closure,0,sizeof(stream_closure));
+	/* Pack TSRMLS info and stream into struct */
+	closure = ecalloc(1, sizeof(stream_closure));
 	closure->stream = stream;
 #ifdef ZTS
 	closure->TSRMLS_C = TSRMLS_C;
 #endif
 
-	object_init_ex(return_value, cairo_ce_cairoimagesurface);
-	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-
+	surface_object->closure = closure;
 	surface_object->surface = cairo_image_surface_create_from_png_stream(php_cairo_read_func,(void *)closure);
 	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
-	if (owned_stream) {
-		php_stream_close(stream);
-	}
-	efree(closure);
 }
 /* }}} */
 #endif

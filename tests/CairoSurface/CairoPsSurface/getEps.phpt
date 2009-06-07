@@ -4,6 +4,7 @@ CairoPsSurface->getEps() method
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 if(!in_array('PS', cairo_available_surfaces())) die('skip - PS surface not available');
+if(!method_exists('CairoPsSurface', 'getEps')) die('skip - CairoPsSurface->getEps not available');
 ?>
 --FILE--
 <?php
