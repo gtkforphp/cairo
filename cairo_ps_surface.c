@@ -66,6 +66,7 @@ PHP_METHOD(CairoPsSurface, __construct)
 	stream_closure *closure;
 	php_stream *stream = NULL;
 	double width, height;
+	zend_bool owned_stream = 0;
 	cairo_surface_object *surface_object;
 
 	PHP_CAIRO_ERROR_TO_EXCEPTION
@@ -75,7 +76,7 @@ PHP_METHOD(CairoPsSurface, __construct)
 	PHP_CAIRO_RESTORE_ERRORS
 
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	surface_object->owned_stream = 0;
+	owned_stream = 0;
 
 	/* special case - a NULL file is like an "in memory" surface
 	   notice it uses the regular create cairo method, not create for stream */
@@ -85,7 +86,7 @@ PHP_METHOD(CairoPsSurface, __construct)
 	} else {
 		if(Z_TYPE_P(stream_zval) == IS_STRING) {
 			stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "w+b", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
-			surface_object->owned_stream = 1;
+			owned_stream = 1;
 		} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE) {
 			php_stream_from_zval(stream, &stream_zval);
 		} else {
@@ -96,6 +97,7 @@ PHP_METHOD(CairoPsSurface, __construct)
 		/* Pack TSRMLS info and stream into struct */
 		closure = ecalloc(1, sizeof(stream_closure));
 		closure->stream = stream;
+		closure->owned_stream = owned_stream;
 #ifdef ZTS
 		closure->TSRMLS_C = TSRMLS_C;
 #endif
@@ -116,6 +118,7 @@ PHP_FUNCTION(cairo_ps_surface_create)
 	stream_closure *closure;
 	php_stream *stream = NULL;
 	double width, height;
+	zend_bool owned_stream = 0;
 	cairo_surface_object *surface_object;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &stream_zval, &width, &height) == FAILURE) {
@@ -124,18 +127,16 @@ PHP_FUNCTION(cairo_ps_surface_create)
 
 	object_init_ex(return_value, cairo_ce_cairopssurface);
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	surface_object->owned_stream = 0;
 
 	/* special case - a NULL file is like an "in memory" surface
 	   notice it uses the regular create cairo method, not create for stream */
 	if(Z_TYPE_P(stream_zval) == IS_NULL) {
 		surface_object->surface = cairo_ps_surface_create(NULL, width, height);
-		surface_object->owned_stream = 1;
 	/* Otherwise it can be a filename or a PHP stream */
 	} else {
 		if(Z_TYPE_P(stream_zval) == IS_STRING) {
 			stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "w+b", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
-			surface_object->owned_stream = 1;
+			owned_stream = 1;
 		} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 			php_stream_from_zval(stream, &stream_zval);	
 		} else {
@@ -145,6 +146,7 @@ PHP_FUNCTION(cairo_ps_surface_create)
 		/* Pack TSRMLS info and stream into struct */
 		closure = ecalloc(1, sizeof(stream_closure));
 		closure->stream = stream;
+		closure->owned_stream = owned_stream;
 #ifdef ZTS
 		closure->TSRMLS_C = TSRMLS_C;
 #endif

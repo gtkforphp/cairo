@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2008 The PHP Group                                |
+  | Copyright (c) 1997-2009 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -444,21 +444,19 @@ PHP_FUNCTION(cairo_surface_write_to_png)
 		php_stream_from_zval(stream, &stream_zval);	
 	} else {
 		zend_error(E_WARNING, "CairoSurface::writeToPng() expects parameter 1 to be a string or a stream resource");
+		return;
 	}
 
-	// Pack TSRMLS info and stream into struct
-	closure = emalloc(sizeof(stream_closure));
-	memset(closure,0,sizeof(stream_closure));
+	/* Pack TSRMLS info and stream into struct */
+	closure = ecalloc(1, sizeof(stream_closure));
 	closure->stream = stream;
+	closure->owned_stream = owned_stream;
 #ifdef ZTS
 	closure->TSRMLS_C = TSRMLS_C;
 #endif
 
+	surface_object->writer = closure;
 	RETVAL_LONG(cairo_surface_write_to_png_stream(surface_object->surface, php_cairo_write_func, (void *)closure));
-	if (owned_stream) {
-		php_stream_close(stream);
-		efree(closure);
-	}
 }
 /* }}} */
 #endif
@@ -514,9 +512,13 @@ void cairo_surface_object_destroy(void *object TSRMLS_DC)
 	}
 
 	/* closure free up time */
-	if(surface->owned_stream && surface->closure) {
+	if(surface->closure && surface->closure->owned_stream) {
 		php_stream_close(surface->closure->stream);
 		efree(surface->closure);
+	}
+	if(surface->writer && surface->writer->owned_stream) {
+		php_stream_close(surface->writer->stream);
+		efree(surface->writer);
 	}
 	efree(object);
 }

@@ -277,6 +277,7 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 	cairo_surface_object *surface_object;
 	zval *stream_zval = NULL;
 	stream_closure *closure;
+	zend_bool owned_stream = 0;
 	php_stream *stream = NULL;
 
 	PHP_CAIRO_ERROR_HANDLING
@@ -287,11 +288,10 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 
 	object_init_ex(return_value, cairo_ce_cairoimagesurface);
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	surface_object->owned_stream = 0;
 
 	if(Z_TYPE_P(stream_zval) == IS_STRING) {
 		stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "rw+b", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
-		surface_object->owned_stream = 1;
+		owned_stream = 1;
 	} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 		php_stream_from_zval(stream, &stream_zval);	
 	} else {
@@ -302,6 +302,7 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 	/* Pack TSRMLS info and stream into struct */
 	closure = ecalloc(1, sizeof(stream_closure));
 	closure->stream = stream;
+	closure->owned_stream = owned_stream;
 #ifdef ZTS
 	closure->TSRMLS_C = TSRMLS_C;
 #endif

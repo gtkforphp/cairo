@@ -56,6 +56,7 @@ extern zend_module_entry cairo_module_entry;
 
 typedef struct _stream_closure {
 	php_stream *stream;
+    zend_bool owned_stream;
 #ifdef ZTS
 	TSRMLS_D;
 #endif
@@ -79,7 +80,7 @@ typedef struct _cairo_surface_object {
 	cairo_surface_t *surface;
 	char * buffer;
 	stream_closure *closure;
-	zend_bool owned_stream;
+	stream_closure *writer;
 } cairo_surface_object;
 
 typedef struct _cairo_matrix_object {
