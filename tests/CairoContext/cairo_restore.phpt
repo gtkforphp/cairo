@@ -14,9 +14,13 @@ var_dump($context);
 
 cairo_save($context);
 cairo_restore($context);
+
+cairo_restore();
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
+
+Warning: cairo_restore() expects exactly 1 parameter, 0 given in %s on line %d

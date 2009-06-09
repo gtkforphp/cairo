@@ -60,11 +60,12 @@ PHP_METHOD(CairoSvgSurface, __construct)
 	zend_bool owned_stream = 0;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_TO_EXCEPTION
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &stream_zval, &width, &height) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
@@ -128,7 +129,7 @@ PHP_FUNCTION(cairo_svg_surface_create)
 			php_stream_from_zval(stream, &stream_zval);	
 		} else {
 			zend_error(E_WARNING, "cairo_svg_surface_create() expects parameter 1 to be null, a string, or a stream resource");
-			return;
+			RETURN_NULL();
 		}
 
 		/* Pack TSRMLS info and stream into struct*/
@@ -155,11 +156,12 @@ PHP_FUNCTION(cairo_svg_surface_restrict_to_version)
 	long version;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &surface_zval, cairo_ce_cairosvgsurface, &version) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 
@@ -169,35 +171,69 @@ PHP_FUNCTION(cairo_svg_surface_restrict_to_version)
 /* }}} */
 
 /* {{{ proto void cairo_svg_version_to_string(int version)
-       proto void CairoSvgSurface::versionToString(int version)
        Get the string representation of the given version id. This function will return NULL if version isn't valid. */
 PHP_FUNCTION(cairo_svg_version_to_string)
 {
 	long version;
 
-	PHP_CAIRO_ERROR_HANDLING
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &version) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+
+	RETURN_STRING(cairo_svg_version_to_string(version), 1);
+}
+/* }}} */
+
+/* {{{ proto void CairoSvgSurface::versionToString(int version)
+       Get the string representation of the given version id. This function will return NULL if version isn't valid. */
+PHP_METHOD(CairoSvgSurface, versionToString)
+{
+	long version;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &version) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	RETURN_STRING(cairo_svg_version_to_string(version), 1);
 }
 /* }}} */
 
 /* {{{ proto array cairo_svg_get_versions()
-       proto array CairoSvgSurface::getVersions()
        Used to retrieve the list of supported versions */
 PHP_FUNCTION(cairo_svg_get_versions)
 {
 	const cairo_svg_version_t *versions = 0;
 	int version_count = 0, i = 0;
 
-	PHP_CAIRO_ERROR_HANDLING
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "") == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+
+	cairo_svg_get_versions(&versions, &version_count);
+	array_init(return_value);
+
+	for (i = 0; i < version_count; i++) {
+		add_next_index_long(return_value, versions[i]);
+	}
+}
+/* }}} */
+
+/* {{{ proto array CairoSvgSurface::getVersions()
+       Used to retrieve the list of supported versions */
+PHP_METHOD(CairoSvgSurface, getVersions)
+{
+	const cairo_svg_version_t *versions = 0;
+	int version_count = 0, i = 0;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "") == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	cairo_svg_get_versions(&versions, &version_count);
 	array_init(return_value);
@@ -212,8 +248,8 @@ PHP_FUNCTION(cairo_svg_get_versions)
 const zend_function_entry cairo_svg_surface_methods[] = {
 	PHP_ME(CairoSvgSurface, __construct, CairoSvgSurface___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME_MAPPING(restrictToVersion, cairo_svg_surface_restrict_to_version, CairoSvgSurface_restrictToVersion_args, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING(versionToString, cairo_svg_version_to_string, CairoSvgSurface_versionToString_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME_MAPPING(getVersions, cairo_svg_get_versions, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(CairoSvgSurface, versionToString, CairoSvgSurface_versionToString_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(CairoSvgSurface, getVersions, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	{NULL, NULL, NULL}
 };
 /* }}} */

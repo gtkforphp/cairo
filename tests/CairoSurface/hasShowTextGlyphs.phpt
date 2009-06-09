@@ -10,7 +10,7 @@ if(!method_exists('CairoSurface', 'hasShowTextGlyphs')) die('skip - CairoSurface
 $surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$surface->hasShowTextGlyphs();
+var_dump($surface->hasShowTextGlyphs());
 
 /* Wrong number args */
 try {
@@ -23,4 +23,5 @@ try {
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
+bool(false)
 CairoSurface::hasShowTextGlyphs() expects exactly 0 parameters, 1 given

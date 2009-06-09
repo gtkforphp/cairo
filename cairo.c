@@ -316,8 +316,7 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_invert_args, ZEND_SEND_BY_VAL, ZEND_RETURN_V
   ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_multiply_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-  ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_multiply_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
   ZEND_ARG_OBJ_INFO(0, matrix1, CairoMatrix, 1)
   ZEND_ARG_OBJ_INFO(0, matrix2, CairoMatrix, 1)
 ZEND_END_ARG_INFO()
@@ -477,6 +476,214 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_font_options_set_long_args, ZEND_SEND_BY_VAL, ZEND_
 	ZEND_ARG_OBJ_INFO(0, other, CairoFontOptions, 0)
 	ZEND_ARG_INFO(0, antialias)
 ZEND_END_ARG_INFO()
+
+/* {{{ proto int cairo_version(void) 
+       Returns an integer version number of the cairo library being used */
+PHP_FUNCTION(cairo_version)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	RETURN_LONG(cairo_version());
+}
+/* }}} */
+
+/* {{{ proto int Cairo::version(void)
+       Returns an integer version number of the cairo library being used */
+PHP_METHOD(Cairo, version)
+{
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters_none() == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	RETURN_LONG(cairo_version());
+}
+/* }}} */
+
+/* {{{ proto string cairo_version_string(void)
+       Returns a string version of the cairo library being used */
+PHP_FUNCTION(cairo_version_string)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	RETURN_STRING(cairo_version_string(), 1);
+}
+/* }}} */
+
+/* {{{ proto string Cairo::versionString(void)
+       Returns a string version of the cairo library being used */
+PHP_METHOD(Cairo, versionString)
+{
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters_none() == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	RETURN_STRING(cairo_version_string(), 1);
+}
+/* }}} */
+
+/* {{{ proto array cairo_available_surfaces(void)
+       Returns an array of available Cairo backend surfaces */
+PHP_FUNCTION(cairo_available_surfaces)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	array_init(return_value);
+	add_next_index_string(return_value,"IMAGE",1);
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+	add_next_index_string(return_value,"PNG",1);
+#endif
+#ifdef CAIRO_HAS_PDF_SURFACE
+	add_next_index_string(return_value,"PDF",1);
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
+	add_next_index_string(return_value,"PS",1);
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
+	add_next_index_string(return_value,"SVG",1);
+#endif
+#ifdef CAIRO_HAS_XLIB_SURFACE
+	add_next_index_string(return_value,"XLIB",1);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+	add_next_index_string(return_value,"QUARTZ",1);
+#endif
+#ifdef CAIRO_HAS_WIN32_SURFACE
+	add_next_index_string(return_value,"WIN32",1);
+#endif
+}
+/* }}} */
+
+/* {{{ proto array cairo_available_surfaces(void)
+       Returns an array of available Cairo backend surfaces */
+PHP_METHOD(Cairo, availableSurfaces)
+{
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters_none() == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	array_init(return_value);
+	add_next_index_string(return_value,"IMAGE",1);
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+	add_next_index_string(return_value,"PNG",1);
+#endif
+#ifdef CAIRO_HAS_PDF_SURFACE
+	add_next_index_string(return_value,"PDF",1);
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
+	add_next_index_string(return_value,"PS",1);
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
+	add_next_index_string(return_value,"SVG",1);
+#endif
+#ifdef CAIRO_HAS_XLIB_SURFACE
+	add_next_index_string(return_value,"XLIB",1);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
+	add_next_index_string(return_value,"QUARTZ",1);
+#endif
+#ifdef CAIRO_HAS_WIN32_SURFACE
+	add_next_index_string(return_value,"WIN32",1);
+#endif
+}
+/* }}} */
+
+/* {{{ proto array cairo_available_fonts(void)
+       Returns an array of available Cairo font backends */
+PHP_FUNCTION(cairo_available_fonts)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	array_init(return_value);
+#ifdef CAIRO_HAS_FT_FONT
+	add_next_index_string(return_value,"FREETYPE",1);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_FONT
+	add_next_index_string(return_value,"QUARTZ",1);
+#endif
+#ifdef CAIRO_HAS_WIN32_FONT
+	add_next_index_string(return_value,"WIN32",1);
+#endif
+#ifdef CAIRO_HAS_USER_FONT
+	add_next_index_string(return_value,"USER",1);
+#endif
+}
+/* }}} */
+
+/* {{{ proto array Cairo::availableFonts(void)
+       Returns an array of available Cairo font backends */
+PHP_METHOD(Cairo, availableFonts)
+{
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters_none() == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	array_init(return_value);
+#ifdef CAIRO_HAS_FT_FONT
+	add_next_index_string(return_value,"FREETYPE",1);
+#endif
+#ifdef CAIRO_HAS_QUARTZ_FONT
+	add_next_index_string(return_value,"QUARTZ",1);
+#endif
+#ifdef CAIRO_HAS_WIN32_FONT
+	add_next_index_string(return_value,"WIN32",1);
+#endif
+#ifdef CAIRO_HAS_USER_FONT
+	add_next_index_string(return_value,"USER",1);
+#endif
+}
+/* }}} */
+
+/* {{{ proto string cairo_status_to_string(int status)
+       Returns a string interpretation of the integer status passed */
+PHP_FUNCTION(cairo_status_to_string)
+{
+	long status;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &status) == FAILURE) {
+		return;
+	}
+
+	RETURN_STRING(cairo_status_to_string(status), 1);
+}
+/* }}} cairo_status_to_string */
+
+
+/* {{{ proto string Cairo::statusToString(int status)
+       Returns a string interpretation of the integer status passed */
+PHP_METHOD(Cairo, statusToString)
+{
+	long status;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &status) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	RETURN_STRING(cairo_status_to_string(status), 1);
+}
+/* }}} */
 
 /* {{{ cairo_functions[] */
 static const function_entry cairo_functions[] = {
@@ -709,12 +916,14 @@ static const function_entry cairo_functions[] = {
 	/* PS Surface Functions */
 #ifdef CAIRO_HAS_PS_SURFACE
 	PHP_FE(cairo_ps_surface_create, cairo_ps_surface_create_args)
-	PHP_FE(cairo_ps_surface_set_size, cairo_ps_surface_set_size_args)  
-	PHP_FE(cairo_ps_surface_restrict_to_level, cairo_ps_surface_restrict_to_level_args)  
+	PHP_FE(cairo_ps_surface_set_size, cairo_ps_surface_set_size_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+	PHP_FE(cairo_ps_surface_restrict_to_level, cairo_ps_surface_restrict_to_level_args)
+	PHP_FE(cairo_ps_level_to_string, cairo_ps_level_to_string_args)
+	PHP_FE(cairo_ps_get_levels, NULL)
 	PHP_FE(cairo_ps_surface_set_eps, cairo_ps_surface_set_eps_args)  
 	PHP_FE(cairo_ps_surface_get_eps, cairo_ps_surface_args)
-	PHP_FE(cairo_ps_get_levels, NULL)
-	PHP_FE(cairo_ps_level_to_string, cairo_ps_level_to_string_args)
+#endif
 	PHP_FE(cairo_ps_surface_dsc_begin_setup, cairo_ps_surface_args)
 	PHP_FE(cairo_ps_surface_dsc_begin_page_setup, cairo_ps_surface_args)
 	PHP_FE(cairo_ps_surface_dsc_comment, cairo_ps_surface_dsc_comment_args)
@@ -747,11 +956,11 @@ static const function_entry cairo_functions[] = {
 
 /* {{{ cairo_class_functions[] */
 const zend_function_entry cairo_methods[] = {
-	PHP_ME_MAPPING(version, cairo_version, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME_MAPPING(versionString, cairo_version_string, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME_MAPPING(availableSurfaces, cairo_available_surfaces, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME_MAPPING(availableFonts, cairo_available_fonts, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME_MAPPING(statusToString, cairo_status_to_string, cairo_status_to_string_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Cairo, version, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Cairo, versionString, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Cairo, availableSurfaces, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Cairo, availableFonts, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Cairo, statusToString, cairo_status_to_string_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	{NULL, NULL, NULL}
 };
 /* }}} */
@@ -939,113 +1148,6 @@ PHP_MINFO_FUNCTION(cairo)
 	php_info_print_table_end();
 }
 /* }}} */
-
-/* {{{ proto int cairo_version(void) 
-   Returns an integer version number of the cairo library being used */
-PHP_FUNCTION(cairo_version)
-{
-	PHP_CAIRO_ERROR_HANDLING
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-	PHP_CAIRO_RESTORE_ERRORS
-
-	RETURN_LONG(cairo_version());
-}
-/* }}} cairo_version */
-
-
-/* {{{ proto string cairo_version_string()
-   Returns a string version of the cairo library being used */
-PHP_FUNCTION(cairo_version_string)
-{
-	PHP_CAIRO_ERROR_HANDLING
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-	PHP_CAIRO_RESTORE_ERRORS
-
-	RETURN_STRING(cairo_version_string(), 1);
-}
-/* }}} cairo_version_string */
-
-/* {{{ proto array cairo_available_surfaces()
-   Returns an array of available Cairo backend surfaces */
-PHP_FUNCTION(cairo_available_surfaces)
-{
-	PHP_CAIRO_ERROR_HANDLING
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-	PHP_CAIRO_RESTORE_ERRORS
-
-	array_init(return_value);
-	add_next_index_string(return_value,"IMAGE",1);
-#ifdef CAIRO_HAS_PNG_FUNCTIONS
-	add_next_index_string(return_value,"PNG",1);
-#endif
-#ifdef CAIRO_HAS_PDF_SURFACE
-	add_next_index_string(return_value,"PDF",1);
-#endif
-#ifdef CAIRO_HAS_PS_SURFACE
-	add_next_index_string(return_value,"PS",1);
-#endif
-#ifdef CAIRO_HAS_SVG_SURFACE
-	add_next_index_string(return_value,"SVG",1);
-#endif
-#ifdef CAIRO_HAS_XLIB_SURFACE
-	add_next_index_string(return_value,"XLIB",1);
-#endif
-#ifdef CAIRO_HAS_QUARTZ_SURFACE
-	add_next_index_string(return_value,"QUARTZ",1);
-#endif
-#ifdef CAIRO_HAS_WIN32_SURFACE
-	add_next_index_string(return_value,"WIN32",1);
-#endif
-}
-/* }}} cairo_available_surfaces */
-
-/* {{{ proto array cairo_available_fonts()
-   Returns an array of available Cairo font backends */
-PHP_FUNCTION(cairo_available_fonts)
-{
-	PHP_CAIRO_ERROR_HANDLING
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-	PHP_CAIRO_RESTORE_ERRORS
-
-	array_init(return_value);
-#ifdef CAIRO_HAS_FT_FONT
-	add_next_index_string(return_value,"FREETYPE",1);
-#endif
-#ifdef CAIRO_HAS_QUARTZ_FONT
-	add_next_index_string(return_value,"QUARTZ",1);
-#endif
-#ifdef CAIRO_HAS_WIN32_FONT
-	add_next_index_string(return_value,"WIN32",1);
-#endif
-#ifdef CAIRO_HAS_USER_FONT
-	add_next_index_string(return_value,"USER",1);
-#endif
-}
-/* }}} cairo_available_fonts */
-
-/* {{{ proto string cairo_status_to_string()
-   Returns a string interpretation of the integer status passed */
-PHP_FUNCTION(cairo_status_to_string)
-{
-	long status;
-
-	PHP_CAIRO_ERROR_HANDLING
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &status) == FAILURE) {
-		return;
-	}
-	PHP_CAIRO_RESTORE_ERRORS
-
-	RETURN_STRING(cairo_status_to_string(status), 1);
-}
-/* }}} cairo_status_to_string */
 
 /*
  * Local variables:

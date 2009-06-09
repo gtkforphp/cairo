@@ -57,11 +57,12 @@ PHP_METHOD(CairoPdfSurface, __construct)
 	zend_bool owned_stream = 0;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_TO_EXCEPTION
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &stream_zval, &width, &height) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
@@ -126,6 +127,7 @@ PHP_FUNCTION(cairo_pdf_surface_create)
 			php_stream_from_zval(stream, &stream_zval);	
 		} else {
 			 zend_error(E_WARNING, "cairo_pdf_surface_create() expects parameter 1 to be null, a string, or a stream resource");
+			 RETURN_NULL();
 		}
 
 		/* Pack TSRMLS info and stream into struct*/
@@ -154,11 +156,12 @@ PHP_FUNCTION(cairo_pdf_surface_set_size)
 	double width = 0.0, height = 0.0;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &surface_zval, cairo_ce_cairopdfsurface, &width, &height) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 

@@ -72,6 +72,8 @@ typedef struct _cairo_context_object {
 
 typedef struct _cairo_pattern_object {
 	zend_object std;
+	zval *matrix;
+	zval *surface;
 	cairo_pattern_t *pattern;
 } cairo_pattern_object;
 
@@ -342,11 +344,13 @@ PHP_FUNCTION(cairo_font_options_get_hint_metrics);
 #ifdef CAIRO_HAS_PS_SURFACE
 	PHP_FUNCTION(cairo_ps_surface_create);
 	PHP_FUNCTION(cairo_ps_surface_set_size);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 	PHP_FUNCTION(cairo_ps_surface_restrict_to_level);
 	PHP_FUNCTION(cairo_ps_surface_set_eps);
 	PHP_FUNCTION(cairo_ps_surface_get_eps);
 	PHP_FUNCTION(cairo_ps_get_levels);
 	PHP_FUNCTION(cairo_ps_level_to_string);
+#endif
 	PHP_FUNCTION(cairo_ps_surface_dsc_begin_setup);
 	PHP_FUNCTION(cairo_ps_surface_dsc_begin_page_setup);
 	PHP_FUNCTION(cairo_ps_surface_dsc_comment);
@@ -383,14 +387,34 @@ PHP_CAIRO_API extern zend_class_entry* php_cairo_get_path_ce();
 PHP_CAIRO_API extern cairo_font_options_t* php_cairo_font_options_copy(const cairo_font_options_t *);
 PHP_CAIRO_API extern cairo_t * php_cairo_context_reference(cairo_t *context);
 
-/* turn error handling to exception mode - MACRO to deal with 5.2, 5.3 changes */
+#define ALLOCATE_MATRIX(matrix_value) if (!matrix_value) { matrix_value = ecalloc(sizeof(cairo_matrix_t), 1); }
+
+/* turn error handling to exception mode and restore */
 #if defined(PHP_VERSION_ID) && PHP_VERSION_ID >= 50300
-#define PHP_CAIRO_ERROR_TO_EXCEPTION \
+/* 5.3 version of the macros */
+#define PHP_CAIRO_ERROR_HANDLING(force_exceptions) \
 	zend_error_handling error_handling; \
-	zend_replace_error_handling(EH_THROW, cairo_ce_cairoexception, &error_handling TSRMLS_CC);
+	if(force_exceptions || getThis()) { \
+		zend_replace_error_handling(EH_THROW, cairo_ce_cairoexception, &error_handling TSRMLS_CC); \
+	}
+
+#define PHP_CAIRO_RESTORE_ERRORS(force_exceptions) \
+	if(force_exceptions || getThis()) { \
+		zend_restore_error_handling(&error_handling TSRMLS_CC); \
+	}
+
 #else
-#define PHP_CAIRO_ERROR_TO_EXCEPTION \
-	php_set_error_handling(EH_THROW, cairo_ce_cairoexception TSRMLS_CC);
+/* 5.2 versions of the macros */
+#define PHP_CAIRO_ERROR_HANDLING(force_exceptions) \
+	if(force_exceptions || getThis()) { \
+		php_set_error_handling(EH_THROW, cairo_ce_cairoexception TSRMLS_CC); \
+	}
+
+#define PHP_CAIRO_RESTORE_ERRORS(force_exceptions) \
+	if(force_exceptions || getThis()) { \
+		php_std_error_handling(); \
+	}
+
 #endif
 
 /* do error or exception based on "are we in method or in function" */
@@ -400,33 +424,6 @@ PHP_CAIRO_API extern cairo_t * php_cairo_context_reference(cairo_t *context);
 	} else { \
 		php_cairo_throw_exception(status TSRMLS_CC); \
 	}
-
-/* Macro to turn on exceptions ONLY if we are in method not function */
-#if defined(PHP_VERSION_ID) && PHP_VERSION_ID >= 50300
-#define PHP_CAIRO_ERROR_HANDLING \
-	zend_error_handling error_handling; \
-	if(getThis()) { \
-		zend_replace_error_handling(EH_THROW, cairo_ce_cairoexception, &error_handling TSRMLS_CC); \
-	}
-#else
-#define PHP_CAIRO_ERROR_HANDLING \
-	if(getThis()) { \
-		php_set_error_handling(EH_THROW, cairo_ce_cairoexception TSRMLS_CC); \
-	}
-#endif
-
-/* Macro to restore error handling - used because of 5.2 to 5.3 API changes */
-#if defined(PHP_VERSION_ID) && PHP_VERSION_ID >= 50300
-#define PHP_CAIRO_RESTORE_ERRORS \
-	if(getThis()) { \
-		zend_restore_error_handling(&error_handling TSRMLS_CC); \
-	}
-#else
-#define PHP_CAIRO_RESTORE_ERRORS \
-	if(getThis()) { \
-		php_std_error_handling(); \
-	}
-#endif
 
 /* a bunch of inline functions to deal with checking for the proper internal object, makes extending classes work */
 static inline cairo_context_object* cairo_context_object_get(zval *zobj TSRMLS_DC)

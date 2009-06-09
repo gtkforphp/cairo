@@ -12,7 +12,7 @@ var_dump($surface);
 $context = cairo_create($surface);
 var_dump($context);
 
-$surface2 = new CairoImageSurface(CAIRO_FORMAT_ARGB32, 50, 50);
+$surface2 = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 50, 50);
 var_dump($surface2);
 
 cairo_set_source_surface($context, $surface2, 5, 5);

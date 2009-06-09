@@ -3,7 +3,7 @@ CairoImageSurface::createFromPng() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!in_array('PNG', cairo_available_surfaces())) die('skip - PNG support not available');
+if(!in_array('PNG', Cairo::availableSurfaces())) die('skip - PNG support not available');
 ?>
 --FILE--
 <?php
@@ -16,22 +16,34 @@ var_dump($surface);
 fclose($resource);
 
 /* Wrong number args - 1 */
-CairoImageSurface::createFromPng();
+try {
+    CairoImageSurface::createFromPng();
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 
 /* Wrong number args - 2 */
-CairoImageSurface::createFromPng('', 1);
+try {
+    CairoImageSurface::createFromPng('', 1);
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 
 /* Wrong arg */
-CairoImageSurface::createFromPng(array());
+try {
+    CairoImageSurface::createFromPng(array());
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
 object(CairoImageSurface)#%d (0) {
 }
-
-Warning: CairoImageSurface::createFromPng() expects exactly 1 parameter, 0 given in %s on line %d
-
-Warning: CairoImageSurface::createFromPng() expects exactly 1 parameter, 2 given in %s on line %d
-
-Warning: CairoImageSurface::createFromPng() expects parameter 1 to be a string or a stream resource in %s on line %d
+CairoImageSurface::createFromPng() expects exactly 1 parameter, 0 given
+CairoImageSurface::createFromPng() expects exactly 1 parameter, 2 given
+CairoImageSurface::createFromPng() expects parameter 1 to be a string or a stream resource

@@ -1,42 +1,26 @@
-Currently finished:
-	cairo_t — The cairo drawing context
-    cairo_pattern_t — Sources for drawing
-    Transformations — Manipulating the current transformation matrix
-    cairo_surface_t — Base class for surfaces
-    Image Surfaces — Rendering to memory buffers
-    PDF Surfaces — Rendering PDF documents
-    PNG Support — Reading and writing PNG images
-    SVG Surfaces — Rendering SVG documents
-    cairo_matrix_t — Generic matrix operations
-    Error handling — Decoding cairo's status
-    Version Information — Compile-time and run-time version checks.
- 
-Unfinished:
- Paths — Creating paths and manipulating path data
-   Context related methods are done
-   TODO: CairoPath needs iterator and destructor/constructor implemented
- Text — Rendering text and glyphs
-   TODO: all, nothing has been started
- 
- Fonts: Very little has been done on any of this, basically enough to be able to return objects out of context/surface calls
-	cairo_font_face_t — Base class for font faces
-	cairo_scaled_font_t — Font face at particular size and options
-	cairo_font_options_t — How a font should be rendered
-	FreeType Fonts — Font support for FreeType
-	Win32 Fonts — Font support for Microsoft Windows
-	Quartz (CGFont) Fonts — Font support via CGFont on OS X
-	User Fonts — Font support with font data provided by the user
-
-Surfaces: PS will be easy, the others will require some interesting additions
-    PostScript Surfaces — Rendering PostScript documents
+Surfaces to Finish:
     Win32 Surfaces — Microsoft Windows surface support
     Quartz Surfaces — Rendering to Quartz surfaces
     XLib Surfaces — X Window System rendering using XLib
 
+Font backends to Finish:
+    FreeType Fonts — Font support for FreeType
+    Win32 Fonts — Font support for Microsoft Windows
+    Quartz (CGFont) Fonts — Font support via CGFont on OS X
+    User Fonts — Font support with font data provided by the user
+
+Paths:
+    Constructor and way to add data
+    Iterator for path object
+
+Text and Fonts:
+    Not very much is complete, basically enough to be able to do basic text drawing
+
 1. Finish code completion (see above)
 
-2. Tests written (good code coverage wanted)
+2. Tests written (good code coverage wanted) - currently at > 90% for finished code
 
 3. Documentation
 
-4. address issues with extended classes set into and returned out of cairo calls
+4. Make sure extended classes set into and returned out of cairo calls work and all
+   classes can be used extended properly

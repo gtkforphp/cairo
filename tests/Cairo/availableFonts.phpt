@@ -10,10 +10,15 @@ $fonts = Cairo::availableFonts();
 var_dump(is_array($fonts));
 var_dump($fonts[0]);
 
-Cairo::availableFonts('foo');
+/* Wrong number args */
+try {
+    Cairo::availableFonts('foo');
+    trigger_error('Cairo::availableFonts should take no arguments');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 ?>
 --EXPECTF--
 bool(true)
 string(%d) %s
-
-Warning: Cairo::availableFonts() expects exactly 0 parameters, 1 given in %s on line %d
+Cairo::availableFonts() expects exactly 0 parameters, 1 given

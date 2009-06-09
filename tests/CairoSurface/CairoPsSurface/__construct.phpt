@@ -3,7 +3,7 @@ new CairoPsSurface [__construct() method ]
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!in_array('PS', cairo_available_surfaces())) die('skip - PS surface not available');
+if(!in_array('PS', Cairo::availableSurfaces())) die('skip - PS surface not available');
 ?>
 --FILE--
 <?php

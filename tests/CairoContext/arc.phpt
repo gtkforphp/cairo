@@ -20,8 +20,8 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#1 (0) {
+object(CairoImageSurface)#%d (0) {
 }
-object(CairoContext)#2 (0) {
+object(CairoContext)#%d (0) {
 }
 CairoContext::arc() expects exactly 5 parameters, 0 given

@@ -46,14 +46,34 @@ ZEND_BEGIN_ARG_INFO_EX(CairoImageSurface_createForData_args, ZEND_SEND_BY_VAL, Z
 	ZEND_ARG_INFO(0, stride)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(CairoImageSurface_formatStrideForWidth_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+ZEND_BEGIN_ARG_INFO(CairoFormat_strideForWidth_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, format)
 	ZEND_ARG_INFO(0, width)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(CairoImageSurface_createFromPng_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+ZEND_BEGIN_ARG_INFO(CairoImageSurface_createFromPng_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, file)
 ZEND_END_ARG_INFO()
+
+/* {{{ proto void __construct(int format, int width, int height)
+       Returns new CairoSurfaceImage object created on an image surface */
+PHP_METHOD(CairoImageSurface, __construct)
+{
+	long format, width, height;
+	cairo_surface_object *surface_object;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &format, &width, &height) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	surface_object = (cairo_surface_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	surface_object->surface = cairo_image_surface_create(format, width, height);
+	php_cairo_throw_exception(cairo_surface_status(surface_object->surface) TSRMLS_CC);
+}
+/* }}} */
 
 /* {{{ proto CairoSurfaceImage cairo_image_surface_create(int format, int width, int height)
        Returns new CairoSurfaceImage object created on an image surface */
@@ -73,27 +93,7 @@ PHP_FUNCTION(cairo_image_surface_create)
 }
 /* }}} */
 
-/* {{{ proto void __construct(int format, int width, int height)
-       Returns new CairoSurfaceImage object created on an image surface */
-PHP_METHOD(CairoImageSurface, __construct)
-{
-	long format, width, height;
-	cairo_surface_object *surface_object;
-
-	PHP_CAIRO_ERROR_TO_EXCEPTION
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &format, &width, &height) == FAILURE) {
-		return;
-	}
-	PHP_CAIRO_RESTORE_ERRORS
-
-	surface_object = (cairo_surface_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	surface_object->surface = cairo_image_surface_create(format, width, height);
-	php_cairo_throw_exception(cairo_surface_status(surface_object->surface) TSRMLS_CC);
-}
-/* }}} */
-
 /* {{{ proto CairoImageSurface object cairo_image_surface_create_for_data(string data, int format, int width, int height, int stride)
-       proto CairoImageSurface Object CairoImageSurface::createForData(string data, int format, int width, int height, int stride)
        Creates an image surface for the provided pixel data. */
 PHP_FUNCTION(cairo_image_surface_create_for_data)
 {
@@ -103,11 +103,9 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 	long format, width, height, stride = -1;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slll|l", &data, &data_len, &format, &width, &height, &stride) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
 
 	/* Figure out our stride if it was not given */
 	if(stride < 0 ){
@@ -149,6 +147,63 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 }
 /* }}} */
 
+/* {{{ proto CairoImageSurface Object CairoImageSurface::createForData(string data, int format, int width, int height, int stride)
+       Creates an image surface for the provided pixel data. */
+PHP_METHOD(CairoImageSurface, createForData)
+{
+	/* NOTE: we have to keep the data buffer around, so we put it in the cairo_surface_object */
+	char *data, *buffer;
+	int data_len;
+	long format, width, height, stride = -1;
+	cairo_surface_object *surface_object;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slll|l", &data, &data_len, &format, &width, &height, &stride) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	/* Figure out our stride if it was not given */
+	if(stride < 0 ){
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+		/* This is the way the stride SHOULD be done */
+		stride = cairo_format_stride_for_width (format, width);
+#else
+		/* This is a dirty hacky way to figure the stride */
+		switch(format) {
+			case CAIRO_FORMAT_RGB16_565:
+				stride = width * 2;
+				break;
+			case CAIRO_FORMAT_A8:
+				stride = width;
+				break;
+			case CAIRO_FORMAT_A1:
+				stride = (width + 1) / 8;
+				break;
+			case CAIRO_FORMAT_ARGB32:
+			case CAIRO_FORMAT_RGB24:
+			default:
+				stride = width * 4;
+				break;
+		}
+#endif
+	}
+
+	/* Create the object, stick in the buffer and surface, check our status */
+	object_init_ex(return_value, cairo_ce_cairoimagesurface);
+	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	/* allocate our internal surface object buffer - has to be left lying around until we destroy the image */
+	surface_object->buffer = emalloc(stride * height);
+	/* copy our data into the buffer */
+	buffer = estrdup(data);
+	surface_object->buffer = buffer;
+	/* create our surface and check for errors */
+	surface_object->surface = cairo_image_surface_create_for_data((unsigned char*)surface_object->buffer, format, width, height, stride);
+	php_cairo_throw_exception(cairo_surface_status(surface_object->surface) TSRMLS_CC);
+}
+/* }}} */
+
 /* {{{ proto string cairo_image_surface_get_data(CairoImageSurface object)
        proto string CairoImageSurface->getData()
        Get the string data of the image surface, for direct inspection or modification */
@@ -157,10 +212,12 @@ PHP_FUNCTION(cairo_image_surface_get_data)
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairoimagesurface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
@@ -177,10 +234,12 @@ PHP_FUNCTION(cairo_image_surface_get_format)
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairoimagesurface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
@@ -197,10 +256,12 @@ PHP_FUNCTION(cairo_image_surface_get_width)
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairoimagesurface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
@@ -217,10 +278,12 @@ PHP_FUNCTION(cairo_image_surface_get_height)
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairoimagesurface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
@@ -237,10 +300,12 @@ PHP_FUNCTION(cairo_image_surface_get_stride)
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairoimagesurface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
@@ -251,17 +316,33 @@ PHP_FUNCTION(cairo_image_surface_get_stride)
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 /* {{{ proto int cairo_format_stride_for_width(long format, long width)
-       proto int CairoImageSurface::strideForWidth(long format, long width)
 	   This function provides a stride value that will respect all alignment 
 	   requirements of the accelerated image-rendering code within cairo. */
 PHP_FUNCTION(cairo_format_stride_for_width)
 {
 	long format, width;
 
-	PHP_CAIRO_ERROR_HANDLING
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &format, &width) == FAILURE) {
 		return;
 	}
+
+	RETURN_LONG(cairo_format_stride_for_width(format, width));
+}
+/* }}} */
+
+/* {{{ proto int CairoFormat::strideForWidth(long format, long width)
+	   This function provides a stride value that will respect all alignment 
+	   requirements of the accelerated image-rendering code within cairo. */
+PHP_METHOD(CairoFormat, strideForWidth)
+{
+	long format, width;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &format, &width) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	RETURN_LONG(cairo_format_stride_for_width(format, width));
 }
@@ -270,7 +351,6 @@ PHP_FUNCTION(cairo_format_stride_for_width)
 
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
 /* {{{ proto CairoImageSurface object cairo_image_surface_create_from_png(file|resource file)
-       proto CairoImageSurface object CairoImageSurface::createFromPng(file|resource file)
        Creates a new image surface and initializes the contents to the given PNG file. */
 PHP_FUNCTION(cairo_image_surface_create_from_png)
 {
@@ -280,11 +360,9 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 	zend_bool owned_stream = 0;
 	php_stream *stream = NULL;
 
-	PHP_CAIRO_ERROR_HANDLING
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &stream_zval) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
 
 	object_init_ex(return_value, cairo_ce_cairoimagesurface);
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
@@ -295,7 +373,51 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 	} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 		php_stream_from_zval(stream, &stream_zval);	
 	} else {
-		zend_error(E_WARNING, "CairoImageSurface::createFromPng() expects parameter 1 to be a string or a stream resource");
+		zend_error(E_WARNING, "cairo_image_surface_create_from_png() expects parameter 1 to be a string or a stream resource");
+		RETURN_NULL();
+	}
+
+	/* Pack TSRMLS info and stream into struct */
+	closure = ecalloc(1, sizeof(stream_closure));
+	closure->stream = stream;
+	closure->owned_stream = owned_stream;
+#ifdef ZTS
+	closure->TSRMLS_C = TSRMLS_C;
+#endif
+
+	surface_object->closure = closure;
+	surface_object->surface = cairo_image_surface_create_from_png_stream(php_cairo_read_func,(void *)closure);
+	php_cairo_trigger_error(cairo_surface_status(surface_object->surface) TSRMLS_CC);
+}
+/* }}} */
+
+/* {{{ proto CairoImageSurface object CairoImageSurface::createFromPng(file|resource file)
+       Creates a new image surface and initializes the contents to the given PNG file. */
+PHP_METHOD(CairoImageSurface, createFromPng)
+{
+	cairo_surface_object *surface_object;
+	zval *stream_zval = NULL;
+	stream_closure *closure;
+	zend_bool owned_stream = 0;
+	php_stream *stream = NULL;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &stream_zval) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	object_init_ex(return_value, cairo_ce_cairoimagesurface);
+	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+
+	if(Z_TYPE_P(stream_zval) == IS_STRING) {
+		stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "rw+b", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
+		owned_stream = 1;
+	} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
+		php_stream_from_zval(stream, &stream_zval);	
+	} else {
+		zend_throw_exception(cairo_ce_cairoexception, "CairoImageSurface::createFromPng() expects parameter 1 to be a string or a stream resource", 0 TSRMLS_CC);
 		RETURN_NULL();
 	}
 
@@ -317,14 +439,14 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 /* {{{ cairo_context_methods[] */
 const zend_function_entry cairo_image_surface_methods[] = {
 	PHP_ME(CairoImageSurface, __construct, CairoImageSurface___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME_MAPPING(createForData, cairo_image_surface_create_for_data, CairoImageSurface_createForData_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(CairoImageSurface, createForData, CairoImageSurface_createForData_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME_MAPPING(getData, cairo_image_surface_get_data, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getFormat, cairo_image_surface_get_format, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getWidth, cairo_image_surface_get_width, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getHeight, cairo_image_surface_get_height, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getStride, cairo_image_surface_get_stride, NULL, ZEND_ACC_PUBLIC)
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
-	PHP_ME_MAPPING(createFromPng, cairo_image_surface_create_from_png, CairoImageSurface_createFromPng_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)  
+	PHP_ME(CairoImageSurface, createFromPng, CairoImageSurface_createFromPng_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)  
 #endif
 	{NULL, NULL, NULL}
 };
@@ -333,7 +455,7 @@ const zend_function_entry cairo_image_surface_methods[] = {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 /* {{{ cairo_context_methods[] */
 const zend_function_entry cairo_format_methods[] = {
-	PHP_ME_MAPPING(strideForWidth, cairo_format_stride_for_width, CairoImageSurface_formatStrideForWidth_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(CairoFormat, strideForWidth, CairoFormat_strideForWidth_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	{NULL, NULL, NULL}
 };
 #endif

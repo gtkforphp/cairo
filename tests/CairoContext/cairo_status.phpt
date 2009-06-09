@@ -16,6 +16,8 @@ $status = cairo_status($context);
 var_dump($status);
 
 var_dump($status == CAIRO_STATUS_SUCCESS);
+
+cairo_status();
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
@@ -24,3 +26,5 @@ object(CairoContext)#%d (0) {
 }
 int(0)
 bool(true)
+
+Warning: cairo_status() expects exactly 1 parameter, 0 given in %s on line %d

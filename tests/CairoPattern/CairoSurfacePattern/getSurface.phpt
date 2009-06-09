@@ -29,5 +29,5 @@ object(CairoSurfacePattern)#%d (0) {
 }
 object(CairoImageSurface)#%d (0) {
 }
-bool(false)
+bool(true)
 CairoSurfacePattern::getSurface() expects exactly 0 parameters, 1 given

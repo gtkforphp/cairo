@@ -61,7 +61,7 @@ PHP_FUNCTION(cairo_font_face_status)
 	zval *font_face_zval = NULL;
 	cairo_fontface_object *font_face_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &font_face_zval, cairo_ce_cairofontface) == FAILURE) {
 		return;
 	}
@@ -79,7 +79,7 @@ PHP_FUNCTION(cairo_font_face_get_type)
 	zval *font_face_zval = NULL;
 	cairo_fontface_object *font_face_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &font_face_zval, cairo_ce_cairofontface) == FAILURE) {
 		return;
 	}
@@ -189,11 +189,11 @@ PHP_METHOD(CairoFontOptions, __construct)
 {
 	cairo_fontoptions_object *fontoptions_object;
 
-	PHP_CAIRO_ERROR_TO_EXCEPTION
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	fontoptions_object = (cairo_fontoptions_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	fontoptions_object->font_options = cairo_font_options_create();
@@ -232,11 +232,11 @@ PHP_FUNCTION(cairo_font_options_status)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &font_options_zval, cairo_ce_cairofontoptions) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(font_options_zval TSRMLS_CC);
 	RETURN_LONG(cairo_font_options_status(font_options_object->font_options));
@@ -253,12 +253,12 @@ PHP_FUNCTION(cairo_font_options_merge)
 	zval *options_zval = NULL, *other_zval = NULL;
 	cairo_fontoptions_object *options_object, *other_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", 
 				&options_zval, cairo_ce_cairofontoptions, &other_zval, cairo_ce_cairofontoptions) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	options_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(options_zval TSRMLS_CC);
 	other_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(options_zval TSRMLS_CC);
@@ -279,11 +279,11 @@ PHP_FUNCTION(cairo_font_options_hash)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &font_options_zval, cairo_ce_cairofontoptions) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(font_options_zval TSRMLS_CC);
 	RETURN_LONG(cairo_font_options_hash(font_options_object->font_options));
@@ -301,12 +301,12 @@ PHP_FUNCTION(cairo_font_options_equal)
 	zval *options_zval = NULL, *other_zval = NULL;
 	cairo_fontoptions_object *options_object, *other_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", 
 				&options_zval, cairo_ce_cairofontoptions, &other_zval, cairo_ce_cairofontoptions) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	options_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(options_zval TSRMLS_CC);
 	other_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(options_zval TSRMLS_CC);
@@ -326,11 +326,11 @@ PHP_FUNCTION(cairo_font_options_set_antialias)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &font_options_zval, cairo_ce_cairofontoptions, &antialias) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(font_options_zval TSRMLS_CC);
 	cairo_font_options_set_antialias(font_options_object->font_options, antialias);
@@ -348,7 +348,7 @@ PHP_FUNCTION(cairo_font_options_get_antialias)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &font_options_zval, cairo_ce_cairofontoptions) == FAILURE) {
 		return;
 	}
@@ -370,11 +370,11 @@ PHP_FUNCTION(cairo_font_options_set_subpixel_order)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &font_options_zval, cairo_ce_cairofontoptions, &subpixel_order) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(font_options_zval TSRMLS_CC);
 	cairo_font_options_set_subpixel_order(font_options_object->font_options, subpixel_order);
@@ -392,7 +392,7 @@ PHP_FUNCTION(cairo_font_options_get_subpixel_order)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &font_options_zval, cairo_ce_cairofontoptions) == FAILURE) {
 		return;
 	}
@@ -413,11 +413,11 @@ PHP_FUNCTION(cairo_font_options_set_hint_style)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &font_options_zval, cairo_ce_cairofontoptions, &hint_style) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(font_options_zval TSRMLS_CC);
 	cairo_font_options_set_hint_style(font_options_object->font_options, hint_style);
@@ -435,7 +435,7 @@ PHP_FUNCTION(cairo_font_options_get_hint_style)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &font_options_zval, cairo_ce_cairofontoptions) == FAILURE) {
 		return;
 	}
@@ -456,11 +456,11 @@ PHP_FUNCTION(cairo_font_options_set_hint_metrics)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &font_options_zval, cairo_ce_cairofontoptions, &hint_metrics) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_fontoptions_object *) cairo_fontoptions_object_get(font_options_zval TSRMLS_CC);
 	cairo_font_options_set_hint_metrics(font_options_object->font_options, hint_metrics);
@@ -478,7 +478,7 @@ PHP_FUNCTION(cairo_font_options_get_hint_metrics)
 	zval *font_options_zval = NULL;
 	cairo_fontoptions_object *font_options_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &font_options_zval, cairo_ce_cairofontoptions) == FAILURE) {
 		return;
 	}

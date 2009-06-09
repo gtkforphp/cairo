@@ -7,31 +7,52 @@ if(!method_exists('CairoFormat', 'strideForWidth')) die('skip - CairoFormat::str
 ?>
 --FILE--
 <?php
-echo CairoFormat::strideForWidth(1, 5);
+echo CairoFormat::strideForWidth(1, 5), PHP_EOL;
 
 /* Wrong number args */
-CairoFormat::strideForWidth();
+try {
+    CairoFormat::strideForWidth();
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 
 /* Wrong number args 2 */
-CairoFormat::strideForWidth(1);
+try {
+    CairoFormat::strideForWidth(1);
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 
 /* Wrong number args 3 */
-CairoFormat::strideForWidth(1, 1, 1);
+try {
+    CairoFormat::strideForWidth(1, 1, 1);
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 
 /* Wrong arg type */
-CairoFormat::strideForWidth(array(), 1);
+try {
+    CairoFormat::strideForWidth(array(), 1);
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 
 /* Wrong arg type */
-CairoFormat::strideForWidth(1, array());
+try {
+    CairoFormat::strideForWidth(1, array());
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 ?>
 --EXPECTF--
 20
-Warning: CairoFormat::strideForWidth() expects exactly 2 parameters, 0 given in %s on line %d
-
-Warning: CairoFormat::strideForWidth() expects exactly 2 parameters, 1 given in %s on line %d
-
-Warning: CairoFormat::strideForWidth() expects exactly 2 parameters, 3 given in %s on line %d
-
-Warning: CairoFormat::strideForWidth() expects parameter 1 to be long, array given in %s on line %d
-
-Warning: CairoFormat::strideForWidth() expects parameter 2 to be long, array given in %s on line %d
+CairoFormat::strideForWidth() expects exactly 2 parameters, 0 given
+CairoFormat::strideForWidth() expects exactly 2 parameters, 1 given
+CairoFormat::strideForWidth() expects exactly 2 parameters, 3 given
+CairoFormat::strideForWidth() expects parameter 1 to be long, array given
+CairoFormat::strideForWidth() expects parameter 2 to be long, array given

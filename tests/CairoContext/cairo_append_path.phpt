@@ -20,11 +20,11 @@ cairo_append_path($context, $path);
 cairo_append_path();
 ?>
 --EXPECTF--
-object(CairoImageSurface)#1 (0) {
+object(CairoImageSurface)#%d (0) {
 }
-object(CairoContext)#2 (0) {
+object(CairoContext)#%d (0) {
 }
-object(CairoPath)#3 (0) {
+object(CairoPath)#%d (0) {
 }
 
 Warning: cairo_append_path() expects exactly 2 parameters, 0 given in %s on line %d

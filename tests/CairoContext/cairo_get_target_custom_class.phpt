@@ -15,6 +15,11 @@ class TestSurface extends CairoImageSurface {
 $t = new TestSurface(CairoFormat::ARGB32, 500, 500);
 $c = cairo_create($t);
 var_dump(cairo_get_target($c) instanceof TestSurface);
+var_dump(cairo_get_target($c) instanceof TestSurface);
+unset($t);
+var_dump(cairo_get_target($c) instanceof TestSurface);
 ?>
 --EXPECTF--
+bool(true)
+bool(true)
 bool(true)

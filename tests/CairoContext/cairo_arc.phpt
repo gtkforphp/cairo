@@ -17,9 +17,9 @@ cairo_arc($context, 0, 0, 1, 0, 2 * M_PI);
 cairo_arc();
 ?>
 --EXPECTF--
-object(CairoImageSurface)#1 (0) {
+object(CairoImageSurface)#%d (0) {
 }
-object(CairoContext)#2 (0) {
+object(CairoContext)#%d (0) {
 }
 
 Warning: cairo_arc() expects exactly 6 parameters, 0 given in %s on line %d

@@ -69,11 +69,12 @@ PHP_METHOD(CairoPsSurface, __construct)
 	zend_bool owned_stream = 0;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_TO_EXCEPTION
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &stream_zval, &width, &height) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	owned_stream = 0;
@@ -141,6 +142,7 @@ PHP_FUNCTION(cairo_ps_surface_create)
 			php_stream_from_zval(stream, &stream_zval);	
 		} else {
 			 zend_error(E_WARNING, "cairo_ps_surface_create() expects parameter 1 to be null, a string, or a stream resource");
+			 RETURN_NULL();
 		}
 
 		/* Pack TSRMLS info and stream into struct */
@@ -169,11 +171,12 @@ PHP_FUNCTION(cairo_ps_surface_set_size)
 	double width = 0.0, height = 0.0;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &surface_zval, cairo_ce_cairopssurface, &width, &height) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 
@@ -182,6 +185,7 @@ PHP_FUNCTION(cairo_ps_surface_set_size)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 /* {{{ proto void cairo_ps_surface_restrict_to_level(CairoPsSurface object, int level)
        proto void CairoPsSurface->restrictToLevel(int level)
        Restricts the generated PostSript file to level. */
@@ -191,11 +195,12 @@ PHP_FUNCTION(cairo_ps_surface_restrict_to_level)
 	cairo_surface_object *surface_object;
 	long level = CAIRO_PS_LEVEL_2;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &surface_zval, cairo_ce_cairopssurface, &level) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 
@@ -213,11 +218,12 @@ PHP_FUNCTION(cairo_ps_surface_set_eps)
 	zend_bool eps = 0;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ob", &surface_zval, cairo_ce_cairopssurface, &eps) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 
@@ -234,16 +240,18 @@ PHP_FUNCTION(cairo_ps_surface_get_eps)
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairopssurface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	RETURN_BOOL(cairo_ps_surface_get_eps(surface_object->surface));
 }
 /* }}} */
+#endif
 
 /* {{{ proto void cairo_ps_surface_dsc_begin_setup(CairoPsSurface surface)
        proto void CairoPsSurface->dscBeginSetup(void)
@@ -254,11 +262,12 @@ PHP_FUNCTION(cairo_ps_surface_dsc_begin_setup)
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairopssurface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	cairo_ps_surface_dsc_begin_setup(surface_object->surface);
@@ -278,11 +287,12 @@ PHP_FUNCTION(cairo_ps_surface_dsc_begin_page_setup)
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairopssurface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	cairo_ps_surface_dsc_begin_page_setup(surface_object->surface);
@@ -299,11 +309,12 @@ PHP_FUNCTION(cairo_ps_surface_dsc_comment)
 	char *comment, *cairo_comment;
 	int comment_len;
 
-	PHP_CAIRO_ERROR_HANDLING
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Os", &surface_zval, cairo_ce_cairopssurface, &comment, &comment_len) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 
@@ -315,19 +326,39 @@ PHP_FUNCTION(cairo_ps_surface_dsc_comment)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 /* {{{ proto array cairo_ps_get_levels(void)
-       proto array CairoPsSurface::getLevels(void)
        Used to retrieve the list of supported levels. See cairo_ps_surface_restrict_to_level(). */
 PHP_FUNCTION(cairo_ps_get_levels)
 {
 	const cairo_ps_level_t *levels;
 	int num_levels, i;
 
-	PHP_CAIRO_ERROR_HANDLING
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "") == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
+
+	cairo_ps_get_levels(&levels, &num_levels);
+	array_init(return_value);
+	for(i = 0; i < num_levels; i++) {
+		add_next_index_long(return_value, levels[i]);
+	}
+}
+/* }}} */
+
+/* {{{ proto array CairoPsSurface::getLevels(void)
+       Used to retrieve the list of supported levels. See cairo_ps_surface_restrict_to_level(). */
+PHP_METHOD(CairoPsSurface, getLevels)
+{
+	const cairo_ps_level_t *levels;
+	int num_levels, i;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "") == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	cairo_ps_get_levels(&levels, &num_levels);
 	array_init(return_value);
@@ -338,31 +369,48 @@ PHP_FUNCTION(cairo_ps_get_levels)
 /* }}} */
 
 /* {{{ proto string cairo_ps_level_to_string(long level)
-       proto string CairoPsSurface::levelToString(level)
        Get the string representation of the given level id. */
 PHP_FUNCTION(cairo_ps_level_to_string)
 {
 	long level;
 
-	PHP_CAIRO_ERROR_HANDLING
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "l", &level) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS
 
 	RETURN_STRING(cairo_ps_level_to_string(level), 1);
 }
 /* }}} */
 
+/* {{{ proto string CairoPsSurface::levelToString(level)
+       Get the string representation of the given level id. */
+PHP_METHOD(CairoPsSurface, levelToString)
+{
+	long level;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "l", &level) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	RETURN_STRING(cairo_ps_level_to_string(level), 1);
+}
+/* }}} */
+#endif
+
 /* {{{ cairo_ps_surface_methods[] */
 const zend_function_entry cairo_ps_surface_methods[] = {
 	PHP_ME(CairoPsSurface, __construct, CairoPsSurface___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME_MAPPING(setSize, cairo_ps_surface_set_size, CairoPsSurface_setSize_args, ZEND_ACC_PUBLIC)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 	PHP_ME_MAPPING(restrictToLevel, cairo_ps_surface_restrict_to_level, CairoPsSurface_long_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoPsSurface, getLevels, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(CairoPsSurface, levelToString, CairoPsSurface_long_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME_MAPPING(setEps, cairo_ps_surface_set_eps, CairoPsSurface_setEps_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getEps, cairo_ps_surface_get_eps, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING(getLevels, cairo_ps_get_levels, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME_MAPPING(levelToString, cairo_ps_level_to_string, CairoPsSurface_long_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#endif
 	PHP_ME_MAPPING(dscBeginSetup, cairo_ps_surface_dsc_begin_setup, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(dscBeginPageSetup, cairo_ps_surface_dsc_begin_page_setup, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(dscComment, cairo_ps_surface_dsc_comment, CairoPsSurface_dscComment_args, ZEND_ACC_PUBLIC)

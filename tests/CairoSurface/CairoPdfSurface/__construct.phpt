@@ -3,7 +3,7 @@ new CairoPdfSurface [__construct() method ]
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!in_array('PDF', cairo_available_surfaces())) die('skip - PDF surface not available');
+if(!in_array('PDF', Cairo::availableSurfaces())) die('skip - PDF surface not available');
 ?>
 --FILE--
 <?php

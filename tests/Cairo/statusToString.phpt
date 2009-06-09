@@ -14,9 +14,29 @@ var_dump($context);
 
 var_dump(Cairo::statusToString($context->status()));
 
-Cairo::statusToString(array());
+/* Wrong number args */
+try {
+    Cairo::statusToString();
+    trigger_error('Cairo::statusToString should take 1 argument');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 
-Cairo::statusToString();
+/* Wrong number args 2*/
+try {
+    Cairo::statusToString(1, 1);
+    trigger_error('Cairo::statusToString should take 1 argument');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong arg type*/
+try {
+    Cairo::statusToString(array());
+    trigger_error('Cairo::statusToString arg 1 must be scalar (int)');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
@@ -24,7 +44,6 @@ object(CairoImageSurface)#%d (0) {
 object(CairoContext)#%d (0) {
 }
 string(7) "success"
-
-Warning: Cairo::statusToString() expects parameter 1 to be long, array given in %s on line %d
-
-Warning: Cairo::statusToString() expects exactly 1 parameter, 0 given in %s on line %d
+Cairo::statusToString() expects exactly 1 parameter, 0 given
+Cairo::statusToString() expects exactly 1 parameter, 2 given
+Cairo::statusToString() expects parameter 1 to be long, array given

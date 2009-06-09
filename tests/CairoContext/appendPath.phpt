@@ -23,10 +23,10 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#1 (0) {
+object(CairoImageSurface)#%d (0) {
 }
-object(CairoContext)#2 (0) {
+object(CairoContext)#%d (0) {
 }
-object(CairoPath)#3 (0) {
+object(CairoPath)#%d (0) {
 }
 CairoContext::appendPath() expects exactly 1 parameter, 0 given

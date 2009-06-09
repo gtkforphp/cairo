@@ -13,9 +13,16 @@ $context = new CairoContext($surface);
 var_dump($context);
 
 $context->pushGroup();
+
+try {
+    $context->pushGroup('foo');
+} catch (CairoException $e) {
+    echo $e->getMessage();
+}
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
+CairoContext::pushGroup() expects exactly 0 parameters, 1 given

@@ -3,7 +3,7 @@ CairoSvgSurface->restrictToVersion() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!in_array('SVG', cairo_available_surfaces())) die('skip - SVG surface not available');
+if(!in_array('SVG', Cairo::availableSurfaces())) die('skip - SVG surface not available');
 ?>
 --FILE--
 <?php
