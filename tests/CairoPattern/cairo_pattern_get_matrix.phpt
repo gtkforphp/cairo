@@ -32,6 +32,7 @@ cairo_pattern_get_matrix($pattern, 1);
 
 // arg types is CairoPattern
 cairo_pattern_get_matrix(1);
+die;
 ?>
 --EXPECTF--
 object(CairoSolidPattern)#%d (0) {

@@ -99,7 +99,7 @@ PHP_FUNCTION(cairo_image_surface_create)
 PHP_FUNCTION(cairo_image_surface_create_for_data)
 {
 	/* NOTE: we have to keep the data buffer around, so we put it in the cairo_surface_object */
-	char *data, *buffer;
+	char *data;
 	int data_len;
 	long format, width, height, stride = -1;
 	cairo_surface_object *surface_object;
@@ -140,8 +140,7 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 	/* allocate our internal surface object buffer - has to be left lying around until we destroy the image */
 	surface_object->buffer = emalloc(stride * height);
 	/* copy our data into the buffer */
-	buffer = estrdup(data);
-	surface_object->buffer = buffer;
+	surface_object->buffer = memcpy(surface_object->buffer, data, data_len);
 	/* create our surface and check for errors */
 	surface_object->surface = cairo_image_surface_create_for_data((unsigned char*)surface_object->buffer, format, width, height, stride);
 	php_cairo_trigger_error(cairo_surface_status(surface_object->surface) TSRMLS_CC);
@@ -153,7 +152,7 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 PHP_METHOD(CairoImageSurface, createForData)
 {
 	/* NOTE: we have to keep the data buffer around, so we put it in the cairo_surface_object */
-	char *data, *buffer;
+	char *data;
 	int data_len;
 	long format, width, height, stride = -1;
 	cairo_surface_object *surface_object;
@@ -197,8 +196,7 @@ PHP_METHOD(CairoImageSurface, createForData)
 	/* allocate our internal surface object buffer - has to be left lying around until we destroy the image */
 	surface_object->buffer = emalloc(stride * height);
 	/* copy our data into the buffer */
-	buffer = estrdup(data);
-	surface_object->buffer = buffer;
+	surface_object->buffer = memcpy(surface_object->buffer, data, data_len);
 	/* create our surface and check for errors */
 	surface_object->surface = cairo_image_surface_create_for_data((unsigned char*)surface_object->buffer, format, width, height, stride);
 	php_cairo_throw_exception(cairo_surface_status(surface_object->surface) TSRMLS_CC);

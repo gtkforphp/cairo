@@ -445,6 +445,7 @@ PHP_FUNCTION(cairo_surface_write_to_png)
 	stream_closure *closure;
 	php_stream *stream = NULL;
 	zend_bool owned_stream = 0;
+	cairo_status_t status;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz", &surface_zval, cairo_ce_cairosurface, &stream_zval) == FAILURE) {
@@ -463,9 +464,10 @@ PHP_FUNCTION(cairo_surface_write_to_png)
 	} else {
 		if(getThis()) {
 			zend_throw_exception(cairo_ce_cairoexception, "CairoSurface::writeToPng() expects parameter 1 to be a string or a stream resource", 0 TSRMLS_CC);
+			return;
 		} else {
 			zend_error(E_WARNING, "cairo_surface_write_to_png() expects parameter 1 to be a string or a stream resource");
-			RETURN_NULL();
+			return;
 		}
 		return;
 	}
@@ -478,8 +480,12 @@ PHP_FUNCTION(cairo_surface_write_to_png)
 	closure->TSRMLS_C = TSRMLS_C;
 #endif
 
-	surface_object->writer = closure;
-	RETVAL_LONG(cairo_surface_write_to_png_stream(surface_object->surface, php_cairo_write_func, (void *)closure));
+	status = cairo_surface_write_to_png_stream(surface_object->surface, php_cairo_write_func, (void *)closure);
+	PHP_CAIRO_ERROR(status);
+	if (owned_stream) {
+		php_stream_close(stream);
+	}
+	efree(closure);
 }
 /* }}} */
 #endif
@@ -524,24 +530,22 @@ void cairo_surface_object_destroy(void *object TSRMLS_DC)
 	zend_hash_destroy(surface->std.properties);
 	FREE_HASHTABLE(surface->std.properties);
 
-	/* buffer for the create_from_data image stuff */
-	if(surface->buffer) {
+	/* buffer for the create_from_data image stuff */ 
+	if(surface->buffer != NULL) {
 		efree(surface->buffer);
 	}
 
-	if(surface->surface){
+	if(surface->surface != NULL){
 		cairo_surface_finish(surface->surface);
 		cairo_surface_destroy(surface->surface);
 	}
 
 	/* closure free up time */
-	if(surface->closure && surface->closure->owned_stream) {
-		php_stream_close(surface->closure->stream);
+	if(surface->closure != NULL) {
+ 		if(surface->closure->owned_stream == 1) {
+			php_stream_close(surface->closure->stream);
+		}
 		efree(surface->closure);
-	}
-	if(surface->writer && surface->writer->owned_stream) {
-		php_stream_close(surface->writer->stream);
-		efree(surface->writer);
 	}
 	efree(object);
 }

@@ -18,6 +18,7 @@ var_dump(cairo_get_target($c) instanceof TestSurface);
 var_dump(cairo_get_target($c) instanceof TestSurface);
 unset($t);
 var_dump(cairo_get_target($c) instanceof TestSurface);
+die; // PHP bug? get a memleak without this
 ?>
 --EXPECTF--
 bool(true)

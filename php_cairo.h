@@ -34,6 +34,14 @@ extern zend_module_entry cairo_module_entry;
 #else
 #	define PHP_CAIRO_API
 #endif
+ 
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
 
 /* Silly compilers */
 #ifndef TRUE
@@ -91,7 +99,6 @@ typedef struct _cairo_surface_object {
 	cairo_surface_t *surface;
 	char * buffer;
 	stream_closure *closure;
-	stream_closure *writer;
 } cairo_surface_object;
 
 typedef struct _cairo_matrix_object {

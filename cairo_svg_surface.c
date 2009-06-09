@@ -139,7 +139,7 @@ PHP_FUNCTION(cairo_svg_surface_create)
 #ifdef ZTS
 		closure->TSRMLS_C = TSRMLS_C;
 #endif
-
+		surface_object->closure = closure;
 		surface_object->surface = cairo_svg_surface_create_for_stream(php_cairo_write_func, (void *)closure, width, height);
 	}
 
