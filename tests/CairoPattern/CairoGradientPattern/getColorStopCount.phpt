@@ -19,9 +19,18 @@ $pattern->addColorStopRgba(0.2, $red, $green, $blue, $alpha);
 $pattern->addColorStopRgba(0.4, $red, $green, $blue, $alpha);
 $pattern->addColorStopRgba(0.6, $red, $green, $blue, $alpha);
 var_dump($pattern->getColorStopCount());
+
+/* Total number of args needed = 0 */
+try {
+    $pattern->getColorStopCount(1);
+    trigger_error('getColorStopCount with too many args');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 ?>
 --EXPECTF--
 object(CairoLinearGradient)#%d (0) {
 }
 int(0)
 int(3)
+CairoGradientPattern::getColorStopCount() expects exactly 0 parameters, 1 given

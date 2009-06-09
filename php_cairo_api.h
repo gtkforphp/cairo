@@ -24,40 +24,56 @@
 #include <php.h>
 #include <cairo.h>
 
+typedef struct _stream_closure {
+	php_stream *stream;
+    zend_bool owned_stream;
+#ifdef ZTS
+	TSRMLS_D;
+#endif
+} stream_closure;
+
 typedef struct _cairo_context_object {
 	zend_object std;
+	zval *surface;
+	zval *matrix;
+	zval *pattern;
 	cairo_t *context;
 } cairo_context_object;
 
 typedef struct _cairo_pattern_object {
 	zend_object std;
+	zval *matrix;
+	zval *surface;
 	cairo_pattern_t *pattern;
 } cairo_pattern_object;
 
 typedef struct _cairo_surface_object {
 	zend_object std;
 	cairo_surface_t *surface;
+	char * buffer;
+	stream_closure *closure;
+	stream_closure *writer;
 } cairo_surface_object;
+
+typedef struct _cairo_matrix_object {
+	zend_object std;
+	cairo_matrix_t *matrix;
+} cairo_matrix_object;
 
 typedef struct _cairo_path_object {
 	zend_object std;
 	cairo_path_t *path;
 } cairo_path_object;
 
-typedef struct _cairo_fontoptions_object {
-	zend_object std;
-	cairo_font_options_t *fontoptions;
-} cairo_fontoptions_object;
-
 typedef struct _cairo_fontface_object {
 	zend_object std;
-	cairo_font_face_t *fontface;
+	cairo_font_face_t *font_face;
 } cairo_fontface_object;
 
-typedef struct _cairo_matrix_object {
+typedef struct _cairo_fontoptions_object {
 	zend_object std;
-	cairo_matrix_t *matrix;
-} cairo_matrix_object;
+	cairo_font_options_t *font_options;
+} cairo_fontoptions_object;
 
 typedef struct _cairo_scaledfont_object {
 	zend_object std;

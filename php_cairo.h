@@ -35,6 +35,15 @@ extern zend_module_entry cairo_module_entry;
 #	define PHP_CAIRO_API
 #endif
 
+/* Silly compilers */
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
 /* 5.2 is stupid and needs some additional stuff */
 #ifndef zend_parse_parameters_none
 #define zend_parse_parameters_none()										\
@@ -118,6 +127,8 @@ PHP_MINIT_FUNCTION(cairo_surface);
 PHP_MINIT_FUNCTION(cairo_font);
 PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_svg_surface);
+PHP_MINIT_FUNCTION(cairo_pdf_surface);
+PHP_MINIT_FUNCTION(cairo_ps_surface);
 
 PHP_FUNCTION(cairo_version);
 PHP_FUNCTION(cairo_version_string);

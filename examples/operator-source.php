@@ -191,5 +191,4 @@ $con = new CairoContext($sur);
 	}
     }
 
-$sur->writeToPng(dirname(__FILE__) . "/operator-source-php.png");
-?>
+$sur->writeToPng(dirname(__FILE__) . '/operator-source.png');

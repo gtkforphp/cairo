@@ -28,6 +28,7 @@
 
 #include "php.h"
 #include "php_cairo.h"
+#include "zend_exceptions.h"
 
 zend_class_entry *cairo_ce_cairosurface;
 zend_class_entry *cairo_ce_cairocontent;

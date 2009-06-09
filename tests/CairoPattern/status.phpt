@@ -18,6 +18,7 @@ var_dump($status == CairoStatus::SUCCESS);
 
 try {
     $pattern->status('foo');
+    trigger_error('status requires no args');
 } catch (CairoException $e) {
     echo $e->getMessage();
 }

@@ -72,6 +72,20 @@ $cairo_surface_type_constants = array(
 	'CAIRO_SURFACE_TYPE_QUARTZ_IMAGE',
 );
 
+$cairo_pattern_type_constants = array(
+	'CAIRO_PATTERN_TYPE_SOLID',
+	'CAIRO_PATTERN_TYPE_SURFACE',
+	'CAIRO_PATTERN_TYPE_LINEAR',
+	'CAIRO_PATTERN_TYPE_RADIAL',
+	);
+
+$cairo_extend_constants = array(
+	'CAIRO_EXTEND_NONE',
+	'CAIRO_EXTEND_REPEAT',
+	'CAIRO_EXTEND_REFLECT',
+	'CAIRO_EXTEND_PAD',
+	);
+
 $cairo_content_constants = array(
 	'CAIRO_CONTENT_COLOR',
 	'CAIRO_CONTENT_ALPHA',
@@ -106,6 +120,7 @@ if (in_array('SVG', $surfaces)) {
 // merge all the constants together
 $constants = array_merge(
 				$cairo_status_constants,
+				$cairo_extend_constants,
 				$cairo_surface_type_constants,
 				$cairo_content_constants,
 				$cairo_image_format_constants,

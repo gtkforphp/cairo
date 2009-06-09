@@ -16,6 +16,7 @@ var_dump($pattern->getType());
 
 try {
     $pattern->getType('foo');
+    trigger_error('CairoPattern->getType requires no arguments');
 } catch (CairoException $e) {
     echo $e->getMessage();
 }

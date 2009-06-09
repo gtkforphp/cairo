@@ -9,31 +9,20 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $pattern = new CairoSolidPattern(0.8, 0.6, 0.5);
 var_dump($pattern);
 
-var_dump($pattern->getMatrix());
+var_dump($orig_matrix = $pattern->getMatrix());
 
-$matrix = new CairoMatrix();
+$matrix = new CairoMatrix(5, 5);
 var_dump($matrix);
+var_dump($orig_matrix === $matrix);
 
 $pattern->setMatrix($matrix);
-var_dump($pattern->getMatrix());
+var_dump($matrix1 = $pattern->getMatrix());
+var_dump($matrix1 === $matrix);
+var_dump($orig_matrix === $matrix);
 
 try {
-    $pattern->setMatrix();
-    trigger_error('Set matrix requires one arg');
-} catch (CairoException $e) {
-    echo $e->getMessage(), PHP_EOL;
-}
-
-try {
-    $pattern->setMatrix(1, 1);
-    trigger_error('Set matrix requires only one arg');
-} catch (CairoException $e) {
-    echo $e->getMessage(), PHP_EOL;
-}
-
-try {
-    $pattern->setMatrix(1);
-    trigger_error('Set matrix requires instanceof Cairomatrix');
+    $pattern->getMatrix('foo');
+    trigger_error('get matrix requires no args');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
 }
@@ -45,8 +34,9 @@ object(CairoMatrix)#%d (0) {
 }
 object(CairoMatrix)#%d (0) {
 }
+bool(false)
 object(CairoMatrix)#%d (0) {
 }
-CairoPattern::setMatrix() expects exactly 1 parameter, 0 given
-CairoPattern::setMatrix() expects exactly 1 parameter, 2 given
-CairoPattern::setMatrix() expects parameter 1 to be CairoMatrix, integer given
+bool(true)
+bool(false)
+CairoPattern::getMatrix() expects exactly 0 parameters, 1 given

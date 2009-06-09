@@ -1,5 +1,5 @@
 --TEST--
-cairo_pattern_status function
+cairo_pattern_status() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
