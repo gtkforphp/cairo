@@ -19,6 +19,17 @@ var_dump($values);
 var_dump($red === $values['red']);
 var_dump($green === $values['green']);
 var_dump($blue === $values['blue']);
+
+// requires 3 args
+cairo_pattern_create_rgb();
+cairo_pattern_create_rgb(1);
+cairo_pattern_create_rgb(1, 1);
+cairo_pattern_create_rgb(1, 1, 1, 1);
+
+// arg types are all double
+cairo_pattern_create_rgb(array(), 1, 1);
+cairo_pattern_create_rgb(1, array(), 1);
+cairo_pattern_create_rgb(1, 1, array());
 ?>
 --EXPECTF--
 object(CairoSolidPattern)#%d (0) {
@@ -36,3 +47,17 @@ array(4) {
 bool(true)
 bool(true)
 bool(true)
+
+Warning: cairo_pattern_create_rgb() expects exactly 3 parameters, 0 given in %s on line %d
+
+Warning: cairo_pattern_create_rgb() expects exactly 3 parameters, 1 given in %s on line %d
+
+Warning: cairo_pattern_create_rgb() expects exactly 3 parameters, 2 given in %s on line %d
+
+Warning: cairo_pattern_create_rgb() expects exactly 3 parameters, 4 given in %s on line %d
+
+Warning: cairo_pattern_create_rgb() expects parameter 1 to be double, array given in %s on line %d
+
+Warning: cairo_pattern_create_rgb() expects parameter 2 to be double, array given in %s on line %d
+
+Warning: cairo_pattern_create_rgb() expects parameter 3 to be double, array given in %s on line %d

@@ -18,10 +18,26 @@ $extend = $pattern->getExtend();
 var_dump($extend);
 var_dump($extend == CairoExtend::PAD);
 
+/* Total number of args needed = 1 */
 try {
-    $pattern->getExtend('foo');
+    $pattern->setExtend();
+    trigger_error('setExtend with no args');
 } catch (CairoException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
+}
+try {
+    $pattern->setExtend(1, 1);
+    trigger_error('setExtend with too many args');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* arg must be int or castable to int */
+try {
+    $pattern->setExtend(array());
+    trigger_error('Arg 1 must be int');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
@@ -31,4 +47,6 @@ object(CairoSurfacePattern)#%d (0) {
 }
 int(3)
 bool(true)
-CairoSurfacePattern::getExtend() expects exactly 0 parameters, 1 given
+CairoSurfacePattern::setExtend() expects exactly 1 parameter, 0 given
+CairoSurfacePattern::setExtend() expects exactly 1 parameter, 2 given
+CairoSurfacePattern::setExtend() expects parameter 1 to be long, array given

@@ -55,6 +55,15 @@ if (cairo_version() >= 10800)
 	);
 }
 
+$cairo_filter_constants = array(
+	'CAIRO_FILTER_FAST',
+	'CAIRO_FILTER_GOOD',
+	'CAIRO_FILTER_BEST',
+	'CAIRO_FILTER_NEAREST',
+	'CAIRO_FILTER_BILINEAR',
+	'CAIRO_FILTER_GAUSSIAN',
+	);
+
 $cairo_surface_type_constants = array(
 	'CAIRO_SURFACE_TYPE_IMAGE',
 	'CAIRO_SURFACE_TYPE_PDF',

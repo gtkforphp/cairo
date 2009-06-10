@@ -217,9 +217,13 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_set_filter_args, ZEND_SEND_BY_VAL, ZEND_RET
 	ZEND_ARG_INFO(0, filter)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_set_extend_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_OBJ_INFO(0, pattern, CairoSurfacePattern, 0)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_set_extend_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, pattern)
 	ZEND_ARG_INFO(0, extend)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_pattern_get_extend_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, pattern)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_add_color_stop_rgb_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
@@ -805,7 +809,7 @@ static const function_entry cairo_functions[] = {
 	PHP_FE(cairo_pattern_set_filter, cairo_pattern_set_filter_args)
 	PHP_FE(cairo_pattern_get_filter, cairo_surfacepattern_args)
 	PHP_FE(cairo_pattern_set_extend, cairo_pattern_set_extend_args)
-	PHP_FE(cairo_pattern_get_extend, cairo_surfacepattern_args)
+	PHP_FE(cairo_pattern_get_extend, cairo_pattern_get_extend_args)
 	PHP_FE(cairo_pattern_add_color_stop_rgb, cairo_pattern_add_color_stop_rgb_args)
 	PHP_FE(cairo_pattern_add_color_stop_rgba, cairo_pattern_add_color_stop_rgba_args)
 	PHP_FE(cairo_pattern_get_color_stop_rgba, cairo_pattern_get_color_stop_rgba_args)

@@ -20,6 +20,14 @@ var_dump($red === $values['red']);
 var_dump($green === $values['green']);
 var_dump($blue === $values['blue']);
 var_dump($alpha === $values['alpha']);
+
+/* Total number of args needed = 0 */
+try {
+    $pattern->getRgba(1);
+    trigger_error('getRgba with too many args');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 ?>
 --EXPECTF--
 object(CairoSolidPattern)#%d (0) {
@@ -38,3 +46,4 @@ bool(true)
 bool(true)
 bool(true)
 bool(true)
+CairoSolidPattern::getRgba() expects exactly 0 parameters, 1 given

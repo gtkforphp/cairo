@@ -16,10 +16,12 @@ $extend = $pattern->getExtend();
 var_dump($extend);
 var_dump($extend == CairoExtend::NONE);
 
+/* Total number of args needed = 0 */
 try {
-    $pattern->getExtend('foo');
+    $pattern->getExtend(1);
+    trigger_error('getExtend with too many args');
 } catch (CairoException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
