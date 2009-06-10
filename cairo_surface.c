@@ -578,7 +578,7 @@ cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, un
 	stream_closure *cast_closure;
 #ifdef ZTS
 	TSRMLS_D;
-#endif;
+#endif
 
 	cast_closure = (stream_closure *)closure;
 #ifdef ZTS
@@ -599,7 +599,7 @@ cairo_status_t php_cairo_read_func(void *closure, const unsigned char *data, uns
 	stream_closure *cast_closure;
 #ifdef ZTS
 	TSRMLS_D;
-#endif;
+#endif
 
 	cast_closure = (stream_closure *)closure;
 #ifdef ZTS

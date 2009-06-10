@@ -43,6 +43,8 @@ try {
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
 }
+
+die; // DO NOT REMOVE THIS - fixes issue in 5.3 with GC giving bogus memleak reports
 ?>
 --EXPECTF--
 object(CairoSolidPattern)#%d (0) {

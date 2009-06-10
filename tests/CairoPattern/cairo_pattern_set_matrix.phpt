@@ -35,6 +35,8 @@ cairo_pattern_set_matrix($pattern, $matrix, 1);
 // arg types are CairoSurface and CairoMatrix
 cairo_pattern_set_matrix(1, $matrix);
 cairo_pattern_set_matrix($pattern, 1);
+
+die; // DO NOT REMOVE THIS - fixes issue in 5.3 with GC giving bogus memleak reports
 ?>
 --EXPECTF--
 object(CairoSolidPattern)#%d (0) {
