@@ -16,10 +16,12 @@ $surface2 = $pattern->getSurface();
 var_dump($surface2);
 var_dump($surface === $surface2);
 
+/* Total number of args needed = 0 */
 try {
-    $pattern->getSurface('foo');
+    $pattern->getSurface(1);
+    trigger_error('getSurface with too many args');
 } catch (CairoException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--

@@ -17,10 +17,12 @@ $filter = $pattern->getFilter();
 var_dump($filter);
 var_dump($filter == CairoFilter::GOOD);
 
+/* Total number of args needed = 0 */
 try {
-    $pattern->setFilter();
+    $pattern->getFilter(1);
+    trigger_error('getFilter with too many args');
 } catch (CairoException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
@@ -30,4 +32,4 @@ object(CairoSurfacePattern)#%d (0) {
 }
 int(1)
 bool(true)
-CairoSurfacePattern::setFilter() expects exactly 1 parameter, 0 given
+CairoSurfacePattern::getFilter() expects exactly 0 parameters, 1 given

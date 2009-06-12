@@ -48,7 +48,8 @@ ZEND_BEGIN_ARG_INFO_EX(CairoSolidPattern___construct_args, ZEND_SEND_BY_VAL, ZEN
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO(CairoSurfacePattern___construct_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	/* ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0) - argh, catchable fatal error syndrome */
+	ZEND_ARG_INFO(0, surface)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO(CairoSurfacePattern_setExtend_args, ZEND_SEND_BY_VAL)
@@ -500,6 +501,10 @@ PHP_FUNCTION(cairo_pattern_create_for_surface)
 
 	pattern_object->pattern = cairo_pattern_create_for_surface(surface_object->surface);
 	php_cairo_trigger_error(cairo_pattern_status(pattern_object->pattern) TSRMLS_CC);
+
+	/* we need to be able to get this zval out later, so ref and store */
+	pattern_object->surface = surface_zval;
+	Z_ADDREF_P(surface_zval);
 }
 /* }}} */
 

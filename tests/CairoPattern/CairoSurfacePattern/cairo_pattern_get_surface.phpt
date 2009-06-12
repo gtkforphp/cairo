@@ -16,7 +16,18 @@ $surface2 = cairo_pattern_get_surface($pattern);
 var_dump($surface2);
 var_dump($surface === $surface2);
 
+// bad type hint is an E_RECOVERABLE_ERROR, so let's hook a handler
+function bad_class($errno, $errstr) {
+	echo 'CAUGHT ERROR: ' . $errstr, PHP_EOL;
+}
+set_error_handler('bad_class', E_RECOVERABLE_ERROR);
+
+// requires exactly 1 arg
 cairo_pattern_get_surface();
+cairo_pattern_get_surface($pattern, 1);
+
+// arg types is CairoPattern
+cairo_pattern_get_surface(1);
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
@@ -25,6 +36,11 @@ object(CairoSurfacePattern)#%d (0) {
 }
 object(CairoImageSurface)#%d (0) {
 }
-bool(false)
+bool(true)
 
 Warning: cairo_pattern_get_surface() expects exactly 1 parameter, 0 given in %s on line %d
+
+Warning: cairo_pattern_get_surface() expects exactly 1 parameter, 2 given in %s on line %d
+CAUGHT ERROR: Argument 1 passed to cairo_pattern_get_surface() must be an instance of CairoSurfacePattern, integer given
+
+Warning: cairo_pattern_get_surface() expects parameter 1 to be CairoSurfacePattern, integer given in %s on line %d

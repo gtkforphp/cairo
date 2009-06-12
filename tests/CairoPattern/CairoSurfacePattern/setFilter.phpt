@@ -18,10 +18,26 @@ $filter = $pattern->getFilter();
 var_dump($filter);
 var_dump($filter == CairoFilter::NEAREST);
 
+/* Total number of args needed = 1 */
 try {
-    $pattern->getFilter('foo');
+    $pattern->setFilter();
+    trigger_error('setFilter with no args');
 } catch (CairoException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
+}
+try {
+    $pattern->setFilter(1, 1);
+    trigger_error('setFilter with too many args');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* arg must be int or castable to int */
+try {
+    $pattern->setFilter(array());
+    trigger_error('Arg 1 must be int');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
@@ -31,4 +47,6 @@ object(CairoSurfacePattern)#%d (0) {
 }
 int(3)
 bool(true)
-CairoSurfacePattern::getFilter() expects exactly 0 parameters, 1 given
+CairoSurfacePattern::setFilter() expects exactly 1 parameter, 0 given
+CairoSurfacePattern::setFilter() expects exactly 1 parameter, 2 given
+CairoSurfacePattern::setFilter() expects parameter 1 to be long, array given
