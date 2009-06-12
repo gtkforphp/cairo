@@ -13,6 +13,46 @@ $context = new CairoContext($surface);
 var_dump($context);
 
 var_dump($context->userToDevice(5, 5));
+
+/* Wrong number args - 1 */
+try {
+    $context->userToDevice();
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong number args - 2 */
+try {
+    $context->userToDevice(10);
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong number args - 3 */
+try {
+    $context->userToDevice(10, 10, 10);
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong arg type 1 */
+try {
+    $context->userToDevice(array(), 10);
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong arg type 2 */
+try {
+    $context->userToDevice(10, array());
+    trigger_error('We should bomb here');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
@@ -25,3 +65,8 @@ array(2) {
   [1]=>
   float(5)
 }
+CairoContext::userToDevice() expects exactly 2 parameters, 0 given
+CairoContext::userToDevice() expects exactly 2 parameters, 1 given
+CairoContext::userToDevice() expects exactly 2 parameters, 3 given
+CairoContext::userToDevice() expects parameter 1 to be double, array given
+CairoContext::userToDevice() expects parameter 2 to be double, array given

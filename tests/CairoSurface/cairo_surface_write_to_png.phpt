@@ -30,6 +30,11 @@ cairo_surface_write_to_png($surface, 1, 1);
 cairo_surface_write_to_png(1, $fp);
 cairo_surface_write_to_png($surface, 1);
 ?>
+--CLEAN--
+<?php
+unlink(dirname(__FILE__) . '/test.png');
+unlink(dirname(__FILE__) . '/stream.png');
+?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }

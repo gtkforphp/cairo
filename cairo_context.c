@@ -39,7 +39,8 @@ zend_class_entry *cairo_ce_cairooperator;
 
 /* Basic Context */
 ZEND_BEGIN_ARG_INFO(CairoContext___construct_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	/* ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0) */
+	ZEND_ARG_INFO(0, surface)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO(CairoContext_pushGroupWithContent_args, ZEND_SEND_BY_VAL)
@@ -73,8 +74,9 @@ ZEND_BEGIN_ARG_INFO_EX(CairoContext_setAntialias_args, ZEND_SEND_BY_VAL, ZEND_RE
 	ZEND_ARG_INFO(0, antialias)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO(CairoContext_setDash_args, ZEND_SEND_BY_VAL)
+ZEND_BEGIN_ARG_INFO_EX(CairoContext_setDash_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
 	ZEND_ARG_ARRAY_INFO(0, dashes, 0)
+	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setFillRule_args, ZEND_SEND_BY_VAL)
