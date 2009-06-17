@@ -1,8 +1,9 @@
 --TEST--
-Cairo->pushGroup() method
+CairoContext->hasCurrentPoint() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+if(!method_exists('CairoContext', 'hasCurrentPoint')) die('skip - CairoContext->hasCurrentPoint not available');
 ?>
 --FILE--
 <?php
@@ -12,12 +13,12 @@ var_dump($surface);
 $context = new CairoContext($surface);
 var_dump($context);
 
-$context->pushGroup();
+var_dump($context->hasCurrentPoint());
 
-/* Wrong number args */
+/* Wrong number args - expects 0 */
 try {
-    $context->pushGroup('foo');
-    trigger_error('save requires only one arg');
+    $context->hasCurrentPoint('foo');
+    trigger_error('hasCurrentPoint requires 0 args');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
 }
@@ -27,4 +28,5 @@ object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-CairoContext::pushGroup() expects exactly 0 parameters, 1 given
+bool(false)
+CairoContext::hasCurrentPoint() expects exactly 0 parameters, 1 given

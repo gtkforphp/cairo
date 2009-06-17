@@ -12,8 +12,9 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
-  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  | Author: Elizabeth Smith <auroraeosrose@php.net>                      |
+  |         Michael Maclean <mgdm@php.net>                               |
+  |         Akshat Gupta <g.akshat@gmail.com>                            |
   +----------------------------------------------------------------------+
 */
 
@@ -33,14 +34,6 @@ extern zend_module_entry cairo_module_entry;
 #	define PHP_CAIRO_API __attribute__ ((visibility("default")))
 #else
 #	define PHP_CAIRO_API
-#endif
- 
-#ifndef TRUE
-#define TRUE 1
-#endif
-
-#ifndef FALSE
-#define FALSE 0
 #endif
 
 /* Silly compilers */
@@ -71,6 +64,7 @@ extern zend_module_entry cairo_module_entry;
 #define Z_SET_REFCOUNT_P(pz, rc)      (pz)->refcount = rc
 #endif
 
+/* Cairo object stuff */
 typedef struct _stream_closure {
 	php_stream *stream;
     zend_bool owned_stream;
@@ -121,6 +115,7 @@ typedef struct _cairo_fontoptions_object {
 	cairo_font_options_t *font_options;
 } cairo_fontoptions_object;
 
+/* Lifecycle functions */
 PHP_MINIT_FUNCTION(cairo);
 PHP_MINFO_FUNCTION(cairo);
 PHP_MSHUTDOWN_FUNCTION(cairo);
@@ -137,6 +132,7 @@ PHP_MINIT_FUNCTION(cairo_svg_surface);
 PHP_MINIT_FUNCTION(cairo_pdf_surface);
 PHP_MINIT_FUNCTION(cairo_ps_surface);
 
+/* cairo functions */
 PHP_FUNCTION(cairo_version);
 PHP_FUNCTION(cairo_version_string);
 PHP_FUNCTION(cairo_available_surfaces);

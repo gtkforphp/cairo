@@ -1,5 +1,5 @@
 --TEST--
-Cairo->pushGroup() method
+CairoContext->copyPathFlat() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -12,12 +12,12 @@ var_dump($surface);
 $context = new CairoContext($surface);
 var_dump($context);
 
-$context->pushGroup();
+var_dump($context->copyPathFlat());
 
-/* Wrong number args */
+/* Wrong number args - expects 0 */
 try {
-    $context->pushGroup('foo');
-    trigger_error('save requires only one arg');
+    $context->copyPathFlat('foo');
+    trigger_error('identityMatrix requires 0 args');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
 }
@@ -27,4 +27,6 @@ object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-CairoContext::pushGroup() expects exactly 0 parameters, 1 given
+object(CairoPath)#%d (0) {
+}
+CairoContext::copyPathFlat() expects exactly 0 parameters, 1 given

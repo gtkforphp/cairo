@@ -1,5 +1,5 @@
 --TEST--
-cairo_get_dash function
+cairo_identity_matrix() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -12,7 +12,7 @@ var_dump($surface);
 $context = cairo_create($surface);
 var_dump($context);
 
-var_dump(cairo_get_dash($context));
+cairo_identity_matrix($context);
 
 // bad type hint is an E_RECOVERABLE_ERROR, so let's hook a handler
 function bad_class($errno, $errstr) {
@@ -21,28 +21,21 @@ function bad_class($errno, $errstr) {
 set_error_handler('bad_class', E_RECOVERABLE_ERROR);
 
 // check number of args - should accept 1
-cairo_get_dash();
-cairo_get_dash($context, 1);
+cairo_identity_matrix();
+cairo_identity_matrix($context, 1);
 
 // check arg types, should be context object
-cairo_get_dash(1);
+cairo_identity_matrix(1);
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-array(2) {
-  ["dashes"]=>
-  array(0) {
-  }
-  ["offset"]=>
-  float(0)
-}
 
-Warning: cairo_get_dash() expects exactly 1 parameter, 0 given in %s on line %d
+Warning: cairo_identity_matrix() expects exactly 1 parameter, 0 given in %s on line %d
 
-Warning: cairo_get_dash() expects exactly 1 parameter, 2 given in %s on line %d
-CAUGHT ERROR: Argument 1 passed to cairo_get_dash() must be an instance of CairoContext, integer given
+Warning: cairo_identity_matrix() expects exactly 1 parameter, 2 given in %s on line %d
+CAUGHT ERROR: Argument 1 passed to cairo_identity_matrix() must be an instance of CairoContext, integer given
 
-Warning: cairo_get_dash() expects parameter 1 to be CairoContext, integer given in %s on line %d
+Warning: cairo_identity_matrix() expects parameter 1 to be CairoContext, integer given in %s on line %d

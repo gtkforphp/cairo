@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2008 The PHP Group                                |
+  | Copyright (c) 1997-2009 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -14,6 +14,7 @@
   +----------------------------------------------------------------------+
   | Author: Elizabeth Smith <auroraeosrose@php.net>                      |
   |         Michael Maclean <mgdm@php.net>                               |
+  |         Akshat Gupta <g.akshat@gmail.com>                            |
   +----------------------------------------------------------------------+
 */
 
