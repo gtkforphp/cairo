@@ -100,6 +100,7 @@ PHP_CAIRO_API void php_cairo_throw_exception(cairo_status_t status TSRMLS_DC)
 	}
 	error_message = estrdup(cairo_status_to_string(status));
 	zend_throw_exception(cairo_ce_cairoexception, error_message, status TSRMLS_CC);
+	efree(error_message);
 	return;
 }
 
