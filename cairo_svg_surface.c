@@ -24,13 +24,11 @@
 #include "config.h"
 #endif
 
-#include <cairo.h>
+#include "php.h"
+#include "php_cairo.h"
 
 #if CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
-
-#include "php.h"
-#include "php_cairo.h"
 
 zend_class_entry *cairo_ce_cairosvgsurface;
 zend_class_entry *cairo_ce_cairosvgversion;

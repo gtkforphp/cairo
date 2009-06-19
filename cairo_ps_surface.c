@@ -24,14 +24,12 @@
 #include "config.h"
 #endif
 
-#include <cairo.h>
-
-#if CAIRO_HAS_PS_SURFACE
-#include <cairo-ps.h>
-
 #include "php.h"
 #include "php_cairo.h"
 #include "zend_exceptions.h"
+
+#if CAIRO_HAS_PS_SURFACE
+#include <cairo-ps.h>
 
 zend_class_entry *cairo_ce_cairopssurface;
 zend_class_entry *cairo_ce_cairopslevel;

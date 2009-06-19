@@ -64,6 +64,8 @@ extern zend_module_entry cairo_module_entry;
 #define Z_SET_REFCOUNT_P(pz, rc)      (pz)->refcount = rc
 #endif
 
+#include <cairo.h>
+
 /* Cairo object stuff */
 typedef struct _stream_closure {
 	php_stream *stream;

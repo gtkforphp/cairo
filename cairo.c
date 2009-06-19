@@ -24,8 +24,6 @@
 #include "config.h"
 #endif
 
-#include <cairo.h>
-
 #include "php.h"
 #include "ext/standard/info.h"
 #include "php_cairo.h"
