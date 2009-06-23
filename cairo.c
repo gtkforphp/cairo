@@ -470,13 +470,33 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_text_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
 ZEND_END_ARG_INFO()
 
 /* Font Options functions */
-ZEND_BEGIN_ARG_INFO_EX(cairo_font_options_fontoptions_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_font_options_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, options, CairoFontOptions, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_font_options_two_args, ZEND_SEND_BY_VAL)
+    ZEND_ARG_OBJ_INFO(0, options, CairoFontOptions, 0)
 	ZEND_ARG_OBJ_INFO(0, other, CairoFontOptions, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_font_options_set_long_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
-	ZEND_ARG_OBJ_INFO(0, other, CairoFontOptions, 0)
+ZEND_BEGIN_ARG_INFO(cairo_font_options_set_antialias_args, ZEND_SEND_BY_VAL)
+    ZEND_ARG_OBJ_INFO(0, options, CairoFontOptions, 0)
 	ZEND_ARG_INFO(0, antialias)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_font_options_set_subpixel_order_args, ZEND_SEND_BY_VAL)
+    ZEND_ARG_OBJ_INFO(0, options, CairoFontOptions, 0)
+	ZEND_ARG_INFO(0, subpixel_order)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_font_options_set_hint_style_args, ZEND_SEND_BY_VAL)
+    ZEND_ARG_OBJ_INFO(0, options, CairoFontOptions, 0)
+	ZEND_ARG_INFO(0, hint_style)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_font_options_set_hint_metrics_args, ZEND_SEND_BY_VAL)
+    ZEND_ARG_OBJ_INFO(0, options, CairoFontOptions, 0)
+	ZEND_ARG_INFO(0, hint_metrics)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int cairo_version(void) 
@@ -846,18 +866,18 @@ static const function_entry cairo_functions[] = {
 
 	/* Font Options Functions */
 	PHP_FE(cairo_font_options_create, NULL)
-	PHP_FE(cairo_font_options_status, NULL)
-	PHP_FE(cairo_font_options_merge, cairo_font_options_fontoptions_args)
-	PHP_FE(cairo_font_options_hash, NULL)
-	PHP_FE(cairo_font_options_equal, cairo_font_options_fontoptions_args)
-	PHP_FE(cairo_font_options_set_antialias, cairo_font_options_set_long_args)
-	PHP_FE(cairo_font_options_get_antialias, cairo_font_options_fontoptions_args)
-	PHP_FE(cairo_font_options_set_subpixel_order, cairo_font_options_set_long_args)
-	PHP_FE(cairo_font_options_get_subpixel_order, cairo_font_options_fontoptions_args)
-	PHP_FE(cairo_font_options_set_hint_style, cairo_font_options_set_long_args)
-	PHP_FE(cairo_font_options_get_hint_style, cairo_font_options_fontoptions_args)
-	PHP_FE(cairo_font_options_set_hint_metrics, cairo_font_options_set_long_args)
-	PHP_FE(cairo_font_options_get_hint_metrics, cairo_font_options_fontoptions_args)
+	PHP_FE(cairo_font_options_status, cairo_font_options_args)
+	PHP_FE(cairo_font_options_merge, cairo_font_options_two_args)
+	PHP_FE(cairo_font_options_hash, cairo_font_options_args)
+	PHP_FE(cairo_font_options_equal, cairo_font_options_two_args)
+	PHP_FE(cairo_font_options_set_antialias, cairo_font_options_set_antialias_args)
+	PHP_FE(cairo_font_options_get_antialias, cairo_font_options_args)
+	PHP_FE(cairo_font_options_set_subpixel_order, cairo_font_options_set_subpixel_order_args)
+	PHP_FE(cairo_font_options_get_subpixel_order, cairo_font_options_args)
+	PHP_FE(cairo_font_options_set_hint_style, cairo_font_options_set_hint_style_args)
+	PHP_FE(cairo_font_options_get_hint_style, cairo_font_options_args)
+	PHP_FE(cairo_font_options_set_hint_metrics, cairo_font_options_set_hint_metrics_args)
+	PHP_FE(cairo_font_options_get_hint_metrics, cairo_font_options_args)
 
 	/* Generic Surface Functions */
 	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)
@@ -943,7 +963,7 @@ static const function_entry cairo_functions[] = {
 	PHP_FE(cairo_win32_surface_get_image, NULL)    
 #endif*/
 
-	/* Compatibility with cairo_wrapper */
+	/* Compatibility with old cairo-wrapper extension */
 #if PHP_VERSION_ID >= 50300
 	ZEND_FENTRY(cairo_matrix_create_scale, ZEND_FN(cairo_matrix_init_scale), cairo_matrix_init_scale_args, ZEND_ACC_DEPRECATED)
 	ZEND_FENTRY(cairo_matrix_create_translate, ZEND_FN(cairo_matrix_init_translate), cairo_matrix_init_translate_args, ZEND_ACC_DEPRECATED)
@@ -1003,6 +1023,7 @@ PHP_MINIT_FUNCTION(cairo)
 	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_pattern)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_path)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_font_options)(INIT_FUNC_ARGS_PASSTHRU);
 
 	PHP_MINIT(cairo_font)(INIT_FUNC_ARGS_PASSTHRU);
 #ifdef CAIRO_HAS_FT_FONT

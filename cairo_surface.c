@@ -165,7 +165,7 @@ PHP_FUNCTION(cairo_surface_get_font_options)
 {
 	zval *surface_zval = NULL;
 	cairo_surface_object *surface_object;
-	cairo_fontoptions_object *font_object;
+	cairo_font_options_object *font_object;
 	cairo_font_options_t *options = cairo_font_options_create();
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
@@ -176,7 +176,7 @@ PHP_FUNCTION(cairo_surface_get_font_options)
 	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	object_init_ex(return_value, cairo_ce_cairofontoptions);
-	font_object = (cairo_fontoptions_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	font_object = (cairo_font_options_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	cairo_surface_get_font_options(surface_object->surface, options);

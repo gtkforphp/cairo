@@ -107,15 +107,15 @@ typedef struct _cairo_path_object {
 	cairo_path_t *path;
 } cairo_path_object;
 
-typedef struct _cairo_fontface_object {
+typedef struct _cairo_font_face_object {
 	zend_object std;
 	cairo_font_face_t *font_face;
-} cairo_fontface_object;
+} cairo_font_face_object;
 
-typedef struct _cairo_fontoptions_object {
+typedef struct _cairo_font_options_object {
 	zend_object std;
 	cairo_font_options_t *font_options;
-} cairo_fontoptions_object;
+} cairo_font_options_object;
 
 /* Lifecycle functions */
 PHP_MINIT_FUNCTION(cairo);
@@ -126,6 +126,7 @@ PHP_MINIT_FUNCTION(cairo_matrix);
 PHP_MINIT_FUNCTION(cairo_error);
 PHP_MINIT_FUNCTION(cairo_context);
 PHP_MINIT_FUNCTION(cairo_path);
+PHP_MINIT_FUNCTION(cairo_font_options);
 PHP_MINIT_FUNCTION(cairo_pattern);
 PHP_MINIT_FUNCTION(cairo_surface);
 PHP_MINIT_FUNCTION(cairo_font);
@@ -487,18 +488,18 @@ static inline cairo_surface_object* cairo_surface_object_get(zval *zobj TSRMLS_D
     return pobj;
 }
 
-static inline cairo_fontface_object* cairo_fontface_object_get(zval *zobj TSRMLS_DC)
+static inline cairo_font_face_object* cairo_font_face_object_get(zval *zobj TSRMLS_DC)
 {
-    cairo_fontface_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    cairo_font_face_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
     if (pobj->font_face == NULL) {
         php_error(E_ERROR, "Internal font face object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
     }
     return pobj;
 }
 
-static inline cairo_fontoptions_object* cairo_fontoptions_object_get(zval *zobj TSRMLS_DC)
+static inline cairo_font_options_object* cairo_font_options_object_get(zval *zobj TSRMLS_DC)
 {
-    cairo_fontoptions_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    cairo_font_options_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
     if (pobj->font_options == NULL) {
         php_error(E_ERROR, "Internal font options object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
     }

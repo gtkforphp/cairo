@@ -64,23 +64,6 @@ $cairo_filter_constants = array(
 	'CAIRO_FILTER_GAUSSIAN',
 	);
 
-$cairo_surface_type_constants = array(
-	'CAIRO_SURFACE_TYPE_IMAGE',
-	'CAIRO_SURFACE_TYPE_PDF',
-	'CAIRO_SURFACE_TYPE_PS',
-	'CAIRO_SURFACE_TYPE_XLIB',
-	'CAIRO_SURFACE_TYPE_XCB',
-	'CAIRO_SURFACE_TYPE_GLITZ',
-	'CAIRO_SURFACE_TYPE_QUARTZ',
-	'CAIRO_SURFACE_TYPE_WIN32',
-	'CAIRO_SURFACE_TYPE_BEOS',
-	'CAIRO_SURFACE_TYPE_DIRECTFB',
-	'CAIRO_SURFACE_TYPE_SVG',
-	'CAIRO_SURFACE_TYPE_OS2',
-	'CAIRO_SURFACE_TYPE_WIN32_PRINTING',
-	'CAIRO_SURFACE_TYPE_QUARTZ_IMAGE',
-);
-
 $cairo_pattern_type_constants = array(
 	'CAIRO_PATTERN_TYPE_SOLID',
 	'CAIRO_PATTERN_TYPE_SURFACE',
@@ -99,6 +82,40 @@ $cairo_content_constants = array(
 	'CAIRO_CONTENT_COLOR',
 	'CAIRO_CONTENT_ALPHA',
 	'CAIRO_CONTENT_COLOR_ALPHA',
+);
+
+$cairo_hint_style_constants = array(
+	'CAIRO_HINT_STYLE_DEFAULT',
+	'CAIRO_HINT_STYLE_NONE',
+	'CAIRO_HINT_STYLE_SLIGHT',
+	'CAIRO_HINT_STYLE_MEDIUM',
+	'CAIRO_HINT_STYLE_FULL',
+);
+
+$cairo_hint_metrics_constants = array(
+	'CAIRO_HINT_METRICS_DEFAULT',
+	'CAIRO_HINT_METRICS_OFF',
+	'CAIRO_HINT_METRICS_ON',
+);
+
+
+
+
+$cairo_surface_type_constants = array(
+	'CAIRO_SURFACE_TYPE_IMAGE',
+	'CAIRO_SURFACE_TYPE_PDF',
+	'CAIRO_SURFACE_TYPE_PS',
+	'CAIRO_SURFACE_TYPE_XLIB',
+	'CAIRO_SURFACE_TYPE_XCB',
+	'CAIRO_SURFACE_TYPE_GLITZ',
+	'CAIRO_SURFACE_TYPE_QUARTZ',
+	'CAIRO_SURFACE_TYPE_WIN32',
+	'CAIRO_SURFACE_TYPE_BEOS',
+	'CAIRO_SURFACE_TYPE_DIRECTFB',
+	'CAIRO_SURFACE_TYPE_SVG',
+	'CAIRO_SURFACE_TYPE_OS2',
+	'CAIRO_SURFACE_TYPE_WIN32_PRINTING',
+	'CAIRO_SURFACE_TYPE_QUARTZ_IMAGE',
 );
 
 $surfaces = cairo_available_surfaces();
@@ -129,9 +146,14 @@ if (in_array('SVG', $surfaces)) {
 // merge all the constants together
 $constants = array_merge(
 				$cairo_status_constants,
+				$cairo_filter_constants,
+				$cairo_pattern_type_constants,
 				$cairo_extend_constants,
-				$cairo_surface_type_constants,
 				$cairo_content_constants,
+				$cairo_hint_style_constants,
+				$cairo_hint_metrics_constants,
+
+				$cairo_surface_type_constants,
 				$cairo_image_format_constants,
 				$cairo_ps_version_constants,
 				$cairo_svg_version_constants);
