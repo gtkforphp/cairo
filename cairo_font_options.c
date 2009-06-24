@@ -228,7 +228,7 @@ PHP_FUNCTION(cairo_font_options_equal)
 	   */
 PHP_FUNCTION(cairo_font_options_set_antialias) 
 {
-	int antialias = 0;
+	long antialias = 0;
 	zval *font_options_zval = NULL;
 	cairo_font_options_object *font_options_object;
 
@@ -272,7 +272,7 @@ PHP_FUNCTION(cairo_font_options_get_antialias)
 	   */
 PHP_FUNCTION(cairo_font_options_set_subpixel_order) 
 {
-	int subpixel_order = 0;
+	long subpixel_order = 0;
 	zval *font_options_zval = NULL;
 	cairo_font_options_object *font_options_object;
 
@@ -315,7 +315,7 @@ PHP_FUNCTION(cairo_font_options_get_subpixel_order)
 	   */
 PHP_FUNCTION(cairo_font_options_set_hint_style) 
 {
-	int hint_style = 0;
+	long hint_style = 0;
 	zval *font_options_zval = NULL;
 	cairo_font_options_object *font_options_object;
 
@@ -358,7 +358,7 @@ PHP_FUNCTION(cairo_font_options_get_hint_style)
 	   */
 PHP_FUNCTION(cairo_font_options_set_hint_metrics) 
 {
-	int hint_metrics = 0;
+	long hint_metrics = 0;
 	zval *font_options_zval = NULL;
 	cairo_font_options_object *font_options_object;
 
