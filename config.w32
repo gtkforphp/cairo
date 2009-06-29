@@ -7,7 +7,7 @@ if (PHP_CAIRO != "no") {
 		CHECK_HEADER_ADD_INCLUDE("cairo/cairo.h", "CFLAGS_CAIRO", null, null, true)) {
 		EXTENSION("cairo", "cairo.c cairo_error.c cairo_context.c cairo_pattern.c cairo_matrix.c cairo_path.c \
 			cairo_surface.c cairo_image_surface.c cairo_svg_surface.c cairo_pdf_surface.c cairo_ps_surface.c \
-			cairo_font.c cairo_font_options.c");
+			cairo_font.c cairo_font_options.c cairo_font_face.c");
 
 		AC_DEFINE("HAVE_CAIRO", 1);
 	} else {

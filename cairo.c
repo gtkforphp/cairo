@@ -114,29 +114,29 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_paint_with_alpha_args, ZEND_SEND_BY_VAL, ZEND_RETUR
 ZEND_END_ARG_INFO()
 
 /* Context Transformations */
-ZEND_BEGIN_ARG_INFO_EX(cairo_translate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+ZEND_BEGIN_ARG_INFO(cairo_translate_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_rotate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_rotate_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, angle)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_transform_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_transform_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
 ZEND_END_ARG_INFO()
 
 /* Context and Path */
-ZEND_BEGIN_ARG_INFO_EX(cairo_append_path_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_append_path_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_OBJ_INFO(0, path, CairoPath, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_arc_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 6)
+ZEND_BEGIN_ARG_INFO(cairo_arc_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
@@ -145,7 +145,7 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_arc_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 6)
 	ZEND_ARG_INFO(0, angle2)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_curve_to_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 7)
+ZEND_BEGIN_ARG_INFO(cairo_curve_to_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, x1)
 	ZEND_ARG_INFO(0, y1)
@@ -155,13 +155,13 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_curve_to_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE,
 	ZEND_ARG_INFO(0, y3)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_line_to_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+ZEND_BEGIN_ARG_INFO(cairo_line_to_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_rectangle_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
+ZEND_BEGIN_ARG_INFO(cairo_rectangle_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
@@ -169,18 +169,27 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_rectangle_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE
 	ZEND_ARG_INFO(0, height)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_glyph_path_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_glyph_path_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_ARRAY_INFO(0, glyphs, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_text_path_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_text_path_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, text)
 ZEND_END_ARG_INFO()
 
+/* Text functions */
+ZEND_BEGIN_ARG_INFO(cairo_set_font_size_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, size)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_text_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, text)
+ZEND_END_ARG_INFO()
+
 /* Pattern Functions */
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, pattern, CairoPattern, 0)
 ZEND_END_ARG_INFO()
 
@@ -189,24 +198,24 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_set_matrix_args, ZEND_SEND_BY_VAL, ZEND_RET
 	ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_rgb_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_create_rgb_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, red)
 	ZEND_ARG_INFO(0, green)
 	ZEND_ARG_INFO(0, blue)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_rgba_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_create_rgba_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, red)
 	ZEND_ARG_INFO(0, green)
 	ZEND_ARG_INFO(0, blue)
 	ZEND_ARG_INFO(0, alpha)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_solidpattern_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_solidpattern_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, pattern, CairoSolidPattern, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_surfacepattern_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_surfacepattern_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, pattern, CairoSurfacePattern, 0)
 ZEND_END_ARG_INFO()
 
@@ -224,7 +233,7 @@ ZEND_BEGIN_ARG_INFO(cairo_pattern_get_extend_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, pattern)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_add_color_stop_rgb_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_add_color_stop_rgb_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, pattern, CairoGradientPattern, 0)
   ZEND_ARG_INFO(0, offset)
   ZEND_ARG_INFO(0, red)
@@ -232,7 +241,7 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_add_color_stop_rgb_args, ZEND_SEND_BY_VAL, 
   ZEND_ARG_INFO(0, blue)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_add_color_stop_rgba_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 6)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_add_color_stop_rgba_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, pattern, CairoGradientPattern, 0)
   ZEND_ARG_INFO(0, offset)
   ZEND_ARG_INFO(0, red)
@@ -241,27 +250,27 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_add_color_stop_rgba_args, ZEND_SEND_BY_VAL,
   ZEND_ARG_INFO(0, alpha)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_get_color_stop_rgba_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_get_color_stop_rgba_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, pattern, CairoGradientPattern, 0)
   ZEND_ARG_INFO(0, index)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_gradientpattern_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_gradientpattern_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, pattern, CairoGradientPattern, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_linear_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_create_linear_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_INFO(0, x0)
   ZEND_ARG_INFO(0, y0)
   ZEND_ARG_INFO(0, x1)
   ZEND_ARG_INFO(0, y1)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_lineargradient_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_lineargradient_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, pattern, CairoLinearGradient, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_radial_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 6)
+ZEND_BEGIN_ARG_INFO(cairo_pattern_create_radial_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_INFO(0, x0)
   ZEND_ARG_INFO(0, y0)
   ZEND_ARG_INFO(0, r0)
@@ -270,7 +279,7 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_pattern_create_radial_args, ZEND_SEND_BY_VAL, ZEND_
   ZEND_ARG_INFO(0, r1)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_radialgradient_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_radialgradient_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, pattern, CairoRadialGradient, 0)
 ZEND_END_ARG_INFO()
 
@@ -283,190 +292,50 @@ ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_init_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VAL
   ZEND_ARG_INFO(0, y0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_init_translate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_init_translate_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_INFO(0, tx)
   ZEND_ARG_INFO(0, ty)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_init_scale_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_init_scale_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_INFO(0, sx)
   ZEND_ARG_INFO(0, sy)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_init_rotate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_init_rotate_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_INFO(0, radians)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_translate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_translate_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
   ZEND_ARG_INFO(0, tx)
   ZEND_ARG_INFO(0, ty)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_scale_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_scale_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
   ZEND_ARG_INFO(0, sx)
   ZEND_ARG_INFO(0, sy)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_rotate_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_rotate_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
   ZEND_ARG_INFO(0, radians)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_invert_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_invert_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_multiply_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_multiply_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, matrix1, CairoMatrix, 1)
   ZEND_ARG_OBJ_INFO(0, matrix2, CairoMatrix, 1)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_matrix_transform_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
+ZEND_BEGIN_ARG_INFO(cairo_matrix_transform_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
   ZEND_ARG_INFO(0, dx)
   ZEND_ARG_INFO(0, dy)
-ZEND_END_ARG_INFO()
-
-/* Surface Functions */
-ZEND_BEGIN_ARG_INFO_EX(cairo_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_surface_create_similar_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
-	ZEND_ARG_INFO(0, content)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_surface_mark_dirty_rectangle_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 5)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
-	ZEND_ARG_INFO(0, x)
-	ZEND_ARG_INFO(0, y)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_surface_set_fallback_resolution_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
-	ZEND_ARG_INFO(0, x)
-	ZEND_ARG_INFO(0, y)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_surface_write_to_png_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
-	ZEND_ARG_INFO(0, x)
-	ZEND_ARG_INFO(0, y)
-ZEND_END_ARG_INFO()
-
-/* Image Surface Functions */
-ZEND_BEGIN_ARG_INFO_EX(cairo_image_create_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-	ZEND_ARG_INFO(0, format)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_format_stride_for_width_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
-	ZEND_ARG_INFO(0, format)
-	ZEND_ARG_INFO(0, width)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_image_surface_create_for_data_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
-	ZEND_ARG_INFO(0, data)
-	ZEND_ARG_INFO(0, format)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-	ZEND_ARG_INFO(0, stride)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_image_surface_create_from_png_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_INFO(0, file)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_image_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoImageSurface, 0)
-ZEND_END_ARG_INFO()
-
-/* SVG surface functions */
-ZEND_BEGIN_ARG_INFO_EX(cairo_svg_surface_create_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-	ZEND_ARG_INFO(0, file)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_svg_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSvgSurface, 0)
-	ZEND_ARG_INFO(0, version)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_svg_surface_version_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_INFO(0, version)
-ZEND_END_ARG_INFO()
-
-/* PDF surface functions */
-ZEND_BEGIN_ARG_INFO_EX(cairo_pdf_surface_create_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-	ZEND_ARG_INFO(0, file)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_pdf_surface_set_size_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoPdfSurface, 0)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-/* PS surface functions */
-ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_create_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-	ZEND_ARG_INFO(0, file)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_set_size_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 3)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_restrict_to_level_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
-	ZEND_ARG_INFO(0, level)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_set_eps_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
-	ZEND_ARG_INFO(0, level)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_ps_level_to_string_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_INFO(0, level)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_ps_surface_dsc_comment_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
-	ZEND_ARG_INFO(0, comment)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_select_font_face_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
-	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
-	ZEND_ARG_INFO(0, family)
-	ZEND_ARG_INFO(0, slant)
-	ZEND_ARG_INFO(0, weight)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_set_font_size_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_INFO(0, size)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(cairo_text_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_INFO(0, text)
 ZEND_END_ARG_INFO()
 
 /* Font Options functions */
@@ -497,6 +366,143 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO(cairo_font_options_set_hint_metrics_args, ZEND_SEND_BY_VAL)
     ZEND_ARG_OBJ_INFO(0, options, CairoFontOptions, 0)
 	ZEND_ARG_INFO(0, hint_metrics)
+ZEND_END_ARG_INFO()
+
+/* Font Face functions */
+ZEND_BEGIN_ARG_INFO(cairo_font_face_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, fontface, CairoFontFace, 0)
+ZEND_END_ARG_INFO()
+
+/* Surface Functions */
+ZEND_BEGIN_ARG_INFO(cairo_surface_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_surface_create_similar_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, content)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_surface_mark_dirty_rectangle_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_surface_set_fallback_resolution_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_surface_write_to_png_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+/* Image Surface Functions */
+ZEND_BEGIN_ARG_INFO(cairo_image_create_surface_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, format)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_format_stride_for_width_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, format)
+	ZEND_ARG_INFO(0, width)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_image_surface_create_for_data_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+	ZEND_ARG_INFO(0, data)
+	ZEND_ARG_INFO(0, format)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+	ZEND_ARG_INFO(0, stride)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_image_surface_create_from_png_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, file)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_image_surface_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoImageSurface, 0)
+ZEND_END_ARG_INFO()
+
+/* SVG surface functions */
+ZEND_BEGIN_ARG_INFO(cairo_svg_surface_create_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, file)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_svg_surface_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSvgSurface, 0)
+	ZEND_ARG_INFO(0, version)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_svg_surface_version_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, version)
+ZEND_END_ARG_INFO()
+
+/* PDF surface functions */
+ZEND_BEGIN_ARG_INFO(cairo_pdf_surface_create_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, file)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_pdf_surface_set_size_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPdfSurface, 0)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+/* PS surface functions */
+ZEND_BEGIN_ARG_INFO(cairo_ps_surface_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_ps_surface_create_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, file)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_ps_surface_set_size_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_ps_surface_restrict_to_level_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+	ZEND_ARG_INFO(0, level)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_ps_surface_set_eps_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+	ZEND_ARG_INFO(0, level)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_ps_level_to_string_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, level)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_ps_surface_dsc_comment_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoPsSurface, 0)
+	ZEND_ARG_INFO(0, comment)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_select_font_face_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, family)
+	ZEND_ARG_INFO(0, slant)
+	ZEND_ARG_INFO(0, weight)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int cairo_version(void) 
@@ -879,6 +885,10 @@ static const function_entry cairo_functions[] = {
 	PHP_FE(cairo_font_options_set_hint_metrics, cairo_font_options_set_hint_metrics_args)
 	PHP_FE(cairo_font_options_get_hint_metrics, cairo_font_options_args)
 
+	/* Font Face Functions */
+	PHP_FE(cairo_font_face_status, cairo_font_face_args)
+	PHP_FE(cairo_font_face_get_type, cairo_font_face_args)
+
 	/* Generic Surface Functions */
 	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)
 	PHP_FE(cairo_surface_status, cairo_surface_args)
@@ -1024,6 +1034,7 @@ PHP_MINIT_FUNCTION(cairo)
 	PHP_MINIT(cairo_pattern)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_path)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_font_options)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_font_face)(INIT_FUNC_ARGS_PASSTHRU);
 
 	PHP_MINIT(cairo_font)(INIT_FUNC_ARGS_PASSTHRU);
 #ifdef CAIRO_HAS_FT_FONT

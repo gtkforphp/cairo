@@ -75,6 +75,11 @@ typedef struct _stream_closure {
 #endif
 } stream_closure;
 
+typedef struct _cairo_glyph_object {
+	zend_object std;
+	cairo_glyph_t *glyph;
+} cairo_glyph_object;
+
 typedef struct _cairo_context_object {
 	zend_object std;
 	zval *surface;
@@ -127,9 +132,10 @@ PHP_MINIT_FUNCTION(cairo_error);
 PHP_MINIT_FUNCTION(cairo_context);
 PHP_MINIT_FUNCTION(cairo_path);
 PHP_MINIT_FUNCTION(cairo_font_options);
+PHP_MINIT_FUNCTION(cairo_font_face);
+PHP_MINIT_FUNCTION(cairo_font);
 PHP_MINIT_FUNCTION(cairo_pattern);
 PHP_MINIT_FUNCTION(cairo_surface);
-PHP_MINIT_FUNCTION(cairo_font);
 PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_svg_surface);
 PHP_MINIT_FUNCTION(cairo_pdf_surface);
@@ -278,6 +284,25 @@ PHP_FUNCTION(cairo_matrix_multiply);
 PHP_FUNCTION(cairo_matrix_transform_distance);
 PHP_FUNCTION(cairo_matrix_transform_point);
 
+/* Font Options Functions */
+PHP_FUNCTION(cairo_font_options_create);
+PHP_FUNCTION(cairo_font_options_status);
+PHP_FUNCTION(cairo_font_options_merge);
+PHP_FUNCTION(cairo_font_options_hash);
+PHP_FUNCTION(cairo_font_options_equal);
+PHP_FUNCTION(cairo_font_options_set_antialias);
+PHP_FUNCTION(cairo_font_options_get_antialias);
+PHP_FUNCTION(cairo_font_options_set_subpixel_order);
+PHP_FUNCTION(cairo_font_options_get_subpixel_order);
+PHP_FUNCTION(cairo_font_options_set_hint_style);
+PHP_FUNCTION(cairo_font_options_get_hint_style);
+PHP_FUNCTION(cairo_font_options_set_hint_metrics);
+PHP_FUNCTION(cairo_font_options_get_hint_metrics);
+
+/* Font Face Functions */
+PHP_FUNCTION(cairo_font_face_status);
+PHP_FUNCTION(cairo_font_face_get_type);
+
 /* Generic Surface Functions */
 PHP_FUNCTION(cairo_surface_create_similar);
 PHP_FUNCTION(cairo_surface_status);
@@ -327,21 +352,6 @@ PHP_FUNCTION(cairo_font_face_get_type);
 	PHP_FUNCTION(cairo_quartz_font_face_create_for_atsu_font_id);
 	PHP_FUNCTION(cairo_quartz_font_face_create_for_cgfont);
 #endif
-
-/* Font Options Functions */
-PHP_FUNCTION(cairo_font_options_create);
-PHP_FUNCTION(cairo_font_options_status);
-PHP_FUNCTION(cairo_font_options_merge);
-PHP_FUNCTION(cairo_font_options_hash);
-PHP_FUNCTION(cairo_font_options_equal);
-PHP_FUNCTION(cairo_font_options_set_antialias);
-PHP_FUNCTION(cairo_font_options_get_antialias);
-PHP_FUNCTION(cairo_font_options_set_subpixel_order);
-PHP_FUNCTION(cairo_font_options_get_subpixel_order);
-PHP_FUNCTION(cairo_font_options_set_hint_style);
-PHP_FUNCTION(cairo_font_options_get_hint_style);
-PHP_FUNCTION(cairo_font_options_set_hint_metrics);
-PHP_FUNCTION(cairo_font_options_get_hint_metrics);
 
 /* SVG Surface Functiosn */
 #ifdef CAIRO_HAS_SVG_SURFACE
