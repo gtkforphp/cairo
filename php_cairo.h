@@ -395,10 +395,17 @@ extern zend_class_entry *cairo_ce_cairosvgsurface;
 extern zend_class_entry *cairo_ce_cairopdfsurface;
 extern zend_class_entry *cairo_ce_cairopssurface;
 extern zend_class_entry *cairo_ce_cairofontoptions;
+extern zend_class_entry *cairo_ce_cairofontface;
+extern zend_class_entry *cairo_ce_cairofonttype;
+extern zend_class_entry *cairo_ce_cairofontslant;
+extern zend_class_entry *cairo_ce_cairofontweight;
+extern zend_class_entry *cairo_ce_cairotoyfontface;
 
 extern zend_object_value cairo_surface_object_new(zend_class_entry *ce TSRMLS_DC);
 extern cairo_status_t php_cairo_read_func(void *closure, const unsigned char *data, unsigned int length);
 extern cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, unsigned int length);
+
+extern zend_object_value cairo_font_face_object_new(zend_class_entry *ce TSRMLS_DC);
 
 /* Exported functions for PHP Cairo API */
 PHP_CAIRO_API extern void php_cairo_throw_exception(cairo_status_t status TSRMLS_DC);

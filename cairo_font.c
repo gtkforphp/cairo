@@ -36,6 +36,12 @@ zend_class_entry *cairo_ce_cairotoyfontface;
 /* Toy font face support */
 #endif
 
+/* {{{ cairo_toy_font_face_methods */
+const zend_function_entry cairo_toy_font_face_methods[] = {
+	{ NULL, NULL, NULL }
+};
+/* }}} */
+
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo_font)
 {
@@ -45,8 +51,8 @@ PHP_MINIT_FUNCTION(cairo_font)
 
 	
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
-	INIT_CLASS_ENTRY(ce, "CairoToyFontFace", cairo_toy_font_face_methods);
-	cairo_ce_cairotoyfontface = zend_register_internal_class_ex(&ce, cairo_ce_cairofontface, "CairoFontFace" TSRMLS_CC);
+	INIT_CLASS_ENTRY(toyfont_ce, "CairoToyFontFace", cairo_toy_font_face_methods);
+	cairo_ce_cairotoyfontface = zend_register_internal_class_ex(&toyfont_ce, cairo_ce_cairofontface, "CairoFontFace" TSRMLS_CC);
 	cairo_ce_cairotoyfontface->create_object = cairo_font_face_object_new;
 #endif
 
@@ -55,7 +61,7 @@ PHP_MINIT_FUNCTION(cairo_font)
     cairo_ce_cairofontslant->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL_CLASS;
 
     #define REGISTER_CAIRO_FONTSLANT_LONG_CONST(const_name, value) \
-    zend_declare_class_constant_long(cairo_ce_fontslant, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC); \
+    zend_declare_class_constant_long(cairo_ce_cairofontslant, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC); \
     REGISTER_LONG_CONSTANT(#value,  value,  CONST_CS | CONST_PERSISTENT);
 
     REGISTER_CAIRO_FONTSLANT_LONG_CONST("NORMAL", CAIRO_FONT_SLANT_NORMAL);
