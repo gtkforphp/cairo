@@ -12,8 +12,9 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Author: Akshat Gupta <g.akshat@gmail.com>                            |
-  |         Elizabeth Smith <auroraeosrose@php.net>                      |
+  | Author: Elizabeth Smith <auroraeosrose@php.net>                      |
+  |         Michael Maclean <mgdm@php.net>                               |
+  |         Akshat Gupta <g.akshat@gmail.com>                            |
   +----------------------------------------------------------------------+
 */
 
@@ -24,6 +25,7 @@
 #include <php.h>
 #include <cairo.h>
 
+/* Cairo object stuff */
 typedef struct _stream_closure {
 	php_stream *stream;
     zend_bool owned_stream;
@@ -31,6 +33,11 @@ typedef struct _stream_closure {
 	TSRMLS_D;
 #endif
 } stream_closure;
+
+typedef struct _cairo_glyph_object {
+	zend_object std;
+	cairo_glyph_t *glyph;
+} cairo_glyph_object;
 
 typedef struct _cairo_context_object {
 	zend_object std;
@@ -52,7 +59,6 @@ typedef struct _cairo_surface_object {
 	cairo_surface_t *surface;
 	char * buffer;
 	stream_closure *closure;
-	stream_closure *writer;
 } cairo_surface_object;
 
 typedef struct _cairo_matrix_object {
@@ -65,38 +71,40 @@ typedef struct _cairo_path_object {
 	cairo_path_t *path;
 } cairo_path_object;
 
-typedef struct _cairo_fontface_object {
+typedef struct _cairo_scaled_font_object {
+	zend_object std;
+	zval *font_face;
+	zval *font_options;
+	zval *matrix;
+	zval *ctm;
+	cairo_scaled_font_t *scaled_font;
+} cairo_scaled_font_object;
+
+typedef struct _cairo_font_face_object {
 	zend_object std;
 	cairo_font_face_t *font_face;
-} cairo_fontface_object;
+} cairo_font_face_object;
 
-typedef struct _cairo_fontoptions_object {
+typedef struct _cairo_font_options_object {
 	zend_object std;
 	cairo_font_options_t *font_options;
-} cairo_fontoptions_object;
+} cairo_font_options_object;
 
-typedef struct _cairo_scaledfont_object {
-	zend_object std;
-	cairo_scaled_font_t *scaledfont;
-} cairo_scaledfont_object;
 
-extern void php_cairo_throw_exception(cairo_status_t status TSRMLS_DC);
-extern void php_cairo_trigger_error(cairo_status_t status TSRMLS_DC);
 
-extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface TSRMLS_DC);
-extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern TSRMLS_DC);
-extern zend_class_entry* php_cairo_get_context_ce();
-extern zend_class_entry* php_cairo_get_fontface_ce();
-extern zend_class_entry* php_cairo_get_fontoptions_ce();
-extern zend_class_entry* php_cairo_get_path_ce();
+/* Exported functions for PHP Cairo API */
+PHP_CAIRO_API extern void php_cairo_throw_exception(cairo_status_t status TSRMLS_DC);
+PHP_CAIRO_API extern void php_cairo_trigger_error(cairo_status_t status TSRMLS_DC);
+PHP_CAIRO_API extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface TSRMLS_DC);
+PHP_CAIRO_API extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern TSRMLS_DC);
+PHP_CAIRO_API extern zend_class_entry* php_cairo_get_context_ce();
+PHP_CAIRO_API extern zend_class_entry* php_cairo_get_fontface_ce();
+PHP_CAIRO_API extern zend_class_entry* php_cairo_get_fontoptions_ce();
+PHP_CAIRO_API extern zend_class_entry* php_cairo_get_path_ce();
 
-extern zend_class_entry* get_CairoPath_ce_ptr();
-extern zend_class_entry* get_CairoMatrix_ce_ptr();
-extern zend_class_entry* get_CairoScaledFont_ce_ptr();
-
-/* Wrapped internal cairo functionally to avoid having to link against cairo too */
-extern cairo_font_options_t* php_cairo_font_options_copy(const cairo_font_options_t *); 
-extern cairo_t * php_cairo_context_reference(cairo_t *context);
+/* Wrapped internal cairo functionality to avoid having to link against cairo lib as well as this extension */
+PHP_CAIRO_API extern cairo_font_options_t* php_cairo_font_options_copy(const cairo_font_options_t *);
+PHP_CAIRO_API extern cairo_t * php_cairo_context_reference(cairo_t *context);
 
 /* Helpers to make fetching internal objects work right with extended classes */
 static inline cairo_context_object* cairo_context_object_get(zval *zobj TSRMLS_DC)
@@ -108,10 +116,64 @@ static inline cairo_context_object* cairo_context_object_get(zval *zobj TSRMLS_D
     return pobj;
 }
 
-static inline cairo_fontoptions_object* cairo_fontoptions_object_get(zval *zobj TSRMLS_DC)
+static inline cairo_path_object* cairo_path_object_get(zval *zobj TSRMLS_DC)
 {
-    cairo_fontoptions_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
-    if (pobj->fontoptions == NULL) {
+    cairo_path_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (pobj->path == NULL) {
+		php_error(E_ERROR, "Internal path object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
+    }
+    return pobj;
+}
+
+static inline cairo_pattern_object* cairo_pattern_object_get(zval *zobj TSRMLS_DC)
+{
+    cairo_pattern_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (pobj->pattern == NULL) {
+        php_error(E_ERROR, "Internal pattern object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
+    }
+    return pobj;
+}
+
+static inline cairo_matrix_object* cairo_matrix_object_get(zval *zobj TSRMLS_DC)
+{
+    cairo_matrix_object *mobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (mobj->matrix == NULL) {
+        php_error(E_ERROR, "Internal matrix object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
+    }
+    return mobj;
+}
+
+static inline cairo_surface_object* cairo_surface_object_get(zval *zobj TSRMLS_DC)
+{
+    cairo_surface_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (pobj->surface == NULL) {
+        php_error(E_ERROR, "Internal surface object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
+    }
+    return pobj;
+}
+
+static inline cairo_font_face_object* cairo_font_face_object_get(zval *zobj TSRMLS_DC)
+{
+    cairo_font_face_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (pobj->font_face == NULL) {
+        php_error(E_ERROR, "Internal font face object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
+    }
+    return pobj;
+}
+
+static inline cairo_scaled_font_object* cairo_scaled_font_object_get(zval *zobj TSRMLS_DC)
+{
+    cairo_scaled_font_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (pobj->scaled_font == NULL) {
+        php_error(E_ERROR, "Internal scaled font object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
+    }
+    return pobj;
+}
+
+static inline cairo_font_options_object* cairo_font_options_object_get(zval *zobj TSRMLS_DC)
+{
+    cairo_font_options_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (pobj->font_options == NULL) {
         php_error(E_ERROR, "Internal font options object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
     }
     return pobj;
