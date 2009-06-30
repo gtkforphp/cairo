@@ -116,6 +116,8 @@ typedef struct _cairo_scaled_font_object {
 	zend_object std;
 	zval *font_face;
 	zval *font_options;
+	zval *matrix;
+	zval *ctm;
 	cairo_scaled_font_t *scaled_font;
 } cairo_scaled_font_object;
 
@@ -140,6 +142,7 @@ PHP_MINIT_FUNCTION(cairo_context);
 PHP_MINIT_FUNCTION(cairo_path);
 PHP_MINIT_FUNCTION(cairo_font_options);
 PHP_MINIT_FUNCTION(cairo_font_face);
+PHP_MINIT_FUNCTION(cairo_scaled_font);
 PHP_MINIT_FUNCTION(cairo_font);
 PHP_MINIT_FUNCTION(cairo_pattern);
 PHP_MINIT_FUNCTION(cairo_surface);

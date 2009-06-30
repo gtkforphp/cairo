@@ -372,6 +372,8 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO(cairo_font_face_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, fontface, CairoFontFace, 0)
 ZEND_END_ARG_INFO()
+
+/* Scaled Font functions */
 	
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 /* Toy Font Face functions */
@@ -1056,6 +1058,7 @@ PHP_MINIT_FUNCTION(cairo)
 	PHP_MINIT(cairo_path)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_font_options)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_font_face)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_scaled_font)(INIT_FUNC_ARGS_PASSTHRU);
 
 	PHP_MINIT(cairo_font)(INIT_FUNC_ARGS_PASSTHRU);
 #ifdef CAIRO_HAS_FT_FONT
