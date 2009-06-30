@@ -32,12 +32,130 @@ zend_class_entry *cairo_ce_cairofontslant;
 zend_class_entry *cairo_ce_cairofontweight;
 zend_class_entry *cairo_ce_cairotoyfontface;
 
+ZEND_BEGIN_ARG_INFO_EX(CairoToyFontFace___construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, family)
+	ZEND_ARG_INFO(0, slant)
+	ZEND_ARG_INFO(0, weight)
+ZEND_END_ARG_INFO()
+
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 /* Toy font face support */
+
+/* {{{ proto void cairo_toy_font_face_create(string family, long slant, long weight)
+       Creates a font face from a triplet of family, slant, and weight. These font 
+	   faces are used in implementation of the the "toy" font API. 
+*/
+PHP_FUNCTION(cairo_toy_font_face_create)
+{
+	const char *family;
+	long family_len, slant, weight;
+	cairo_font_face_object *fontface_object;
+
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sll", 
+				&family, &family_len, 
+				&slant, &weight) == FAILURE) {
+		return;
+	}
+
+	object_init_ex(return_value, cairo_ce_cairotoyfontface);
+	fontface_object = (cairo_font_face_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	fontface_object->font_face = cairo_toy_font_face_create(family, slant, weight);
+	php_cairo_trigger_error(cairo_font_face_status(fontface_object->font_face) TSRMLS_CC);
+}
+
+/* {{{ proto void __construct(string family, long slant, long weight)
+       Creates a font face from a triplet of family, slant, and weight. These font 
+	   faces are used in implementation of the the "toy" font API. 
+*/
+PHP_METHOD(CairoToyFontFace, __construct)
+{
+	const char *family;
+	long family_len, slant = CAIRO_FONT_SLANT_NORMAL, weight = CAIRO_FONT_WEIGHT_NORMAL;
+	cairo_font_face_object *fontface_object;
+
+	PHP_CAIRO_ERROR_HANDLING(TRUE)
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", 
+				&family, &family_len, 
+				&slant, &weight) == FAILURE) {
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+
+	fontface_object = (cairo_font_face_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	fontface_object->font_face = cairo_toy_font_face_create(family, slant, weight);
+	php_cairo_throw_exception(cairo_font_face_status(fontface_object->font_face) TSRMLS_CC);
+}
+
+/* {{{ proto string cairo_toy_font_face_get_family(CairoToyFontFace object)
+ 	   proto string CairoToyFontFace->getFamily()
+	   Gets the family name of a toy font. */
+PHP_FUNCTION(cairo_toy_font_face_get_family)
+{
+	zval *toy_font_face_zval = NULL;
+	cairo_font_face_object *font_face_object;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &toy_font_face_zval, cairo_ce_cairotoyfontface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	font_face_object = (cairo_font_face_object *) cairo_font_face_object_get(toy_font_face_zval TSRMLS_CC);
+	RETURN_STRING(cairo_toy_font_face_get_family(font_face_object->font_face));
+}
+/* }}} */
+
+/* {{{ proto long cairo_toy_font_face_get_slant(CairoToyFontFace object)
+ 	   proto long CairoToyFontFace->getSlant()
+	   Gets the slant of a toy font. */
+PHP_FUNCTION(cairo_toy_font_face_get_slant)
+{
+	zval *toy_font_face_zval = NULL;
+	cairo_font_face_object *font_face_object;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &toy_font_face_zval, cairo_ce_cairotoyfontface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	font_face_object = (cairo_font_face_object *) cairo_font_face_object_get(toy_font_face_zval TSRMLS_CC);
+	RETURN_LONG(cairo_toy_font_face_get_slant(font_face_object->font_face));
+}
+/* }}} */
+
+/* {{{ proto long cairo_toy_font_face_get_weight(CairoToyFontFace object)
+ 	   proto long CairoToyFontFace->getWeight()
+	   Gets the weight of a toy font. */
+PHP_FUNCTION(cairo_toy_font_face_get_weight)
+{
+	zval *toy_font_face_zval = NULL;
+	cairo_font_face_object *font_face_object;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &toy_font_face_zval, cairo_ce_cairotoyfontface) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	font_face_object = (cairo_font_face_object *) cairo_font_face_object_get(toy_font_face_zval TSRMLS_CC);
+	RETURN_LONG(cairo_toy_font_face_get_weight(font_face_object->font_face));
+}
+/* }}} */
+
 #endif
 
 /* {{{ cairo_toy_font_face_methods */
 const zend_function_entry cairo_toy_font_face_methods[] = {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+	PHP_ME(CairoToyFontFace, __construct, CairoContext___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME_MAPPING(getFamily, cairo_toy_font_face_get_family, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING(getSlant, cairo_toy_font_face_get_slant, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING(getWeight, cairo_toy_font_face_get_weight, NULL, ZEND_ACC_PUBLIC)
+#endif
 	{ NULL, NULL, NULL }
 };
 /* }}} */

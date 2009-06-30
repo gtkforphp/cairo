@@ -372,6 +372,17 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO(cairo_font_face_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, fontface, CairoFontFace, 0)
 ZEND_END_ARG_INFO()
+	
+/* Toy Font Face functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_toy_font_face_create_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, family)
+	ZEND_ARG_INFO(0, slant)
+	ZEND_ARG_INFO(0, weight)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_toy_font_face_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, fontface, CairoToyFontFace, 0)
+ZEND_END_ARG_INFO()
 
 /* Surface Functions */
 ZEND_BEGIN_ARG_INFO(cairo_surface_args, ZEND_SEND_BY_VAL)
@@ -888,6 +899,12 @@ static const function_entry cairo_functions[] = {
 	/* Font Face Functions */
 	PHP_FE(cairo_font_face_status, cairo_font_face_args)
 	PHP_FE(cairo_font_face_get_type, cairo_font_face_args)
+
+	/* Toy font face functions */
+	PHP_FE(cairo_toy_font_face_create, cairo_toy_font_face_create_args)
+	PHP_FE(cairo_toy_font_face_get_family, cairo_toy_font_face_args)
+	PHP_FE(cairo_toy_font_face_get_weight, cairo_toy_font_face_args)
+	PHP_FE(cairo_toy_font_face_get_slant, cairo_toy_font_face_args)
 
 	/* Generic Surface Functions */
 	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)

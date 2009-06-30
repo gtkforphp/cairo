@@ -303,6 +303,12 @@ PHP_FUNCTION(cairo_font_options_get_hint_metrics);
 PHP_FUNCTION(cairo_font_face_status);
 PHP_FUNCTION(cairo_font_face_get_type);
 
+/* Toy Font Face Functions */
+PHP_FUNCTION(cairo_toy_font_face_create);
+PHP_FUNCTION(cairo_toy_font_face_get_family);
+PHP_FUNCTION(cairo_toy_font_face_get_weight);
+PHP_FUNCTION(cairo_toy_font_face_get_slant);
+
 /* Generic Surface Functions */
 PHP_FUNCTION(cairo_surface_create_similar);
 PHP_FUNCTION(cairo_surface_status);
