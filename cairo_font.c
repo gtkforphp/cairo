@@ -102,7 +102,7 @@ PHP_FUNCTION(cairo_toy_font_face_get_family)
 	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_face_object = (cairo_font_face_object *) cairo_font_face_object_get(toy_font_face_zval TSRMLS_CC);
-	RETURN_STRING(cairo_toy_font_face_get_family(font_face_object->font_face));
+	RETURN_STRING(cairo_toy_font_face_get_family(font_face_object->font_face), 1);
 }
 /* }}} */
 
@@ -151,7 +151,7 @@ PHP_FUNCTION(cairo_toy_font_face_get_weight)
 /* {{{ cairo_toy_font_face_methods */
 const zend_function_entry cairo_toy_font_face_methods[] = {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
-	PHP_ME(CairoToyFontFace, __construct, CairoContext___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME(CairoToyFontFace, __construct, CairoToyFontFace___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME_MAPPING(getFamily, cairo_toy_font_face_get_family, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getSlant, cairo_toy_font_face_get_slant, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getWeight, cairo_toy_font_face_get_weight, NULL, ZEND_ACC_PUBLIC)
