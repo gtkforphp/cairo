@@ -507,8 +507,7 @@ static zend_object_value cairo_matrix_object_new(zend_class_entry *ce TSRMLS_DC)
 	cairo_matrix_object *matrix;
 	zval *temp;
 
-	matrix = emalloc(sizeof(cairo_matrix_object));
-	memset(matrix,0,sizeof(cairo_matrix_object));
+	matrix = ecalloc(1, sizeof(cairo_matrix_object));
 
 	matrix->matrix = NULL;
 	matrix->std.ce = ce;

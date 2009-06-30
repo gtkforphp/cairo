@@ -915,8 +915,7 @@ static zend_object_value cairo_pattern_object_new(zend_class_entry *ce TSRMLS_DC
 	cairo_pattern_object *pattern;
 	zval *temp;
 
-	pattern = emalloc(sizeof(cairo_pattern_object));
-	memset(pattern,0,sizeof(cairo_pattern_object));
+	pattern = ecalloc(1, sizeof(cairo_pattern_object));
 
 	pattern->std.ce = ce;
 

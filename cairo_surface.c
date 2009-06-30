@@ -555,8 +555,7 @@ zend_object_value cairo_surface_object_new(zend_class_entry *ce TSRMLS_DC)
 	cairo_surface_object *surface;
 	zval *temp;
 
-	surface = emalloc(sizeof(cairo_surface_object));
-	memset(surface,0,sizeof(cairo_surface_object));
+	surface = ecalloc(1, sizeof(cairo_surface_object));
 
 	surface->std.ce = ce;
 	surface->buffer = NULL;

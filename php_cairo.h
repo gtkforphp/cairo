@@ -112,6 +112,13 @@ typedef struct _cairo_path_object {
 	cairo_path_t *path;
 } cairo_path_object;
 
+typedef struct _cairo_scaled_font_object {
+	zend_object std;
+	zval *font_face;
+	zval *font_options;
+	cairo_scaled_font_t *scaled_font;
+} cairo_scaled_font_object;
+
 typedef struct _cairo_font_face_object {
 	zend_object std;
 	cairo_font_face_t *font_face;
@@ -516,6 +523,15 @@ static inline cairo_font_face_object* cairo_font_face_object_get(zval *zobj TSRM
     cairo_font_face_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
     if (pobj->font_face == NULL) {
         php_error(E_ERROR, "Internal font face object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
+    }
+    return pobj;
+}
+
+static inline cairo_scaled_font_object* cairo_scaled_font_object_get(zval *zobj TSRMLS_DC)
+{
+    cairo_scaled_font_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (pobj->scaled_font == NULL) {
+        php_error(E_ERROR, "Internal scaled font object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
     }
     return pobj;
 }
