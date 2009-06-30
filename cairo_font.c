@@ -47,11 +47,12 @@ ZEND_END_ARG_INFO()
 */
 PHP_FUNCTION(cairo_toy_font_face_create)
 {
-	const char *family;
-	long family_len, slant, weight;
+	char *family;
+	int family_len;
+   	long slant = CAIRO_FONT_SLANT_NORMAL, weight = CAIRO_FONT_WEIGHT_NORMAL;
 	cairo_font_face_object *fontface_object;
 
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sll", 
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", 
 				&family, &family_len, 
 				&slant, &weight) == FAILURE) {
 		return;
@@ -59,7 +60,7 @@ PHP_FUNCTION(cairo_toy_font_face_create)
 
 	object_init_ex(return_value, cairo_ce_cairotoyfontface);
 	fontface_object = (cairo_font_face_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	fontface_object->font_face = cairo_toy_font_face_create(family, slant, weight);
+	fontface_object->font_face = cairo_toy_font_face_create((const char *)family, slant, weight);
 	php_cairo_trigger_error(cairo_font_face_status(fontface_object->font_face) TSRMLS_CC);
 }
 
@@ -69,7 +70,7 @@ PHP_FUNCTION(cairo_toy_font_face_create)
 */
 PHP_METHOD(CairoToyFontFace, __construct)
 {
-	const char *family;
+	char *family;
 	long family_len, slant = CAIRO_FONT_SLANT_NORMAL, weight = CAIRO_FONT_WEIGHT_NORMAL;
 	cairo_font_face_object *fontface_object;
 
@@ -82,7 +83,7 @@ PHP_METHOD(CairoToyFontFace, __construct)
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	fontface_object = (cairo_font_face_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	fontface_object->font_face = cairo_toy_font_face_create(family, slant, weight);
+	fontface_object->font_face = cairo_toy_font_face_create((const char *)family, slant, weight);
 	php_cairo_throw_exception(cairo_font_face_status(fontface_object->font_face) TSRMLS_CC);
 }
 

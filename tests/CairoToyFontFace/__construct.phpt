@@ -23,11 +23,24 @@ $c = new CairoToyFontFace("sans-serif", null, CairoFontWeight::NORMAL);
 var_dump($c);
 
 // We shouldn't accept 0 args
-$c = new CairoToyFontFace();
+try {
+    $c = new CairoToyFontFace();
+} catch (CairoException $e) {
+    var_dump($e->getMessage());
+}
 var_dump($c);
 
 // Test with 1 param
 $c = new CairoToyFontFace("NotARealFont");
+var_dump($c);
+
+// Test with a silly param
+$o = array();
+try {
+    $c = new CairoToyFontFace($o);
+} catch (CairoException $e) {
+    var_dump($e->getMessage());
+}
 var_dump($c);
 ?>
 --EXPECTF--
@@ -39,9 +52,11 @@ object(CairoToyFontFace)#%d (0) {
 }
 object(CairoToyFontFace)#%d (0) {
 }
-
-Fatal error: Uncaught exception 'CairoException' with message 'CairoToyFontFace::__construct() expects at least 1 parameter, 0 given' in %s:%d
-Stack trace:
-#0 %s(19): CairoToyFontFace->__construct()
-#1 {main}
-  thrown in %s on line %d
+string(69) "CairoToyFontFace::__construct() expects at least 1 parameter, 0 given"
+object(CairoToyFontFace)#2 (0) {
+}
+object(CairoToyFontFace)#1 (0) {
+}
+string(77) "CairoToyFontFace::__construct() expects parameter 1 to be string, array given"
+object(CairoToyFontFace)#1 (0) {
+}
