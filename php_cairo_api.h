@@ -93,18 +93,18 @@ typedef struct _cairo_font_options_object {
 
 
 /* Exported functions for PHP Cairo API */
-PHP_CAIRO_API extern void php_cairo_throw_exception(cairo_status_t status TSRMLS_DC);
-PHP_CAIRO_API extern void php_cairo_trigger_error(cairo_status_t status TSRMLS_DC);
-PHP_CAIRO_API extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface TSRMLS_DC);
-PHP_CAIRO_API extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern TSRMLS_DC);
-PHP_CAIRO_API extern zend_class_entry* php_cairo_get_context_ce();
-PHP_CAIRO_API extern zend_class_entry* php_cairo_get_fontface_ce();
-PHP_CAIRO_API extern zend_class_entry* php_cairo_get_fontoptions_ce();
-PHP_CAIRO_API extern zend_class_entry* php_cairo_get_path_ce();
+extern void php_cairo_throw_exception(cairo_status_t status TSRMLS_DC);
+extern void php_cairo_trigger_error(cairo_status_t status TSRMLS_DC);
+extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface TSRMLS_DC);
+extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern TSRMLS_DC);
+extern zend_class_entry* php_cairo_get_context_ce();
+extern zend_class_entry* php_cairo_get_fontface_ce();
+extern zend_class_entry* php_cairo_get_fontoptions_ce();
+extern zend_class_entry* php_cairo_get_path_ce();
 
 /* Wrapped internal cairo functionality to avoid having to link against cairo lib as well as this extension */
-PHP_CAIRO_API extern cairo_font_options_t* php_cairo_font_options_copy(const cairo_font_options_t *);
-PHP_CAIRO_API extern cairo_t * php_cairo_context_reference(cairo_t *context);
+extern cairo_font_options_t* php_cairo_font_options_copy(const cairo_font_options_t *);
+extern cairo_t * php_cairo_context_reference(cairo_t *context);
 
 /* Helpers to make fetching internal objects work right with extended classes */
 static inline cairo_context_object* cairo_context_object_get(zval *zobj TSRMLS_DC)

@@ -2077,7 +2077,7 @@ PHP_FUNCTION(cairo_glyph_path)
 {
 	zval *context_zval = NULL;
 	cairo_context_object *context_object;
-	const cairo_glyph_t *glyphs;
+	const cairo_glyph_t *glyphs = NULL;
 	long num_glyphs = 0;
 
 	zval * php_glyphs = NULL, **ppzval;

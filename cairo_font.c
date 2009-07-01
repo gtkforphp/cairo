@@ -78,6 +78,7 @@ PHP_METHOD(CairoToyFontFace, __construct)
 	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", 
 				&family, &family_len, 
 				&slant, &weight) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
