@@ -1,5 +1,5 @@
 --TEST--
-Cairo->setDash() method
+CairoContext->setDash() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -74,6 +74,6 @@ array(2) {
 }
 CairoContext::setDash() expects at least 1 parameter, 0 given
 CairoContext::setDash() expects at most 2 parameters, 3 given
-Argument 1 passed to CairoContext::setDash() must be an array, integer given
+CairoContext::setDash() expects parameter 1 to be array, integer given
 invalid value for a dash setting
 CairoContext::setDash() expects parameter 2 to be double, string given

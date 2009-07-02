@@ -81,6 +81,7 @@ PHP_FUNCTION(cairo_font_face_get_type)
 
 /* {{{ cairo_font_face_methods[] */
 const zend_function_entry cairo_font_face_methods[] = {
+	PHP_ME(CairoFontFace, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME_MAPPING(status, cairo_font_face_status, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getType, cairo_font_face_get_type, NULL, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}

@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->newSubPath() method
+CairoContext->closePath() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
