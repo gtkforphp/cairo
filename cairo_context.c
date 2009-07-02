@@ -2265,6 +2265,47 @@ PHP_FUNCTION(cairo_select_font_face)
 }
 /* }}} */
 
+/* {{{ proto CairoFontFace object cairo_get_font_face(CairoContext object)
+       proto CairoFontFace object CairoContext->getFontFace()
+       Retrieves the font face selected by the context.  If no font face has been selected or set then the default face
+	   will be returned.  */
+PHP_FUNCTION(cairo_get_font_face)
+{
+	zval *context_zval = NULL;
+	cairo_context_object *context_object;
+	cairo_font_face_object *font_face_object;
+	cairo_font_face_t *font_face;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &context_zval, cairo_ce_cairocontext) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	context_object = (cairo_context_object *)cairo_context_object_get(context_zval TSRMLS_CC);
+
+	/* Grab the font face properly */
+	font_face = cairo_get_font_face(context_object->context);
+	PHP_CAIRO_ERROR(cairo_status(context_object->context));
+
+	/* If we have a font face object stored, grab that zval to use */
+	if(context_object->font_face) {
+		zval_dtor(return_value);
+		*return_value = *context_object->font_face;
+		zval_copy_ctor(return_value);
+		Z_SET_REFCOUNT_P(return_value, 1);
+	/* Otherwise we spawn a new object */
+	} else {
+		object_init_ex(return_value, cairo_ce_cairotoyfontface);	
+	}
+
+	font_face_object = (cairo_font_face_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	font_face_object->font_face = font_face;
+	cairo_font_face_reference(font_face_object->font_face);
+}
+/* }}} */
+
 /* {{{ proto void cairo_set_font_size(CairoContext context, double size)
   	   proto void CairoContext->selectFontFace(double size)
 	   Sets the current font matrix to a scale by a factor of size, replacing any font matrix previously 
@@ -2446,6 +2487,7 @@ const zend_function_entry cairo_context_methods[] = {
 	PHP_ME_MAPPING(pathExtents, cairo_path_extents, NULL, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME_MAPPING(selectFontFace, cairo_select_font_face, CairoContext_selectFontFace_args, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING(getFontFace, cairo_get_font_face, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(setFontSize, cairo_set_font_size, CairoContext_setFontSize_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(textExtents, cairo_text_extents, CairoContext_text_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(showText, cairo_show_text, CairoContext_text_args, ZEND_ACC_PUBLIC)
@@ -2471,6 +2513,10 @@ static void cairo_context_object_destroy(void *object TSRMLS_DC)
 		Z_DELREF_P(context->pattern);
 		context->pattern = NULL;
 	}
+	if(context->font_face) {
+		Z_DELREF_P(context->font_face);
+		context->font_face = NULL;
+	}
 
 	if(context->context){
 		cairo_destroy(context->context);
@@ -2490,6 +2536,7 @@ static zend_object_value cairo_context_object_new(zend_class_entry *ce TSRMLS_DC
 	context->surface = NULL;
 	context->matrix = NULL;
 	context->pattern = NULL;
+	context->font_face = NULL;
 
 	ALLOC_HASHTABLE(context->std.properties);
 	zend_hash_init(context->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);

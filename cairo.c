@@ -374,6 +374,26 @@ ZEND_BEGIN_ARG_INFO(cairo_font_face_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 /* Scaled Font functions */
+ZEND_BEGIN_ARG_INFO(cairo_scaled_font_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, scaledfont, CairoScaledFont, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(cairo_scaled_font_create_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_OBJ_INFO(0, fontface, CairoFontFace, 0)
+	ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+	ZEND_ARG_OBJ_INFO(0, ctm, CairoMatrix, 0)
+	ZEND_ARG_OBJ_INFO(0, fontoptions, CairoFontOptions, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_scaled_font_text_extents_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, scaledfont, CairoScaledFont, 0)
+	ZEND_ARG_INFO(0, text)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_scaled_font_glyph_extents_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, scaledfont, CairoScaledFont, 0)
+	ZEND_ARG_INFO(0, glyphs)
+ZEND_END_ARG_INFO()
 	
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 /* Toy Font Face functions */
@@ -871,19 +891,6 @@ static const function_entry cairo_functions[] = {
 	PHP_FE(cairo_matrix_multiply, cairo_matrix_multiply_args)
 	PHP_FE(cairo_matrix_transform_distance, cairo_matrix_transform_args)
 	PHP_FE(cairo_matrix_transform_point, cairo_matrix_transform_args)
-	
-	/* User Font Functions 
-#ifdef CAIRO_HAS_USER_FONT
-	PHP_FE(cairo_user_font_face_create, cairo_user_font_face_create_args)
-	PHP_FE(cairo_user_font_face_set_init_func, cairo_user_font_face_set_init_func_args)
-	PHP_FE(cairo_user_font_face_get_init_func, cairo_user_font_face_get_init_func_args)
-	PHP_FE(cairo_user_font_face_set_render_glyph_func, cairo_user_font_face_set_render_glyph_func_args)
-	PHP_FE(cairo_user_font_face_get_render_glyph_func, cairo_user_font_face_get_render_glyph_func_args)
-	cairo_user_font_face_set_unicode_to_glyph_func
-	cairo_user_font_face_get_unicode_to_glyph_func
-	cairo_user_font_face_set_text_to_glyphs_func
-	cairo_user_font_face_get_text_to_glyphs_func
-#endif*/
 
 	/* Font Options Functions */
 	PHP_FE(cairo_font_options_create, NULL)
@@ -900,10 +907,6 @@ static const function_entry cairo_functions[] = {
 	PHP_FE(cairo_font_options_set_hint_metrics, cairo_font_options_set_hint_metrics_args)
 	PHP_FE(cairo_font_options_get_hint_metrics, cairo_font_options_args)
 
-	/* Font Face Functions */
-	PHP_FE(cairo_font_face_status, cairo_font_face_args)
-	PHP_FE(cairo_font_face_get_type, cairo_font_face_args)
-
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 	/* Toy font face functions */
 	PHP_FE(cairo_toy_font_face_create, cairo_toy_font_face_create_args)
@@ -911,6 +914,36 @@ static const function_entry cairo_functions[] = {
 	PHP_FE(cairo_toy_font_face_get_weight, cairo_toy_font_face_args)
 	PHP_FE(cairo_toy_font_face_get_slant, cairo_toy_font_face_args)
 #endif
+
+	/* Font Face Functions */
+	PHP_FE(cairo_font_face_status, cairo_font_face_args)
+	PHP_FE(cairo_font_face_get_type, cairo_font_face_args)
+
+	/* Scaled Font Functions */
+	PHP_FE(cairo_scaled_font_create, cairo_scaled_font_create_args)
+	PHP_FE(cairo_scaled_font_status, cairo_scaled_font_args)
+	PHP_FE(cairo_scaled_font_extents, cairo_scaled_font_args)
+	PHP_FE(cairo_scaled_font_text_extents, cairo_scaled_font_text_extents_args)
+	PHP_FE(cairo_scaled_font_glyph_extents, cairo_scaled_font_glyph_extents_args)
+	PHP_FE(cairo_scaled_font_get_font_face, cairo_scaled_font_args)
+	PHP_FE(cairo_scaled_font_get_font_options, cairo_scaled_font_args)
+	PHP_FE(cairo_scaled_font_get_font_matrix, cairo_scaled_font_args)
+	PHP_FE(cairo_scaled_font_get_ctm, cairo_scaled_font_args)
+	PHP_FE(cairo_scaled_font_get_scale_matrix, cairo_scaled_font_args)
+	PHP_FE(cairo_scaled_font_get_type, cairo_scaled_font_args)
+
+	/* User Font Functions 
+#ifdef CAIRO_HAS_USER_FONT
+	PHP_FE(cairo_user_font_face_create, cairo_user_font_face_create_args)
+	PHP_FE(cairo_user_font_face_set_init_func, cairo_user_font_face_set_init_func_args)
+	PHP_FE(cairo_user_font_face_get_init_func, cairo_user_font_face_get_init_func_args)
+	PHP_FE(cairo_user_font_face_set_render_glyph_func, cairo_user_font_face_set_render_glyph_func_args)
+	PHP_FE(cairo_user_font_face_get_render_glyph_func, cairo_user_font_face_get_render_glyph_func_args)
+	cairo_user_font_face_set_unicode_to_glyph_func
+	cairo_user_font_face_get_unicode_to_glyph_func
+	cairo_user_font_face_set_text_to_glyphs_func
+	cairo_user_font_face_get_text_to_glyphs_func
+#endif*/
 
 	/* Generic Surface Functions */
 	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)

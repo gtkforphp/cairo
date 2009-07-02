@@ -85,6 +85,7 @@ typedef struct _cairo_context_object {
 	zval *surface;
 	zval *matrix;
 	zval *pattern;
+	zval *font_face;
 	cairo_t *context;
 } cairo_context_object;
 
@@ -318,6 +319,19 @@ PHP_FUNCTION(cairo_toy_font_face_create);
 PHP_FUNCTION(cairo_toy_font_face_get_family);
 PHP_FUNCTION(cairo_toy_font_face_get_weight);
 PHP_FUNCTION(cairo_toy_font_face_get_slant);
+
+/* Scaled Font Functiosn */
+PHP_FUNCTION(cairo_scaled_font_create);
+PHP_FUNCTION(cairo_scaled_font_status);
+PHP_FUNCTION(cairo_scaled_font_extents);
+PHP_FUNCTION(cairo_scaled_font_text_extents);
+PHP_FUNCTION(cairo_scaled_font_glyph_extents);
+PHP_FUNCTION(cairo_scaled_font_get_font_face);
+PHP_FUNCTION(cairo_scaled_font_get_font_options);
+PHP_FUNCTION(cairo_scaled_font_get_font_matrix);
+PHP_FUNCTION(cairo_scaled_font_get_ctm);
+PHP_FUNCTION(cairo_scaled_font_get_scale_matrix);
+PHP_FUNCTION(cairo_scaled_font_get_type);
 
 /* Generic Surface Functions */
 PHP_FUNCTION(cairo_surface_create_similar);
