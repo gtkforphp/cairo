@@ -86,6 +86,9 @@ typedef struct _cairo_context_object {
 	zval *matrix;
 	zval *pattern;
 	zval *font_face;
+	zval *font_matrix;
+	zval *font_options;
+	zval *scaled_font;
 	cairo_t *context;
 } cairo_context_object;
 
@@ -430,6 +433,7 @@ extern zend_class_entry *cairo_ce_cairofonttype;
 extern zend_class_entry *cairo_ce_cairofontslant;
 extern zend_class_entry *cairo_ce_cairofontweight;
 extern zend_class_entry *cairo_ce_cairotoyfontface;
+extern zend_class_entry *cairo_ce_cairoscaledfont;
 
 extern zend_object_value cairo_surface_object_new(zend_class_entry *ce TSRMLS_DC);
 extern cairo_status_t php_cairo_read_func(void *closure, const unsigned char *data, unsigned int length);

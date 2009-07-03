@@ -98,8 +98,29 @@ $cairo_hint_metrics_constants = array(
 	'CAIRO_HINT_METRICS_ON',
 );
 
+$cairo_font_type_constants = array(
+	'CAIRO_FONT_TYPE_TOY',
+	'CAIRO_FONT_TYPE_FT',
+	'CAIRO_FONT_TYPE_WIN32',
+	);
 
+if(cairo_version() > 10600) {
+    $cairo_font_type_constants[] = 'CAIRO_FONT_TYPE_QUARTZ';
+}
+if(cairo_version() > 10800) {
+    $cairo_font_type_constants[] = 'CAIRO_FONT_TYPE_USER';
+}
 
+$cairo_font_slant_constants = array(
+	'CAIRO_FONT_SLANT_NORMAL',
+	'CAIRO_FONT_SLANT_ITALIC',
+	'CAIRO_FONT_SLANT_OBLIQUE',
+	);
+
+$cairo_font_weight_constants = array(
+	'CAIRO_FONT_WEIGHT_NORMAL',
+	'CAIRO_FONT_WEIGHT_BOLD',
+	);
 
 $cairo_surface_type_constants = array(
 	'CAIRO_SURFACE_TYPE_IMAGE',
@@ -152,6 +173,9 @@ $constants = array_merge(
 				$cairo_content_constants,
 				$cairo_hint_style_constants,
 				$cairo_hint_metrics_constants,
+				$cairo_font_type_constants,
+				$cairo_font_slant_constants,
+				$cairo_font_weight_constants,
 
 				$cairo_surface_type_constants,
 				$cairo_image_format_constants,
