@@ -29,5 +29,5 @@ object(CairoToyFontFace)#%d (0) {
 }
 object(CairoScaledFont)#%d (0) {
 }
-int(2)
+int(%d)
 CairoScaledFont::getType() expects exactly 0 parameters, 1 given

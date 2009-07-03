@@ -1,5 +1,5 @@
 --TEST--
-cairo_set_source_rgba function
+cairo_set_source_rgba() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

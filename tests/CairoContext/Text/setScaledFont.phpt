@@ -22,6 +22,7 @@ $orig_fontface = $fontface;
 $context->setFontFace($orig_fontface);
 
 /* create scaled font with new font face, font options, matrix */
+include(dirname(__FILE__) . '/create_toyfont.inc');
 $matrix1 = new CairoMatrix(1);
 $matrix2 = new CairoMatrix(1,1);
 $fontoptions = new CairoFontOptions();
@@ -33,24 +34,14 @@ $context->setScaledFont($scaled);
 
 /* compare new values to original values */
 var_dump($matrix1 === $orig_matrix);
-var_dump($fonface === $orig_fontface);
+var_dump($fontface === $orig_fontface);
 var_dump($fontoptions === $orig_options);
 
 /* compare matrix, font face, font options, scaled font */
 var_dump($matrix1 === $context->getFontMatrix());
-var_dump($fonface === $context->getFontFace());
+var_dump($fontface === $context->getFontFace());
 var_dump($fontoptions === $context->getFontOptions());
 var_dump($scaled === $context->getScaledFont());
-die;
-
-
-
-
-
-
-
-
-
 
 try {
     $context->setScaledFont();
@@ -80,12 +71,18 @@ object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-object(CairoToyFontFace)#%d (0) {
+object(CairoScaledFont)#%d (0) {
 }
+bool(false)
+bool(false)
+bool(false)
 bool(true)
-object(CairoToyFontFace)#%d (0) {
-}
 bool(true)
-CairoContext::setFontFace() expects exactly 1 parameter, 0 given
-CairoContext::setFontFace() expects exactly 1 parameter, 2 given
-CairoContext::setFontFace() expects parameter 1 to be CairoFontFace, integer given
+bool(true)
+bool(true)
+CairoContext::setScaledFont() expects exactly 1 parameter, 0 given
+CairoContext::setScaledFont() expects exactly 1 parameter, 2 given
+CairoContext::setScaledFont() expects parameter 1 to be CairoScaledFont, integer given
+--XFAIL--
+Issue in Cairo seems to be prematurely freeing memory, causing issues during shutdown with scaled font
+see http://bugs.freedesktop.org/show_bug.cgi?id=19655

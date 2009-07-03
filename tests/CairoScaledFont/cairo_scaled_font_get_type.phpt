@@ -37,7 +37,7 @@ object(CairoToyFontFace)#%d (0) {
 }
 object(CairoScaledFont)#%d (0) {
 }
-int(2)
+int(%d)
 
 Warning: cairo_scaled_font_get_type() expects exactly 1 parameter, 0 given in %s on line %d
 CAUGHT ERROR: Argument 1 passed to cairo_scaled_font_get_type() must be an instance of CairoScaledFont, integer given

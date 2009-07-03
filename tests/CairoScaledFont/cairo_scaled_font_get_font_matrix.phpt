@@ -30,6 +30,8 @@ cairo_scaled_font_get_font_matrix($scaledfont, 1);
 
 // check arg types, should be scaledfont object
 cairo_scaled_font_get_font_matrix(1);
+
+die; // GC issues, bogus memleaks reported without this
 ?>
 --EXPECTF--
 object(CairoToyFontFace)#%d (0) {

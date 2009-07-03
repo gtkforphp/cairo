@@ -48,17 +48,17 @@ object(CairoScaledFont)#%d (0) {
 }
 array(6) {
   ["x_bearing"]=>
-  float(0.00%A)
+  float(%f)
   ["y_bearing"]=>
-  float(-0.72%A)
+  float(%f)
   ["width"]=>
-  float(2.8%A)
+  float(%f)
   ["height"]=>
-  float(0.73%A)
+  float(%f)
   ["x_advance"]=>
-  float(2.83%A)
+  float(%f)
   ["y_advance"]=>
-  float(0%A)
+  float(%f)
 }
 CairoScaledFont::textExtents() expects exactly 1 parameter, 0 given
 CairoScaledFont::textExtents() expects exactly 1 parameter, 2 given

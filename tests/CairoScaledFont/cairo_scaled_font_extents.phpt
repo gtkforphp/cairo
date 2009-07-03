@@ -38,15 +38,15 @@ object(CairoScaledFont)#%d (0) {
 }
 array(5) {
   ["ascent"]=>
-  float(0.90%A)
+  float(%f)
   ["descent"]=>
-  float(0.21%A)
+  float(%f)
   ["height"]=>
-  float(1.14%A)
+  float(%f)
   ["max_x_advance"]=>
-  float(2.66%A)
+  float(%f)
   ["max_y_advance"]=>
-  float(0%A)
+  float(%f)
 }
 
 Warning: cairo_scaled_font_extents() expects exactly 1 parameter, 0 given in %s on line %d

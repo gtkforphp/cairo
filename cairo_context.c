@@ -2307,7 +2307,7 @@ PHP_FUNCTION(cairo_path_extents)
 PHP_FUNCTION(cairo_select_font_face)
 {
 	zval *context_zval = NULL;
-	int slant = CAIRO_FONT_SLANT_NORMAL, weight = CAIRO_FONT_WEIGHT_NORMAL, family_len;
+	long slant = CAIRO_FONT_SLANT_NORMAL, weight = CAIRO_FONT_WEIGHT_NORMAL, family_len;
 	char *family, *cairo_family;
 	cairo_context_object *context_object;
 
@@ -2541,7 +2541,6 @@ PHP_FUNCTION(cairo_get_font_face)
 	zval *context_zval = NULL;
 	cairo_context_object *context_object;
 	cairo_font_face_object *font_face_object;
-	cairo_font_face_t *font_face;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &context_zval, cairo_ce_cairocontext) == FAILURE) {
@@ -2551,10 +2550,6 @@ PHP_FUNCTION(cairo_get_font_face)
 	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	context_object = (cairo_context_object *)cairo_context_object_get(context_zval TSRMLS_CC);
-
-	/* Grab the font face properly */
-	font_face = cairo_get_font_face(context_object->context);
-	PHP_CAIRO_ERROR(cairo_status(context_object->context));
 
 	/* If we have a font face object stored, grab that zval to use */
 	if(context_object->font_face) {
@@ -2568,7 +2563,7 @@ PHP_FUNCTION(cairo_get_font_face)
 	}
 
 	font_face_object = (cairo_font_face_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	font_face_object->font_face = font_face;
+	font_face_object->font_face = cairo_get_font_face(context_object->context);;
 }
 /* }}} */
 
@@ -2593,7 +2588,7 @@ PHP_FUNCTION(cairo_set_scaled_font)
 	cairo_set_scaled_font(context_object->context, scaled_font_object->scaled_font);
 	PHP_CAIRO_ERROR(cairo_status(context_object->context));
 
-	/* If there's already a font face, font matrix, and or font options stored, then we deref and remove them */
+	/* If there's already a font face, font matrix, scaled font, and or font options stored, then we deref and remove them */
 	if(context_object->font_face) {
 		Z_DELREF_P(context_object->font_face);
 		context_object->font_face = NULL;
@@ -2605,6 +2600,10 @@ PHP_FUNCTION(cairo_set_scaled_font)
 	if(context_object->font_options) {
 		Z_DELREF_P(context_object->font_options);
 		context_object->font_options = NULL;
+	}
+	if(context_object->scaled_font) {
+		Z_DELREF_P(context_object->scaled_font);
+		context_object->scaled_font = NULL;
 	}
 
 	/* if the scaled font has a font_face, matrix, or option zvals stored, move them to context as well and ref again */
@@ -2624,7 +2623,7 @@ PHP_FUNCTION(cairo_set_scaled_font)
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->scaled_font = scaled_font_zval;
 	Z_ADDREF_P(scaled_font_zval);
-
+	cairo_scaled_font_reference(scaled_font_object->scaled_font);
 }
 /* }}} */
 
@@ -2660,7 +2659,6 @@ PHP_FUNCTION(cairo_get_scaled_font)
 
 	scaled_font_object = (cairo_scaled_font_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 	scaled_font_object->scaled_font = cairo_get_scaled_font(context_object->context);
-	PHP_CAIRO_ERROR(cairo_status(context_object->context));
 }
 /* }}} */
 

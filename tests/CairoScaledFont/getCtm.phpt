@@ -24,6 +24,8 @@ try {
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
 }
+
+die; // GC issue, bogus memleaks reported without this
 ?>
 --EXPECTF--
 object(CairoToyFontFace)#%d (0) {

@@ -3,7 +3,7 @@ cairo_toy_font_face_create() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!class_exists('CairoToyFontFace')) die('skip - CairoToyFontFace not enabled');
+if(!function_exists('cairo_toy_font_face_create')) die('skip - cairo_toy_font_face_create not available');
 ?>
 --FILE--
 <?php
@@ -45,10 +45,10 @@ object(CairoToyFontFace)#%d (0) {
 object(CairoToyFontFace)#%d (0) {
 }
 
-Warning: cairo_toy_font_face_create() expects at least 1 parameter, 0 given in /home/michael/src/pecl/cairo/tests/CairoFontFace/CairoToyFontFace/cairo_toy_font_face_create.php on line 19
+Warning: cairo_toy_font_face_create() expects at least 1 parameter, 0 given in %s on line %d
 NULL
 object(CairoToyFontFace)#2 (0) {
 }
 
-Warning: cairo_toy_font_face_create() expects parameter 1 to be string, array given in /home/michael/src/pecl/cairo/tests/CairoFontFace/CairoToyFontFace/cairo_toy_font_face_create.php on line 27
+Warning: cairo_toy_font_face_create() expects parameter 1 to be string, array given in %s on line %d
 NULL
