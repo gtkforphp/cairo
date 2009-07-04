@@ -43,6 +43,16 @@ var_dump($fontface === $context->getFontFace());
 var_dump($fontoptions === $context->getFontOptions());
 var_dump($scaled === $context->getScaledFont());
 
+/* create scaled font with new font face, font options, matrix */
+include(dirname(__FILE__) . '/create_toyfont.inc');
+$matrix1 = new CairoMatrix(1);
+$matrix2 = new CairoMatrix(1,1);
+$fontoptions = new CairoFontOptions();
+
+$scaled = new CairoScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
+
+$context->setScaledFont($scaled);
+
 try {
     $context->setScaledFont();
     trigger_error('setScaledFont requires one arg');
@@ -83,6 +93,3 @@ bool(true)
 CairoContext::setScaledFont() expects exactly 1 parameter, 0 given
 CairoContext::setScaledFont() expects exactly 1 parameter, 2 given
 CairoContext::setScaledFont() expects parameter 1 to be CairoScaledFont, integer given
---XFAIL--
-Issue in Cairo seems to be prematurely freeing memory, causing issues during shutdown with scaled font
-see http://bugs.freedesktop.org/show_bug.cgi?id=19655

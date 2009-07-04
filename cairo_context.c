@@ -334,6 +334,11 @@ PHP_FUNCTION(cairo_get_target)
 	
 	/* Get the surface_object and replace the internal surface pointer with what we fetched (should be the same) */
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	/* if there IS a value in surface, destroy it cause we're getting a new one */
+	if (surface_object->surface != NULL) {
+		cairo_surface_destroy(surface_object->surface);
+	}
+	/* Grab the surface properly */
 	surface_object->surface = surface;
 	cairo_surface_reference(surface_object->surface);
 }
@@ -459,8 +464,8 @@ PHP_FUNCTION(cairo_get_group_target)
 
 	object_init_ex(return_value, ce);
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-
-	surface_object->surface = cairo_surface_reference(surface);
+	surface_object->surface = cairo_get_group_target(context_object->context);
+	cairo_surface_reference(surface_object->surface);
 }
 /* }}} */
 
@@ -606,6 +611,10 @@ PHP_FUNCTION(cairo_get_source)
 	
 	/* Get the pattern object and replace the internal pattern pointer with what we fetched (should be the same) */
 	pattern_object = (cairo_pattern_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	/* if there IS a value in pattern, destroy it cause we're getting a new one */
+	if (pattern_object->pattern != NULL) {
+		cairo_pattern_destroy(pattern_object->pattern);
+	}
 	pattern_object->pattern = pattern;
 	cairo_pattern_reference(pattern_object->pattern);
 }
@@ -2563,7 +2572,12 @@ PHP_FUNCTION(cairo_get_font_face)
 	}
 
 	font_face_object = (cairo_font_face_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	font_face_object->font_face = cairo_get_font_face(context_object->context);;
+	/* if there IS a value in font_face_object, destroy it cause we're getting a new one */
+	if (font_face_object->font_face != NULL) {
+		cairo_font_face_destroy(font_face_object->font_face);
+	}
+	font_face_object->font_face = cairo_get_font_face(context_object->context);
+	cairo_font_face_reference(font_face_object->font_face);
 }
 /* }}} */
 
@@ -2623,7 +2637,6 @@ PHP_FUNCTION(cairo_set_scaled_font)
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->scaled_font = scaled_font_zval;
 	Z_ADDREF_P(scaled_font_zval);
-	cairo_scaled_font_reference(scaled_font_object->scaled_font);
 }
 /* }}} */
 
@@ -2658,7 +2671,12 @@ PHP_FUNCTION(cairo_get_scaled_font)
 	}
 
 	scaled_font_object = (cairo_scaled_font_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	/* if there IS a value in scaled_font_object, destroy it cause we're getting a new one */
+	if (scaled_font_object->scaled_font != NULL) {
+		cairo_scaled_font_destroy(scaled_font_object->scaled_font);
+	}
 	scaled_font_object->scaled_font = cairo_get_scaled_font(context_object->context);
+	cairo_scaled_font_reference(scaled_font_object->scaled_font);
 }
 /* }}} */
 
