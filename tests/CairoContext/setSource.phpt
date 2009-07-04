@@ -18,6 +18,13 @@ var_dump($pattern);
 $context->setSource($pattern);
 
 var_dump($context->getSource()->getRGBA());
+
+try {
+    $context->setSource(new stdClass);
+} catch (CairoException $e) {
+    echo $e->getMessage();
+}
+
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
@@ -36,3 +43,4 @@ array(4) {
   ["alpha"]=>
   float(1)
 }
+CairoContext::setSource() expects parameter 1 to be CairoPattern, object given
