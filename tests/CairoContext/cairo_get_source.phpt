@@ -33,5 +33,5 @@ object(CairoSolidPattern)#%d (0) {
 }
 CAUGHT ERROR: Argument 1 passed to cairo_get_source() must be an instance of CairoContext, instance of stdClass given
 
-Warning: cairo_get_source() expects parameter 1 to be CairoContext, object given in /home/michael/src/pecl/cairo/tests/CairoContext/cairo_get_source.php on line 17
+Warning: cairo_get_source() expects parameter 1 to be CairoContext, object given in %d on line %s
 NULL
