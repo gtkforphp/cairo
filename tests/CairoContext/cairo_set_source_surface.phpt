@@ -15,6 +15,11 @@ var_dump($context);
 $surface2 = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 50, 50);
 var_dump($surface2);
 
+$pattern = cairo_pattern_create_rgb(0.5, 0.5, 0.5);
+var_dump($pattern);
+
+cairo_set_source($context, $pattern);
+
 cairo_set_source_surface($context, $surface2, 5, 5);
 
 function bad_class($errno, $errstr) {
@@ -41,6 +46,8 @@ object(CairoImageSurface)#%d (0) {
 object(CairoContext)#%d (0) {
 }
 object(CairoImageSurface)#%d (0) {
+}
+object(CairoSolidPattern)#%d (0) {
 }
 
 Warning: cairo_set_source_surface() expects at least 2 parameters, 0 given in %s on line %d

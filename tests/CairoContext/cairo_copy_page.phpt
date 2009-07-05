@@ -12,6 +12,8 @@ var_dump($surface);
 $context = cairo_create($surface);
 var_dump($context);
 
+cairo_copy_page($context);
+
 // bad type hint is an E_RECOVERABLE_ERROR, so let's hook a handler
 function bad_class($errno, $errstr) {
 	echo 'CAUGHT ERROR: ' . $errstr, PHP_EOL;

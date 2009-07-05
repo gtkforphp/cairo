@@ -18,6 +18,13 @@ var_dump($pattern);
 cairo_set_source($context, $pattern);
 var_dump(cairo_pattern_get_rgba(cairo_get_source($context)));
 
+$pattern = cairo_pattern_create_rgb(0.5, 0.5, 0.5);
+var_dump($pattern);
+
+cairo_set_source($context, $pattern);
+
+var_dump(cairo_pattern_get_rgba(cairo_get_source($context)));
+
 function bad_class($errno, $errstr) {
 	echo 'CAUGHT ERROR: ' . $errstr, PHP_EOL;
 }
@@ -47,6 +54,18 @@ array(4) {
   float(0.3)
   ["blue"]=>
   float(0.3)
+  ["alpha"]=>
+  float(1)
+}
+object(CairoSolidPattern)#%d (0) {
+}
+array(4) {
+  ["red"]=>
+  float(0.5)
+  ["green"]=>
+  float(0.5)
+  ["blue"]=>
+  float(0.5)
   ["alpha"]=>
   float(1)
 }

@@ -571,9 +571,11 @@ PHP_FUNCTION(cairo_set_source_surface)
 	cairo_set_source_surface(context_object->context, surface_object->surface, x, y);
 	PHP_CAIRO_ERROR(cairo_status(context_object->context));
 
-	/* we need to be able to get this zval out later, so ref and store 
-	context_object->surface = surface_zval;
-	Z_ADDREF_P(surface_zval);*/
+	/* If there's already a pattern, then we deref and remove it because we just overwrote it */
+	if(context_object->pattern) {
+		Z_DELREF_P(context_object->pattern);
+		context_object->pattern = NULL;
+	}
 }
 /* }}} */
 
