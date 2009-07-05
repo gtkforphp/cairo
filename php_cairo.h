@@ -256,10 +256,20 @@ PHP_FUNCTION(cairo_rel_move_to);
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 PHP_FUNCTION(cairo_path_extents);
 #endif
+/* Text Functions */
 PHP_FUNCTION(cairo_select_font_face);
 PHP_FUNCTION(cairo_set_font_size);
-PHP_FUNCTION(cairo_text_extents);
+PHP_FUNCTION(cairo_set_font_matrix);
+PHP_FUNCTION(cairo_get_font_matrix);
+PHP_FUNCTION(cairo_set_font_options);
+PHP_FUNCTION(cairo_get_font_options);
+PHP_FUNCTION(cairo_set_font_face);
+PHP_FUNCTION(cairo_get_font_face);
+PHP_FUNCTION(cairo_set_scaled_font);
+PHP_FUNCTION(cairo_get_scaled_font);
 PHP_FUNCTION(cairo_show_text);
+PHP_FUNCTION(cairo_text_extents);
+PHP_FUNCTION(cairo_font_extents);
 
 /* Pattern Functions */
 PHP_FUNCTION(cairo_pattern_get_type);

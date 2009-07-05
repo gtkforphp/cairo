@@ -180,11 +180,40 @@ ZEND_BEGIN_ARG_INFO(cairo_text_path_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 /* Text functions */
+ZEND_BEGIN_ARG_INFO_EX(cairo_select_font_face_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, family)
+	ZEND_ARG_INFO(0, slant)
+	ZEND_ARG_INFO(0, weight)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(cairo_set_font_size_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, size)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO(cairo_text_args, ZEND_SEND_BY_VAL)
+ZEND_BEGIN_ARG_INFO(cairo_set_font_matrix_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_set_font_options_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_OBJ_INFO(0, fontoptions, CairoFontOptions, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_set_font_face_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_OBJ_INFO(0, fontface, CairoFontFace, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_set_scaled_font_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_OBJ_INFO(0, scaledfont, CairoScaledFont, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(cairo_show_text_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, text)
 ZEND_END_ARG_INFO()
 
@@ -533,13 +562,6 @@ ZEND_BEGIN_ARG_INFO(cairo_ps_surface_dsc_comment_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, comment)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(cairo_select_font_face_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 2)
-	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
-	ZEND_ARG_INFO(0, family)
-	ZEND_ARG_INFO(0, slant)
-	ZEND_ARG_INFO(0, weight)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int cairo_version(void) 
        Returns an integer version number of the cairo library being used */
 PHP_FUNCTION(cairo_version)
@@ -850,11 +872,21 @@ static const function_entry cairo_functions[] = {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 	PHP_FE(cairo_path_extents, cairo_context_args)
 #endif
+	/* Text Functions */
 	PHP_FE(cairo_select_font_face, cairo_select_font_face_args)
 	PHP_FE(cairo_set_font_size, cairo_set_font_size_args)
-	PHP_FE(cairo_text_extents, cairo_text_args)
-	PHP_FE(cairo_show_text, cairo_text_args)
-
+	PHP_FE(cairo_set_font_matrix, cairo_set_font_matrix_args)
+	PHP_FE(cairo_get_font_matrix, cairo_context_args)
+	PHP_FE(cairo_set_font_options, cairo_set_font_options_args)
+	PHP_FE(cairo_get_font_options, cairo_context_args)
+	PHP_FE(cairo_set_font_face, cairo_set_font_face_args)
+	PHP_FE(cairo_get_font_face, cairo_context_args)
+	PHP_FE(cairo_set_scaled_font, cairo_set_scaled_font_args)
+	PHP_FE(cairo_get_scaled_font, cairo_context_args)
+	PHP_FE(cairo_show_text, cairo_show_text_args)
+	PHP_FE(cairo_text_extents, cairo_context_args)
+	PHP_FE(cairo_font_extents, cairo_context_args)
+	
 	/* Pattern Functions */
 	PHP_FE(cairo_pattern_get_type, cairo_pattern_args)
 	PHP_FE(cairo_pattern_status, cairo_pattern_args)
