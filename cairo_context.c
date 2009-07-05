@@ -59,11 +59,13 @@ ZEND_BEGIN_ARG_INFO(CairoContext_setSourceRGBA_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setSource_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(0, pattern, CairoPattern, 0)
+	/* ZEND_ARG_OBJ_INFO(0, pattern, CairoPattern, 0) */
+	ZEND_ARG_INFO(0, pattern)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(CairoContext_setSourceSurface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	/* ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0) */
+	ZEND_ARG_INFO(0, surface)
 	ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()

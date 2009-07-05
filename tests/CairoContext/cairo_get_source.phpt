@@ -33,5 +33,5 @@ object(CairoSolidPattern)#%d (0) {
 }
 CAUGHT ERROR: Argument 1 passed to cairo_get_source() must be an instance of CairoContext, instance of stdClass given
 
-Warning: cairo_get_source() expects parameter 1 to be CairoContext, object given in %d on line %s
+Warning: cairo_get_source() expects parameter 1 to be CairoContext, object given in %s on line %d
 NULL
