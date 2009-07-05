@@ -23,7 +23,7 @@
 #ifndef PHP_CAIRO_H
 #define PHP_CAIRO_H
 
-#define PHP_CAIRO_VERSION "1.0.0-dev"
+#define PHP_CAIRO_VERSION "0.1.0-alpha"
 
 extern zend_module_entry cairo_module_entry;
 #define phpext_cairo_ptr &cairo_module_entry
