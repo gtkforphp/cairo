@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.4.7" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+    <name>Cairo</name>
+    <channel>pecl.php.net</channel>
+    <summary>Cairo Graphics Library Extension</summary>
+    <description>Cairo is a 2D graphics library with support for multiple output devices. Currently supported output targets include the X Window System, Quartz, Win32, image buffers, PostScript, PDF, and SVG file output.</description>
+    <lead>
+     <name>Elizabeth M Smith</name>
+     <user>auroraeosrose</user>
+     <email>auroraeosrose@php.net</email>
+     <active>yes</active>
+    </lead>
+    <developer>
+     <name>Michael Maclean</name>
+     <user>mgdm</user>
+     <email>mgdm@php.net</email>
+     <active>yes</active>
+    </developer>
+    <developer>
+     <name>Akshat Gupta</name>
+     <user>akshat</user>
+     <email>g.akshat@gmail.com</email>
+     <active>no</active>
+    </developer>
+
+    <date>2009-07-05</date>
+    <version><release>0.1.0</release><api>0.1.0</api></version>
+    <stability><release>alpha</release><api>alpha</api></stability>
+    <license uri="http://www.php.net/license">PHP License</license>
+    <notes>
+    * Initial Release
+    * Support for svg, pdf, ps, image, png surface backends
+    * Support for libcairo versions 1.4, 1.6 and 1.8
+    * Toy font API support only, glyph support not complete
+    * OO or procedural APIs
+    </notes>
+
+    <contents>
+       <dir name="/">
+            <file role="doc" name="README"/>
+            <file role="doc" name="TODO"/>
+            <file role="doc" name="IGNORED"/>
+            <file role="doc" name="SYMBOLS"/>
+            <file role="doc" name="CREDITS"/>
+
+            <file role="src" name="php_cairo.h"/>
+            <file role="src" name="php_cairo_api.h"/>
+
+            <file role="src" name="cairo.c"/>
+            <file role="src" name="cairo_context.c"/>
+            <file role="src" name="cairo_error.c"/>
+            <file role="src" name="cairo_matrix.c"/>
+            <file role="src" name="cairo_path.c"/>
+            <file role="src" name="cairo_pattern.c"/>
+            <file role="src" name="cairo_font.c"/>
+            <file role="src" name="cairo_font_face.c"/>
+            <file role="src" name="cairo_scaled_font.c"/>
+            <file role="src" name="cairo_font_options.c"/>
+            <file role="src" name="cairo_surface.c"/>
+            <file role="src" name="cairo_image_surface.c"/>
+            <file role="src" name="cairo_pdf_surface.c"/>
+            <file role="src" name="cairo_ps_surface.c"/>
+            <file role="src" name="cairo_svg_surface.c"/>
+
+            <file role="src" name="config.m4"/>
+            <file role="src" name="config.w32"/>
+
+            <dir name="tests">
+                <file role="test" name="cairo_available_fonts.phpt"/>
+                <file role="test" name="cairo_available_surfaces.phpt"/>
+                <file role="test" name="cairo_constants.phpt"/>
+                <file role="test" name="cairo_phpinfo.phpt"/>
+                <file role="test" name="cairo_status_to_string.phpt"/>
+                <file role="test" name="cairo_version.phpt"/>
+                <file role="test" name="cairo_version_string.phpt"/>
+                <dir name="Cairo">
+                    <file role="test" name="availableFonts.phpt"/>
+                    <file role="test" name="availableSurfaces.phpt"/>
+                    <file role="test" name="CairoStatus_constants.phpt"/>
+                    <file role="test" name="statusToString.phpt"/>
+                    <file role="test" name="version.phpt"/>
+                    <file role="test" name="versionString.phpt"/>
+                </dir>
+                <dir name="CairoContext">
+                    <file role="test" name="__construct.phpt"/>
+                    <file role="test" name="cairo_clip.phpt"/>
+                    <file role="test" name="cairo_clip_extents.phpt"/>
+                    <file role="test" name="cairo_clip_preserve.phpt"/>
+                    <file role="test" name="cairo_clip_rectangle_list.phpt"/>
+                    <file role="test" name="cairo_copy_page.phpt"/>
+                    <file role="test" name="cairo_create.phpt"/>
+                    <file role="test" name="cairo_fill.phpt"/>
+                    <file role="test" name="cairo_fill_extents.phpt"/>
+                    <file role="test" name="cairo_fill_preserve.phpt"/>
+                    <file role="test" name="cairo_get_antialias.phpt"/>
+                    <file role="test" name="cairo_get_dash.phpt"/>
+                    <file role="test" name="cairo_get_dash_count.phpt"/>
+                    <file role="test" name="cairo_get_fill_rule.phpt"/>
+                    <file role="test" name="cairo_get_group_target.phpt"/>
+                    <file role="test" name="cairo_get_line_cap.phpt"/>
+                    <file role="test" name="cairo_get_line_join.phpt"/>
+                    <file role="test" name="cairo_get_line_width.phpt"/>
+                    <file role="test" name="cairo_get_miter_limit.phpt"/>
+                    <file role="test" name="cairo_get_operator.phpt"/>
+                    <file role="test" name="cairo_get_source.phpt"/>
+                    <file role="test" name="cairo_get_target.phpt"/>
+                    <file role="test" name="cairo_get_target_custom_class.phpt"/>
+                    <file role="test" name="cairo_get_target_errors.phpt"/>
+                    <file role="test" name="cairo_get_tolerance.phpt"/>
+                    <file role="test" name="cairo_in_fill.phpt"/>
+                    <file role="test" name="cairo_in_stroke.phpt"/>
+                    <file role="test" name="cairo_mask.phpt"/>
+                    <file role="test" name="cairo_mask_surface.phpt"/>
+                    <file role="test" name="cairo_paint.phpt"/>
+                    <file role="test" name="cairo_paint_with_alpha.phpt"/>
+                    <file role="test" name="cairo_pop_group.phpt"/>
+                    <file role="test" name="cairo_pop_group_to_source.phpt"/>
+                    <file role="test" name="cairo_push_group.phpt"/>
+                    <file role="test" name="cairo_push_group_with_content.phpt"/>
+                    <file role="test" name="cairo_reset_clip.phpt"/>
+                    <file role="test" name="cairo_restore.phpt"/>
+                    <file role="test" name="cairo_save.phpt"/>
+                    <file role="test" name="cairo_set_antialias.phpt"/>
+                    <file role="test" name="cairo_set_dash.phpt"/>
+                    <file role="test" name="cairo_set_fill_rule.phpt"/>
+                    <file role="test" name="cairo_set_line_cap.phpt"/>
+                    <file role="test" name="cairo_set_line_join.phpt"/>
+                    <file role="test" name="cairo_set_line_width.phpt"/>
+                    <file role="test" name="cairo_set_miter_limit.phpt"/>
+                    <file role="test" name="cairo_set_operator.phpt"/>
+                    <file role="test" name="cairo_set_source.phpt"/>
+                    <file role="test" name="cairo_set_source_rgb.phpt"/>
+                    <file role="test" name="cairo_set_source_rgba.phpt"/>
+                    <file role="test" name="cairo_set_source_surface.phpt"/>
+                    <file role="test" name="cairo_set_tolerance.phpt"/>
+                    <file role="test" name="cairo_show_page.phpt"/>
+                    <file role="test" name="cairo_status.phpt"/>
+                    <file role="test" name="cairo_stroke.phpt"/>
+                    <file role="test" name="cairo_stroke_extents.phpt"/>
+                    <file role="test" name="cairo_stroke_preserve.phpt"/>
+                    <file role="test" name="clip.phpt"/>
+                    <file role="test" name="clipExtents.phpt"/>
+                    <file role="test" name="clipPreserve.phpt"/>
+                    <file role="test" name="clipRectangleList.phpt"/>
+                    <file role="test" name="copyPage.phpt"/>
+                    <file role="test" name="fill.phpt"/>
+                    <file role="test" name="fillExtents.phpt"/>
+                    <file role="test" name="fillPreserve.phpt"/>
+                    <file role="test" name="getAntialias.phpt"/>
+                    <file role="test" name="getDash.phpt"/>
+                    <file role="test" name="getDashCount.phpt"/>
+                    <file role="test" name="getFillRule.phpt"/>
+                    <file role="test" name="getGroupTarget.phpt"/>
+                    <file role="test" name="getLineCap.phpt"/>
+                    <file role="test" name="getLineJoin.phpt"/>
+                    <file role="test" name="getLineWidth.phpt"/>
+                    <file role="test" name="getMiterLimit.phpt"/>
+                    <file role="test" name="getOperator.phpt"/>
+                    <file role="test" name="getSource.phpt"/>
+                    <file role="test" name="getTarget.phpt"/>
+                    <file role="test" name="getTarget_custom_class.phpt"/>
+                    <file role="test" name="getTarget_errors.phpt"/>
+                    <file role="test" name="getTolerance.phpt"/>
+                    <file role="test" name="inFill.phpt"/>
+                    <file role="test" name="inStroke.phpt"/>
+                    <file role="test" name="mask.phpt"/>
+                    <file role="test" name="maskSurface.phpt"/>
+                    <file role="test" name="paint.phpt"/>
+                    <file role="test" name="paintWithAlpha.phpt"/>
+                    <file role="test" name="popGroup.phpt"/>
+                    <file role="test" name="popGroupToSource.phpt"/>
+                    <file role="test" name="pushGroup.phpt"/>
+                    <file role="test" name="pushGroupWithContent.phpt"/>
+                    <file role="test" name="resetClip.phpt"/>
+                    <file role="test" name="restore.phpt"/>
+                    <file role="test" name="save.phpt"/>
+                    <file role="test" name="setAntialias.phpt"/>
+                    <file role="test" name="setDash.phpt"/>
+                    <file role="test" name="setFillRule.phpt"/>
+                    <file role="test" name="setLineCap.phpt"/>
+                    <file role="test" name="setLineJoin.phpt"/>
+                    <file role="test" name="setLineWidth.phpt"/>
+                    <file role="test" name="setMiterLimit.phpt"/>
+                    <file role="test" name="setOperator.phpt"/>
+                    <file role="test" name="setSource.phpt"/>
+                    <file role="test" name="setSourceRgb.phpt"/>
+                    <file role="test" name="setSourceRGBA.phpt"/>
+                    <file role="test" name="setSourceSurface.phpt"/>
+                    <file role="test" name="setTolerance.phpt"/>
+                    <file role="test" name="showPage.phpt"/>
+                    <file role="test" name="status.phpt"/>
+                    <file role="test" name="stroke.phpt"/>
+                    <file role="test" name="strokeExtents.phpt"/>
+                    <file role="test" name="strokePreserve.phpt"/>
+                    <dir name="Paths">
+                        <file role="test" name="appendPath.phpt"/>
+                        <file role="test" name="arc.phpt"/>
+                        <file role="test" name="arcNegative.phpt"/>
+                        <file role="test" name="cairo_append_path.phpt"/>
+                        <file role="test" name="cairo_arc.phpt"/>
+                        <file role="test" name="cairo_arc_negative.phpt"/>
+                        <file role="test" name="cairo_close_path.phpt"/>
+                        <file role="test" name="cairo_copy_path.phpt"/>
+                        <file role="test" name="cairo_copy_path_flat.phpt"/>
+                        <file role="test" name="cairo_curve_to.phpt"/>
+                        <file role="test" name="cairo_get_current_point.phpt"/>
+                        <file role="test" name="cairo_glyph_path.phpt"/>
+                        <file role="test" name="cairo_has_current_point.phpt"/>
+                        <file role="test" name="cairo_line_to.phpt"/>
+                        <file role="test" name="cairo_move_to.phpt"/>
+                        <file role="test" name="cairo_new_path.phpt"/>
+                        <file role="test" name="cairo_new_sub_path.phpt"/>
+                        <file role="test" name="cairo_path_extents.phpt"/>
+                        <file role="test" name="cairo_rectangle.phpt"/>
+                        <file role="test" name="cairo_rel_curve_to.phpt"/>
+                        <file role="test" name="cairo_rel_line_to.phpt"/>
+                        <file role="test" name="cairo_rel_move_to.phpt"/>
+                        <file role="test" name="cairo_text_path.phpt"/>
+                        <file role="test" name="closePath.phpt"/>
+                        <file role="test" name="copyPath.phpt"/>
+                        <file role="test" name="copyPathFlat.phpt"/>
+                        <file role="test" name="curveTo.phpt"/>
+                        <file role="test" name="getCurrentPoint.phpt"/>
+                        <file role="test" name="glyphPath.phpt"/>
+                        <file role="test" name="hasCurrentPoint.phpt"/>
+                        <file role="test" name="lineTo.phpt"/>
+                        <file role="test" name="moveTo.phpt"/>
+                        <file role="test" name="newPath.phpt"/>
+                        <file role="test" name="newSubPath.phpt"/>
+                        <file role="test" name="pathExtents.phpt"/>
+                        <file role="test" name="rectangle.phpt"/>
+                        <file role="test" name="relCurveTo.phpt"/>
+                        <file role="test" name="relLineTo.phpt"/>
+                        <file role="test" name="relMoveTo.phpt"/>
+                        <file role="test" name="textPath.phpt"/>
+                    </dir>
+                    <dir name="Text">
+                        <file role="test" name="cairo_font_extents.phpt"/>
+                        <file role="test" name="cairo_get_font_face.phpt"/>
+                        <file role="test" name="cairo_get_font_matrix.phpt"/>
+                        <file role="test" name="cairo_get_font_options.phpt"/>
+                        <file role="test" name="cairo_get_scaled_font.phpt"/>
+                        <file role="test" name="cairo_select_font_face.phpt"/>
+                        <file role="test" name="cairo_set_font_face.phpt"/>
+                        <file role="test" name="cairo_set_font_matrix.phpt"/>
+                        <file role="test" name="cairo_set_font_options.phpt"/>
+                        <file role="test" name="cairo_set_font_size.phpt"/>
+                        <file role="test" name="cairo_set_scaled_font.phpt"/>
+                        <file role="test" name="cairo_show_text.phpt"/>
+                        <file role="test" name="cairo_text_extents.phpt"/>
+                        <file role="test" name="create_toyfont.inc"/>
+                        <file role="test" name="fontExtents.phpt"/>
+                        <file role="test" name="getFontFace.phpt"/>
+                        <file role="test" name="getFontMatrix.phpt"/>
+                        <file role="test" name="getFontOptions.phpt"/>
+                        <file role="test" name="getScaledFont.phpt"/>
+                        <file role="test" name="selectFontFace.phpt"/>
+                        <file role="test" name="setFontFace.phpt"/>
+                        <file role="test" name="setFontMatrix.phpt"/>
+                        <file role="test" name="setFontOptions.phpt"/>
+                        <file role="test" name="setFontSize.phpt"/>
+                        <file role="test" name="setScaledFont.phpt"/>
+                        <file role="test" name="showText.phpt"/>
+                        <file role="test" name="textExtents.phpt"/>
+                    </dir>
+                    <dir name="Transformations">
+                        <file role="test" name="cairo_device_to_user.phpt"/>
+                        <file role="test" name="cairo_device_to_user_distance.phpt"/>
+                        <file role="test" name="cairo_get_matrix.phpt"/>
+                        <file role="test" name="cairo_identity_matrix.phpt"/>
+                        <file role="test" name="cairo_rotate.phpt"/>
+                        <file role="test" name="cairo_scale.phpt"/>
+                        <file role="test" name="cairo_set_matrix.phpt"/>
+                        <file role="test" name="cairo_transform.phpt"/>
+                        <file role="test" name="cairo_translate.phpt"/>
+                        <file role="test" name="cairo_user_to_device.phpt"/>
+                        <file role="test" name="cairo_user_to_device_distance.phpt"/>
+                        <file role="test" name="deviceToUser.phpt"/>
+                        <file role="test" name="deviceToUserDistance.phpt"/>
+                        <file role="test" name="getMatrix.phpt"/>
+                        <file role="test" name="identityMatrix.phpt"/>
+                        <file role="test" name="rotate.phpt"/>
+                        <file role="test" name="scale.phpt"/>
+                        <file role="test" name="setMatrix.phpt"/>
+                        <file role="test" name="transform.phpt"/>
+                        <file role="test" name="translate.phpt"/>
+                        <file role="test" name="userToDevice.phpt"/>
+                        <file role="test" name="userToDeviceDistance.phpt"/>
+                    </dir>
+                </dir>
+                <dir name="CairoScaledFont">
+                    <file role="test" name="cairo_scaled_font_create.phpt"/>
+                    <file role="test" name="cairo_scaled_font_extents.phpt"/>
+                    <file role="test" name="cairo_scaled_font_get_ctm.phpt"/>
+                    <file role="test" name="cairo_scaled_font_get_font_face.phpt"/>
+                    <file role="test" name="cairo_scaled_font_get_font_matrix.phpt"/>
+                    <file role="test" name="cairo_scaled_font_get_font_options.phpt"/>
+                    <file role="test" name="cairo_scaled_font_get_scale_matrix.phpt"/>
+                    <file role="test" name="cairo_scaled_font_get_type.phpt"/>
+                    <file role="test" name="cairo_scaled_font_glyph_extents.phpt"/>
+                    <file role="test" name="cairo_scaled_font_status.phpt"/>
+                    <file role="test" name="cairo_scaled_font_text_extents.phpt"/>
+                    <file role="test" name="extents.phpt"/>
+                    <file role="test" name="getCtm.phpt"/>
+                    <file role="test" name="getFontFace.phpt"/>
+                    <file role="test" name="getFontMatrix.phpt"/>
+                    <file role="test" name="getFontOptions.phpt"/>
+                    <file role="test" name="getScaleMatrix.phpt"/>
+                    <file role="test" name="getType.phpt"/>
+                    <file role="test" name="glyphExtents.phpt"/>
+                    <file role="test" name="status.phpt"/>
+                    <file role="test" name="textExtents.phpt"/>
+                    <file role="test" name="__construct.phpt"/>
+                    <file role="test" name="create_toyfont.inc"/>
+                </dir>
+                <dir name="CairoFontFace">
+                    <file role="test" name="CairoFontSlant_constants.phpt"/>
+                    <file role="test" name="CairoFontType_constants.phpt"/>
+                    <file role="test" name="CairoFontWeight_constants.phpt"/>
+                    <file role="test" name="cairo_font_face_get_type.phpt"/>
+                    <file role="test" name="cairo_font_face_status.phpt"/>
+                    <file role="test" name="getType.phpt"/>
+                    <file role="test" name="status.phpt"/>
+                    <file role="test" name="__construct.phpt"/>
+                    <file role="test" name="create_toyfont.inc"/>
+                    <dir name="CairoToyFontFace">
+                        <file role="test" name="cairo_toy_font_face_create.phpt"/>
+                        <file role="test" name="cairo_toy_font_face_get_family.phpt"/>
+                        <file role="test" name="cairo_toy_font_face_get_slant.phpt"/>
+                        <file role="test" name="cairo_toy_font_face_get_weight.phpt"/>
+                        <file role="test" name="getFamily.phpt"/>
+                        <file role="test" name="getSlant.phpt"/>
+                        <file role="test" name="getWeight.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                    </dir>
+                </dir>
+                <dir name="CairoFontOptions">
+                    <file role="test" name="CairoHintMetrics_constants.phpt"/>
+                    <file role="test" name="CairoHintStyle_constants.phpt"/>
+                    <file role="test" name="cairo_font_options_create.phpt"/>
+                    <file role="test" name="cairo_font_options_equal.phpt"/>
+                    <file role="test" name="cairo_font_options_get_antialias.phpt"/>
+                    <file role="test" name="cairo_font_options_get_hint_metrics.phpt"/>
+                    <file role="test" name="cairo_font_options_get_hint_style.phpt"/>
+                    <file role="test" name="cairo_font_options_get_subpixel_order.phpt"/>
+                    <file role="test" name="cairo_font_options_hash.phpt"/>
+                    <file role="test" name="cairo_font_options_merge.phpt"/>
+                    <file role="test" name="cairo_font_options_set_antialias.phpt"/>
+                    <file role="test" name="cairo_font_options_set_hint_metrics.phpt"/>
+                    <file role="test" name="cairo_font_options_set_hint_style.phpt"/>
+                    <file role="test" name="cairo_font_options_set_subpixel_order.phpt"/>
+                    <file role="test" name="cairo_font_options_status.phpt"/>
+                    <file role="test" name="equal.phpt"/>
+                    <file role="test" name="getAntialias.phpt"/>
+                    <file role="test" name="getHintMetrics.phpt"/>
+                    <file role="test" name="getHintStyle.phpt"/>
+                    <file role="test" name="getSubpixelOrder.phpt"/>
+                    <file role="test" name="hash.phpt"/>
+                    <file role="test" name="merge.phpt"/>
+                    <file role="test" name="setAntialias.phpt"/>
+                    <file role="test" name="setHintMetrics.phpt"/>
+                    <file role="test" name="setHintStyle.phpt"/>
+                    <file role="test" name="setSubpixelOrder.phpt"/>
+                    <file role="test" name="status.phpt"/>
+                    <file role="test" name="__construct.phpt"/>
+                </dir>
+                <dir name="CairoMatrix">
+                    <file role="test" name="cairo_matrix_init.phpt"/>
+                    <file role="test" name="cairo_matrix_init_identity.phpt"/>
+                    <file role="test" name="cairo_matrix_init_rotate.phpt"/>
+                    <file role="test" name="cairo_matrix_init_scale.phpt"/>
+                    <file role="test" name="cairo_matrix_init_translate.phpt"/>
+                    <file role="test" name="cairo_matrix_invert.phpt"/>
+                    <file role="test" name="cairo_matrix_multiply.phpt"/>
+                    <file role="test" name="cairo_matrix_rotate.phpt"/>
+                    <file role="test" name="cairo_matrix_scale.phpt"/>
+                    <file role="test" name="cairo_matrix_transform_distance.phpt"/>
+                    <file role="test" name="cairo_matrix_transform_point.phpt"/>
+                    <file role="test" name="cairo_matrix_translate.phpt"/>
+                    <file role="test" name="initIdentity.phpt"/>
+                    <file role="test" name="initRotate.phpt"/>
+                    <file role="test" name="initScale.phpt"/>
+                    <file role="test" name="initTranslate.phpt"/>
+                    <file role="test" name="invert.phpt"/>
+                    <file role="test" name="matrix_extended_class.phpt"/>
+                    <file role="test" name="multiply.phpt"/>
+                    <file role="test" name="rotate.phpt"/>
+                    <file role="test" name="scale.phpt"/>
+                    <file role="test" name="transformDistance.phpt"/>
+                    <file role="test" name="transformPoint.phpt"/>
+                    <file role="test" name="translate.phpt"/>
+                    <file role="test" name="__construct.phpt"/>
+                </dir>
+                <dir name="CairoPattern">
+                    <file role="test" name="CairoExtend_constants.phpt"/>
+                    <file role="test" name="CairoPatternType_constants.phpt"/>
+                    <file role="test" name="cairo_pattern_get_matrix.phpt"/>
+                    <file role="test" name="cairo_pattern_get_type.phpt"/>
+                    <file role="test" name="cairo_pattern_set_matrix.phpt"/>
+                    <file role="test" name="cairo_pattern_status.phpt"/>
+                    <file role="test" name="getMatrix.phpt"/>
+                    <file role="test" name="getType.phpt"/>
+                    <file role="test" name="setMatrix.phpt"/>
+                    <file role="test" name="status.phpt"/>
+                    <file role="test" name="__construct.phpt"/>
+                    <dir name="CairoGradientPattern">
+                        <file role="test" name="addColorStopRgb.phpt"/>
+                        <file role="test" name="addColorStopRgba.phpt"/>
+                        <file role="test" name="cairo_pattern_add_color_stop_rgb.phpt"/>
+                        <file role="test" name="cairo_pattern_add_color_stop_rgba.phpt"/>
+                        <file role="test" name="cairo_pattern_get_color_stop_count.phpt"/>
+                        <file role="test" name="cairo_pattern_get_color_stop_rgba.phpt"/>
+                        <file role="test" name="getColorStopCount.phpt"/>
+                        <file role="test" name="getColorStopRgba.phpt"/>
+                        <file role="test" name="getExtend.phpt"/>
+                        <file role="test" name="setExtend.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                        <dir name="CairoLinearGradient">
+                            <file role="test" name="cairo_pattern_create_linear.phpt"/>
+                            <file role="test" name="cairo_pattern_get_linear_points.phpt"/>
+                            <file role="test" name="getPoints.phpt"/>
+                            <file role="test" name="__construct.phpt"/>
+                        </dir>
+                        <dir name="CairoRadialGradient">
+                            <file role="test" name="cairo_pattern_create_radial.phpt"/>
+                            <file role="test" name="cairo_pattern_get_radial_circles.phpt"/>
+                            <file role="test" name="getCircles.phpt"/>
+                            <file role="test" name="__construct.phpt"/>
+                        </dir>
+                    </dir>
+                    <dir name="CairoSolidPattern">
+                        <file role="test" name="cairo_pattern_create_rgb.phpt"/>
+                        <file role="test" name="cairo_pattern_create_rgba.phpt"/>
+                        <file role="test" name="cairo_pattern_get_rgba.phpt"/>
+                        <file role="test" name="getRgba.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                    </dir>
+                    <dir name="CairoSurfacePattern">
+                        <file role="test" name="CairoFilter_constants.phpt"/>
+                        <file role="test" name="cairo_pattern_create_for_surface.phpt"/>
+                        <file role="test" name="cairo_pattern_get_extend.phpt"/>
+                        <file role="test" name="cairo_pattern_get_filter.phpt"/>
+                        <file role="test" name="cairo_pattern_get_surface.phpt"/>
+                        <file role="test" name="cairo_pattern_set_extend.phpt"/>
+                        <file role="test" name="cairo_pattern_set_filter.phpt"/>
+                        <file role="test" name="getExtend.phpt"/>
+                        <file role="test" name="getFilter.phpt"/>
+                        <file role="test" name="getSurface.phpt"/>
+                        <file role="test" name="setExtend.phpt"/>
+                        <file role="test" name="setFilter.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                    </dir>
+                </dir>
+                <dir name="CairoSurface">
+                    <file role="test" name="CairoContent_constants.phpt"/>
+                    <file role="test" name="CairoSurfaceType_constants.phpt"/>
+                    <file role="test" name="cairo_surface_copy_page.phpt"/>
+                    <file role="test" name="cairo_surface_create_similar.phpt"/>
+                    <file role="test" name="cairo_surface_finish.phpt"/>
+                    <file role="test" name="cairo_surface_flush.phpt"/>
+                    <file role="test" name="cairo_surface_get_content.phpt"/>
+                    <file role="test" name="cairo_surface_get_device_offset.phpt"/>
+                    <file role="test" name="cairo_surface_get_fallback_resolution.phpt"/>
+                    <file role="test" name="cairo_surface_get_font_options.phpt"/>
+                    <file role="test" name="cairo_surface_get_type.phpt"/>
+                    <file role="test" name="cairo_surface_has_show_text_glyphs.phpt"/>
+                    <file role="test" name="cairo_surface_mark_dirty.phpt"/>
+                    <file role="test" name="cairo_surface_mark_dirty_rectangle.phpt"/>
+                    <file role="test" name="cairo_surface_set_device_offset.phpt"/>
+                    <file role="test" name="cairo_surface_set_fallback_resolution.phpt"/>
+                    <file role="test" name="cairo_surface_show_page.phpt"/>
+                    <file role="test" name="cairo_surface_status.phpt"/>
+                    <file role="test" name="cairo_surface_write_to_png.phpt"/>
+                    <file role="test" name="copyPage.phpt"/>
+                    <file role="test" name="createSimilar.phpt"/>
+                    <file role="test" name="finish.phpt"/>
+                    <file role="test" name="flush.phpt"/>
+                    <file role="test" name="getContent.phpt"/>
+                    <file role="test" name="getDeviceOffset.phpt"/>
+                    <file role="test" name="getFallbackResolution.phpt"/>
+                    <file role="test" name="getFontOptions.phpt"/>
+                    <file role="test" name="getType.phpt"/>
+                    <file role="test" name="hasShowTextGlyphs.phpt"/>
+                    <file role="test" name="markDirty.phpt"/>
+                    <file role="test" name="markDirtyRectangle.phpt"/>
+                    <file role="test" name="setDeviceOffset.phpt"/>
+                    <file role="test" name="setFallbackResolution.phpt"/>
+                    <file role="test" name="showPage.phpt"/>
+                    <file role="test" name="status.phpt"/>
+                    <file role="test" name="writeToPng.phpt"/>
+                    <file role="test" name="__construct.phpt"/>
+                    <dir name="CairoImageSurface">
+                        <file role="test" name="CairoFormat_constants.phpt"/>
+                        <file role="test" name="CairoFormat_strideForWidth.phpt"/>
+                        <file role="test" name="cairo_format_stride_for_width.phpt"/>
+                        <file role="test" name="cairo_image_surface_create.phpt"/>
+                        <file role="test" name="cairo_image_surface_create_for_data.phpt"/>
+                        <file role="test" name="cairo_image_surface_create_from_png.phpt"/>
+                        <file role="test" name="cairo_image_surface_get_data.phpt"/>
+                        <file role="test" name="cairo_image_surface_get_format.phpt"/>
+                        <file role="test" name="cairo_image_surface_get_height.phpt"/>
+                        <file role="test" name="cairo_image_surface_get_stride.phpt"/>
+                        <file role="test" name="cairo_image_surface_get_width.phpt"/>
+                        <file role="test" name="createForData.phpt"/>
+                        <file role="test" name="createFromPng.phpt"/>
+                        <file role="test" name="getData.phpt"/>
+                        <file role="test" name="getFormat.phpt"/>
+                        <file role="test" name="getHeight.phpt"/>
+                        <file role="test" name="getStride.phpt"/>
+                        <file role="test" name="getWidth.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                        <file role="test" name="red.png"/>
+                    </dir>
+                    <dir name="CairoPdfSurface">
+                        <file role="test" name="cairo_pdf_surface_create.phpt"/>
+                        <file role="test" name="cairo_pdf_surface_set_size.phpt"/>
+                        <file role="test" name="setSize.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                    </dir>
+                    <dir name="CairoPsSurface">
+                        <file role="test" name="CairoPsLevel_constants.phpt"/>
+                        <file role="test" name="cairo_ps_get_levels.phpt"/>
+                        <file role="test" name="cairo_ps_level_to_string.phpt"/>
+                        <file role="test" name="cairo_ps_surface_create.phpt"/>
+                        <file role="test" name="cairo_ps_surface_dsc_begin_page_setup.phpt"/>
+                        <file role="test" name="cairo_ps_surface_dsc_begin_setup.phpt"/>
+                        <file role="test" name="cairo_ps_surface_dsc_comment.phpt"/>
+                        <file role="test" name="cairo_ps_surface_get_eps.phpt"/>
+                        <file role="test" name="cairo_ps_surface_restrict_to_level.phpt"/>
+                        <file role="test" name="cairo_ps_surface_set_eps.phpt"/>
+                        <file role="test" name="cairo_ps_surface_set_size.phpt"/>
+                        <file role="test" name="dscBeginPageSetup.phpt"/>
+                        <file role="test" name="dscBeginSetup.phpt"/>
+                        <file role="test" name="dscComment.phpt"/>
+                        <file role="test" name="getEps.phpt"/>
+                        <file role="test" name="getLevels.phpt"/>
+                        <file role="test" name="levelToString.phpt"/>
+                        <file role="test" name="restrictToLevel.phpt"/>
+                        <file role="test" name="setEps.phpt"/>
+                        <file role="test" name="setSize.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                    </dir>
+                    <dir name="CairoSvgSurface">
+                        <file role="test" name="CairoSvgVersion_constants.phpt"/>
+                        <file role="test" name="cairo_svg_get_versions.phpt"/>
+                        <file role="test" name="cairo_svg_surface_create.phpt"/>
+                        <file role="test" name="cairo_svg_surface_restrict_to_version.phpt"/>
+                        <file role="test" name="cairo_svg_version_to_string.phpt"/>
+                        <file role="test" name="getVersions.phpt"/>
+                        <file role="test" name="restrictToVersion.phpt"/>
+                        <file role="test" name="versionToString.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                    </dir>
+                </dir>
+            </dir>
+        </dir>
+    </contents>
+
+    <dependencies>
+      <required>
+        <php>
+          <min>5.2.0</min>
+        </php>
+        <pearinstaller>
+          <min>1.4.0</min>
+        </pearinstaller>
+      </required>
+   
+    </dependencies>
+   
+    <providesextension>cairo</providesextension>
+   
+    <changelog>
+    </changelog>
+</package>
+<!--
+vim:et:ts=1:sw=1
+-->

@@ -1,0 +1,264 @@
+Datatypes
+
+Cairo type                              pecl/cairo type
+
+cairo_t                                 CairoContext
+cairo_content_t                         CairoContent
+cairo_fill_rule_t                       CairoFillRule
+cairo_font_face_t                       CairoFontFace
+cairo_font_options_t                    CairoFontOptions
+cairo_glyph_t                           CairoGlyph
+cairo_line_cap_t                        CairoLineCap
+cairo_line_join_t                       CairoLineJoin
+cairo_line_t                            CairoLine
+cairo_matrix_t                          CairoMatrix
+cairo_move_t                            CairoMove
+cairo_operator_t                        CairoOperator
+cairo_path_t                            CairoPath
+cairo_pattern_t                         CairoPattern
+cairo_scaled_font_t                     CairoScaledFont
+cairo_status_t                          CairoStatus
+cairo_surface_t                         CairoSurface
+
+Cairo symbol                            Procedural symbol                        OO symbol
+
+CAIRO_STATUS_SUCCESS                    CAIRO_STATUS_SUCCESS                     CairoStatus::SUCCESS
+CAIRO_STATUS_NO_MEMORY                  CAIRO_STATUS_NO_MEMORY                   CairoStatus::NO_MEMORY 
+CAIRO_STATUS_INVALID_RESTORE            CAIRO_STATUS_INVALID_RESTORE             CairoStatus::INVALID_RESTORE 
+CAIRO_STATUS_INVALID_POP_GROUP          CAIRO_STATUS_INVALID_POP_GROUP           CairoStatus::INVALID_POP_GROUP 
+CAIRO_STATUS_NO_CURRENT_POINT           CAIRO_STATUS_NO_CURRENT_POINT            CairoStatus::NO_CURRENT_POINT 
+CAIRO_STATUS_INVALID_MATRIX             CAIRO_STATUS_INVALID_MATRIX              CairoStatus::INVALID_MATRIX 
+CAIRO_STATUS_INVALID_STATUS             CAIRO_STATUS_INVALID_STATUS              CairoStatus::INVALID_STATUS 
+CAIRO_STATUS_NULL_POINTER               CAIRO_STATUS_NULL_POINTER                CairoStatus::NULL_POINTER 
+CAIRO_STATUS_INVALID_STRING             CAIRO_STATUS_INVALID_STRING              CairoStatus::INVALID_STRING 
+CAIRO_STATUS_INVALID_PATH_DATA          CAIRO_STATUS_INVALID_PATH_DATA           CairoStatus::INVALID_PATH_DATA 
+CAIRO_STATUS_READ_ERROR                 CAIRO_STATUS_READ_ERROR                  CairoStatus::READ_ERROR 
+CAIRO_STATUS_WRITE_ERROR                CAIRO_STATUS_WRITE_ERROR                 CairoStatus::WRITE_ERROR 
+CAIRO_STATUS_SURFACE_FINISHED           CAIRO_STATUS_SURFACE_FINISHED            CairoStatus::SURFACE_FINISHED 
+CAIRO_STATUS_SURFACE_TYPE_MISMATCH      CAIRO_STATUS_SURFACE_TYPE_MISMATCH       CairoStatus::SURFACE_TYPE_MISMATCH 
+CAIRO_STATUS_PATTERN_TYPE_MISMATCH      CAIRO_STATUS_PATTERN_TYPE_MISMATCH       CairoStatus::PATTERN_TYPE_MISMATCH 
+CAIRO_STATUS_INVALID_CONTENT            CAIRO_STATUS_INVALID_CONTENT             CairoStatus::INVALID_CONTENT 
+CAIRO_STATUS_INVALID_FORMAT             CAIRO_STATUS_INVALID_FORMAT              CairoStatus::INVALID_FORMAT 
+CAIRO_STATUS_INVALID_VISUAL             CAIRO_STATUS_INVALID_VISUAL              CairoStatus::INVALID_VISUAL 
+CAIRO_STATUS_FILE_NOT_FOUND             CAIRO_STATUS_FILE_NOT_FOUND              CairoStatus::FILE_NOT_FOUND 
+CAIRO_STATUS_INVALID_DASH               CAIRO_STATUS_INVALID_DASH                CairoStatus::INVALID_DASH 
+CAIRO_STATUS_INVALID_DSC_COMMENT        CAIRO_STATUS_INVALID_DSC_COMMENT         CairoStatus::INVALID_DSC_COMMENT 
+CAIRO_STATUS_INVALID_INDEX              CAIRO_STATUS_INVALID_INDEX               CairoStatus::INVALID_INDEX 
+CAIRO_STATUS_CLIP_NOT_REPRESENTABLE     CAIRO_STATUS_CLIP_NOT_REPRESENTABLE      CairoStatus::CLIP_NOT_REPRESENTABLE 
+CAIRO_STATUS_TEMP_FILE_ERROR            CAIRO_STATUS_TEMP_FILE_ERROR             CairoStatus::TEMP_FILE_ERROR 
+CAIRO_STATUS_INVALID_STRIDE             CAIRO_STATUS_INVALID_STRIDE              CairoStatus::INVALID_STRIDE 
+CAIRO_STATUS_FONT_TYPE_MISMATCH         CAIRO_STATUS_FONT_TYPE_MISMATCH          CairoStatus::FONT_TYPE_MISMATCH 
+CAIRO_STATUS_USER_FONT_IMMUTABLE        CAIRO_STATUS_USER_FONT_IMMUTABLE         CairoStatus::USER_FONT_IMMUTABLE 
+CAIRO_STATUS_USER_FONT_ERROR            CAIRO_STATUS_USER_FONT_ERROR             CairoStatus::USER_FONT_ERROR 
+CAIRO_STATUS_NEGATIVE_COUNT             CAIRO_STATUS_NEGATIVE_COUNT              CairoStatus::NEGATIVE_COUNT 
+CAIRO_STATUS_INVALID_CLUSTERS           CAIRO_STATUS_INVALID_CLUSTERS            CairoStatus::INVALID_CLUSTERS 
+CAIRO_STATUS_INVALID_SLANT              CAIRO_STATUS_INVALID_SLANT               CairoStatus::INVALID_SLANT 
+CAIRO_STATUS_INVALID_WEIGHT             CAIRO_STATUS_INVALID_WEIGHT              CairoStatus::INVALID_WEIGHT 
+CAIRO_ANTIALIAS_DEFAULT                 CAIRO_ANTIALIAS_DEFAULT                  CairoAntialias::MODE_DEFAULT 
+CAIRO_ANTIALIAS_NONE                    CAIRO_ANTIALIAS_NONE                     CairoAntialias::MODE_NONE 
+CAIRO_ANTIALIAS_GRAY                    CAIRO_ANTIALIAS_GRAY                     CairoAntialias::MODE_GRAY 
+CAIRO_ANTIALIAS_SUBPIXEL                CAIRO_ANTIALIAS_SUBPIXEL                 CairoAntialias::MODE_SUBPIXEL 
+CAIRO_SUBPIXEL_ORDER_DEFAULT            CAIRO_SUBPIXEL_ORDER_DEFAULT             CairoSubpixelOrder::ORDER_DEFAULT 
+CAIRO_SUBPIXEL_ORDER_RGB                CAIRO_SUBPIXEL_ORDER_RGB                 CairoSubpixelOrder::ORDER_RGB 
+CAIRO_SUBPIXEL_ORDER_BGR                CAIRO_SUBPIXEL_ORDER_BGR                 CairoSubpixelOrder::ORDER_BGR 
+CAIRO_SUBPIXEL_ORDER_VRGB               CAIRO_SUBPIXEL_ORDER_VRGB                CairoSubpixelOrder::ORDER_VRGB 
+CAIRO_SUBPIXEL_ORDER_VBGR               CAIRO_SUBPIXEL_ORDER_VBGR                CairoSubpixelOrder::ORDER_VBGR 
+CAIRO_FILL_RULE_WINDING                 CAIRO_FILL_RULE_WINDING                  CairoFillRule::WINDING 
+CAIRO_FILL_RULE_EVEN_ODD                CAIRO_FILL_RULE_EVEN_ODD                 CairoFillRule::EVEN_ODD 
+CAIRO_LINE_CAP_BUTT                     CAIRO_LINE_CAP_BUTT                      CairoLineCap::BUTT 
+CAIRO_LINE_CAP_ROUND                    CAIRO_LINE_CAP_ROUND                     CairoLineCap::ROUND 
+CAIRO_LINE_CAP_SQUARE                   CAIRO_LINE_CAP_SQUARE                    CairoLineCap::SQUARE 
+CAIRO_LINE_JOIN_MITER                   CAIRO_LINE_JOIN_MITER                    CairoLineJoin::MITER 
+CAIRO_LINE_JOIN_ROUND                   CAIRO_LINE_JOIN_ROUND                    CairoLineJoin::ROUND 
+CAIRO_LINE_JOIN_BEVEL                   CAIRO_LINE_JOIN_BEVEL                    CairoLineJoin::BEVEL 
+CAIRO_OPERATOR_CLEAR                    CAIRO_OPERATOR_CLEAR                     CairoOperator::CLEAR 
+CAIRO_OPERATOR_SOURCE                   CAIRO_OPERATOR_SOURCE                    CairoOperator::SOURCE 
+CAIRO_OPERATOR_OVER                     CAIRO_OPERATOR_OVER                      CairoOperator::OVER 
+CAIRO_OPERATOR_IN                       CAIRO_OPERATOR_IN                        CairoOperator::IN 
+CAIRO_OPERATOR_OUT                      CAIRO_OPERATOR_OUT                       CairoOperator::OUT 
+CAIRO_OPERATOR_ATOP                     CAIRO_OPERATOR_ATOP                      CairoOperator::ATOP 
+CAIRO_OPERATOR_DEST                     CAIRO_OPERATOR_DEST                      CairoOperator::DEST 
+CAIRO_OPERATOR_DEST_OVER                CAIRO_OPERATOR_DEST_OVER                 CairoOperator::DEST_OVER 
+CAIRO_OPERATOR_DEST_IN                  CAIRO_OPERATOR_DEST_IN                   CairoOperator::DEST_IN 
+CAIRO_OPERATOR_DEST_OUT                 CAIRO_OPERATOR_DEST_OUT                  CairoOperator::DEST_OUT 
+CAIRO_OPERATOR_DEST_ATOP                CAIRO_OPERATOR_DEST_ATOP                 CairoOperator::DEST_ATOP 
+CAIRO_OPERATOR_XOR                      CAIRO_OPERATOR_XOR                       CairoOperator::XOR 
+CAIRO_OPERATOR_ADD                      CAIRO_OPERATOR_ADD                       CairoOperator::ADD 
+CAIRO_OPERATOR_SATURATE                 CAIRO_OPERATOR_SATURATE                  CairoOperator::SATURATE 
+CAIRO_PATTERN_TYPE_SOLID                CAIRO_PATTERN_TYPE_SOLID                 CairoPatternType::SOLID 
+CAIRO_PATTERN_TYPE_SURFACE              CAIRO_PATTERN_TYPE_SURFACE               CairoPatternType::SURFACE 
+CAIRO_PATTERN_TYPE_LINEAR               CAIRO_PATTERN_TYPE_LINEAR                CairoPatternType::LINEAR 
+CAIRO_PATTERN_TYPE_RADIAL               CAIRO_PATTERN_TYPE_RADIAL                CairoPatternType::RADIAL 
+CAIRO_EXTEND_NONE                       CAIRO_EXTEND_NONE                        CairoExtend::NONE 
+CAIRO_EXTEND_REPEAT                     CAIRO_EXTEND_REPEAT                      CairoExtend::REPEAT 
+CAIRO_EXTEND_REFLECT                    CAIRO_EXTEND_REFLECT                     CairoExtend::REFLECT 
+CAIRO_EXTEND_PAD                        CAIRO_EXTEND_PAD                         CairoExtend::PAD 
+CAIRO_FILTER_FAST                       CAIRO_FILTER_FAST                        CairoFilter::FAST 
+CAIRO_FILTER_GOOD                       CAIRO_FILTER_GOOD                        CairoFilter::GOOD 
+CAIRO_FILTER_BEST                       CAIRO_FILTER_BEST                        CairoFilter::BEST 
+CAIRO_FILTER_NEAREST                    CAIRO_FILTER_NEAREST                     CairoFilter::NEAREST 
+CAIRO_FILTER_BILINEAR                   CAIRO_FILTER_BILINEAR                    CairoFilter::BILINEAR 
+CAIRO_FILTER_GAUSSIAN                   CAIRO_FILTER_GAUSSIAN                    CairoFilter::GAUSSIAN 
+CAIRO_HINT_STYLE_DEFAULT                CAIRO_HINT_STYLE_DEFAULT                 CairoHintStyle::STYLE_DEFAULT 
+CAIRO_HINT_STYLE_NONE                   CAIRO_HINT_STYLE_NONE                    CairoHintStyle::STYLE_NONE 
+CAIRO_HINT_STYLE_SLIGHT                 CAIRO_HINT_STYLE_SLIGHT                  CairoHintStyle::STYLE_SLIGHT 
+CAIRO_HINT_STYLE_MEDIUM                 CAIRO_HINT_STYLE_MEDIUM                  CairoHintStyle::STYLE_MEDIUM 
+CAIRO_HINT_STYLE_FULL                   CAIRO_HINT_STYLE_FULL                    CairoHintStyle::STYLE_FULL 
+CAIRO_HINT_METRICS_DEFAULT              CAIRO_HINT_METRICS_DEFAULT               CairoHintMetrics::METRICS_DEFAULT 
+CAIRO_HINT_METRICS_OFF                  CAIRO_HINT_METRICS_OFF                   CairoHintMetrics::METRICS_OFF 
+CAIRO_HINT_METRICS_ON                   CAIRO_HINT_METRICS_ON                    CairoHintMetrics::METRICS_ON 
+CAIRO_FONT_TYPE_TOY                     CAIRO_FONT_TYPE_TOY                      CairoFontType::TOY 
+CAIRO_FONT_TYPE_FT                      CAIRO_FONT_TYPE_FT                       CairoFontType::FT 
+CAIRO_FONT_TYPE_WIN32                   CAIRO_FONT_TYPE_WIN32                    CairoFontType::WIN32 
+CAIRO_FONT_SLANT_NORMAL                 CAIRO_FONT_SLANT_NORMAL                  CairoFontSlant::NORMAL 
+CAIRO_FONT_SLANT_ITALIC                 CAIRO_FONT_SLANT_ITALIC                  CairoFontSlant::ITALIC 
+CAIRO_FONT_SLANT_OBLIQUE                CAIRO_FONT_SLANT_OBLIQUE                 CairoFontSlant::OBLIQUE 
+CAIRO_FONT_WEIGHT_NORMAL                CAIRO_FONT_WEIGHT_NORMAL                 CairoFontWeight::NORMAL 
+CAIRO_FONT_WEIGHT_BOLD                  CAIRO_FONT_WEIGHT_BOLD                   CairoFontWeight::BOLD 
+CAIRO_CONTENT_COLOR                     CAIRO_CONTENT_COLOR                      CairoContent::COLOR 
+CAIRO_CONTENT_ALPHA                     CAIRO_CONTENT_ALPHA                      CairoContent::ALPHA 
+CAIRO_CONTENT_COLOR_ALPHA               CAIRO_CONTENT_COLOR_ALPHA                CairoContent::COLOR_ALPHA 
+CAIRO_SURFACE_TYPE_IMAGE                CAIRO_SURFACE_TYPE_IMAGE                 CairoSurfaceType::IMAGE 
+CAIRO_SURFACE_TYPE_PDF                  CAIRO_SURFACE_TYPE_PDF                   CairoSurfaceType::PDF 
+CAIRO_SURFACE_TYPE_PS                   CAIRO_SURFACE_TYPE_PS                    CairoSurfaceType::PS 
+CAIRO_SURFACE_TYPE_XLIB                 CAIRO_SURFACE_TYPE_XLIB                  CairoSurfaceType::XLIB 
+CAIRO_SURFACE_TYPE_XCB                  CAIRO_SURFACE_TYPE_XCB                   CairoSurfaceType::XCB 
+CAIRO_SURFACE_TYPE_GLITZ                CAIRO_SURFACE_TYPE_GLITZ                 CairoSurfaceType::GLITZ 
+CAIRO_SURFACE_TYPE_QUARTZ               CAIRO_SURFACE_TYPE_QUARTZ                CairoSurfaceType::QUARTZ 
+CAIRO_SURFACE_TYPE_WIN32                CAIRO_SURFACE_TYPE_WIN32                 CairoSurfaceType::WIN32 
+CAIRO_SURFACE_TYPE_BEOS                 CAIRO_SURFACE_TYPE_BEOS                  CairoSurfaceType::BEOS 
+CAIRO_SURFACE_TYPE_DIRECTFB             CAIRO_SURFACE_TYPE_DIRECTFB              CairoSurfaceType::DIRECTFB 
+CAIRO_SURFACE_TYPE_SVG                  CAIRO_SURFACE_TYPE_SVG                   CairoSurfaceType::SVG 
+CAIRO_SURFACE_TYPE_OS2                  CAIRO_SURFACE_TYPE_OS2                   CairoSurfaceType::OS2 
+CAIRO_SURFACE_TYPE_WIN32_PRINTING       CAIRO_SURFACE_TYPE_WIN32_PRINTING        CairoSurfaceType::WIN32_PRINTING 
+CAIRO_SURFACE_TYPE_QUARTZ_IMAGE         CAIRO_SURFACE_TYPE_QUARTZ_IMAGE          CairoSurfaceType::QUARTZ_IMAGE 
+CAIRO_FORMAT_ARGB32                     CAIRO_FORMAT_ARGB32                      CairoFormat::ARGB32 
+CAIRO_FORMAT_RGB24                      CAIRO_FORMAT_RGB24                       CairoFormat::RGB24 
+CAIRO_FORMAT_A8                         CAIRO_FORMAT_A8                          CairoFormat::A8 
+CAIRO_FORMAT_A1                         CAIRO_FORMAT_A1                          CairoFormat::A1 
+CAIRO_PS_LEVEL_2                        CAIRO_PS_LEVEL_2                         CairoPsLevel::LEVEL_2 
+CAIRO_PS_LEVEL_3                        CAIRO_PS_LEVEL_3                         CairoPsLevel::LEVEL_3 
+CAIRO_SVG_VERSION_1_1                   CAIRO_SVG_VERSION_1_1                    CairoSvgSurface::VERSION_1_1 
+CAIRO_SVG_VERSION_1_2                   CAIRO_SVG_VERSION_1_2                    CairoSvgSurface::VERSION_1_2  
+        
+cairo_create                            cairo_create                            CairoContext::__construct
+cairo_font_face_get_type                cairo_font_face_get_type                CairoFontFace::getType
+cairo_font_face_status                  cairo_font_face_status                  CairoFontFace::status
+        
+cairo_font_options_create               cairo_font_options_create               CairoFontOptions::__construct
+cairo_font_options_equal                cairo_font_options_equal                CairoFontOptions::equal
+cairo_font_options_get_antialias        cairo_font_options_get_antialias        CairoFontOptions::getAntiAlias
+cairo_font_options_get_hint_metrics     cairo_font_options_get_hint_metrics     CairoFontOptions::getHintMetrics
+cairo_font_options_get_hint_style       cairo_font_options_get_hint_style       CairoFontOptions::getHintStyle
+cairo_font_options_get_subpixel_order   cairo_font_options_get_subpixel_order   CairoFontOptions::getSubpixelOrder
+cairo_font_options_hash                 cairo_font_options_hash                 CairoFontOptions::hash
+cairo_font_options_merge                cairo_font_options_merge                CairoFontOptions::merge
+cairo_font_options_set_antialias        cairo_font_options_set_antialias        CairoFontOptions::setAntialias
+cairo_font_options_set_hint_metrics     cairo_font_options_set_hint_metrics     CairoFontOptions::setHintMetrics
+cairo_font_options_set_hint_style       cairo_font_options_set_hint_style       CairoFontOptions::setHintStyle
+cairo_font_options_set_subpixel_order   cairo_font_options_set_subpixel_order   CairoFontOptions::setSubpixelOrder
+cairo_font_options_status               cairo_font_options_status               CairoFontOptions::status
+        
+cairo_format_stride_for_width           cairo_format_stride_for_width           CairoFormat::strideForWidth
+                                                                                                         
+cairo_image_surface_create              cairo_image_surface_create              CairoImageSurface::__construct
+cairo_image_surface_create_for_data     cairo_image_surface_create_for_data     CairoImageSurface::createForData
+cairo_image_surface_create_from_png     cairo_image_surface_create_from_png     CairoImageSurface::createFromPng
+cairo_image_surface_get_data            cairo_image_surface_get_data            CairoImageSurface::getData
+cairo_image_surface_get_format          cairo_image_surface_get_format          CairoImageSurface::getFormat
+cairo_image_surface_get_height          cairo_image_surface_get_height          CairoImageSurface::getHeight
+cairo_image_surface_get_stride          cairo_image_surface_get_stride          CairoImageSurface::getStride
+cairo_image_surface_get_width           cairo_image_surface_get_width           CairoImageSurface::getWidth
+                                                                                                         
+cairo_matrix_create_scale               cairo_matrix_create_scale               CairoMatrix::createScale
+cairo_matrix_create_translate           cairo_matrix_create_translate           CairoMatrix::createTranslate
+cairo_matrix_init_identity              cairo_matrix_init_identity              CairoMatrix::initIdentity
+cairo_matrix_init_rotate                cairo_matrix_init_rotate                CairoMatrix::initRotate 
+cairo_matrix_init_scale                 cairo_matrix_init_scale                 CairoMatrix::initScale  
+cairo_matrix_init_translate             cairo_matrix_init_translate             CairoMatrix::initTranslate
+cairo_matrix_init                       cairo_matrix_init                       CairoMatrix::init   
+cairo_matrix_invert                     cairo_matrix_invert                     CairoMatrix::invert 
+cairo_matrix_multiply                   cairo_matrix_multiply                   CairoMatrix::multiply   
+cairo_matrix_rotate                     cairo_matrix_rotate                     CairoMatrix::rotate 
+cairo_matrix_scale                      cairo_matrix_scale                      CairoMatrix::scale  
+cairo_matrix_transform_distance         cairo_matrix_transform_distance         CairoMatrix::transformDistance
+cairo_matrix_transform_point            cairo_matrix_transform_point            CairoMatrix::transformPoint
+cairo_matrix_translate                  cairo_matrix_translate                  CairoMatrix::translate  
+        
+cairo_pattern_add_color_stop_rgb        cairo_pattern_add_color_stop_rgb        CairoPattern::addColorStopRgb       
+cairo_pattern_add_color_stop_rgba       cairo_pattern_add_color_stop_rgba       CairoPattern::addColorStopRgba  
+cairo_pattern_create_for_surface        cairo_pattern_create_for_surface        CairoPattern::createForSurface  
+cairo_pattern_create_linear             cairo_pattern_create_linear             CairoPattern::createLinear  
+cairo_pattern_create_radial             cairo_pattern_create_radial             CairoPattern::createRadial  
+cairo_pattern_create_rgb                cairo_pattern_create_rgb                CairoPattern::createRgb 
+cairo_pattern_create_rgba               cairo_pattern_create_rgba               CairoPattern::createRgba    
+cairo_pattern_get_color_stop_count      cairo_pattern_get_color_stop_count      CairoPattern::getColorStopCount 
+cairo_pattern_get_color_stop_rgba       cairo_pattern_get_color_stop_rgba       CairoPattern::getColorStopRgba  
+cairo_pattern_get_extend                cairo_pattern_get_extend                CairoPattern::getExtend 
+cairo_pattern_get_filter                cairo_pattern_get_filter                CairoPattern::getFilter 
+cairo_pattern_get_linear_points         cairo_pattern_get_linear_points         CairoPattern::getLinearPoints   
+cairo_pattern_get_matrix                cairo_pattern_get_matrix                CairoPattern::getMatrix 
+cairo_pattern_get_radial_circles        cairo_pattern_get_radial_circles        CairoPattern::getRadialCircles  
+cairo_pattern_get_rgba                  cairo_pattern_get_rgba                  CairoPattern::getRgba   
+cairo_pattern_get_surface               cairo_pattern_get_surface               CairoPattern::getSurface    
+cairo_pattern_get_type                  cairo_pattern_get_type                  CairoPattern::getType   
+cairo_pattern_set_extend                cairo_pattern_set_extend                CairoPattern::setExtend 
+cairo_pattern_set_filter                cairo_pattern_set_filter                CairoPattern::setFilter 
+cairo_pattern_set_matrix                cairo_pattern_set_matrix                CairoPattern::setMatrix 
+cairo_pattern_status                    cairo_pattern_status                    CairoPattern::status    
+        
+cairo_pdf_surface_create                cairo_pdf_surface_create                CairoPdfSurface::__construct
+cairo_pdf_surface_set_size              cairo_pdf_surface_set_size              CairoPdfSurface::setSize    
+        
+cairo_ps_get_levels                     cairo_ps_get_levels                     CairoPsSurface::getLevels   
+cairo_ps_level_to_string                cairo_ps_level_to_string                CairoPsSurface::levelToString   
+
+cairo_ps_surface_create                 cairo_ps_surface_create                 CairoPsSurface::__construct
+cairo_ps_surface_dsc_begin_page_setup   cairo_ps_surface_dsc_begin_page_setup   CairoPsSurface::dscBeginPageSetup   
+cairo_ps_surface_dsc_begin_setup        cairo_ps_surface_dsc_begin_setup        CairoPsSurface::dscBeginSetup   
+cairo_ps_surface_dsc_comment            cairo_ps_surface_dsc_comment            CairoPsSurface::dscComment  
+cairo_ps_surface_get_eps                cairo_ps_surface_get_eps                CairoPsSurface::getEps  
+cairo_ps_surface_restrict_to_level      cairo_ps_surface_restrict_to_level      CairoPsSurface::restrictToLevel 
+cairo_ps_surface_set_eps                cairo_ps_surface_set_eps                CairoPsSurface::setEps  
+cairo_ps_surface_set_size               cairo_ps_surface_set_size               CairoPsSurface::setSize 
+                                                                                                                         
+cairo_scaled_font_create                cairo_scaled_font_create                CairoScaledFont::__construct
+cairo_scaled_font_extents               cairo_scaled_font_extents               CairoScaledFont::extents    
+cairo_scaled_font_get_ctm               cairo_scaled_font_get_ctm               CairoScaledFont::getCtm 
+cairo_scaled_font_get_font_face         cairo_scaled_font_get_font_face         CairoScaledFont::getFontFace    
+cairo_scaled_font_get_font_matrix       cairo_scaled_font_get_font_matrix       CairoScaledFont::getFontMatrix  
+cairo_scaled_font_get_font_options      cairo_scaled_font_get_font_options      CairoScaledFont::getFontOptions 
+cairo_scaled_font_get_scale_matrix      cairo_scaled_font_get_scale_matrix      CairoScaledFont::getScaleMatrix 
+cairo_scaled_font_get_type              cairo_scaled_font_get_type              CairoScaledFont::getType    
+cairo_scaled_font_glyph_extents         cairo_scaled_font_glyph_extents         CairoScaledFont::glyphExtents   
+cairo_scaled_font_status                cairo_scaled_font_status                CairoScaledFont::status 
+cairo_scaled_font_text_extents          cairo_scaled_font_text_extents          CairoScaledFont::textExtents    
+                                                                                                                        
+cairo_surface_copy_page                 cairo_surface_copy_page                 CairoSurface::copyPage  
+cairo_surface_create_similar            cairo_surface_create_similar            CairoSurface::createSimilar 
+cairo_surface_finish                    cairo_surface_finish                    CairoSurface::finish    
+cairo_surface_flush                     cairo_surface_flush                     CairoSurface::flush 
+cairo_surface_get_content               cairo_surface_get_content               CairoSurface::getContent    
+cairo_surface_get_device_offset         cairo_surface_get_device_offset         CairoSurface::getDeviceOffset   
+cairo_surface_get_fallback_resolution   cairo_surface_get_fallback_resolution   CairoSurface::getFallbackResolution 
+cairo_surface_get_font_options          cairo_surface_get_font_options          CairoSurface::getFontOptions    
+cairo_surface_get_type                  cairo_surface_get_type                  CairoSurface::getType   
+cairo_surface_has_show_text_glyphs      cairo_surface_has_show_text_glyphs      CairoSurface::hasShowTextGlyphs 
+cairo_surface_mark_dirty_rectangle      cairo_surface_mark_dirty_rectangle      CairoSurface::markDirtyRectangle    
+cairo_surface_mark_dirty                cairo_surface_mark_dirty                CairoSurface::markDirty 
+cairo_surface_set_device_offset         cairo_surface_set_device_offset         CairoSurface::setDeviceOffset   
+cairo_surface_set_fallback_resolution   cairo_surface_set_fallback_resolution   CairoSurface::setFallbackResolution 
+cairo_surface_show_page                 cairo_surface_show_page                 CairoSurface::showPage  
+cairo_surface_status                    cairo_surface_status                    CairoSurface::status    
+cairo_surface_write_to_png              cairo_surface_write_to_png              CairoSurface::writeToPng    
+                                                                                                                        
+cairo_svg_get_versions                  cairo_svg_get_versions                  CairoSvgSurface::getVersions    
+cairo_svg_version_to_string             cairo_svg_version_to_string             CairoSvgSurface::versionToString    
+
+cairo_svg_surface_create                cairo_svg_surface_create                CairoSvgSurface::__construct
+cairo_svg_surface_restrict_to_version   cairo_svg_surface_restrict_to_version   CairoSvgSurface::restrictToVersion  
+                                                                                                                        
+cairo_toy_font_face_create              cairo_toy_font_face_create              CairoToyFontFace::__construct
+cairo_toy_font_face_get_family          cairo_toy_font_face_get_family          CairoToyFontFace::getFamily 
+cairo_toy_font_face_get_slant           cairo_toy_font_face_get_slant           CairoToyFontFace::getSlant  
+cairo_toy_font_face_get_weight          cairo_toy_font_face_get_weight          CairoToyFontFace::getWeight 

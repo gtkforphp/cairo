@@ -13,14 +13,21 @@ Paths:
     Constructor and way to add data
     Iterator for path object
 
-Text and Fonts:
-    Not very much is complete, basically enough to be able to do basic text drawing
+Other:
+    API utilizing glyphs needs to be completed, a few functions in scaled font,
+    backend fonts, and CairoContext
+
+    Add ability to see values in matrix (read only properties, var_dump support) and
+    in other objects as well
+
+    clone handling
+
+    Maybe implement cairo_svg_surface_create_for_stream and similar, allowing
+    PHP callbacks/closures to be used as the callback
 
 1. Finish code completion (see above)
 
-2. Tests written (good code coverage wanted) - currently at > 90% for finished code
+2. Tests written (good code coverage wanted)
 
 3. Documentation
 
-4. Make sure extended classes set into and returned out of cairo calls work and all
-   classes can be used extended properly
