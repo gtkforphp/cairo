@@ -18,10 +18,44 @@ var_dump($surface2);
 $context->setSourceSurface($surface2, 5, 5);
 var_dump($context);
 
+/* Wrong number args */
 try {
-    $context->setSourceSurface(new stdClass, 5, 5);
+    $context->setSourceSurface();
+    trigger_error('setSourceSurface requires at leastone arg');
 } catch (CairoException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong number args */
+try {
+    $context->setSourceSurface($pattern, 1, 1, 1);
+    trigger_error('setSourceSurface requires no more than 3 args');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong arg type */
+try {
+    $context->setSourceSurface(array());
+    trigger_error('setSourceSurface expects instanceof CairoPattern');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong arg type */
+try {
+    $context->setSourceSurface($pattern, array());
+    trigger_error('setSourceSurface expects instanceof CairoPattern');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* Wrong arg type */
+try {
+    $context->setSourceSurface($pattern, 1, array());
+    trigger_error('setSourceSurface expects double');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
@@ -33,4 +67,8 @@ object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-CairoContext::setSourceSurface() expects parameter 1 to be CairoSurface, object given
+CairoContext::setSourceSurface() expects at least 1 parameter, 0 given
+CairoContext::setSourceSurface() expects at most 3 parameters, 4 given
+CairoContext::setSourceSurface() expects parameter 1 to be CairoSurface, array given
+CairoContext::setSourceSurface() expects parameter 1 to be CairoSurface, null given
+CairoContext::setSourceSurface() expects parameter 1 to be CairoSurface, null given

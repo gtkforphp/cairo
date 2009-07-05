@@ -1,5 +1,5 @@
 --TEST--
-Cairo->getAntialias() method
+Cairo->getLineCap() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -12,12 +12,12 @@ var_dump($surface);
 $context = new CairoContext($surface);
 var_dump($context);
 
-var_dump($context->getAntialias());
+var_dump($context->getLineCap());
 
 /* Wrong number args */
 try {
-    $context->getAntialias('foobar');
-    trigger_error('getAntialias requires no args');
+    $context->getLineCap('foobar');
+    trigger_error('getLineCap requires no args');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
 }
@@ -28,4 +28,4 @@ object(CairoImageSurface)#%d (0) {
 object(CairoContext)#%d (0) {
 }
 int(0)
-CairoContext::getAntialias() expects exactly 0 parameters, 1 given
+CairoContext::getLineCap() expects exactly 0 parameters, 1 given
