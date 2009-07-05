@@ -1380,7 +1380,7 @@ PHP_FUNCTION(cairo_paint_with_alpha)
 	double alpha = 0.0;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &context_zval, cairo_ce_cairocontext, &alpha) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Od", &context_zval, cairo_ce_cairocontext, &alpha) == FAILURE) {
 		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}

@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->copyPage() method
+CairoContext->getOperator() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -12,16 +12,22 @@ var_dump($surface);
 $context = new CairoContext($surface);
 var_dump($context);
 
-$context->copyPage();
+$context->setOperator(CAIRO_FORMAT_ARGB32);
+var_dump($context->getOperator());
+
 try {
-    $context->copyPage('foo');
-} catch (CairoException $e) {
-    echo $e->getMessage();
+    $context->getOperator(1);
+    trigger_error('CairoContext->getOperator expects 0 parameters.');
+} 
+catch (CairoException $ex) {
+	echo $ex->getMessage(), PHP_EOL;
 }
+
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-CairoContext::copyPage() expects exactly 0 parameters, 1 given
+int(0)
+CairoContext::getOperator() expects exactly 0 parameters, 1 given

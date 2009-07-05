@@ -1,5 +1,5 @@
 --TEST--
-Cairo->userToDevice() method
+CairoContext->userToDevice() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

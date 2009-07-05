@@ -1,5 +1,5 @@
 --TEST--
-Cairo->popGroup() method
+CairoContext->popGroup() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

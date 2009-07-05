@@ -1,5 +1,5 @@
 --TEST--
-Cairo->getTarget() error conditions
+CairoContext->getTarget() error conditions
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

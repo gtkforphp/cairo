@@ -1,5 +1,5 @@
 --TEST--
-Cairo->pushGroupWithContent() method
+CairoContext->pushGroupWithContent() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

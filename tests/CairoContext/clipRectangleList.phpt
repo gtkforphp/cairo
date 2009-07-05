@@ -1,5 +1,5 @@
 --TEST--
-Cairo->clipRectangleList() method
+CairoContext->clipRectangleList() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

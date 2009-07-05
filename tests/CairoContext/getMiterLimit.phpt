@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->popGroupToSource() method
+Cairo->getMiterLimit() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -12,26 +12,22 @@ var_dump($surface);
 $context = new CairoContext($surface);
 var_dump($context);
 
-$context->pushGroup();
-$context->popGroupToSource();
-
-var_dump($context->getSource());
+$context->setMiterLimit(1);
+var_dump($context->getMiterLimit());
 
 /* wrong params */
 try {
-	$context->popGroupToSource(1);
-	trigger_error('popGroupToSource() expects 0 params');	
-}
+    $context->getMiterLimit('foobar');
+    trigger_error('Cairo->getMiterLimit() expects no params');
+} 
 catch (CairoException $ex) {
 	echo $ex->getMessage(), PHP_EOL;
 }
-
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-object(CairoSurfacePattern)#%d (0) {
-}
-CairoContext::popGroupToSource() expects exactly 0 parameters, 1 given
+float(1)
+CairoContext::getMiterLimit() expects exactly 0 parameters, 1 given

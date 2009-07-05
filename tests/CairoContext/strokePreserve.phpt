@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->copyPage() method
+CairoContext->strokePreserve() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -12,11 +12,14 @@ var_dump($surface);
 $context = new CairoContext($surface);
 var_dump($context);
 
-$context->copyPage();
+$context->strokePreserve();
+
+/* Wrong number args */
 try {
-    $context->copyPage('foo');
+    $context->strokePreserve('foobar');
+    trigger_error('strokePreserve requires no args');
 } catch (CairoException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
@@ -24,4 +27,4 @@ object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-CairoContext::copyPage() expects exactly 0 parameters, 1 given
+CairoContext::strokePreserve() expects exactly 0 parameters, 1 given

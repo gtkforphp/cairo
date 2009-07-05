@@ -1,5 +1,5 @@
 --TEST--
-Cairo->fillExtents() method
+CairoContext->fillExtents() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -13,6 +13,14 @@ $context = new CairoContext($surface);
 var_dump($context);
 
 var_dump($context->fillExtents());
+
+/* Wrong number args */
+try {
+    $context->fillExtents('foobar');
+    trigger_error('fillExtents requires no args');
+} catch (CairoException $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
@@ -29,3 +37,4 @@ array(4) {
   [3]=>
   float(0)
 }
+CairoContext::fillExtents() expects exactly 0 parameters, 1 given

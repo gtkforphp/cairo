@@ -1,5 +1,5 @@
 --TEST--
-Cairo->clip() method
+CairoContext->clip() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

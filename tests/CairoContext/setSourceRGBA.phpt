@@ -1,5 +1,5 @@
 --TEST--
-Cairo->setSourceRGBA() method
+CairoContext->setSourceRGBA() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

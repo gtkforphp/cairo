@@ -1,5 +1,5 @@
 --TEST--
-Cairo->getLineJoin() method
+CairoContext->getLineJoin() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

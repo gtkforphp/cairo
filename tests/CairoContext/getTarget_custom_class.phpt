@@ -1,5 +1,5 @@
 --TEST--
-Cairo->getTarget() should return custom classes derived from CairoImageSurface
+CairoContext->getTarget() should return custom classes derived from CairoImageSurface
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
