@@ -44,6 +44,10 @@ typedef struct _cairo_context_object {
 	zval *surface;
 	zval *matrix;
 	zval *pattern;
+	zval *font_face;
+	zval *font_matrix;
+	zval *font_options;
+	zval *scaled_font;
 	cairo_t *context;
 } cairo_context_object;
 
