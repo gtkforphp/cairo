@@ -3,14 +3,25 @@
 ARG_WITH("cairo", "Cairo Graphics Library Bindings", "no");
 
 if (PHP_CAIRO != "no") {
-	if (CHECK_LIB("cairo_a.lib;cairo.lib", "cairo", PHP_CAIRO) &&
-		CHECK_HEADER_ADD_INCLUDE("cairo/cairo.h", "CFLAGS_CAIRO", null, null, true)) {
-		EXTENSION("cairo", "cairo.c cairo_error.c cairo_context.c cairo_pattern.c cairo_matrix.c cairo_path.c \
+	if (CHECK_HEADER_ADD_INCLUDE("cairo/cairo.h", "CFLAGS_CAIRO", null, null, true)) {
+		/* Check for static lib first, because that will need an extra define */
+		if (CHECK_LIB("cairo_a.lib", "cairo", PHP_CAIRO)) {
+			EXTENSION("cairo", "cairo.c cairo_error.c cairo_context.c cairo_pattern.c cairo_matrix.c cairo_path.c \
+			cairo_surface.c cairo_image_surface.c cairo_svg_surface.c cairo_pdf_surface.c cairo_ps_surface.c \
+			cairo_font.c cairo_font_options.c cairo_font_face.c cairo_scaled_font.c");
+			ADD_FLAG("CFLAGS_CAIRO", "/D CAIRO_WIN32_STATIC_BUILD=1");
+
+			AC_DEFINE("HAVE_CAIRO", 1);
+		} else if (CHECK_LIB("cairo.lib", "cairo", PHP_CAIRO)) {
+			EXTENSION("cairo", "cairo.c cairo_error.c cairo_context.c cairo_pattern.c cairo_matrix.c cairo_path.c \
 			cairo_surface.c cairo_image_surface.c cairo_svg_surface.c cairo_pdf_surface.c cairo_ps_surface.c \
 			cairo_font.c cairo_font_options.c cairo_font_face.c cairo_scaled_font.c");
 
-		AC_DEFINE("HAVE_CAIRO", 1);
+			AC_DEFINE("HAVE_CAIRO", 1);
+		} else {
+			WARNING('Could not find cairo.lib or cairo_a.lib; skipping');
+		}
 	} else {
-		WARNING('Could not find cairo.h or cairo.lib; skipping');
+		WARNING('Could not find cairo.h; skipping');
 	}
 }
