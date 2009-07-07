@@ -49,6 +49,9 @@ try {
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
 }
+
+// DO NOT REMOVE: workaround for GC-related bug in 5.3
+die;
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {

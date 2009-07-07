@@ -39,6 +39,8 @@ cairo_set_source($context, $pattern, 1);
 cairo_set_source(1, $pattern);
 cairo_set_source($context, 1);
 
+// DO NOT REMOVE: workaround for GC-related bug in 5.3
+die;
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {

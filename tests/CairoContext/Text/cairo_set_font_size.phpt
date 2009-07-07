@@ -32,6 +32,9 @@ cairo_set_font_size($context, 1, 1);
 // check arg types, should be context object, double
 cairo_set_font_size(array(), 1);
 cairo_set_font_size($context, array());
+
+// DO NOT REMOVE: workaround for GC-related bug in 5.3 
+die;
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {

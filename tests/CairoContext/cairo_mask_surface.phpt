@@ -33,6 +33,9 @@ cairo_mask_surface(1, $surface);
 cairo_mask_surface($context, array());
 cairo_mask_surface($context, $surface, array());
 cairo_mask_surface($context, $surface, 1, array());
+
+// DO NOT REMOVE: workaround for GC-related bug in 5.3
+die;
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
