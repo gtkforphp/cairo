@@ -24,6 +24,7 @@ Other:
 
     Maybe implement cairo_svg_surface_create_for_stream and similar, allowing
     PHP callbacks/closures to be used as the callback
+    Helper methods to convert image surfaces for use with imagick/gmagick/etc
 
 1. Finish code completion (see above)
 
