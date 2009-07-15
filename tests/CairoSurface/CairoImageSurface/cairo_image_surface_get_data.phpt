@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 50, 50);
 var_dump($surface);
 
-var_dump(cairo_image_surface_get_data($surface));
+var_dump(strlen(cairo_image_surface_get_data($surface)));
 
 // bad type hint is an E_RECOVERABLE_ERROR, so let's hook a handler
 function bad_class($errno, $errstr) {
@@ -27,7 +27,7 @@ cairo_image_surface_get_data(null);
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
-string(0) ""
+int(10000)
 
 Warning: cairo_image_surface_get_data() expects exactly 1 parameter, 0 given in %s on line %d
 

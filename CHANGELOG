@@ -1,0 +1,5 @@
+2009-07-15  Michael Maclean  <mgdm@php.net>
+
+    * Fix a bug in CairoImageSurface::getData/cairo_image_surface_get_data, 
+      which caused it to return the wrong length of string. String length now
+      calculated based on stride and height

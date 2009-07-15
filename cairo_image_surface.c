@@ -208,6 +208,8 @@ PHP_FUNCTION(cairo_image_surface_get_data)
 {
 	zval *surface_zval;
 	cairo_surface_object *surface_object;
+	unsigned char *data;	
+	long height, stride;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &surface_zval, cairo_ce_cairoimagesurface) == FAILURE) {
@@ -219,7 +221,10 @@ PHP_FUNCTION(cairo_image_surface_get_data)
 	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
 	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
 
-	RETURN_STRING((char *)cairo_image_surface_get_data(surface_object->surface), 1);
+	data = cairo_image_surface_get_data(surface_object->surface);
+	height = cairo_image_surface_get_height(surface_object->surface);
+	stride = cairo_image_surface_get_stride(surface_object->surface);
+	RETURN_STRINGL(data, height * stride, 1);
 }
 /* }}} */
 
