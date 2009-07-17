@@ -781,7 +781,7 @@ PHP_FUNCTION(cairo_set_fill_rule)
 {
 	zval *context_zval = NULL;
 	cairo_context_object *context_object;
-	cairo_fill_rule_t fill_rule = 0;
+	long fill_rule = 0;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &context_zval, cairo_ce_cairocontext, &fill_rule) == FAILURE) {
@@ -823,7 +823,7 @@ PHP_FUNCTION(cairo_set_line_cap)
 {
 	zval *context_zval = NULL;
 	cairo_context_object *context_object;
-	cairo_line_cap_t line_cap = 0;
+	long line_cap = 0;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &context_zval, cairo_ce_cairocontext, &line_cap) == FAILURE) {
@@ -865,7 +865,7 @@ PHP_FUNCTION(cairo_set_line_join)
 {
 	zval *context_zval = NULL;
 	cairo_context_object *context_object;
-	cairo_line_join_t line_join = 0;
+	long line_join = 0;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &context_zval, cairo_ce_cairocontext, &line_join) == FAILURE) {
@@ -992,7 +992,7 @@ PHP_FUNCTION(cairo_set_operator)
 {
 	zval *context_zval = NULL;
 	cairo_context_object *context_object;
-	cairo_operator_t op = 0;
+	long op = 0;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &context_zval, cairo_ce_cairocontext, &op) == FAILURE) {

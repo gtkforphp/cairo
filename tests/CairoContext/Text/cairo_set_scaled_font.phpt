@@ -68,7 +68,7 @@ cairo_set_scaled_font($context, $scaled, 1);
 cairo_set_scaled_font(array(), $scaled);
 cairo_set_scaled_font($context, array());
 
-//die; // DO NOT REMOVE THIS - fixes issue in 5.3 with GC giving bogus memleak reports
+die; // DO NOT REMOVE THIS - fixes issue in 5.3 with GC giving bogus memleak reports
 ?>
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
