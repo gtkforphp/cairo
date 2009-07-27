@@ -75,6 +75,7 @@ PHP_METHOD(CairoPdfSurface, __construct)
 			owned_stream = 1;
 		} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 			php_stream_from_zval(stream, &stream_zval);	
+			Z_ADDREF_P(stream_zval);
 		} else {
 			zend_throw_exception(cairo_ce_cairoexception, "CairoPdfSurface::__construct() expects parameter 1 to be null, a string, or a stream resource", 0 TSRMLS_CC);
 			return;
@@ -124,6 +125,7 @@ PHP_FUNCTION(cairo_pdf_surface_create)
 			owned_stream = 1;
 		} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 			php_stream_from_zval(stream, &stream_zval);	
+			Z_ADDREF_P(stream_zval);
 		} else {
 			 zend_error(E_WARNING, "cairo_pdf_surface_create() expects parameter 1 to be null, a string, or a stream resource");
 			 RETURN_NULL();
