@@ -1,3 +1,6 @@
+2009-07-27  Michael Maclean  <mgdm@php.net>
+    * Add the beginnings of support for FreeType fonts
+
 2009-07-17  Michael Maclean  <mgdm@php.net>
 
     * Change types in cairo_set_* operators to long to avoid segfaults on 
