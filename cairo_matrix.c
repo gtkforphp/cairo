@@ -28,6 +28,8 @@
 #include "php_cairo.h"
 
 zend_class_entry *cairo_ce_cairomatrix;
+static zend_object_value cairo_matrix_object_new(zend_class_entry *ce TSRMLS_DC);
+static zend_object_handlers cairo_matrix_object_handlers; 
 
 ZEND_BEGIN_ARG_INFO_EX(CairoMatrix____construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
   ZEND_ARG_INFO(0, yx)
@@ -490,6 +492,22 @@ const zend_function_entry cairo_matrix_methods[] = {
 };
 /* }}} */
 
+static zend_object_value cairo_matrix_object_clone(zval *this_ptr TSRMLS_DC) 
+{
+	cairo_matrix_object *new_matrix = NULL;
+	zend_object_value new_zend_object;
+	cairo_matrix_object *old_matrix = (cairo_matrix_object *)cairo_matrix_object_get(this_ptr TSRMLS_CC);
+	new_zend_object = cairo_matrix_object_new(old_matrix->std.ce TSRMLS_CC);
+	new_matrix = (cairo_matrix_object *)zend_object_store_get_object(this_ptr TSRMLS_CC);
+
+	zend_objects_clone_members(&new_matrix->std, new_zend_object, &old_matrix->std, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+
+	cairo_matrix_init(new_matrix->matrix, old_matrix->matrix->xx, old_matrix->matrix->yx, old_matrix->matrix->xy,
+		old_matrix->matrix->yy, old_matrix->matrix->x0, old_matrix->matrix->y0);
+
+	return new_zend_object;
+}
+
 static void cairo_matrix_object_destroy(void *object TSRMLS_DC)
 {
 	cairo_matrix_object *matrix = (cairo_matrix_object *)object;
@@ -516,7 +534,7 @@ static zend_object_value cairo_matrix_object_new(zend_class_entry *ce TSRMLS_DC)
 	zend_hash_init(matrix->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
 	zend_hash_copy(matrix->std.properties, &ce->default_properties, (copy_ctor_func_t) zval_add_ref,(void *) &temp, sizeof(zval *));
 	retval.handle = zend_objects_store_put(matrix, NULL, (zend_objects_free_object_storage_t)cairo_matrix_object_destroy, NULL TSRMLS_CC);
-	retval.handlers = &cairo_std_object_handlers;
+	retval.handlers = &cairo_matrix_object_handlers;
 	return retval;
 }
 
@@ -528,6 +546,10 @@ PHP_MINIT_FUNCTION(cairo_matrix)
 	INIT_CLASS_ENTRY(ce, "CairoMatrix", cairo_matrix_methods);
 	cairo_ce_cairomatrix = zend_register_internal_class(&ce TSRMLS_CC);
 	cairo_ce_cairomatrix->create_object = cairo_matrix_object_new;
+	memcpy(&cairo_matrix_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	cairo_matrix_object_handlers.clone_obj = cairo_matrix_object_clone;
+	// date_object_handlers_date.compare_objects = date_object_compare_date;
+	// date_object_handlers_date.get_properties = date_object_get_properties; 
 
 	return SUCCESS;
 }
