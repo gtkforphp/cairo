@@ -33,17 +33,24 @@ zend_object_handlers cairo_std_object_handlers;
 
 #ifdef CAIRO_HAS_FT_FONT
 ZEND_DECLARE_MODULE_GLOBALS(cairo)
-static PHP_GINIT_FUNCTION(cairo);
+/* static PHP_GINIT_FUNCTION(cairo); */
 #endif
 
 static void php_cairo_globals_ctor(zend_cairo_globals *cairo_globals TSRMLS_DC)
 {
-	CAIROG(ft_lib) = NULL;
+	cairo_globals->ft_lib = NULL;
+	cairo_globals->fc_config = NULL;
 }
 
 static void php_cairo_globals_dtor(zend_cairo_globals *cairo_globals TSRMLS_DC)
 {
-	FT_Done_FreeType(CAIROG(ft_lib));
+	if(cairo_globals->ft_lib != NULL) {
+		FT_Done_FreeType(cairo_globals->ft_lib);
+	}
+
+	if(cairo_globals->fc_config != NULL) {
+		//FcFini();
+	}
 }
 
 /* Cairo Functions */
@@ -994,6 +1001,8 @@ static const function_entry cairo_functions[] = {
 
 #ifdef CAIRO_HAS_FT_FONT
 	PHP_FE(cairo_ft_font_face_create_for_ft_face, NULL)
+	PHP_FE(cairo_ft_font_face_create_for_pattern, NULL)
+	PHP_FE(cairo_fc_pattern_search, NULL)
 #endif
 
 	/* Generic Surface Functions */
@@ -1117,7 +1126,7 @@ zend_module_entry cairo_module_entry = {
 	PHP_CAIRO_VERSION,
 #ifdef CAIRO_HAS_FT_FONT
 	PHP_MODULE_GLOBALS(cairo),
-	PHP_GINIT(cairo),
+	NULL, /*	PHP_GINIT(cairo), */
 	NULL, 
 	NULL,
 	STANDARD_MODULE_PROPERTIES_EX
@@ -1131,15 +1140,6 @@ zend_module_entry cairo_module_entry = {
 ZEND_GET_MODULE(cairo)
 #endif
 
-
-/* {{{ PHP_GINIT_FUNCTION */
-#ifdef CAIRO_HAS_FT_FONT
-static PHP_GINIT_FUNCTION(cairo)
-{
-	cairo_globals->ft_lib == NULL;
-}
-#endif
-/* }}} */
 
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo)

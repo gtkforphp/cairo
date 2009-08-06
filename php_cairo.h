@@ -141,6 +141,11 @@ typedef struct _cairo_font_options_object {
 	cairo_font_options_t *font_options;
 } cairo_font_options_object;
 
+typedef struct _cairo_fc_pattern_object {
+	zend_object std;
+	FcPattern *fc_pattern;
+} cairo_fc_pattern_object;
+
 /* Lifecycle functions */
 PHP_MINIT_FUNCTION(cairo);
 PHP_MINFO_FUNCTION(cairo);
@@ -149,7 +154,10 @@ PHP_MSHUTDOWN_FUNCTION(cairo);
 /* Globals */
 #ifdef CAIRO_HAS_FT_FONT
 ZEND_BEGIN_MODULE_GLOBALS(cairo)
+	/* Freetype library */
 	FT_Library ft_lib;
+	/* Fontconfig config object */
+	FcConfig *fc_config;
 ZEND_END_MODULE_GLOBALS(cairo)
 
 #ifdef ZTS
@@ -420,6 +428,8 @@ PHP_FUNCTION(cairo_font_face_get_type);
 #endif
 #ifdef CAIRO_HAS_FT_FONT
 	PHP_FUNCTION(cairo_ft_font_face_create_for_ft_face);
+	PHP_FUNCTION(cairo_ft_font_face_create_for_pattern);
+	PHP_FUNCTION(cairo_fc_pattern_search);
 #endif
 
 /* SVG Surface Functiosn */
@@ -602,6 +612,16 @@ static inline cairo_font_options_object* cairo_font_options_object_get(zval *zob
     }
     return pobj;
 }
+
+static inline cairo_fc_pattern_object* cairo_fc_pattern_object_get(zval *zobj TSRMLS_DC)
+{
+    cairo_fc_pattern_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
+    if (pobj->fc_pattern == NULL) {
+        php_error(E_ERROR, "Internal fc_pattern object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
+    }
+    return pobj;
+}
+
 #endif /* PHP_CAIRO_H */
 
 /*
