@@ -35,6 +35,8 @@
 
 zend_class_entry *cairo_ce_cairoftfont;
 zend_class_entry *cairo_ce_fcpattern;
+zend_class_entry *cairo_ce_cairoftfontface;
+
 
 ZEND_BEGIN_ARG_INFO_EX(CairoFtFontFace_createForFtFace_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
 	ZEND_ARG_INFO(0, face)
