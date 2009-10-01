@@ -141,10 +141,12 @@ typedef struct _cairo_font_options_object {
 	cairo_font_options_t *font_options;
 } cairo_font_options_object;
 
+#ifdef CAIRO_HAS_FT_FONT
 typedef struct _cairo_fc_pattern_object {
 	zend_object std;
 	FcPattern *fc_pattern;
 } cairo_fc_pattern_object;
+#endif
 
 /* Lifecycle functions */
 PHP_MINIT_FUNCTION(cairo);
@@ -613,6 +615,7 @@ static inline cairo_font_options_object* cairo_font_options_object_get(zval *zob
     return pobj;
 }
 
+#ifdef CAIRO_HAS_FT_FONT
 static inline cairo_fc_pattern_object* cairo_fc_pattern_object_get(zval *zobj TSRMLS_DC)
 {
     cairo_fc_pattern_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
@@ -621,6 +624,7 @@ static inline cairo_fc_pattern_object* cairo_fc_pattern_object_get(zval *zobj TS
     }
     return pobj;
 }
+#endif
 
 #endif /* PHP_CAIRO_H */
 

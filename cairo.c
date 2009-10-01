@@ -34,7 +34,7 @@ zend_object_handlers cairo_std_object_handlers;
 #ifdef CAIRO_HAS_FT_FONT
 ZEND_DECLARE_MODULE_GLOBALS(cairo)
 /* static PHP_GINIT_FUNCTION(cairo); */
-#endif
+
 
 static void php_cairo_globals_ctor(zend_cairo_globals *cairo_globals TSRMLS_DC)
 {
@@ -52,6 +52,8 @@ static void php_cairo_globals_dtor(zend_cairo_globals *cairo_globals TSRMLS_DC)
 		//FcFini();
 	}
 }
+
+#endif
 
 /* Cairo Functions */
 ZEND_BEGIN_ARG_INFO(cairo_status_to_string_args, ZEND_SEND_BY_VAL)
