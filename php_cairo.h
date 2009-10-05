@@ -577,17 +577,6 @@ static inline cairo_font_options_object* cairo_font_options_object_get(zval *zob
     return pobj;
 }
 
-#ifdef CAIRO_HAS_FT_FONT
-static inline cairo_fc_pattern_object* cairo_fc_pattern_object_get(zval *zobj TSRMLS_DC)
-{
-    cairo_fc_pattern_object *pobj = zend_object_store_get_object(zobj TSRMLS_CC);
-    if (pobj->fc_pattern == NULL) {
-        php_error(E_ERROR, "Internal fc_pattern object missing in %s wrapper, you must call parent::__construct in extended classes", Z_OBJCE_P(zobj)->name);
-    }
-    return pobj;
-}
-#endif
-
 #endif /* PHP_CAIRO_H */
 
 /*
