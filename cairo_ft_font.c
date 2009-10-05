@@ -27,11 +27,12 @@
 #include <cairo.h>
 #include "php.h"
 #include "php_cairo.h"
+#include "zend_exceptions.h"
 
 #ifdef CAIRO_HAS_FT_FONT
-#include <fontconfig/fontconfig.h>
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <cairo-ft.h>
+
+ZEND_DECLARE_MODULE_GLOBALS(cairo);
 
 zend_class_entry *cairo_ce_cairoftfont;
 zend_class_entry *cairo_ce_fcpattern;
@@ -118,6 +119,7 @@ PHP_FUNCTION(cairo_ft_font_options_substitute)
 	}
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
+	pattern_object = (cairo_fc_pattern_object *)zend_object_store_get_object(pattern_zval TSRMLS_CC);
 	font_options_object = (cairo_font_options_object *)cairo_font_options_object_get(font_options_zval TSRMLS_CC);
 	cairo_ft_font_options_substitute(font_options_object->font_options, pattern_object->fc_pattern);
 }
@@ -296,7 +298,7 @@ PHP_FUNCTION(cairo_ft_font_face_create_for_pattern)
 
 	object_init_ex(return_value, cairo_ce_cairoftfontface);
 	font_face_object = (cairo_font_face_object *)zend_object_store_get_object(return_value TSRMLS_CC);	
-	font_face_object->font_face = (cairo_font_face_t *)cairo_ft_face_create_for_pattern(pattern_object->fc_pattern);
+	font_face_object->font_face = (cairo_font_face_t *)cairo_ft_font_face_create_for_pattern(pattern_object->fc_pattern);
 	PHP_CAIRO_ERROR(cairo_font_face_status(font_face_object->font_face));
 }
 /* }}} */
@@ -322,16 +324,15 @@ const zend_function_entry cairo_ft_font_methods[] = {
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo_ft_font)
 {
-	zend_class_entry ftfont_ce;
-	zend_class_entry fcpattern_ce;
+	zend_class_entry ftfont_ce, fcpattern_ce;
 
 	INIT_CLASS_ENTRY(fcpattern_ce, "CairoFcPattern", cairo_fc_pattern_methods);
 	cairo_ce_fcpattern = zend_register_internal_class(&fcpattern_ce TSRMLS_CC);
-	cairo_ce_fcpattern->create_object = cairo_fc_pattern_object_new;
+	//cairo_ce_fcpattern->create_object = cairo_fc_pattern_object_new;
 
 	INIT_CLASS_ENTRY(ftfont_ce, "CairoFtFontFace", cairo_ft_font_methods);
 	cairo_ce_cairoftfont = zend_register_internal_class_ex(&ftfont_ce, cairo_ce_cairofontface, "CairoFontFace" TSRMLS_CC);
-	cairo_ce_cairoftfont->create_object = cairo_font_face_object_new;
+	//cairo_ce_cairoftfont->create_object = cairo_font_face_object_new;
 
 	return SUCCESS;
 }

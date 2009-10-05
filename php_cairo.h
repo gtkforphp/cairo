@@ -66,12 +66,6 @@ extern zend_module_entry cairo_module_entry;
 
 #include <cairo.h>
 
-#ifdef CAIRO_HAS_FT_FONT
-#include <fontconfig/fontconfig.h>
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#endif
-
 /* Cairo object stuff */
 typedef struct _stream_closure {
 	php_stream *stream;
@@ -141,36 +135,10 @@ typedef struct _cairo_font_options_object {
 	cairo_font_options_t *font_options;
 } cairo_font_options_object;
 
-#ifdef CAIRO_HAS_FT_FONT
-typedef struct _cairo_fc_pattern_object {
-	zend_object std;
-	FcPattern *fc_pattern;
-} cairo_fc_pattern_object;
-#endif
-
 /* Lifecycle functions */
 PHP_MINIT_FUNCTION(cairo);
 PHP_MINFO_FUNCTION(cairo);
 PHP_MSHUTDOWN_FUNCTION(cairo);
-
-/* Globals */
-#ifdef CAIRO_HAS_FT_FONT
-ZEND_BEGIN_MODULE_GLOBALS(cairo)
-	/* Freetype library */
-	FT_Library ft_lib;
-	/* Fontconfig config object */
-	FcConfig *fc_config;
-ZEND_END_MODULE_GLOBALS(cairo)
-
-#ifdef ZTS
-# define CAIROG(v) TSRMG(cairo_globals_id, zend_cairo_globals *, v)
-#else
-# define CAIROG(v) (cairo_globals.v)
-#endif
-
-ZEND_EXTERN_MODULE_GLOBALS(cairo)
-
-#endif
 
 PHP_MINIT_FUNCTION(cairo_matrix);
 PHP_MINIT_FUNCTION(cairo_error);
@@ -186,7 +154,6 @@ PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_svg_surface);
 PHP_MINIT_FUNCTION(cairo_pdf_surface);
 PHP_MINIT_FUNCTION(cairo_ps_surface);
-PHP_MINIT_FUNCTION(cairo_ft_font);
 
 /* cairo functions */
 PHP_FUNCTION(cairo_version);
@@ -428,11 +395,6 @@ PHP_FUNCTION(cairo_font_face_get_type);
 	PHP_FUNCTION(cairo_quartz_font_face_create_for_atsu_font_id);
 	PHP_FUNCTION(cairo_quartz_font_face_create_for_cgfont);
 #endif
-#ifdef CAIRO_HAS_FT_FONT
-	PHP_FUNCTION(cairo_ft_font_face_create_for_ft_face);
-	PHP_FUNCTION(cairo_ft_font_face_create_for_pattern);
-	PHP_FUNCTION(cairo_fc_pattern_search);
-#endif
 
 /* SVG Surface Functiosn */
 #ifdef CAIRO_HAS_SVG_SURFACE
@@ -507,7 +469,7 @@ PHP_CAIRO_API extern cairo_t * php_cairo_context_reference(cairo_t *context);
 #define ALLOCATE_MATRIX(matrix_value) if (!matrix_value) { matrix_value = ecalloc(sizeof(cairo_matrix_t), 1); }
 
 /* turn error handling to exception mode and restore */
-#if defined(PHP_VERSION_ID) && PHP_VERSION_ID >= 50300
+#ifdef zend_replace_error_handling
 /* 5.3 version of the macros */
 #define PHP_CAIRO_ERROR_HANDLING(force_exceptions) \
 	zend_error_handling error_handling; \

@@ -31,30 +31,6 @@
 zend_class_entry *cairo_ce_cairo;
 zend_object_handlers cairo_std_object_handlers;
 
-#ifdef CAIRO_HAS_FT_FONT
-ZEND_DECLARE_MODULE_GLOBALS(cairo)
-/* static PHP_GINIT_FUNCTION(cairo); */
-
-
-static void php_cairo_globals_ctor(zend_cairo_globals *cairo_globals TSRMLS_DC)
-{
-	cairo_globals->ft_lib = NULL;
-	cairo_globals->fc_config = NULL;
-}
-
-static void php_cairo_globals_dtor(zend_cairo_globals *cairo_globals TSRMLS_DC)
-{
-	if(cairo_globals->ft_lib != NULL) {
-		FT_Done_FreeType(cairo_globals->ft_lib);
-	}
-
-	if(cairo_globals->fc_config != NULL) {
-		//FcFini();
-	}
-}
-
-#endif
-
 /* Cairo Functions */
 ZEND_BEGIN_ARG_INFO(cairo_status_to_string_args, ZEND_SEND_BY_VAL)
   ZEND_ARG_INFO(0, status)
@@ -896,6 +872,7 @@ static const function_entry cairo_functions[] = {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 	PHP_FE(cairo_path_extents, cairo_context_args)
 #endif
+
 	/* Text Functions */
 	PHP_FE(cairo_select_font_face, cairo_select_font_face_args)
 	PHP_FE(cairo_set_font_size, cairo_set_font_size_args)
@@ -910,7 +887,7 @@ static const function_entry cairo_functions[] = {
 	PHP_FE(cairo_show_text, cairo_show_text_args)
 	PHP_FE(cairo_text_extents, cairo_context_args)
 	PHP_FE(cairo_font_extents, cairo_context_args)
-	
+
 	/* Pattern Functions */
 	PHP_FE(cairo_pattern_get_type, cairo_pattern_args)
 	PHP_FE(cairo_pattern_status, cairo_pattern_args)
@@ -999,13 +976,7 @@ static const function_entry cairo_functions[] = {
 	cairo_user_font_face_get_unicode_to_glyph_func
 	cairo_user_font_face_set_text_to_glyphs_func
 	cairo_user_font_face_get_text_to_glyphs_func
-#endif*/
-
-#ifdef CAIRO_HAS_FT_FONT
-	PHP_FE(cairo_ft_font_face_create_for_ft_face, NULL)
-	PHP_FE(cairo_ft_font_face_create_for_pattern, NULL)
-	PHP_FE(cairo_fc_pattern_search, NULL)
-#endif
+#endif */
 
 	/* Generic Surface Functions */
 	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)
@@ -1071,7 +1042,7 @@ static const function_entry cairo_functions[] = {
 	PHP_FE(cairo_ps_surface_restrict_to_level, cairo_ps_surface_restrict_to_level_args)
 	PHP_FE(cairo_ps_level_to_string, cairo_ps_level_to_string_args)
 	PHP_FE(cairo_ps_get_levels, NULL)
-	PHP_FE(cairo_ps_surface_set_eps, cairo_ps_surface_set_eps_args)  
+	PHP_FE(cairo_ps_surface_set_eps, cairo_ps_surface_set_eps_args)
 	PHP_FE(cairo_ps_surface_get_eps, cairo_ps_surface_args)
 #endif
 	PHP_FE(cairo_ps_surface_dsc_begin_setup, cairo_ps_surface_args)
@@ -1121,20 +1092,12 @@ zend_module_entry cairo_module_entry = {
 	"cairo",
 	cairo_functions,
 	PHP_MINIT(cairo),
-	PHP_MSHUTDOWN(cairo),
+	NULL, //PHP_MSHUTDOWN(cairo),
 	NULL,
 	NULL,
 	PHP_MINFO(cairo),
 	PHP_CAIRO_VERSION,
-#ifdef CAIRO_HAS_FT_FONT
-	PHP_MODULE_GLOBALS(cairo),
-	NULL, /*	PHP_GINIT(cairo), */
-	NULL, 
-	NULL,
-	STANDARD_MODULE_PROPERTIES_EX
-#else
 	STANDARD_MODULE_PROPERTIES
-#endif
 };
 /* }}} */
 
@@ -1155,6 +1118,7 @@ PHP_MINIT_FUNCTION(cairo)
 	memcpy(&cairo_std_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	cairo_std_object_handlers.clone_obj = NULL;
 
+
 	PHP_MINIT(cairo_error)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_context)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
@@ -1163,20 +1127,21 @@ PHP_MINIT_FUNCTION(cairo)
 	PHP_MINIT(cairo_font_options)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_font_face)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_scaled_font)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_font)(INIT_FUNC_ARGS_PASSTHRU); /* must be after font_face */
 
-	PHP_MINIT(cairo_font)(INIT_FUNC_ARGS_PASSTHRU);
+/*
 #ifdef CAIRO_HAS_FT_FONT
 	PHP_MINIT(cairo_ft_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 #ifdef CAIRO_HAS_WIN32_FONT
-	//PHP_MINIT(cairo_win32_font)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_win32_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 #ifdef CAIRO_HAS_QUARTZ_FONT
-	//PHP_MINIT(cairo_quartz_font)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_quartz_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 #ifdef CAIRO_HAS_USER_FONT
-	//PHP_MINIT(cairo_svg_surface)(INIT_FUNC_ARGS_PASSTHRU);
-#endif
+	PHP_MINIT(cairo_svg_surface)(INIT_FUNC_ARGS_PASSTHRU);
+#endif */
 
 	PHP_MINIT(cairo_surface)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_image_surface)(INIT_FUNC_ARGS_PASSTHRU);
@@ -1186,29 +1151,20 @@ PHP_MINIT_FUNCTION(cairo)
 #ifdef CAIRO_HAS_PS_SURFACE
 	PHP_MINIT(cairo_ps_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
+/*
 #ifdef CAIRO_HAS_WIN32_SURFACE
-	//PHP_MINIT(cairo_win32_surface)(INIT_FUNC_ARGS_PASSTHRU);
-#endif
+	PHP_MINIT(cairo_win32_surface)(INIT_FUNC_ARGS_PASSTHRU);
+#endif */
 #ifdef CAIRO_HAS_SVG_SURFACE
 	PHP_MINIT(cairo_svg_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
+/*
 #ifdef CAIRO_HAS_QUARTZ_SURFACE
-	//PHP_MINIT(cairo_quartz_surface)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_quartz_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 #ifdef CAIRO_HAS_XLIB_SURFACE
-	//PHP_MINIT(cairo_xlib_surface)(INIT_FUNC_ARGS_PASSTHRU);
-#endif
-
-#ifdef CAIRO_HAS_FT_FONT
-#ifdef ZTS
-	ts_allocate_id(&cairo_globals_id,
-			sizeof(zend_cairo_globals),
-			(ts_allocate_ctor)php_cairo_globals_ctor,
-			(ts_allocate_dtor)php_cairo_globals_dtor);
-#else
-	php_cairo_globals_ctor(&cairo_globals TSRMLS_CC);
-#endif	
-#endif
+	PHP_MINIT(cairo_xlib_surface)(INIT_FUNC_ARGS_PASSTHRU);
+#endif */
 
 	return SUCCESS;
 }
@@ -1217,14 +1173,8 @@ PHP_MINIT_FUNCTION(cairo)
 /* {{{ PHP_MSHUTDOWN_FUNCTION */
 PHP_MSHUTDOWN_FUNCTION(cairo)
 {
-#ifdef ZEND_DEBUG
+#if defined(ZEND_DEBUG) && ZEND_DEBUG == 1
 	cairo_debug_reset_static_data();
-#endif
-
-#ifdef CAIRO_HAS_FT_FONT
-#ifndef ZTS
-	php_cairo_globals_dtor(&cairo_globals TSRMLS_CC);
-#endif
 #endif
 
 	return SUCCESS;
