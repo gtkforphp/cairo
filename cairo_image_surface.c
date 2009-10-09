@@ -136,7 +136,7 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 	object_init_ex(return_value, cairo_ce_cairoimagesurface);
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 	/* allocate our internal surface object buffer - has to be left lying around until we destroy the image */
-	surface_object->buffer = emalloc(stride * height);
+	surface_object->buffer = safe_emalloc(stride * height, sizeof(char), 0);
 	/* copy our data into the buffer */
 	surface_object->buffer = memcpy(surface_object->buffer, data, data_len);
 	/* create our surface and check for errors */

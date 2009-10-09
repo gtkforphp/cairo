@@ -372,12 +372,17 @@ PHP_METHOD(CairoPsSurface, getLevels)
 PHP_FUNCTION(cairo_ps_level_to_string)
 {
 	long level;
+	const char *level_str;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "l", &level) == FAILURE) {
 		return;
 	}
-
-	RETURN_STRING(cairo_ps_level_to_string(level), 1);
+	
+	if (level_str = cairo_ps_level_to_string(level)) {
+		RETURN_STRING(level_str, 1);
+	}
+	
+	RETURN_FALSE;
 }
 /* }}} */
 

@@ -173,12 +173,16 @@ PHP_FUNCTION(cairo_svg_surface_restrict_to_version)
 PHP_FUNCTION(cairo_svg_version_to_string)
 {
 	long version;
+	const char *version_str;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &version) == FAILURE) {
 		return;
 	}
-
-	RETURN_STRING(cairo_svg_version_to_string(version), 1);
+	
+	if (version_str = cairo_svg_version_to_string(version)) {
+		RETURN_STRING(version_str, 1);
+	}
+	RETURN_FALSE;
 }
 /* }}} */
 
