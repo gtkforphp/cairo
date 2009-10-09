@@ -469,7 +469,7 @@ PHP_CAIRO_API extern cairo_t * php_cairo_context_reference(cairo_t *context);
 #define ALLOCATE_MATRIX(matrix_value) if (!matrix_value) { matrix_value = ecalloc(sizeof(cairo_matrix_t), 1); }
 
 /* turn error handling to exception mode and restore */
-#ifdef zend_replace_error_handling
+#if PHP_VERSION_ID >= 50300
 /* 5.3 version of the macros */
 #define PHP_CAIRO_ERROR_HANDLING(force_exceptions) \
 	zend_error_handling error_handling; \
