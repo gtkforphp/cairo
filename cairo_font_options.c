@@ -259,6 +259,7 @@ PHP_FUNCTION(cairo_font_options_get_antialias)
 		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_font_options_object *) cairo_font_options_object_get(font_options_zval TSRMLS_CC);
 	RETURN_LONG(cairo_font_options_get_antialias(font_options_object->font_options));
@@ -303,6 +304,7 @@ PHP_FUNCTION(cairo_font_options_get_subpixel_order)
 		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_font_options_object *) cairo_font_options_object_get(font_options_zval TSRMLS_CC);
 	RETURN_LONG(cairo_font_options_get_subpixel_order(font_options_object->font_options));
@@ -346,6 +348,7 @@ PHP_FUNCTION(cairo_font_options_get_hint_style)
 		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_font_options_object *) cairo_font_options_object_get(font_options_zval TSRMLS_CC);
 	RETURN_LONG(cairo_font_options_get_hint_style(font_options_object->font_options));
@@ -389,6 +392,7 @@ PHP_FUNCTION(cairo_font_options_get_hint_metrics)
 		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
 
 	font_options_object = (cairo_font_options_object *) cairo_font_options_object_get(font_options_zval TSRMLS_CC);
 	RETURN_LONG(cairo_font_options_get_hint_metrics(font_options_object->font_options));
