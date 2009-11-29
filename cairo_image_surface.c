@@ -412,7 +412,6 @@ PHP_METHOD(CairoImageSurface, createFromPng)
 		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
-	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	object_init_ex(return_value, cairo_ce_cairoimagesurface);
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
@@ -430,6 +429,7 @@ PHP_METHOD(CairoImageSurface, createFromPng)
 	if(!stream) {
 		return;
 	}
+	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	/* Pack TSRMLS info and stream into struct */
 	closure = ecalloc(1, sizeof(stream_closure));
