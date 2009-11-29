@@ -379,6 +379,10 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 		RETURN_NULL();
 	}
 
+	if(!stream) {
+		RETURN_NULL();
+	}
+
 	/* Pack TSRMLS info and stream into struct */
 	closure = ecalloc(1, sizeof(stream_closure));
 	closure->stream = stream;
@@ -414,13 +418,17 @@ PHP_METHOD(CairoImageSurface, createFromPng)
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 
 	if(Z_TYPE_P(stream_zval) == IS_STRING) {
-		stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "rw+b", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
+		stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "rb", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
 		owned_stream = 1;
 	} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 		php_stream_from_zval(stream, &stream_zval);	
 	} else {
 		zend_throw_exception(cairo_ce_cairoexception, "CairoImageSurface::createFromPng() expects parameter 1 to be a string or a stream resource", 0 TSRMLS_CC);
-		RETURN_NULL();
+		return;
+	}
+
+	if(!stream) {
+		return;
 	}
 
 	/* Pack TSRMLS info and stream into struct */
