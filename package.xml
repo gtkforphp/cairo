@@ -29,6 +29,7 @@
     <license uri="http://www.php.net/license">PHP License</license>
     <notes>
      * Adds support for loading Freetype fonts
+     * Support for cloning matrices
      * Various bugfixes
     </notes>
 
