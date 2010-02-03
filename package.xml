@@ -23,7 +23,7 @@
      <active>no</active>
     </developer>
 
-    <date>2010-02-02</date>
+    <date>2010-02-03</date>
     <version><release>0.2.0</release><api>0.2.0</api></version>
     <stability><release>beta</release><api>beta</api></stability>
     <license uri="http://www.php.net/license">PHP License</license>
@@ -182,7 +182,7 @@
                     <file role="test" name="setMiterLimit.phpt"/>
                     <file role="test" name="setOperator.phpt"/>
                     <file role="test" name="setSource.phpt"/>
-                    <file role="test" name="setSourceRgb.phpt"/>
+                    <file role="test" name="setSourceRGB.phpt"/>
                     <file role="test" name="setSourceRGBA.phpt"/>
                     <file role="test" name="setSourceSurface.phpt"/>
                     <file role="test" name="setTolerance.phpt"/>
@@ -332,7 +332,7 @@
                         <file role="test" name="getWeight.phpt"/>
                         <file role="test" name="__construct.phpt"/>
                     </dir>
-                    <dir name="CairoToyFontFace">
+                    <dir name="CairoFtFontFace">
                         <file role="test" name="cairo_ft_font_face_create.phpt"/>
                         <file role="test" name="__construct.phpt"/>
                         <file role="test" name="Vera.ttf"/>
@@ -574,6 +574,11 @@
     </dependencies>
    
     <providesextension>cairo</providesextension>
+
+	<extsrcrelease>
+  		<configureoption default="autodetect" name="with-cairo" prompt="Please provide the prefix of Cairo installation" />
+ 	</extsrcrelease>
+
    
     <changelog>
     </changelog>
