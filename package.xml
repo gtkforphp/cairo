@@ -23,16 +23,13 @@
      <active>no</active>
     </developer>
 
-    <date>2009-07-05</date>
-    <version><release>0.1.0</release><api>0.1.0</api></version>
-    <stability><release>alpha</release><api>alpha</api></stability>
+    <date>2010-02-02</date>
+    <version><release>0.2.0</release><api>0.2.0</api></version>
+    <stability><release>beta</release><api>beta</api></stability>
     <license uri="http://www.php.net/license">PHP License</license>
     <notes>
-    * Initial Release
-    * Support for svg, pdf, ps, image, png surface backends
-    * Support for libcairo versions 1.4, 1.6 and 1.8
-    * Toy font API support only, glyph support not complete
-    * OO or procedural APIs
+     * Adds support for loading Freetype fonts
+     * Various bugfixes
     </notes>
 
     <contents>
@@ -56,6 +53,7 @@
             <file role="src" name="cairo_font_face.c"/>
             <file role="src" name="cairo_scaled_font.c"/>
             <file role="src" name="cairo_font_options.c"/>
+            <file role="src" name="cairo_ft_font.c"/>
             <file role="src" name="cairo_surface.c"/>
             <file role="src" name="cairo_image_surface.c"/>
             <file role="src" name="cairo_pdf_surface.c"/>
@@ -332,6 +330,12 @@
                         <file role="test" name="getSlant.phpt"/>
                         <file role="test" name="getWeight.phpt"/>
                         <file role="test" name="__construct.phpt"/>
+                    </dir>
+                    <dir name="CairoToyFontFace">
+                        <file role="test" name="cairo_ft_font_face_create.phpt"/>
+                        <file role="test" name="__construct.phpt"/>
+                        <file role="test" name="Vera.ttf"/>
+                        <file role="test" name="broken.ttf"/>
                     </dir>
                 </dir>
                 <dir name="CairoFontOptions">
