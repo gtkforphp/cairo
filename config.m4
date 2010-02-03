@@ -25,7 +25,7 @@ if test "$PHP_CAIRO" != "no"; then
 
   PHP_NEW_EXTENSION(cairo, cairo.c cairo_error.c cairo_context.c cairo_pattern.c cairo_matrix.c cairo_path.c \
     cairo_surface.c cairo_image_surface.c cairo_svg_surface.c cairo_pdf_surface.c cairo_ps_surface.c \
-    cairo_font.c cairo_font_options.c cairo_font_face.c cairo_scaled_font.c, $ext_shared)
+    cairo_font.c cairo_font_options.c cairo_font_face.c cairo_scaled_font.c cairo_ft_font.c, $ext_shared)
 
   EXT_CAIRO_HEADERS="php_cairo_api.h"
 
@@ -64,6 +64,18 @@ if test "$PHP_CAIRO" != "no"; then
                 PHP_EVAL_INCLINE($CAIRO_INCS)
                 PHP_EVAL_LIBLINE($CAIRO_LIBS, CAIRO_SHARED_LIBADD)
                 AC_DEFINE(HAVE_CAIRO, 1, [whether cairo exists in the system])
+
+                AC_MSG_CHECKING(for Freetype)
+                if $PKG_CONFIG --exists freetype2; then
+                    freetype_version_full=`$PKG_CONFIG --modversion freetype2`
+                    AC_MSG_RESULT([found $freetype_version_full])
+                    FREETYPE_LIBS="$LDFLAGS `$PKG_CONFIG --libs freetype2`"
+                    FREETYPE_INCS="$CFLAGS `$PKG_CONFIG --cflags-only-I freetype2`"
+                    PHP_EVAL_INCLINE($FREETYPE_INCS)
+                    PHP_EVAL_LIBLINE($FREETYPE_LIBS, FREETYPE_SHARED_LIBADD)
+                    AC_DEFINE(HAVE_FREETYPE, 1, [whether freetype2 exists in the system])
+                fi
+                    
             else
                 AC_MSG_RESULT(too old)
                 AC_MSG_ERROR(Ooops ! You need at least cairo 1.4)

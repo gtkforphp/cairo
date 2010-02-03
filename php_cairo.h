@@ -66,6 +66,11 @@ extern zend_module_entry cairo_module_entry;
 
 #include <cairo.h>
 
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#endif
+
 /* Cairo object stuff */
 typedef struct _stream_closure {
 	php_stream *stream;
@@ -130,6 +135,14 @@ typedef struct _cairo_font_face_object {
 	cairo_font_face_t *font_face;
 } cairo_font_face_object;
 
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+typedef struct _cairo_ft_font_face_object {
+	zend_object std;
+	cairo_font_face_t *font_face;
+	FT_Stream ft_stream;
+} cairo_ft_font_face_object;
+#endif
+
 typedef struct _cairo_font_options_object {
 	zend_object std;
 	cairo_font_options_t *font_options;
@@ -139,6 +152,22 @@ typedef struct _cairo_font_options_object {
 PHP_MINIT_FUNCTION(cairo);
 PHP_MINFO_FUNCTION(cairo);
 PHP_MSHUTDOWN_FUNCTION(cairo);
+
+/* Globals */
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+ZEND_BEGIN_MODULE_GLOBALS(cairo)
+	/* Freetype library */
+	FT_Library ft_lib;
+ZEND_END_MODULE_GLOBALS(cairo)
+
+#ifdef ZTS
+# define CAIROG(v) TSRMG(cairo_globals_id, zend_cairo_globals *, v)
+#else
+# define CAIROG(v) (cairo_globals.v)
+#endif
+
+ZEND_EXTERN_MODULE_GLOBALS(cairo)
+#endif
 
 PHP_MINIT_FUNCTION(cairo_matrix);
 PHP_MINIT_FUNCTION(cairo_error);
@@ -154,6 +183,7 @@ PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_svg_surface);
 PHP_MINIT_FUNCTION(cairo_pdf_surface);
 PHP_MINIT_FUNCTION(cairo_ps_surface);
+PHP_MINIT_FUNCTION(cairo_ft_font);
 
 /* cairo functions */
 PHP_FUNCTION(cairo_version);
@@ -395,6 +425,9 @@ PHP_FUNCTION(cairo_font_face_get_type);
 	PHP_FUNCTION(cairo_quartz_font_face_create_for_atsu_font_id);
 	PHP_FUNCTION(cairo_quartz_font_face_create_for_cgfont);
 #endif
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+	PHP_FUNCTION(cairo_ft_font_face_create);
+#endif
 
 /* SVG Surface Functiosn */
 #ifdef CAIRO_HAS_SVG_SURFACE
@@ -449,6 +482,10 @@ extern zend_class_entry *cairo_ce_cairoftfontface;
 extern zend_object_value cairo_surface_object_new(zend_class_entry *ce TSRMLS_DC);
 extern cairo_status_t php_cairo_read_func(void *closure, const unsigned char *data, unsigned int length);
 extern cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, unsigned int length);
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+static unsigned long php_cairo_ft_read_func(FT_Stream stream, unsigned long offset, unsigned char* buffer, unsigned long count);
+extern void php_cairo_ft_close_stream(FT_Stream stream);
+#endif
 
 extern zend_object_value cairo_font_face_object_new(zend_class_entry *ce TSRMLS_DC);
 
