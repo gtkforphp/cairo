@@ -790,7 +790,7 @@ PHP_METHOD(Cairo, statusToString)
 /* }}} */
 
 /* {{{ cairo_functions[] */
-static const function_entry cairo_functions[] = {
+static const zend_function_entry cairo_functions[] = {
 	/* Cairo Functions */
 	PHP_FE(cairo_version, NULL)
 	PHP_FE(cairo_version_string, NULL)
