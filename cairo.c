@@ -1000,6 +1000,9 @@ static const zend_function_entry cairo_functions[] = {
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 	PHP_FE(cairo_ft_font_face_create, NULL)
 #endif
+#if defined(CAIRO_HAS_WIN32_FONT) && defined(HAVE_WIN32_FONT)
+	PHP_FE(cairo_win32_font_face_create, NULL)
+#endif
 
 	/* Generic Surface Functions */
 	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)
@@ -1169,10 +1172,10 @@ PHP_MINIT_FUNCTION(cairo)
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 	PHP_MINIT(cairo_ft_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
-/*
 #ifdef CAIRO_HAS_WIN32_FONT
 	PHP_MINIT(cairo_win32_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
+/*
 #ifdef CAIRO_HAS_QUARTZ_FONT
 	PHP_MINIT(cairo_quartz_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif

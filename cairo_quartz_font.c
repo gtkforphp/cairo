@@ -125,19 +125,6 @@ const zend_function_entry cairo_quartz_font_methods[] = {
 
 #endif
 
-#ifdef CAIRO_HAS_WIN32_FONT
-
-/* {{{ cairo_win32_font_methods[] */
-const zend_function_entry cairo_win32_font_methods[] = {
-	//PHP_ME_MAPPING(createForLogfontw, cairo_win32_font_face_create_for_logfontw, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	//PHP_ME_MAPPING(createForHfont, cairo_win32_font_face_create_for_hfont, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	//PHP_ME_MAPPING(createForLogfontwHfont, cairo_win32_font_face_create_for_logfontw_hfont, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	{NULL, NULL, NULL}
-};
-/* }}} */
-
-#endif
-
 #ifdef CAIRO_HAS_QUARTZ_FONT
 	INIT_CLASS_ENTRY(ce, "CairoQuartzFontFace", cairo_quartz_font_methods);
 	cairo_ce_cairoquartzfont = zend_register_internal_class_ex(&ce, cairo_ce_cairofontface, "CairoFontFace" TSRMLS_CC);
