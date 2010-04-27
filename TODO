@@ -4,8 +4,6 @@ Surfaces to Finish:
     XLib Surfaces — X Window System rendering using XLib
 
 Font backends to Finish:
-    FreeType Fonts — Font support for FreeType
-    Win32 Fonts — Font support for Microsoft Windows
     Quartz (CGFont) Fonts — Font support via CGFont on OS X
     User Fonts — Font support with font data provided by the user
 
