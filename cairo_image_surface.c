@@ -106,6 +106,16 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 		return;
 	}
 
+	if (format < 0) {
+		zend_error(E_WARNING, "Invalid format for cairo_image_surface_create_for_data()");
+		return;
+	}
+
+	if (width < 1 || height < 1) {
+		zend_error(E_WARNING, "Invalid surface dimensions for cairo_image_surface_create_for_data()");
+		return;
+	}
+
 	/* Figure out our stride if it was not given */
 	if(stride < 0 ){
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
@@ -161,6 +171,17 @@ PHP_METHOD(CairoImageSurface, createForData)
 		return;
 	}
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
+	
+	if (format < 0) {
+		zend_throw_exception(cairo_ce_cairoexception, "CairoImageSurface::createForData(): invalid format", 0 TSRMLS_CC);
+		return;
+	}
+
+	if (width < 1 || height < 1) {
+		zend_throw_exception(cairo_ce_cairoexception, "CairoImageSurface::createForData(): invalid surface dimensions", 0 TSRMLS_CC);
+		return;
+	}
+
 
 	/* Figure out our stride if it was not given */
 	if(stride < 0 ){
