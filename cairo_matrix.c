@@ -532,7 +532,11 @@ static zend_object_value cairo_matrix_object_new(zend_class_entry *ce TSRMLS_DC)
 
 	ALLOC_HASHTABLE(matrix->std.properties);
 	zend_hash_init(matrix->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
+#if PHP_VERSION_ID < 50399
 	zend_hash_copy(matrix->std.properties, &ce->default_properties, (copy_ctor_func_t) zval_add_ref,(void *) &temp, sizeof(zval *));
+#else
+	object_properties_init(&matrix->std, ce);
+#endif
 	retval.handle = zend_objects_store_put(matrix, NULL, (zend_objects_free_object_storage_t)cairo_matrix_object_destroy, NULL TSRMLS_CC);
 	retval.handlers = &cairo_matrix_object_handlers;
 	return retval;

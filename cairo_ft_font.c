@@ -340,7 +340,11 @@ zend_object_value cairo_ft_font_face_object_new(zend_class_entry *ce TSRMLS_DC)
 
 	ALLOC_HASHTABLE(font_face->std.properties);
 	zend_hash_init(font_face->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
+#if PHP_VERSION_ID < 50399
 	zend_hash_copy(font_face->std.properties, &ce->default_properties, (copy_ctor_func_t) zval_add_ref,(void *) &temp, sizeof(zval *));
+#else
+	object_properties_init(&font_face->std, ce);
+#endif
 	retval.handle = zend_objects_store_put(font_face, NULL, (zend_objects_free_object_storage_t)cairo_ft_font_face_object_destroy, NULL TSRMLS_CC);
 	retval.handlers = zend_get_std_object_handlers();
 	return retval;
