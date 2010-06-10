@@ -116,6 +116,11 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 		return;
 	}
 
+	if (stride >= INT_MAX || stride < -1) {
+		zend_error(E_WARNING, "Invalid stride for cairo_image_surface_create_for_data()");
+		return;
+	}
+
 	/* Figure out our stride if it was not given */
 	if(stride < 0 ){
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
@@ -147,6 +152,12 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 	/* allocate our internal surface object buffer - has to be left lying around until we destroy the image */
 	surface_object->buffer = safe_emalloc(stride * height, sizeof(char), 0);
+	
+	if(surface_object->buffer == NULL) {
+		zend_error(E_WARNING, "cairo_image_surface_create_for_data(): Could not allocate memory for buffer");
+		return;
+	}
+
 	/* copy our data into the buffer */
 	surface_object->buffer = memcpy(surface_object->buffer, data, data_len);
 	/* create our surface and check for errors */
@@ -181,7 +192,11 @@ PHP_METHOD(CairoImageSurface, createForData)
 		zend_throw_exception(cairo_ce_cairoexception, "CairoImageSurface::createForData(): invalid surface dimensions", 0 TSRMLS_CC);
 		return;
 	}
-
+	
+	if (stride >= INT_MAX || stride < -1) {
+		zend_error(E_WARNING, "Invalid stride for cairo_image_surface_create_for_data()");
+		return;
+	}
 
 	/* Figure out our stride if it was not given */
 	if(stride < 0 ){
@@ -213,7 +228,13 @@ PHP_METHOD(CairoImageSurface, createForData)
 	object_init_ex(return_value, cairo_ce_cairoimagesurface);
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 	/* allocate our internal surface object buffer - has to be left lying around until we destroy the image */
-	surface_object->buffer = emalloc(stride * height);
+	surface_object->buffer = safe_emalloc(stride * height, sizeof(char), 0);
+
+	if(surface_object->buffer == NULL) {
+		zend_throw_exception(cairo_ce_cairoexception, "CairoImageSurface::createForData(): Could not allocate memory for buffer", 0 TSRMLS_CC);
+		return;
+	}
+
 	/* copy our data into the buffer */
 	surface_object->buffer = memcpy(surface_object->buffer, data, data_len);
 	/* create our surface and check for errors */
