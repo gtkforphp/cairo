@@ -88,15 +88,16 @@
 
 zend_class_entry *cairo_ce_cairowin32font;
 /** These classes are containers for constants defined in WinGdi.h, etc. */
-zend_class_entry *cairo_ce_cairowin32fontweight;
-zend_class_entry *cairo_ce_cairowin32fontcharset;
+static zend_class_entry *cairo_ce_cairowin32fontweight;
+static zend_class_entry *cairo_ce_cairowin32fontcharset;
 /** output precision constants */
-zend_class_entry *cairo_ce_cairowin32fontoutprec;
+static zend_class_entry *cairo_ce_cairowin32fontoutprec;
 /** clip precision constants */
-zend_class_entry *cairo_ce_cairowin32fontclipprec;
-zend_class_entry *cairo_ce_cairowin32fontquality;
-zend_class_entry *cairo_ce_cairowin32fontpitch;
-zend_class_entry *cairo_ce_cairowin32fontfamily;
+static zend_class_entry *cairo_ce_cairowin32fontclipprec;
+static zend_class_entry *cairo_ce_cairowin32fontquality;
+static zend_class_entry *cairo_ce_cairowin32fontpitch;
+static zend_class_entry *cairo_ce_cairowin32fontfamily;
+static zend_object_handlers cairo_win32_font_face_object_handlers;
 
 /**
  * CairoWin32FontFace::__construct takes 1 optional argument
@@ -262,8 +263,9 @@ static void cairo_win32_font_face_object_destroy(void *object TSRMLS_DC)
 
     if (font_face->font_face)
         cairo_font_face_destroy(font_face->font_face);
-
-    efree(font_face);
+	
+    if (cairo_font_face_get_reference_count(font_face->font_face) == 0)
+	    efree(font_face);
 }
 
 /**
@@ -295,10 +297,36 @@ zend_object_value cairo_win32_font_face_create_new(zend_class_entry *ce TSRMLS_D
         (zend_objects_free_object_storage_t)cairo_win32_font_face_object_destroy, 
         NULL TSRMLS_CC
     );
-    retval.handlers = zend_get_std_object_handlers();
+    retval.handlers = &cairo_win32_font_face_object_handlers;
     return retval;
 }
 
+zend_object_value cairo_win32_font_face_clone(zval * old_zval TSRMLS_DC)
+{
+	zend_object_value new_val;
+	cairo_win32_font_face_object *new_font,
+								 *old_font;
+	old_font = zend_object_store_get_object(old_zval TSRMLS_CC);
+	new_val = cairo_win32_font_face_create_new(old_font->std.ce TSRMLS_CC);
+	new_font = zend_object_store_get_object_by_handle(new_val.handle TSRMLS_CC);
+	zend_objects_clone_members(
+		&new_font->std,
+		new_val,
+		&old_font->std,
+		Z_OBJ_HANDLE_P(old_zval)
+		TSRMLS_CC
+	);
+
+	/* Fonts are created and then never changed, with the exception of
+	 * the set_user_data stuff. That means we don't have to do any
+	 * real cloning of the font -- just increase it's ref count and
+	 * point the new font to the old one. Simples.
+	 */
+	cairo_font_face_reference(old_font->font_face);
+	new_font->font_face = old_font->font_face;
+	
+	return new_val;
+}
 
 PHP_MINIT_FUNCTION(cairo_win32_font)
 {
@@ -422,6 +450,12 @@ PHP_MINIT_FUNCTION(cairo_win32_font)
     REGISTER_WIN32_LONG_CONST(cairowin32fontfamily, "ROMAN", FF_ROMAN, "CAIRO_WIN32_FONT_FAMILY_ROMAN");
     REGISTER_WIN32_LONG_CONST(cairowin32fontfamily, "SCRIPT", FF_SCRIPT, "CAIRO_WIN32_FONT_FAMILY_SCRIPT");
     REGISTER_WIN32_LONG_CONST(cairowin32fontfamily, "SWISS", FF_SWISS, "CAIRO_WIN32_FONT_FAMILY_SWISS");
+
+    memcpy(&cairo_win32_font_face_object_handlers,
+        zend_get_std_object_handlers(),
+        sizeof(zend_object_handlers)
+    );
+    cairo_win32_font_face_object_handlers.clone_obj = cairo_win32_font_face_clone;
 
     return SUCCESS;
 }
