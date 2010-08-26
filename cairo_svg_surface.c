@@ -26,6 +26,7 @@
 
 #include "php.h"
 #include "php_cairo.h"
+#include <zend_exceptions.h>
 
 #if CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
