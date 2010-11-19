@@ -33,6 +33,9 @@ zend_class_entry *cairo_ce_subpixelorder;
 zend_class_entry *cairo_ce_hintstyle;
 zend_class_entry *cairo_ce_hintmetrics;
 
+static zend_object_handlers object_handlers;
+static zend_function		ctor_wrapper_func;
+
 ZEND_BEGIN_ARG_INFO(CairoFontOptions_fontoptions_args, ZEND_SEND_BY_VAL)
 	/* ZEND_ARG_OBJ_INFO(0, other, CairoFontOptions, 0) - dang E_RECOVERABLE_ERROR */
 	ZEND_ARG_INFO(0, other)
@@ -77,8 +80,9 @@ static zend_object_value cairo_font_options_object_new(zend_class_entry *ce TSRM
 	zval *temp;
 
 	font_options = ecalloc(1, sizeof(cairo_font_options_object));
-	font_options->font_options = NULL;
-	font_options->std.ce = ce;
+	font_options->font_options   = NULL;
+	font_options->std.ce 		 = ce;
+	font_options->is_constructed = 0;
 
 	ALLOC_HASHTABLE(font_options->std.properties);
 	zend_hash_init(font_options->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
@@ -88,7 +92,7 @@ static zend_object_value cairo_font_options_object_new(zend_class_entry *ce TSRM
 	object_properties_init(&font_options->std, ce);
 #endif
 	retval.handle = zend_objects_store_put(font_options, NULL, (zend_objects_free_object_storage_t)cairo_font_options_object_destroy, NULL TSRMLS_CC);
-	retval.handlers = zend_get_std_object_handlers();
+	retval.handlers = &object_handlers;
 	return retval;
 }
 /* }}} */
@@ -102,13 +106,19 @@ PHP_METHOD(CairoFontOptions, __construct)
 
 	PHP_CAIRO_ERROR_HANDLING(TRUE)
 	if (zend_parse_parameters_none() == FAILURE) {
+		/* For some reason zend_parse_parameters_none() DOES return FAILURE,
+		 * but DOESN'T throw an exception. No idea why - I believe this may
+		 * be the reason for the later segfault after we return from this
+		 * function.
+		 */
 		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	font_options_object = (cairo_font_options_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	font_options_object->font_options = cairo_font_options_create();
+	font_options_object->font_options   = cairo_font_options_create();
+	font_options_object->is_constructed = 1;
 
 	php_cairo_throw_exception(cairo_font_options_status(font_options_object->font_options) TSRMLS_CC);
 }
@@ -422,6 +432,18 @@ const zend_function_entry cairo_font_options_methods[] = {
 
 /* }}} */
 
+static zend_function * get_constructor (zval * object TSRMLS_DC)
+{
+    if (Z_OBJCE_P(object) == cairo_ce_cairofontoptions)
+    {
+        return zend_get_std_object_handlers()->get_constructor(object TSRMLS_CC);
+    }
+    else
+    {
+        return &ctor_wrapper_func;
+    }
+}
+
 /* Helper Functions */
 PHP_CAIRO_API zend_class_entry * php_cairo_get_fontoptions_ce()
 {
@@ -447,6 +469,12 @@ PHP_MINIT_FUNCTION(cairo_font_options)
 	INIT_CLASS_ENTRY(fontoptions_ce, "CairoFontOptions", cairo_font_options_methods);
 	cairo_ce_cairofontoptions = zend_register_internal_class(&fontoptions_ce TSRMLS_CC);
 	cairo_ce_cairofontoptions->create_object = cairo_font_options_object_new;
+
+	memcpy(&object_handlers, zend_get_std_object_handlers(),
+		sizeof object_handlers);
+	object_handlers.get_constructor = get_constructor;
+
+	PHP_CAIRO_CTOR_WRAPPER_FUNC_INIT(cairo_ce_cairofontoptions);
 
 	INIT_CLASS_ENTRY(hintstyle_ce, "CairoHintStyle", NULL);
     cairo_ce_hintstyle = zend_register_internal_class(&hintstyle_ce TSRMLS_CC);

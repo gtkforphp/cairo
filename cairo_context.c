@@ -35,6 +35,9 @@ zend_class_entry *cairo_ce_cairolinecap;
 zend_class_entry *cairo_ce_cairolinejoin;
 zend_class_entry *cairo_ce_cairooperator;
 
+static zend_object_handlers object_handlers;
+static zend_function        ctor_wrapper_func; 
+
 /* Basic Context */
 ZEND_BEGIN_ARG_INFO(CairoContext___construct_args, ZEND_SEND_BY_VAL)
 	/* ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0) */
@@ -227,7 +230,8 @@ PHP_METHOD(CairoContext, __construct)
 
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(surface_zval TSRMLS_CC);
 	context_object = (cairo_context_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	context_object->context = cairo_create(surface_object->surface);
+	context_object->context        = cairo_create(surface_object->surface);
+    context_object->is_constructed = 1;
 	php_cairo_throw_exception(cairo_status(context_object->context) TSRMLS_CC);
 
 	/* we need to be able to get this zval out later, so ref and store */
@@ -2930,6 +2934,14 @@ static void cairo_context_object_destroy(void *object TSRMLS_DC)
 	efree(object);
 }
 
+static zend_function * get_constructor(zval *object TSRMLS_DC)
+{
+    if (Z_OBJCE_P(object) == cairo_ce_cairocontext)
+        return zend_get_std_object_handlers()->get_constructor(object TSRMLS_CC);
+    else
+        return &ctor_wrapper_func;
+}
+
 static zend_object_value cairo_context_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
@@ -2938,13 +2950,14 @@ static zend_object_value cairo_context_object_new(zend_class_entry *ce TSRMLS_DC
 
 	context = ecalloc(1, sizeof(cairo_context_object));
 
-	context->std.ce = ce;
-	context->surface = NULL;
-	context->matrix = NULL;
-	context->pattern = NULL;
-	context->font_face = NULL;
-	context->font_matrix = NULL;
-	context->scaled_font = NULL;
+	context->std.ce         = ce;
+	context->surface        = NULL;
+	context->matrix         = NULL;
+	context->pattern        = NULL;
+	context->font_face      = NULL;
+	context->font_matrix    = NULL;
+	context->scaled_font    = NULL;
+    context->is_constructed = 0;
 
 	ALLOC_HASHTABLE(context->std.properties);
 	zend_hash_init(context->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
@@ -2954,7 +2967,7 @@ static zend_object_value cairo_context_object_new(zend_class_entry *ce TSRMLS_DC
 	object_properties_init(&context->std, ce);
 #endif
 	retval.handle = zend_objects_store_put(context, NULL, (zend_objects_free_object_storage_t)cairo_context_object_destroy, NULL TSRMLS_CC);
-	retval.handlers = &cairo_std_object_handlers;
+	retval.handlers = &object_handlers;
 	return retval;
 }
 
@@ -2976,6 +2989,12 @@ PHP_MINIT_FUNCTION(cairo_context)
 	INIT_CLASS_ENTRY(ce, "CairoContext", cairo_context_methods);
 	cairo_ce_cairocontext = zend_register_internal_class(&ce TSRMLS_CC);
 	cairo_ce_cairocontext->create_object = cairo_context_object_new;
+
+    memcpy(&object_handlers, zend_get_std_object_handlers(),
+        sizeof object_handlers);
+    object_handlers.get_constructor = get_constructor;
+
+	PHP_CAIRO_CTOR_WRAPPER_FUNC_INIT(cairo_ce_cairocontext);
 
 	INIT_CLASS_ENTRY(antialias_ce, "CairoAntialias", NULL);
 	cairo_ce_cairoantialias = zend_register_internal_class(&antialias_ce TSRMLS_CC);

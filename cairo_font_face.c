@@ -120,7 +120,8 @@ zend_object_value cairo_font_face_object_new(zend_class_entry *ce TSRMLS_DC)
 
 	font_face = ecalloc(1, sizeof(cairo_font_face_object));
 
-	font_face->std.ce = ce;
+	font_face->std.ce 		  = ce;
+	font_face->is_constructed = 0;
 
 	ALLOC_HASHTABLE(font_face->std.properties);
 	zend_hash_init(font_face->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
