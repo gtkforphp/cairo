@@ -625,7 +625,7 @@ static void php_cairo_internal_construction_wrapper (INTERNAL_FUNCTION_PARAMETER
 			"parent::__construct() must be called in %s::__construct()", this_ce->name);
     efree(fci.params);
 	/* CairoFontOption sefaults here */
-	printf("10\n");
+	zval_ptr_dtor(&retval_ptr);
 }
 
 /* a bunch of inline functions to deal with checking for the proper internal object, makes extending classes work */
