@@ -65,7 +65,6 @@ extern zend_module_entry cairo_module_entry;
 #endif
 
 #include <cairo.h>
-#include <zend_exceptions.h>
 
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 #include <ft2build.h>
@@ -81,12 +80,6 @@ typedef struct _stream_closure {
 #endif
 } stream_closure;
 
-/* Generic object - common members of all objects */
-typedef struct _cairo_generic_object {
-	zend_object std;
-	zend_bool   is_constructed;
-} cairo_generic_object;
-
 typedef struct _cairo_glyph_object {
 	zend_object std;
 	cairo_glyph_t *glyph;
@@ -94,7 +87,6 @@ typedef struct _cairo_glyph_object {
 
 typedef struct _cairo_context_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	zval *surface;
 	zval *matrix;
 	zval *pattern;
@@ -107,7 +99,6 @@ typedef struct _cairo_context_object {
 
 typedef struct _cairo_pattern_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	zval *matrix;
 	zval *surface;
 	cairo_pattern_t *pattern;
@@ -115,7 +106,6 @@ typedef struct _cairo_pattern_object {
 
 typedef struct _cairo_surface_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	cairo_surface_t *surface;
 	char * buffer;
 	stream_closure *closure;
@@ -123,19 +113,16 @@ typedef struct _cairo_surface_object {
 
 typedef struct _cairo_matrix_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	cairo_matrix_t *matrix;
 } cairo_matrix_object;
 
 typedef struct _cairo_path_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	cairo_path_t *path;
 } cairo_path_object;
 
 typedef struct _cairo_scaled_font_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	zval *font_face;
 	zval *font_options;
 	zval *matrix;
@@ -145,14 +132,12 @@ typedef struct _cairo_scaled_font_object {
 
 typedef struct _cairo_font_face_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	cairo_font_face_t *font_face;
 } cairo_font_face_object;
 
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 typedef struct _cairo_ft_font_face_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	cairo_font_face_t *font_face;
 	FT_Stream ft_stream;
 } cairo_ft_font_face_object;
@@ -161,14 +146,12 @@ typedef struct _cairo_ft_font_face_object {
 #if defined(CAIRO_HAS_WIN32_FONT) && defined(HAVE_WIN32_FONT)
 typedef struct _cairo_win32_font_face_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	cairo_font_face_t *font_face;
 } cairo_win32_font_face_object;
 #endif
 
 typedef struct _cairo_font_options_object {
 	zend_object std;
-	zend_bool   is_constructed;
 	cairo_font_options_t *font_options;
 } cairo_font_options_object;
 
@@ -568,65 +551,6 @@ PHP_CAIRO_API extern cairo_t * php_cairo_context_reference(cairo_t *context);
 	} else { \
 		php_cairo_throw_exception(status TSRMLS_CC); \
 	}
-
-#define PHP_CAIRO_CTOR_WRAPPER_FUNC_INIT(context) \
-    ctor_wrapper_func.type                 = ZEND_INTERNAL_FUNCTION; \
-    ctor_wrapper_func.common.function_name = "internal_construction_wrapper"; \
-    ctor_wrapper_func.common.scope         = context; \
-    ctor_wrapper_func.common.fn_flags      = ZEND_ACC_PROTECTED; \
-    ctor_wrapper_func.common.prototype     = NULL; \
-    ctor_wrapper_func.common.required_num_args = 0; \
-	ctor_wrapper_func.common.pass_rest_by_reference = 0; \
-	ctor_wrapper_func.common.return_reference       = 0; \
-    ctor_wrapper_func.common.arg_info      = NULL; \
-    ctor_wrapper_func.internal_function.handler = php_cairo_internal_construction_wrapper; \
-    ctor_wrapper_func.internal_function.module  = EG(current_module);
-
-static void php_cairo_internal_construction_wrapper (INTERNAL_FUNCTION_PARAMETERS)
-{
-    zval *this = getThis();
-    cairo_generic_object *gen_obj;
-    zend_class_entry *this_ce;
-    zend_function *zf;
-    zend_fcall_info fci = {0};
-    zend_fcall_info_cache fci_cache = {0};
-    zval *retval_ptr = NULL;
-    unsigned i;
- 
-	
-    gen_obj = zend_object_store_get_object(this TSRMLS_CC);
-    zf = zend_get_std_object_handlers()->get_constructor(this TSRMLS_CC);
-    this_ce = Z_OBJCE_P(this);
- 
-    fci.size = sizeof(fci);
-    fci.function_table = &this_ce->function_table;
-    fci.object_ptr = this;
-    /* fci.function_name = ; not necessary to bother */
-    fci.retval_ptr_ptr = &retval_ptr;
-    fci.param_count = ZEND_NUM_ARGS();
-    fci.params = emalloc(fci.param_count * sizeof *fci.params);
-    /* Or use _zend_get_parameters_array_ex instead of loop: */
-    for (i = 0; i < fci.param_count; i++) {
-        fci.params[i] = (zval **) (zend_vm_stack_top(TSRMLS_C) - 1 -
-            (fci.param_count - i));
-    }
-    fci.object_ptr = this;
-    fci.no_separation = 0;
- 
-    fci_cache.initialized = 1;
-    fci_cache.called_scope = EG(current_execute_data)->called_scope;
-    fci_cache.calling_scope = EG(current_execute_data)->current_scope;
-    fci_cache.function_handler = zf;
-    fci_cache.object_ptr = this;
- 
-    zend_call_function(&fci, &fci_cache TSRMLS_CC);
-    if (!EG(exception) && gen_obj->is_constructed == 0)
-		zend_throw_exception_ex(cairo_ce_cairoexception, 0 TSRMLS_CC,
-			"parent::__construct() must be called in %s::__construct()", this_ce->name);
-    efree(fci.params);
-	/* CairoFontOption sefaults here */
-	zval_ptr_dtor(&retval_ptr);
-}
 
 /* a bunch of inline functions to deal with checking for the proper internal object, makes extending classes work */
 static inline cairo_context_object* cairo_context_object_get(zval *zobj TSRMLS_DC)
