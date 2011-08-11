@@ -33,15 +33,13 @@ zend_object_handlers cairo_std_object_handlers;
 
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 ZEND_DECLARE_MODULE_GLOBALS(cairo)
-static PHP_GINIT_FUNCTION(cairo); 
 
-
-static void php_cairo_globals_ctor(zend_cairo_globals *cairo_globals TSRMLS_DC)
+PHP_GINIT_FUNCTION(cairo)
 {
 	cairo_globals->ft_lib = NULL;
 }
 
-static void php_cairo_globals_dtor(zend_cairo_globals *cairo_globals TSRMLS_DC)
+PHP_GSHUTDOWN_FUNCTION(cairo)
 {
 	if(cairo_globals->ft_lib != NULL) {
 		FT_Done_FreeType(cairo_globals->ft_lib);
@@ -1126,7 +1124,7 @@ zend_module_entry cairo_module_entry = {
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 	PHP_MODULE_GLOBALS(cairo),
 	PHP_GINIT(cairo),
-	NULL, 
+	PHP_GSHUTDOWN(cairo), 
 	NULL,
 	STANDARD_MODULE_PROPERTIES_EX
 #else
@@ -1137,13 +1135,6 @@ zend_module_entry cairo_module_entry = {
 
 #ifdef COMPILE_DL_CAIRO
 ZEND_GET_MODULE(cairo)
-#endif
-
-#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
-static PHP_GINIT_FUNCTION(cairo)
-{
-	cairo_globals->ft_lib = NULL;
-}
 #endif
 
 /* {{{ PHP_MINIT_FUNCTION */
