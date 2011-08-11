@@ -54,6 +54,32 @@ ZEND_BEGIN_ARG_INFO(CairoImageSurface_createFromPng_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, file)
 ZEND_END_ARG_INFO()
 
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 6, 0)
+static int php_cairo_format_stride_for_width(cairo_format_t format, int width) {
+	int bpp = 0;
+
+	switch (format) {
+		case CAIRO_FORMAT_ARGB32:
+			bpp = 32;
+		case CAIRO_FORMAT_RGB24:
+			bpp = 32;
+		case CAIRO_FORMAT_A8:
+			bpp = 8;
+		case CAIRO_FORMAT_A1:
+			bpp = 1;
+		default:
+			bpp = 0;
+	}
+
+	if (bpp > 0) {
+		stride = (((bpp * width) + 31) >> 5) << 2;
+		return stride;
+	}
+
+	return 0;
+}
+#endif
+
 /* {{{ proto void __construct(int format, int width, int height)
        Returns new CairoSurfaceImage object created on an image surface */
 PHP_METHOD(CairoImageSurface, __construct)
@@ -92,7 +118,7 @@ PHP_FUNCTION(cairo_image_surface_create)
 }
 /* }}} */
 
-/* {{{ proto CairoImageSurface object cairo_image_surface_create_for_data(string data, int format, int width, int height, int stride)
+/* {{{ proto CairoImageSurface object cairo_image_surface_create_for_data(string data, int format, int width, int height)
        Creates an image surface for the provided pixel data. */
 PHP_FUNCTION(cairo_image_surface_create_for_data)
 {
@@ -102,7 +128,7 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 	long format, width, height, stride = -1;
 	cairo_surface_object *surface_object;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slll|l", &data, &data_len, &format, &width, &height, &stride) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slll", &data, &data_len, &format, &width, &height) == FAILURE) {
 		return;
 	}
 
@@ -116,35 +142,16 @@ PHP_FUNCTION(cairo_image_surface_create_for_data)
 		return;
 	}
 
-	if (stride >= INT_MAX || stride < -1) {
-		zend_error(E_WARNING, "Invalid stride for cairo_image_surface_create_for_data()");
-		return;
-	}
-
-	/* Figure out our stride if it was not given */
-	if(stride < 0 ){
+	/* Figure out our stride */
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
-		/* This is the way the stride SHOULD be done */
-		stride = cairo_format_stride_for_width (format, width);
+	/* This is the way the stride SHOULD be done */
+	stride = cairo_format_stride_for_width (format, width);
 #else
-		/* This is a dirty hacky way to figure the stride */
-		switch(format) {
-			case CAIRO_FORMAT_RGB16_565:
-				stride = width * 2;
-				break;
-			case CAIRO_FORMAT_A8:
-				stride = width;
-				break;
-			case CAIRO_FORMAT_A1:
-				stride = (width + 1) / 8;
-				break;
-			case CAIRO_FORMAT_ARGB32:
-			case CAIRO_FORMAT_RGB24:
-			default:
-				stride = width * 4;
-				break;
-		}
+	stride = php_cairo_format_stride_for_width(format, width);
 #endif
+	if (stride <= 0) {
+		zend_error(E_WARNING, "Could not calculate stride for surface in cairo_image_surface_create_for_data()");
+		return;
 	}
 
 	/* Create the object, stick in the buffer and surface, check our status */
@@ -177,7 +184,7 @@ PHP_METHOD(CairoImageSurface, createForData)
 	cairo_surface_object *surface_object;
 
 	PHP_CAIRO_ERROR_HANDLING(TRUE)
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slll|l", &data, &data_len, &format, &width, &height, &stride) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slll", &data, &data_len, &format, &width, &height) == FAILURE) {
 		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
@@ -198,30 +205,16 @@ PHP_METHOD(CairoImageSurface, createForData)
 		return;
 	}
 
-	/* Figure out our stride if it was not given */
-	if(stride < 0 ){
+	/* Figure out our stride */
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
-		/* This is the way the stride SHOULD be done */
-		stride = cairo_format_stride_for_width (format, width);
+	/* This is the way the stride SHOULD be done */
+	stride = cairo_format_stride_for_width (format, width);
 #else
-		/* This is a dirty hacky way to figure the stride */
-		switch(format) {
-			case CAIRO_FORMAT_RGB16_565:
-				stride = width * 2;
-				break;
-			case CAIRO_FORMAT_A8:
-				stride = width;
-				break;
-			case CAIRO_FORMAT_A1:
-				stride = (width + 1) / 8;
-				break;
-			case CAIRO_FORMAT_ARGB32:
-			case CAIRO_FORMAT_RGB24:
-			default:
-				stride = width * 4;
-				break;
-		}
+	stride = php_cairo_format_stride_for_width(format, width);
 #endif
+	if (stride <= 0) {
+		zend_error(E_WARNING, "Could not calculate stride for surface in cairo_image_surface_create_for_data()");
+		return;
 	}
 
 	/* Create the object, stick in the buffer and surface, check our status */
