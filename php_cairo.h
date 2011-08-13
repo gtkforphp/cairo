@@ -23,7 +23,7 @@
 #ifndef PHP_CAIRO_H
 #define PHP_CAIRO_H
 
-#define PHP_CAIRO_VERSION "0.2.0-beta"
+#define PHP_CAIRO_VERSION "0.2.1-beta"
 
 extern zend_module_entry cairo_module_entry;
 #define phpext_cairo_ptr &cairo_module_entry
@@ -140,6 +140,8 @@ typedef struct _cairo_ft_font_face_object {
 	zend_object std;
 	cairo_font_face_t *font_face;
 	FT_Stream ft_stream;
+	FT_Face ft_face;
+	cairo_user_data_key_t key;
 } cairo_ft_font_face_object;
 #endif
 

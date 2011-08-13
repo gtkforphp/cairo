@@ -1,5 +1,5 @@
 --TEST--
-cairo_ft_font_face_create() function
+CairoFtFontFace::__construct()
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');

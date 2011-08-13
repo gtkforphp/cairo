@@ -78,13 +78,73 @@ void php_cairo_ft_close_stream(FT_Stream stream)
 	efree(stream);
 }
 
+static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_face_object, php_stream *stream, zend_bool owned_stream, int load_flags, zend_bool throw_exceptions TSRMLS_DC) {
+	FT_Library *ft_lib;
+	FT_Stream ft_stream;
+	FT_Face face;
+	stream_closure *closure;
+	php_stream_statbuf ssbuf;
+	FT_Open_Args open_args;
+	int error;
+
+	ft_lib = &CAIROG(ft_lib);
+	font_face_object->ft_face = NULL;
+	font_face_object->ft_stream = NULL;
+	
+	closure = ecalloc(1, sizeof(stream_closure));
+	closure->stream = stream;
+	closure->owned_stream = owned_stream;
+#ifdef ZTS
+	closure->TSRMLS_C = TSRMLS_C;
+#endif
+
+	ft_stream = ecalloc(1, sizeof(*ft_stream));
+	ft_stream->descriptor.pointer = (void *)closure;
+	ft_stream->pos = php_stream_tell(stream);
+	ft_stream->size = ssbuf.sb.st_size;
+	ft_stream->read = php_cairo_ft_read_func;
+	/* ft_stream->close = php_cairo_ft_close_stream; */
+	open_args.flags = FT_OPEN_STREAM;
+	open_args.stream = ft_stream;
+
+	error = FT_Open_Face(*ft_lib, &open_args, 0, &face);
+	
+	if (error) {
+		if (owned_stream) {
+			php_stream_close(stream);
+		}
+		efree(closure);
+		efree(ft_stream);
+
+		return error;
+	}
+	
+	font_face_object->ft_stream = ft_stream;
+	font_face_object->font_face = (cairo_font_face_t *)cairo_ft_font_face_create_for_ft_face(face, (int)load_flags);
+
+	/* Set Cairo to automatically destroy the FT_Face when the cairo_font_face_t is destroyed */
+	error = cairo_font_face_set_user_data (
+			font_face_object->font_face, 
+			&font_face_object->key,
+			face, 
+			(cairo_destroy_func_t) FT_Done_Face);
+
+	if (error) {
+		cairo_font_face_destroy (font_face_object->font_face);
+		FT_Done_Face(face);
+		return error;
+	}
+
+	return 0;
+}
+
 /* {{{ proto CairoFtFontFace cairo_ft_font_face_create(string face, long load_flags)
 	   Creates a new font face for the FreeType font backend from a pre-opened FreeType face. */
 
 /* FIXME: Adapt this to use streams, to handle open_basedir etc */
 PHP_FUNCTION(cairo_ft_font_face_create)
 {
-	FT_Face face = (FT_Face) NULL;
+	FT_Face *face = NULL;
 	FT_Library *ft_lib;
 	long load_flags = 0;
 	int error = 0;
@@ -92,11 +152,8 @@ PHP_FUNCTION(cairo_ft_font_face_create)
 	cairo_ft_font_face_object *font_face_object;
 
 	php_stream *stream;
-	stream_closure *closure;
-	zend_bool owned_stream = 0;
-	FT_Open_Args open_args;
-	FT_Stream ft_stream;
 	php_stream_statbuf ssbuf;
+	zend_bool owned_stream = 0;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z|l",
@@ -138,49 +195,20 @@ PHP_FUNCTION(cairo_ft_font_face_create)
 		return;
 	}
 
-	closure = ecalloc(1, sizeof(stream_closure));
-	closure->stream = stream;
-	closure->owned_stream = owned_stream;
-#ifdef ZTS
-	closure->TSRMLS_C = TSRMLS_C;
-#endif
-
-	ft_stream = ecalloc(sizeof(*ft_stream), 1);
-	ft_stream->descriptor.pointer = (void *)closure;
-	ft_stream->pos = php_stream_tell(stream);
-	ft_stream->size = ssbuf.sb.st_size;
-	ft_stream->read = php_cairo_ft_read_func;
-//	ft_stream->close = php_cairo_ft_close_stream;
-	open_args.flags = FT_OPEN_STREAM;
-	open_args.stream = ft_stream;
-
-	/* FIXME: hard coding open first face, will change to allow it to be selected */
-	error = FT_Open_Face(*ft_lib, &open_args, 0, &face);
-	if(error == FT_Err_Unknown_File_Format) { 
-		if(owned_stream) {
-			php_stream_close(stream);
-		}
-		efree(closure);
-		efree(ft_stream);
-
-		zend_error(E_WARNING, "cairo_ft_font_face_create(): unknown file format");
-		return;
-	} else if (error) {
-		if(owned_stream) {
-			php_stream_close(stream);
-		}
-		efree(closure);
-		efree(ft_stream);
-
-		zend_error(E_WARNING, "cairo_ft_font_face_create(): An error occurred opening the file");
-		return;
-	} 
-
-
 	object_init_ex(return_value, cairo_ce_cairoftfont);
 	font_face_object = (cairo_ft_font_face_object *)zend_object_store_get_object(return_value TSRMLS_CC);	
-	font_face_object->font_face = (cairo_font_face_t *)cairo_ft_font_face_create_for_ft_face(face, (int)load_flags);
-	font_face_object->ft_stream = ft_stream;
+	error = php_cairo_create_ft_font_face(font_face_object, stream, owned_stream, load_flags, 0 TSRMLS_CC);
+
+	if (error) {
+		if (error == FT_Err_Unknown_File_Format) {
+			zend_error(E_WARNING, "Unknown file format");
+		} else {
+			zend_error(E_WARNING, "Error %d occurred opening the file", error);
+		} 
+
+		RETURN_NULL();
+	}
+
 	PHP_CAIRO_ERROR(cairo_font_face_status(font_face_object->font_face));
 }
 
@@ -232,7 +260,6 @@ PHP_METHOD(CairoFtFontFace, __construct)
 		php_stream_from_zval(stream, &stream_zval);	
 	} else {	
 		PHP_CAIRO_RESTORE_ERRORS(TRUE)
-
 		zend_throw_exception(cairo_ce_cairoexception, "CairoFtFontFace::__construct() expects parameter 1 to be a string or a stream resource", 0 TSRMLS_CC);
 		return;
 	}
@@ -250,43 +277,18 @@ PHP_METHOD(CairoFtFontFace, __construct)
 		return;
 	}
 
-	closure = ecalloc(1, sizeof(stream_closure));
-	closure->stream = stream;
-	closure->owned_stream = owned_stream;
-#ifdef ZTS
-	closure->TSRMLS_C = TSRMLS_C;
-#endif
-
-	ft_stream = ecalloc(sizeof(*ft_stream), 1);
-	ft_stream->descriptor.pointer = (void *)closure;
-	ft_stream->pos = php_stream_tell(stream);
-	ft_stream->size = ssbuf.sb.st_size;
-	ft_stream->read = php_cairo_ft_read_func;
-	ft_stream->close = php_cairo_ft_close_stream;
-	open_args.flags = FT_OPEN_STREAM;
-	open_args.stream = ft_stream;
-
-	/* FIXME: hard coding open first face, will change to allow it to be selected */
-	error = FT_Open_Face(*ft_lib, &open_args, 0, &face);
-	if(error == FT_Err_Unknown_File_Format) { 
-		if(owned_stream) {
-			php_stream_close(stream);
-		}	
-
-		zend_throw_exception(cairo_ce_cairoexception, "CairoFtFontFace::__construct(): unknown file format", 0 TSRMLS_CC);
-		return;
-	} else if (error) {
-		if(owned_stream) {
-			php_stream_close(stream);
-		}	
-
-		zend_throw_exception(cairo_ce_cairoexception, "CairoFtFontFace::__construct(): An error occurred opening the file", 0 TSRMLS_CC);
-		return;
-	} 
-
 	font_face_object = (cairo_ft_font_face_object *)zend_object_store_get_object(getThis() TSRMLS_CC);	
-	font_face_object->ft_stream = ft_stream;
-	font_face_object->font_face = (cairo_font_face_t *)cairo_ft_font_face_create_for_ft_face(face, (int)load_flags);
+	error = php_cairo_create_ft_font_face(font_face_object, stream, owned_stream, load_flags, 1 TSRMLS_CC);
+
+	if (error) {
+		if (error == FT_Err_Unknown_File_Format) {
+			zend_throw_exception(cairo_ce_cairoexception, "CairoFtFontFace::__construct(): unknown file format", error TSRMLS_CC);
+			return;
+		} else {
+			zend_throw_exception(cairo_ce_cairoexception, "CairoFtFontFace::__construct(): An error occurred opening the file", error TSRMLS_CC);
+			return;
+		} 
+	}
 
 	php_cairo_throw_exception(cairo_font_face_status(font_face_object->font_face) TSRMLS_CC);
 }

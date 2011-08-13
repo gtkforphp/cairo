@@ -41,8 +41,8 @@ PHP_GINIT_FUNCTION(cairo)
 
 PHP_GSHUTDOWN_FUNCTION(cairo)
 {
-	if(cairo_globals->ft_lib != NULL) {
-		FT_Done_FreeType(cairo_globals->ft_lib);
+	if (cairo_globals->ft_lib != NULL) {
+		FT_Done_Library(cairo_globals->ft_lib);
 	}
 }
 
@@ -1206,23 +1206,6 @@ PHP_MSHUTDOWN_FUNCTION(cairo)
 {
 #if defined(ZEND_DEBUG) && ZEND_DEBUG == 1
 	cairo_debug_reset_static_data();
-#endif
-
-#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
-#ifdef ZTS
-	ts_allocate_id(&cairo_globals_id,
-			sizeof(zend_cairo_globals),
-			(ts_allocate_ctor)php_cairo_globals_ctor,
-			(ts_allocate_dtor)php_cairo_globals_dtor);
-#else
-	php_cairo_globals_ctor(&cairo_globals TSRMLS_CC);
-#endif	
-#endif
-
-#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
-#ifndef ZTS
-	php_cairo_globals_dtor(&cairo_globals TSRMLS_CC);
-#endif
 #endif
 
 	return SUCCESS;
