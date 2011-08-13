@@ -55,7 +55,7 @@ ZEND_END_ARG_INFO()
 
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 6, 0)
 static int php_cairo_format_stride_for_width(cairo_format_t format, int width) {
-	int bpp = 0;
+	int bpp = 0, stride = 0;
 
 	switch (format) {
 		case CAIRO_FORMAT_ARGB32:
