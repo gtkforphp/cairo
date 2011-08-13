@@ -427,7 +427,7 @@ PHP_FUNCTION(cairo_image_surface_create_from_png)
 #endif
 
 	surface_object->closure = closure;
-	surface_object->surface = cairo_image_surface_create_from_png_stream(php_cairo_read_func,(void *)closure);
+	surface_object->surface = cairo_image_surface_create_from_png_stream((cairo_read_func_t) php_cairo_read_func, (void *)closure);
 	php_cairo_trigger_error(cairo_surface_status(surface_object->surface) TSRMLS_CC);
 }
 /* }}} */
@@ -475,7 +475,7 @@ PHP_METHOD(CairoImageSurface, createFromPng)
 #endif
 
 	surface_object->closure = closure;
-	surface_object->surface = cairo_image_surface_create_from_png_stream(php_cairo_read_func,(void *)closure);
+	surface_object->surface = cairo_image_surface_create_from_png_stream((cairo_read_func_t) php_cairo_read_func, (void *)closure);
 	PHP_CAIRO_ERROR(cairo_surface_status(surface_object->surface));
 }
 /* }}} */

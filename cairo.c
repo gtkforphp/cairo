@@ -24,6 +24,11 @@
 #include "config.h"
 #endif
 
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#endif
+
 #include "php.h"
 #include "ext/standard/info.h"
 #include "php_cairo.h"
@@ -42,7 +47,7 @@ PHP_GINIT_FUNCTION(cairo)
 PHP_GSHUTDOWN_FUNCTION(cairo)
 {
 	if (cairo_globals->ft_lib != NULL) {
-		FT_Done_Library(cairo_globals->ft_lib);
+		FT_Done_FreeType(cairo_globals->ft_lib);
 	}
 }
 
