@@ -42,7 +42,6 @@ ZEND_BEGIN_ARG_INFO_EX(CairoImageSurface_createForData_args, ZEND_SEND_BY_VAL, Z
 	ZEND_ARG_INFO(0, format)
 	ZEND_ARG_INFO(0, width)
 	ZEND_ARG_INFO(0, height)
-	ZEND_ARG_INFO(0, stride)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO(CairoFormat_strideForWidth_args, ZEND_SEND_BY_VAL)
