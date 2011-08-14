@@ -440,8 +440,10 @@ PHP_MINIT_FUNCTION(cairo_ps_surface)
 	zend_declare_class_constant_long(cairo_ce_cairopslevel, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC); \
 	REGISTER_LONG_CONSTANT(#value,  value,  CONST_CS | CONST_PERSISTENT);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	REGISTER_CAIRO_PSLEVEL_LONG_CONST("LEVEL_2", CAIRO_PS_LEVEL_2);
 	REGISTER_CAIRO_PSLEVEL_LONG_CONST("LEVEL_3", CAIRO_PS_LEVEL_3);
+#endif
 
 	return SUCCESS;
 }

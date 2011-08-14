@@ -240,9 +240,11 @@ PHP_FUNCTION(cairo_set_tolerance);
 PHP_FUNCTION(cairo_get_tolerance);
 PHP_FUNCTION(cairo_clip);
 PHP_FUNCTION(cairo_clip_preserve);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 PHP_FUNCTION(cairo_clip_extents);
-PHP_FUNCTION(cairo_reset_clip);
 PHP_FUNCTION(cairo_clip_rectangle_list);
+#endif
+PHP_FUNCTION(cairo_reset_clip);
 PHP_FUNCTION(cairo_fill);
 PHP_FUNCTION(cairo_fill_preserve);
 PHP_FUNCTION(cairo_fill_extents);
@@ -306,7 +308,9 @@ PHP_FUNCTION(cairo_get_font_options);
 PHP_FUNCTION(cairo_set_font_face);
 PHP_FUNCTION(cairo_get_font_face);
 PHP_FUNCTION(cairo_set_scaled_font);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 PHP_FUNCTION(cairo_get_scaled_font);
+#endif
 PHP_FUNCTION(cairo_show_text);
 PHP_FUNCTION(cairo_text_extents);
 PHP_FUNCTION(cairo_font_extents);
@@ -318,21 +322,23 @@ PHP_FUNCTION(cairo_pattern_get_matrix);
 PHP_FUNCTION(cairo_pattern_set_matrix);
 PHP_FUNCTION(cairo_pattern_create_rgb);
 PHP_FUNCTION(cairo_pattern_create_rgba);
-PHP_FUNCTION(cairo_pattern_get_rgba);
 PHP_FUNCTION(cairo_pattern_create_for_surface);
-PHP_FUNCTION(cairo_pattern_get_surface);
 PHP_FUNCTION(cairo_pattern_set_filter);
 PHP_FUNCTION(cairo_pattern_get_filter);
 PHP_FUNCTION(cairo_pattern_set_extend);
 PHP_FUNCTION(cairo_pattern_get_extend);
 PHP_FUNCTION(cairo_pattern_add_color_stop_rgb);
 PHP_FUNCTION(cairo_pattern_add_color_stop_rgba);
-PHP_FUNCTION(cairo_pattern_get_color_stop_rgba);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 PHP_FUNCTION(cairo_pattern_get_color_stop_count);
-PHP_FUNCTION(cairo_pattern_create_linear);
+PHP_FUNCTION(cairo_pattern_get_surface);
 PHP_FUNCTION(cairo_pattern_get_linear_points);
-PHP_FUNCTION(cairo_pattern_create_radial);
 PHP_FUNCTION(cairo_pattern_get_radial_circles);
+PHP_FUNCTION(cairo_pattern_get_rgba);
+PHP_FUNCTION(cairo_pattern_get_color_stop_rgba);
+#endif
+PHP_FUNCTION(cairo_pattern_create_linear);
+PHP_FUNCTION(cairo_pattern_create_radial);
 
 /* Matrix Functions */
 PHP_FUNCTION(cairo_matrix_init);

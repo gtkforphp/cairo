@@ -820,8 +820,10 @@ static const zend_function_entry cairo_functions[] = {
 	PHP_FE(cairo_set_antialias, cairo_set_antialias_args)
 	PHP_FE(cairo_get_antialias, cairo_context_args)
 	PHP_FE(cairo_set_dash, cairo_set_dash_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_FE(cairo_get_dash_count, cairo_context_args)
 	PHP_FE(cairo_get_dash, cairo_context_args)
+#endif
 	PHP_FE(cairo_set_fill_rule, cairo_set_fill_rule_args)
 	PHP_FE(cairo_get_fill_rule, cairo_context_args)
 	PHP_FE(cairo_set_line_cap, cairo_set_fill_rule_args)
@@ -838,9 +840,11 @@ static const zend_function_entry cairo_functions[] = {
 	PHP_FE(cairo_get_tolerance, cairo_context_args)
 	PHP_FE(cairo_clip, cairo_context_args)
 	PHP_FE(cairo_clip_preserve, cairo_context_args)
-	PHP_FE(cairo_clip_extents, cairo_context_args)
 	PHP_FE(cairo_reset_clip, cairo_context_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
+	PHP_FE(cairo_clip_extents, cairo_context_args)
 	PHP_FE(cairo_clip_rectangle_list, cairo_context_args)
+#endif
 	PHP_FE(cairo_fill, cairo_context_args)
 	PHP_FE(cairo_fill_preserve, cairo_context_args)
 	PHP_FE(cairo_fill_extents, cairo_context_args)
@@ -905,7 +909,9 @@ static const zend_function_entry cairo_functions[] = {
 	PHP_FE(cairo_set_font_face, cairo_set_font_face_args)
 	PHP_FE(cairo_get_font_face, cairo_context_args)
 	PHP_FE(cairo_set_scaled_font, cairo_set_scaled_font_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_FE(cairo_get_scaled_font, cairo_context_args)
+#endif
 	PHP_FE(cairo_show_text, cairo_show_text_args)
 	PHP_FE(cairo_text_extents, cairo_context_args)
 	PHP_FE(cairo_font_extents, cairo_context_args)
@@ -917,21 +923,23 @@ static const zend_function_entry cairo_functions[] = {
 	PHP_FE(cairo_pattern_set_matrix, cairo_pattern_set_matrix_args)
 	PHP_FE(cairo_pattern_create_rgb, cairo_pattern_create_rgb_args)
 	PHP_FE(cairo_pattern_create_rgba, cairo_pattern_create_rgba_args)
-	PHP_FE(cairo_pattern_get_rgba, cairo_solidpattern_args)
 	PHP_FE(cairo_pattern_create_for_surface, cairo_create_args)
-	PHP_FE(cairo_pattern_get_surface, cairo_surfacepattern_args)
 	PHP_FE(cairo_pattern_set_filter, cairo_pattern_set_filter_args)
 	PHP_FE(cairo_pattern_get_filter, cairo_surfacepattern_args)
 	PHP_FE(cairo_pattern_set_extend, cairo_pattern_set_extend_args)
 	PHP_FE(cairo_pattern_get_extend, cairo_pattern_get_extend_args)
 	PHP_FE(cairo_pattern_add_color_stop_rgb, cairo_pattern_add_color_stop_rgb_args)
 	PHP_FE(cairo_pattern_add_color_stop_rgba, cairo_pattern_add_color_stop_rgba_args)
-	PHP_FE(cairo_pattern_get_color_stop_rgba, cairo_pattern_get_color_stop_rgba_args)
-	PHP_FE(cairo_pattern_get_color_stop_count, cairo_gradientpattern_args)
 	PHP_FE(cairo_pattern_create_linear, cairo_pattern_create_linear_args)
-	PHP_FE(cairo_pattern_get_linear_points, cairo_lineargradient_args)
 	PHP_FE(cairo_pattern_create_radial, cairo_pattern_create_radial_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
+	PHP_FE(cairo_pattern_get_color_stop_count, cairo_gradientpattern_args)
+	PHP_FE(cairo_pattern_get_surface, cairo_surfacepattern_args)
+	PHP_FE(cairo_pattern_get_rgba, cairo_solidpattern_args)
+	PHP_FE(cairo_pattern_get_color_stop_rgba, cairo_pattern_get_color_stop_rgba_args)
+	PHP_FE(cairo_pattern_get_linear_points, cairo_lineargradient_args)
 	PHP_FE(cairo_pattern_get_radial_circles, cairo_radialgradient_args)
+#endif
 
 	/* Matrix Functions */
 	PHP_FE(cairo_matrix_init, cairo_matrix_init_args)
@@ -984,7 +992,9 @@ static const zend_function_entry cairo_functions[] = {
 	PHP_FE(cairo_scaled_font_get_font_options, cairo_scaled_font_args)
 	PHP_FE(cairo_scaled_font_get_font_matrix, cairo_scaled_font_args)
 	PHP_FE(cairo_scaled_font_get_ctm, cairo_scaled_font_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 	PHP_FE(cairo_scaled_font_get_scale_matrix, cairo_scaled_font_args)
+#endif
 	PHP_FE(cairo_scaled_font_get_type, cairo_scaled_font_args)
 
 	/* User Font Functions 

@@ -712,6 +712,7 @@ PHP_FUNCTION(cairo_set_dash)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 /* {{{ proto int cairo_get_dash_count(CairoContext object)
    proto int CairoContext->getDashCount()
    This function returns the length of the dash array or 0 */
@@ -772,6 +773,7 @@ PHP_FUNCTION(cairo_get_dash)
 	add_assoc_double(return_value, "offset", offset);
 }
 /* }}} */
+#endif
 
 /* {{{ proto void cairo_set_fill_rule(CairoContext object, int setting)
    proto void CairoContext->setFillRule(int setting)
@@ -1114,6 +1116,28 @@ PHP_FUNCTION(cairo_clip_preserve)
 }
 /* }}} */
 
+/* {{{ proto void cairo_reset_clip(CairoContext object)
+   proto void CairoContext->resetclip()
+   Reset the current clip region to its original, unrestricted state. */
+PHP_FUNCTION(cairo_reset_clip)
+{
+	zval *context_zval = NULL;
+	cairo_context_object *context_object;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &context_zval, cairo_ce_cairocontext) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	context_object = (cairo_context_object *)cairo_context_object_get(context_zval TSRMLS_CC);
+	cairo_reset_clip(context_object->context);
+	PHP_CAIRO_ERROR(cairo_status(context_object->context));
+}
+/* }}} */
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 /* {{{ proto array cairo_clip_extents(CairoContext object)
    proto array CairoContext->clipExtents()
    Computes a bounding box in user coordinates covering the area inside the current clip. */
@@ -1139,27 +1163,6 @@ PHP_FUNCTION(cairo_clip_extents)
 	add_next_index_double(return_value, y1);
 	add_next_index_double(return_value, x2);
 	add_next_index_double(return_value, y2);
-}
-/* }}} */
-
-/* {{{ proto void cairo_reset_clip(CairoContext object)
-   proto void CairoContext->resetclip()
-   Reset the current clip region to its original, unrestricted state. */
-PHP_FUNCTION(cairo_reset_clip)
-{
-	zval *context_zval = NULL;
-	cairo_context_object *context_object;
-
-	PHP_CAIRO_ERROR_HANDLING(FALSE)
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &context_zval, cairo_ce_cairocontext) == FAILURE) {
-		PHP_CAIRO_RESTORE_ERRORS(FALSE)
-		return;
-	}
-	PHP_CAIRO_RESTORE_ERRORS(FALSE)
-
-	context_object = (cairo_context_object *)cairo_context_object_get(context_zval TSRMLS_CC);
-	cairo_reset_clip(context_object->context);
-	PHP_CAIRO_ERROR(cairo_status(context_object->context));
 }
 /* }}} */
 
@@ -1204,6 +1207,7 @@ PHP_FUNCTION(cairo_clip_rectangle_list)
 	cairo_rectangle_list_destroy(rectangles);
 }
 /* }}} */
+#endif
 
 /* {{{ proto void cairo_fill(CairoContext object)
    proto void CairoContext->fill()
@@ -2644,6 +2648,7 @@ PHP_FUNCTION(cairo_set_scaled_font)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 /* {{{ proto CairoScaledFont object cairo_get_scaled_font(CairoContext object)
        proto CairoScaledFont object CairoContext->getScaledFont()
        Retrieves the scaled font face selected by the context.  If no scaled font has been selected or set then the default face
@@ -2683,6 +2688,7 @@ PHP_FUNCTION(cairo_get_scaled_font)
 	cairo_scaled_font_reference(scaled_font_object->scaled_font);
 }
 /* }}} */
+#endif
 
 /* {{{ proto array cairo_show_text(CairoContext object, string text)
    proto array CairoContext->showText(string text)
@@ -2799,8 +2805,10 @@ const zend_function_entry cairo_context_methods[] = {
 	PHP_ME_MAPPING(setAntialias, cairo_set_antialias, CairoContext_setAntialias_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getAntialias, cairo_get_antialias, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(setDash, cairo_set_dash, CairoContext_setDash_args, ZEND_ACC_PUBLIC)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_ME_MAPPING(getDashCount, cairo_get_dash_count, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getDash, cairo_get_dash, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME_MAPPING(setFillRule, cairo_set_fill_rule, CairoContext_setFillRule_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getFillRule, cairo_get_fill_rule, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(setLineCap, cairo_set_line_cap, CairoContext_setFillRule_args, ZEND_ACC_PUBLIC)
@@ -2817,9 +2825,13 @@ const zend_function_entry cairo_context_methods[] = {
 	PHP_ME_MAPPING(getTolerance, cairo_get_tolerance, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(clip, cairo_clip, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(clipPreserve, cairo_clip_preserve, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING(clipExtents, cairo_clip_extents, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(resetClip, cairo_reset_clip, NULL, ZEND_ACC_PUBLIC)
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
+	PHP_ME_MAPPING(clipExtents, cairo_clip_extents, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(clipRectangleList, cairo_clip_rectangle_list, NULL, ZEND_ACC_PUBLIC)
+#endif
+
 	PHP_ME_MAPPING(fill, cairo_fill, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(fillPreserve, cairo_fill_preserve, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(fillExtents, cairo_fill_extents, NULL, ZEND_ACC_PUBLIC)
@@ -2881,7 +2893,9 @@ const zend_function_entry cairo_context_methods[] = {
 	PHP_ME_MAPPING(setFontFace, cairo_set_font_face, CairoContext_setFontFace_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getFontFace, cairo_get_font_face, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(setScaledFont, cairo_set_scaled_font, CairoContext_setScaledFont_args, ZEND_ACC_PUBLIC)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_ME_MAPPING(getScaledFont, cairo_get_scaled_font, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME_MAPPING(showText, cairo_show_text, CairoContext_text_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(fontExtents, cairo_font_extents, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(textExtents, cairo_text_extents, CairoContext_text_args, ZEND_ACC_PUBLIC)

@@ -414,6 +414,7 @@ PHP_FUNCTION(cairo_scaled_font_get_ctm)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 /* {{{ proto CairoMatrix object cairo_scaled_font_get_scale_matrix (CairoScaledFont object)
        proto CairoMatrix object CairoScaledFont->getScaleMatrix()
        The scale matrix is product of the font matrix and the ctm associated with the scaled font, and hence is the matrix mapping from font space to device space */
@@ -440,6 +441,7 @@ PHP_FUNCTION(cairo_scaled_font_get_scale_matrix)
 	cairo_scaled_font_get_scale_matrix(scaled_font_object->scaled_font, matrix_object->matrix);
 }
 /* }}} */
+#endif
 
 /* {{{ proto long cairo_scaled_font_get_type(CairoScaledFont object)
        proto long CairoScaledFont->getType()
@@ -472,7 +474,9 @@ const zend_function_entry cairo_scaled_font_methods[] = {
 	PHP_ME_MAPPING(getFontOptions, cairo_scaled_font_get_font_options, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getFontMatrix,  cairo_scaled_font_get_font_matrix , NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getCtm, cairo_scaled_font_get_ctm, NULL, ZEND_ACC_PUBLIC)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 	PHP_ME_MAPPING(getScaleMatrix, cairo_scaled_font_get_scale_matrix, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME_MAPPING(getType, cairo_scaled_font_get_type , NULL, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };

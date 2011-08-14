@@ -276,6 +276,7 @@ PHP_FUNCTION(cairo_pattern_add_color_stop_rgba)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 /* {{{ proto array cairo_pattern_get_color_stop_rgba(CairoPattern object)
    proto array CairoGradientPattern->getColorStopRgba()
    Gets the color and offset information at the given index for a gradient pattern */
@@ -328,6 +329,7 @@ PHP_FUNCTION(cairo_pattern_get_color_stop_count)
 	RETURN_LONG(count);
 }
 /* }}} */
+#endif
 
 /* {{{ proto int CairoGradientPattern->getExtend()
        Gets the current extend mode for a pattern */
@@ -374,8 +376,10 @@ PHP_METHOD(CairoGradientPattern, setExtend)
 const zend_function_entry cairo_gradientpattern_methods[] = {
 	PHP_ME_MAPPING(addColorStopRgb, cairo_pattern_add_color_stop_rgb, CairoGradient_addColorStopRgb_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(addColorStopRgba, cairo_pattern_add_color_stop_rgba, CairoGradient_addColorStopRgba_args, ZEND_ACC_PUBLIC)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_ME_MAPPING(getColorStopRgba, cairo_pattern_get_color_stop_rgba, CairoGradient_getColorStopRgba_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getColorStopCount, cairo_pattern_get_color_stop_count, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(CairoGradientPattern, getExtend, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoGradientPattern, setExtend, CairoSurfacePattern_setExtend_args, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
@@ -445,6 +449,7 @@ PHP_METHOD(CairoSolidPattern, __construct)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 /* {{{ proto array cairo_pattern_get_rgba(CairoSolidPattern object)
    proto array CairoSolidPattern->getRgba()
    This function returns an array with four elements, the float values of red, green, blue, and alpha from the solid pattern */
@@ -472,11 +477,14 @@ PHP_FUNCTION(cairo_pattern_get_rgba)
 	add_assoc_double(return_value, "alpha", alpha);
 }
 /* }}} */
+#endif
 
 /* {{{ cairo_solidpattern_methods[] */
 const zend_function_entry cairo_solidpattern_methods[] = {
 	PHP_ME(CairoSolidPattern, __construct, CairoSolidPattern___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_ME_MAPPING(getRgba, cairo_pattern_get_rgba, NULL, ZEND_ACC_PUBLIC)
+#endif
 	{NULL, NULL, NULL}
 };
 /* }}} */
@@ -533,6 +541,7 @@ PHP_METHOD(CairoSurfacePattern, __construct)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 /* {{{ proto CairoSurface object cairo_pattern_get_surface(CairoSurfacePattern object)
    proto CairoSurface object CairoSurfacePattern->getSurface()
    This function returns the surface object */
@@ -570,6 +579,7 @@ PHP_FUNCTION(cairo_pattern_get_surface)
 	surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 }
 /* }}} */
+#endif
 
 /* {{{ proto int cairo_pattern_get_filter(CairoSurfacePattern object)
    proto int CairoPattern->getFilter()
@@ -699,7 +709,10 @@ PHP_FUNCTION(cairo_pattern_set_extend)
 /* {{{ cairo_surfacepattern_methods[] */
 const zend_function_entry cairo_surfacepattern_methods[] = {
 	PHP_ME(CairoSurfacePattern, __construct, CairoSurfacePattern___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+#
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_ME_MAPPING(getSurface, cairo_pattern_get_surface, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME_MAPPING(setFilter, cairo_pattern_set_filter, CairoSurfacePattern_setFilter_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getFilter, cairo_pattern_get_filter, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoSurfacePattern, setExtend, CairoSurfacePattern_setExtend_args, ZEND_ACC_PUBLIC)
@@ -748,6 +761,7 @@ PHP_METHOD(CairoLinearGradient, __construct)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 /* {{{ proto void cairo_pattern_get_linear_points(CairoLinearGradient object)
    proto void CairoLinearGradient->getPoints()
    Gets the gradient endpoints for a linear gradient. */
@@ -774,13 +788,16 @@ PHP_FUNCTION(cairo_pattern_get_linear_points)
 	add_assoc_double(return_value, "x1", x1);
 	add_assoc_double(return_value, "y1", y1);
 }
+#endif
 
 /* }}} */
 
 /* {{{ cairo_lineargradient_methods[] */
 const zend_function_entry cairo_lineargradient_methods[] = {
 	PHP_ME(CairoLinearGradient, __construct, CairoLinearGradient___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_ME_MAPPING(getPoints, cairo_pattern_get_linear_points, NULL, ZEND_ACC_PUBLIC)
+#endif
 	{NULL, NULL, NULL}
 };
 /* }}} */
@@ -825,6 +842,7 @@ PHP_METHOD(CairoRadialGradient, __construct)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 /* {{{ proto void cairo_pattern_get_radial_circles(CairoRadialGradient object)
    proto void CairoRadialGradient->getCircles()
    Gets the gradient endpoint circles for a radial gradient, each specified as a center coordinate and a radius. */
@@ -853,13 +871,16 @@ PHP_FUNCTION(cairo_pattern_get_radial_circles)
 	add_assoc_double(return_value, "y1", y1);
 	add_assoc_double(return_value, "r1", r1);
 }
+#endif
 
 /* }}} */
 
 /* {{{ cairo_radialgradient_methods[] */
 const zend_function_entry cairo_radialgradient_methods[] = {
 	PHP_ME(CairoRadialGradient, __construct, CairoRadialGradient___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_ME_MAPPING(getCircles, cairo_pattern_get_radial_circles, NULL, ZEND_ACC_PUBLIC)
+#endif
 	{NULL, NULL, NULL}
 };
 /* }}} */
