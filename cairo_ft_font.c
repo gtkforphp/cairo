@@ -144,7 +144,6 @@ static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_f
 /* FIXME: Adapt this to use streams, to handle open_basedir etc */
 PHP_FUNCTION(cairo_ft_font_face_create)
 {
-	FT_Face *face = NULL;
 	FT_Library *ft_lib;
 	long load_flags = 0;
 	int error = 0;
@@ -221,7 +220,6 @@ PHP_FUNCTION(cairo_ft_font_face_create)
 /* FIXME: Adapt this to use streams, to handle open_basedir etc */
 PHP_METHOD(CairoFtFontFace, __construct)
 {
-	FT_Face face = (FT_Face) NULL;
 	FT_Library *ft_lib;
 	long load_flags = 0;
 	int error = 0;
@@ -229,10 +227,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	cairo_ft_font_face_object *font_face_object;
 
 	php_stream *stream;
-	stream_closure *closure;
 	zend_bool owned_stream = 0;
-	FT_Open_Args open_args;
-	FT_Stream ft_stream;
 	php_stream_statbuf ssbuf;
 
 	PHP_CAIRO_ERROR_HANDLING(TRUE)
