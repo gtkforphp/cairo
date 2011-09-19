@@ -584,6 +584,12 @@ ZEND_BEGIN_ARG_INFO(cairo_ps_surface_dsc_comment_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, comment)
 ZEND_END_ARG_INFO()
 
+/* Recording surface args */
+ZEND_BEGIN_ARG_INFO(cairo_recording_surface_create_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, content)
+	ZEND_ARG_INFO(0, extents)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto int cairo_version(void) 
        Returns an integer version number of the cairo library being used */
 PHP_FUNCTION(cairo_version)
@@ -705,6 +711,9 @@ PHP_METHOD(Cairo, availableSurfaces)
 #endif
 #ifdef CAIRO_HAS_WIN32_SURFACE
 	add_next_index_string(return_value,"WIN32",1);
+#endif
+#ifdef CAIRO_HAS_RECORDING_SURFACE
+	add_next_index_string(return_value,"RECORDING",1);
 #endif
 }
 /* }}} */
@@ -1101,6 +1110,11 @@ static const zend_function_entry cairo_functions[] = {
 	PHP_FE(cairo_win32_surface_get_image, NULL)    
 #endif*/
 
+	/* Recording surface functions */
+#ifdef CAIRO_HAS_RECORDING_SURFACE
+	PHP_FE(cairo_recording_surface_create, cairo_recording_surface_create_args)
+#endif
+
 	/* Compatibility with old cairo-wrapper extension */
 #if PHP_VERSION_ID >= 50300
 	ZEND_FENTRY(cairo_matrix_create_scale, ZEND_FN(cairo_matrix_init_scale), cairo_matrix_init_scale_args, ZEND_ACC_DEPRECATED)
@@ -1204,6 +1218,10 @@ PHP_MINIT_FUNCTION(cairo)
 #ifdef CAIRO_HAS_SVG_SURFACE
 	PHP_MINIT(cairo_svg_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
+
+#ifdef CAIRO_HAS_RECORDING_SURFACE
+	PHP_MINIT(cairo_recording_surface)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
 /*
 #ifdef CAIRO_HAS_QUARTZ_SURFACE
 	PHP_MINIT(cairo_quartz_surface)(INIT_FUNC_ARGS_PASSTHRU);
@@ -1286,6 +1304,13 @@ PHP_MINFO_FUNCTION(cairo)
 		);
 	php_info_print_table_row(2, "Win32 Surface",
 #ifdef CAIRO_HAS_WIN32_SURFACE
+		"enabled"
+#else
+		"disabled"
+#endif
+		);
+	php_info_print_table_row(2, "Recording Surface",
+#ifdef CAIRO_HAS_RECORDING_SURFACE
 		"enabled"
 #else
 		"disabled"

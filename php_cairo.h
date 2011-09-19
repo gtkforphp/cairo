@@ -192,6 +192,7 @@ PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_svg_surface);
 PHP_MINIT_FUNCTION(cairo_pdf_surface);
 PHP_MINIT_FUNCTION(cairo_ps_surface);
+PHP_MINIT_FUNCTION(cairo_recording_surface);
 PHP_MINIT_FUNCTION(cairo_ft_font);
 PHP_MINIT_FUNCTION(cairo_win32_font);
 
@@ -478,6 +479,11 @@ PHP_FUNCTION(cairo_font_face_get_type);
 	PHP_FUNCTION(cairo_ps_surface_dsc_comment);
 #endif
 
+/* Recording surface functions */
+#ifdef CAIRO_HAS_RECORDING_SURFACE
+	PHP_FUNCTION(cairo_recording_surface_create);
+#endif
+
 extern zend_object_handlers cairo_std_object_handlers;
 extern zend_class_entry *cairo_ce_cairoexception;
 extern zend_class_entry *cairo_ce_cairocontext;
@@ -489,6 +495,8 @@ extern zend_class_entry *cairo_ce_cairoimagesurface;
 extern zend_class_entry *cairo_ce_cairosvgsurface;
 extern zend_class_entry *cairo_ce_cairopdfsurface;
 extern zend_class_entry *cairo_ce_cairopssurface;
+extern zend_class_entry *cairo_ce_cairorecordingsurface;
+extern zend_class_entry *cairo_ce_cairocontent;
 extern zend_class_entry *cairo_ce_cairofontoptions;
 extern zend_class_entry *cairo_ce_cairofontface;
 extern zend_class_entry *cairo_ce_cairofonttype;
