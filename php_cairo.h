@@ -241,6 +241,9 @@ PHP_FUNCTION(cairo_set_tolerance);
 PHP_FUNCTION(cairo_get_tolerance);
 PHP_FUNCTION(cairo_clip);
 PHP_FUNCTION(cairo_clip_preserve);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+PHP_FUNCTION(cairo_in_clip);
+#endif
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 PHP_FUNCTION(cairo_clip_extents);
 PHP_FUNCTION(cairo_clip_rectangle_list);

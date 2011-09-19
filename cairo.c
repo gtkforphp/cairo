@@ -167,6 +167,12 @@ ZEND_BEGIN_ARG_INFO(cairo_arc_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, angle2)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(cairo_in_clip_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(cairo_curve_to_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, context, CairoContext, 0)
 	ZEND_ARG_INFO(0, x1)
@@ -850,6 +856,9 @@ static const zend_function_entry cairo_functions[] = {
 	PHP_FE(cairo_clip, cairo_context_args)
 	PHP_FE(cairo_clip_preserve, cairo_context_args)
 	PHP_FE(cairo_reset_clip, cairo_context_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+	PHP_FE(cairo_in_clip, cairo_in_clip_args)
+#endif
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_FE(cairo_clip_extents, cairo_context_args)
 	PHP_FE(cairo_clip_rectangle_list, cairo_context_args)

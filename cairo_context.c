@@ -1093,6 +1093,31 @@ PHP_FUNCTION(cairo_clip)
 }
 /* }}} */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+/* {{{ proto boolean cairo_in_clip(CairoContext object, double x, double y)
+   proto boolean CairoContext->inClip(double x, double y)
+   Tests whether the given point is inside the area that would be visible 
+   through the current clip
+*/
+PHP_FUNCTION(cairo_in_clip)
+{
+	zval *context_zval = NULL;
+	cairo_context_object *context_object;
+	double x = 0.0, y = 0.0;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odd", &context_zval, cairo_ce_cairocontext, &x, &y) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	context_object = (cairo_context_object *)cairo_context_object_get(context_zval TSRMLS_CC);
+	RETURN_BOOL(cairo_in_clip(context_object->context, x, y));
+}
+/* }}} */
+#endif
+
 /* {{{ proto void cairo_clip_preserve(CairoContext object)
    proto void CairoContext->clipPreserve()
    Establishes a new clip region by intersecting the current clip region with the current path as it
@@ -2824,6 +2849,9 @@ const zend_function_entry cairo_context_methods[] = {
 	PHP_ME_MAPPING(setTolerance, cairo_set_tolerance, CairoContext_setTolerance_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getTolerance, cairo_get_tolerance, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(clip, cairo_clip, NULL, ZEND_ACC_PUBLIC)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+	PHP_ME_MAPPING(inClip, cairo_in_clip, NULL, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME_MAPPING(clipPreserve, cairo_clip_preserve, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(resetClip, cairo_reset_clip, NULL, ZEND_ACC_PUBLIC)
 
