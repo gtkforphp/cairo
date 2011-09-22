@@ -58,7 +58,7 @@ Warning: cairo_set_dash() expects at most 3 parameters, 4 given in %s on line %d
 CAUGHT ERROR: Argument 1 passed to cairo_set_dash() must be an instance of CairoContext, integer given
 
 Warning: cairo_set_dash() expects parameter 1 to be CairoContext, integer given in %s on line %d
-CAUGHT ERROR: Argument 2 passed to cairo_set_dash() must be of the type array, integer given
+CAUGHT ERROR: Argument 2 passed to cairo_set_dash() must be an array, integer given
 
 Warning: cairo_set_dash() expects parameter 2 to be array, integer given in %s on line %d
 
