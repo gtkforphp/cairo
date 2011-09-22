@@ -138,7 +138,7 @@ PHP_FUNCTION(cairo_recording_surface_ink_extents)
 	add_assoc_double(return_value, "height", height);
 }
 
-static function_entry cairo_recording_surface_methods[] = {
+const zend_function_entry cairo_recording_surface_methods[] = {
     PHP_ME(CairoRecordingSurface, __construct, CairoRecordingSurface___construct_args, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 	PHP_ME_MAPPING(inkExtents, cairo_recording_surface_ink_extents, NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
