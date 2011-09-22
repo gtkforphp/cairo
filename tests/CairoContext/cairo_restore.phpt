@@ -35,7 +35,7 @@ object(CairoImageSurface)#%d (0) {
 object(CairoContext)#%d (0) {
 }
 
-Warning: cairo_restore(): cairo_restore without matching cairo_save in %s on line %d
+Warning: cairo_restore(): cairo_restore() without matching cairo_save() in %s on line %d
 
 Warning: cairo_restore() expects exactly 1 parameter, 0 given in %s on line %d
 

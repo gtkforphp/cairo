@@ -23,7 +23,7 @@ object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-string(7) "success"
+string(21) "no error has occurred"
 
 Warning: cairo_status_to_string() expects exactly 1 parameter, 0 given in %s on line %d
 

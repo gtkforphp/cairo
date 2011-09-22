@@ -32,6 +32,7 @@ Xlib (X11, X.org) Surface => %s
 Quartz (MacOSX) Surface => %s
 SVG Surface => %s
 Win32 Surface => %s
+Recording Surface => %s
                          Font Backends Available                         
 Freetype Fonts => %s
 Quartz Fonts => %s

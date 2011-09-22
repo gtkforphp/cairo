@@ -43,7 +43,7 @@ try {
 
 /* Wrong number args - 5 */
 try {
-    CairoImageSurface::createForData('', CairoFormat::ARGB32, 1, 1, 1, 1);
+    CairoImageSurface::createForData('', CairoFormat::ARGB32, 1, 1, 1);
     trigger_error('We should bomb here');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
@@ -51,7 +51,7 @@ try {
 
 /* Wrong arg type 1 */
 try {
-    CairoImageSurface::createForData(array(), 1, 1, 1, 1);
+    CairoImageSurface::createForData(array(), 1, 1, 1);
     trigger_error('We should bomb here');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
@@ -59,7 +59,7 @@ try {
 
 /* Wrong arg type 2 */
 try {
-    CairoImageSurface::createForData('', array(), 1, 1, 1);
+    CairoImageSurface::createForData('', array(), 1, 1);
     trigger_error('We should bomb here');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
@@ -67,7 +67,7 @@ try {
 
 /* Wrong arg type 3 */
 try {
-    CairoImageSurface::createForData('', 1, array(), 1, 1);
+    CairoImageSurface::createForData('', 1, array(), 1);
     trigger_error('We should bomb here');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
@@ -75,15 +75,7 @@ try {
 
 /* Wrong arg type 4 */
 try {
-    CairoImageSurface::createForData('', 1, 1, array(), 1);
-    trigger_error('We should bomb here');
-} catch (CairoException $e) {
-    echo $e->getMessage(), PHP_EOL;
-}
-
-/* Wrong arg type 5 */
-try {
-    CairoImageSurface::createForData('', 1, 1, 1, array());
+    CairoImageSurface::createForData('', 1, 1, array());
     trigger_error('We should bomb here');
 } catch (CairoException $e) {
     echo $e->getMessage(), PHP_EOL;
@@ -92,13 +84,12 @@ try {
 --EXPECTF--
 object(CairoImageSurface)#%d (0) {
 }
-CairoImageSurface::createForData() expects at least 4 parameters, 0 given
-CairoImageSurface::createForData() expects at least 4 parameters, 1 given
-CairoImageSurface::createForData() expects at least 4 parameters, 2 given
-CairoImageSurface::createForData() expects at least 4 parameters, 3 given
-CairoImageSurface::createForData() expects at most 5 parameters, 6 given
+CairoImageSurface::createForData() expects exactly 4 parameters, 0 given
+CairoImageSurface::createForData() expects exactly 4 parameters, 1 given
+CairoImageSurface::createForData() expects exactly 4 parameters, 2 given
+CairoImageSurface::createForData() expects exactly 4 parameters, 3 given
+CairoImageSurface::createForData() expects exactly 4 parameters, 5 given
 CairoImageSurface::createForData() expects parameter 1 to be string, array given
 CairoImageSurface::createForData() expects parameter 2 to be long, array given
 CairoImageSurface::createForData() expects parameter 3 to be long, array given
 CairoImageSurface::createForData() expects parameter 4 to be long, array given
-CairoImageSurface::createForData() expects parameter 5 to be long, array given

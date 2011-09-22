@@ -36,5 +36,5 @@ object(CairoImageSurface)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-cairo_restore without matching cairo_save
+cairo_restore() without matching cairo_save()
 CairoContext::restore() expects exactly 0 parameters, 1 given
