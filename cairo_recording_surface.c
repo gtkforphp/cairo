@@ -31,7 +31,6 @@
 #ifdef CAIRO_HAS_RECORDING_SURFACE
 
 zend_class_entry *cairo_ce_cairorecordingsurface;
-zend_class_entry *cairo_ce_cairoformat;
 
 ZEND_BEGIN_ARG_INFO(CairoRecordingSurface___construct_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, content)
