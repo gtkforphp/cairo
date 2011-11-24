@@ -25,7 +25,8 @@ if test "$PHP_CAIRO" != "no"; then
 
   PHP_NEW_EXTENSION(cairo, cairo.c cairo_error.c cairo_context.c cairo_pattern.c cairo_matrix.c cairo_path.c \
     cairo_surface.c cairo_image_surface.c cairo_svg_surface.c cairo_pdf_surface.c cairo_ps_surface.c \
-    cairo_font.c cairo_font_options.c cairo_font_face.c cairo_scaled_font.c cairo_ft_font.c cairo_recording_surface.c, $ext_shared)
+    cairo_font.c cairo_font_options.c cairo_font_face.c cairo_scaled_font.c cairo_ft_font.c \
+    cairo_recording_surface.c cairo_sub_surface.c, $ext_shared)
 
   EXT_CAIRO_HEADERS="php_cairo_api.h"
 

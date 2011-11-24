@@ -477,6 +477,14 @@ ZEND_BEGIN_ARG_INFO(cairo_surface_create_similar_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, height)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(cairo_surface_create_for_rectangle_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(cairo_surface_mark_dirty_rectangle_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
 	ZEND_ARG_INFO(0, x)
@@ -1037,6 +1045,7 @@ static const zend_function_entry cairo_functions[] = {
 
 	/* Generic Surface Functions */
 	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)
+	PHP_FE(cairo_surface_create_for_rectangle, cairo_surface_create_similar_args)
 	PHP_FE(cairo_surface_status, cairo_surface_args)
 	PHP_FE(cairo_surface_finish, cairo_surface_args)
 	PHP_FE(cairo_surface_flush, cairo_surface_args)
@@ -1231,6 +1240,11 @@ PHP_MINIT_FUNCTION(cairo)
 #ifdef CAIRO_HAS_RECORDING_SURFACE
 	PHP_MINIT(cairo_recording_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
+
+#ifdef CAIRO_HAS_SUB_SURFACE
+	PHP_MINIT(cairo_sub_surface)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+
 /*
 #ifdef CAIRO_HAS_QUARTZ_SURFACE
 	PHP_MINIT(cairo_quartz_surface)(INIT_FUNC_ARGS_PASSTHRU);

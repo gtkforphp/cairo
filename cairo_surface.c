@@ -38,6 +38,13 @@ ZEND_BEGIN_ARG_INFO(CairoSurface_createSimilar_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, height)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(CairoSurface_createForRectangle_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(CairoSurface_markDirtyRectangle_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
@@ -93,6 +100,38 @@ PHP_FUNCTION(cairo_surface_create_similar)
 	new_surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 	new_surface_object->surface = new_surface;
 }
+/* }}} */
+
+/* {{{ proto CairoSurface object cairo_surface_create_for_rectangle(CairoSurface target, double x, double y, double width, double height)
+	   proto CairoSurface object CairoSurface->createForRectangle(double x, double y, double width, double height)
+	   Create a new surface that is a rectangle within the target surface. */
+
+PHP_FUNCTION(cairo_surface_create_for_rectangle)
+{
+	zval *surface_zval = NULL;
+	cairo_surface_object *surface_object, *new_surface_object;
+	cairo_surface_t *new_surface;
+	double x, y, width, height;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odddd", &surface_zval, cairo_ce_cairosurface, &x, &y, &width, &height) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval TSRMLS_CC);
+	new_surface = cairo_surface_create_for_rectangle(surface_object->surface, x, y, width, height);
+
+	Z_ADDREF_P(surface_zval);
+	surface_object->parent_zval = surface_zval;
+
+	/* we can't always rely on the same type of surface being returned, so we use php_cairo_get_surface_ce */
+	object_init_ex(return_value, php_cairo_get_surface_ce(new_surface TSRMLS_CC));
+	new_surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	new_surface_object->surface = new_surface;
+}
+
 /* }}} */
 
 /* {{{ proto int cairo_surface_status(CairoSurface object)
@@ -492,6 +531,7 @@ PHP_FUNCTION(cairo_surface_write_to_png)
 const zend_function_entry cairo_surface_methods[] = {
 	PHP_ME(CairoSurface, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME_MAPPING(createSimilar, cairo_surface_create_similar, CairoSurface_createSimilar_args, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING(createForRectangle, cairo_surface_create_for_rectangle, CairoSurface_createForRectangle_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(status, cairo_surface_status, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(finish, cairo_surface_finish, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(flush, cairo_surface_flush, NULL, ZEND_ACC_PUBLIC)
@@ -545,6 +585,11 @@ void cairo_surface_object_destroy(void *object TSRMLS_DC)
 		}
 		efree(surface->closure);
 	}
+
+	if (surface->parent_zval != NULL) {
+		Z_DELREF_P(surface->parent_zval);
+	}
+
 	efree(object);
 }
 
@@ -664,6 +709,12 @@ zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface TSRMLS_DC)
 			type = get_CairoQuartzSurface_ce_ptr();
 			break;
 #endif */
+#ifdef CAIRO_HAS_SUB_SURFACE
+		case CAIRO_SURFACE_TYPE_SUBSURFACE:
+			type = cairo_ce_cairosubsurface;
+			break;
+#endif
+
 		default:
 			php_error(E_WARNING, "Unsupported Cairo Surface Type");
 			return NULL;

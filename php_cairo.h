@@ -109,6 +109,7 @@ typedef struct _cairo_surface_object {
 	cairo_surface_t *surface;
 	char * buffer;
 	stream_closure *closure;
+	zval *parent_zval;
 } cairo_surface_object;
 
 typedef struct _cairo_matrix_object {
@@ -193,6 +194,7 @@ PHP_MINIT_FUNCTION(cairo_svg_surface);
 PHP_MINIT_FUNCTION(cairo_pdf_surface);
 PHP_MINIT_FUNCTION(cairo_ps_surface);
 PHP_MINIT_FUNCTION(cairo_recording_surface);
+PHP_MINIT_FUNCTION(cairo_sub_surface);
 PHP_MINIT_FUNCTION(cairo_ft_font);
 PHP_MINIT_FUNCTION(cairo_win32_font);
 
@@ -398,6 +400,7 @@ PHP_FUNCTION(cairo_scaled_font_get_type);
 
 /* Generic Surface Functions */
 PHP_FUNCTION(cairo_surface_create_similar);
+PHP_FUNCTION(cairo_surface_create_for_rectangle);
 PHP_FUNCTION(cairo_surface_status);
 PHP_FUNCTION(cairo_surface_finish);
 PHP_FUNCTION(cairo_surface_flush);
@@ -499,6 +502,7 @@ extern zend_class_entry *cairo_ce_cairosvgsurface;
 extern zend_class_entry *cairo_ce_cairopdfsurface;
 extern zend_class_entry *cairo_ce_cairopssurface;
 extern zend_class_entry *cairo_ce_cairorecordingsurface;
+extern zend_class_entry *cairo_ce_cairosubsurface;
 extern zend_class_entry *cairo_ce_cairocontent;
 extern zend_class_entry *cairo_ce_cairofontoptions;
 extern zend_class_entry *cairo_ce_cairofontface;
