@@ -709,7 +709,7 @@ zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface TSRMLS_DC)
 			type = get_CairoQuartzSurface_ce_ptr();
 			break;
 #endif */
-#ifdef CAIRO_HAS_SUB_SURFACE
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 		case CAIRO_SURFACE_TYPE_SUBSURFACE:
 			type = cairo_ce_cairosubsurface;
 			break;

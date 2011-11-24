@@ -1241,7 +1241,7 @@ PHP_MINIT_FUNCTION(cairo)
 	PHP_MINIT(cairo_recording_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 
-#ifdef CAIRO_HAS_SUB_SURFACE
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 	PHP_MINIT(cairo_sub_surface)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 

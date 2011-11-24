@@ -28,7 +28,7 @@
 #include "php_cairo.h"
 #include "zend_exceptions.h"
 
-#ifdef CAIRO_HAS_SUB_SURFACE
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 
 zend_class_entry *cairo_ce_cairosubsurface;
 
@@ -41,7 +41,7 @@ PHP_METHOD(CairoSubSurface, __construct)
 /* }}} */
 
 const zend_function_entry cairo_sub_surface_methods[] = {
-    PHP_ME(CairoSubSurface, __construct, CairoSubSurface___construct_args, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME(CairoSubSurface, __construct, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     {NULL, NULL, NULL}
 };
 
