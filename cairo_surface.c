@@ -124,11 +124,10 @@ PHP_FUNCTION(cairo_surface_create_for_rectangle)
 	new_surface = cairo_surface_create_for_rectangle(surface_object->surface, x, y, width, height);
 
 	Z_ADDREF_P(surface_zval);
-	surface_object->parent_zval = surface_zval;
 
-	/* we can't always rely on the same type of surface being returned, so we use php_cairo_get_surface_ce */
-	object_init_ex(return_value, php_cairo_get_surface_ce(new_surface TSRMLS_CC));
+	object_init_ex(return_value, cairo_ce_cairosubsurface);
 	new_surface_object = (cairo_surface_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	new_surface_object->parent_zval = surface_zval;
 	new_surface_object->surface = new_surface;
 }
 
