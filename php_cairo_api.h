@@ -63,6 +63,7 @@ typedef struct _cairo_surface_object {
 	cairo_surface_t *surface;
 	char * buffer;
 	stream_closure *closure;
+	zval *parent_zval;
 } cairo_surface_object;
 
 typedef struct _cairo_matrix_object {
@@ -109,6 +110,11 @@ extern zend_class_entry* php_cairo_get_path_ce();
 /* Wrapped internal cairo functionality to avoid having to link against cairo lib as well as this extension */
 extern cairo_font_options_t* php_cairo_font_options_copy(const cairo_font_options_t *);
 extern cairo_t * php_cairo_context_reference(cairo_t *context);
+
+/* Helper for FreeType etc */
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+const char* php_cairo_get_ft_error(int error);
+#endif
 
 /* Helpers to make fetching internal objects work right with extended classes */
 static inline cairo_context_object* cairo_context_object_get(zval *zobj TSRMLS_DC)

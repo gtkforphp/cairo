@@ -48,5 +48,5 @@ NULL
 Warning: cairo_ft_font_face_create expects parameter 1 to be a string or a stream resource in %s on line 21
 NULL
 
-Warning: cairo_ft_font_face_create(): An error occurred opening the file in %s on line 25
+Warning: cairo_ft_font_face_create(): An error occurred opening the file: %s in %s on line 25
 NULL

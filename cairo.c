@@ -39,6 +39,9 @@ zend_object_handlers cairo_std_object_handlers;
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 ZEND_DECLARE_MODULE_GLOBALS(cairo)
 
+const php_cairo_ft_error php_cairo_ft_errors[] =
+#include FT_ERRORS_H
+
 PHP_GINIT_FUNCTION(cairo)
 {
 	cairo_globals->ft_lib = NULL;
@@ -50,6 +53,7 @@ PHP_GSHUTDOWN_FUNCTION(cairo)
 		FT_Done_FreeType(cairo_globals->ft_lib);
 	}
 }
+
 
 #endif
 
@@ -603,6 +607,24 @@ ZEND_BEGIN_ARG_INFO(cairo_recording_surface_create_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, content)
 	ZEND_ARG_INFO(0, extents)
 ZEND_END_ARG_INFO()
+
+
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+
+const char* php_cairo_get_ft_error(int error TSRMLS_DC) {
+	int i;
+	php_cairo_ft_error *current_error = php_cairo_ft_errors;
+
+	while (current_error->err_msg != NULL) {
+		if (current_error->err_code == error) {
+			return current_error->err_msg;
+		}
+		current_error++;
+	}
+	return NULL;
+}
+
+#endif	
 
 /* {{{ proto int cairo_version(void) 
        Returns an integer version number of the cairo library being used */

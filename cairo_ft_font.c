@@ -187,7 +187,7 @@ PHP_FUNCTION(cairo_ft_font_face_create)
 	}
 
 	if(php_stream_stat(stream, &ssbuf) != 0) {
-		zend_error(E_WARNING, "Cannot determine size of stream");
+		zend_error(E_WARNING, "cairo_ft_font_face_create(): Cannot determine size of stream");
 		if(owned_stream) {
 			php_stream_close(stream);
 		}
@@ -199,14 +199,10 @@ PHP_FUNCTION(cairo_ft_font_face_create)
 	error = php_cairo_create_ft_font_face(font_face_object, stream, owned_stream, load_flags, 0 TSRMLS_CC);
 
 	if (error) {
-		if (error == FT_Err_Unknown_File_Format) {
-			zend_error(E_WARNING, "Unknown file format");
-		} else {
-			zend_error(E_WARNING, "Error %d occurred opening the file", error);
-		} 
-
+		char *err_string = php_cairo_get_ft_error(error TSRMLS_CC);
+		zend_error(E_WARNING, "cairo_ft_font_face_create(): An error occurred opening the file: %s", err_string);
 		RETURN_NULL();
-	}
+	} 
 
 	PHP_CAIRO_ERROR(cairo_font_face_status(font_face_object->font_face));
 }

@@ -170,6 +170,7 @@ ZEND_BEGIN_MODULE_GLOBALS(cairo)
 	FT_Library ft_lib;
 ZEND_END_MODULE_GLOBALS(cairo)
 
+
 #ifdef ZTS
 # define CAIROG(v) TSRMG(cairo_globals_id, zend_cairo_globals *, v)
 #else
@@ -177,6 +178,23 @@ ZEND_END_MODULE_GLOBALS(cairo)
 #endif
 
 ZEND_EXTERN_MODULE_GLOBALS(cairo)
+
+
+typedef struct _php_cairo_ft_error {
+	int err_code;
+	const char *err_msg;
+} php_cairo_ft_error;
+
+extern const php_cairo_ft_error php_cairo_ft_errors[];
+
+/* Helper for getting FreeType error strings */
+const char* php_cairo_get_ft_error(int error TSRMLS_DC);
+
+#undef __FTERRORS_H__
+#define FT_ERRORDEF( e, v, s )  { e, s },
+#define FT_ERROR_START_LIST     {
+#define FT_ERROR_END_LIST       { 0, 0 } };
+
 #endif
 
 PHP_MINIT_FUNCTION(cairo_matrix);
