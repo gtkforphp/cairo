@@ -23,13 +23,18 @@
      <active>no</active>
     </developer>
 
-    <date>2010-02-02</date>
-    <version><release>0.2.0</release><api>0.2.0</api></version>
+    <date>2011-12-28</date>
+    <version><release>0.3.0</release><api>0.3.0</api></version>
     <stability><release>beta</release><api>beta</api></stability>
     <license uri="http://www.php.net/license">PHP License</license>
     <notes>
-     * Adds support for loading Freetype fonts
-     * Various bugfixes
+     * Added support for Cairo 1.10 subsurfaces
+     * Added support for Cairo 1.10 recording surfaces
+     * Added other Cairo 1.10 methods
+     * Fix bug relating to strides for image data
+     * Allow compiling all the way back to Cairo 1.2
+     * Win32 font support
+     * Handle construction and destruction of globals correctly
     </notes>
 
     <contents>
@@ -54,10 +59,13 @@
             <file role="src" name="cairo_scaled_font.c"/>
             <file role="src" name="cairo_font_options.c"/>
             <file role="src" name="cairo_ft_font.c"/>
+            <file role="src" name="cairo_win32_font.c"/>
             <file role="src" name="cairo_surface.c"/>
             <file role="src" name="cairo_image_surface.c"/>
             <file role="src" name="cairo_pdf_surface.c"/>
             <file role="src" name="cairo_ps_surface.c"/>
+            <file role="src" name="cairo_recording_surface.c"/>
+            <file role="src" name="cairo_sub_surface.c"/>
             <file role="src" name="cairo_svg_surface.c"/>
 
             <file role="src" name="config.m4"/>
@@ -181,7 +189,7 @@
                     <file role="test" name="setMiterLimit.phpt"/>
                     <file role="test" name="setOperator.phpt"/>
                     <file role="test" name="setSource.phpt"/>
-                    <file role="test" name="setSourceRgb.phpt"/>
+                    <file role="test" name="setSourceRGB.phpt"/>
                     <file role="test" name="setSourceRGBA.phpt"/>
                     <file role="test" name="setSourceSurface.phpt"/>
                     <file role="test" name="setTolerance.phpt"/>
@@ -331,7 +339,7 @@
                         <file role="test" name="getWeight.phpt"/>
                         <file role="test" name="__construct.phpt"/>
                     </dir>
-                    <dir name="CairoToyFontFace">
+                    <dir name="CairoFtFontFace">
                         <file role="test" name="cairo_ft_font_face_create.phpt"/>
                         <file role="test" name="__construct.phpt"/>
                         <file role="test" name="Vera.ttf"/>
@@ -460,6 +468,7 @@
                     <file role="test" name="CairoSurfaceType_constants.phpt"/>
                     <file role="test" name="cairo_surface_copy_page.phpt"/>
                     <file role="test" name="cairo_surface_create_similar.phpt"/>
+                    <file role="test" name="cairo_surface_create_for_rectangle.phpt"/>
                     <file role="test" name="cairo_surface_finish.phpt"/>
                     <file role="test" name="cairo_surface_flush.phpt"/>
                     <file role="test" name="cairo_surface_get_content.phpt"/>
@@ -555,6 +564,12 @@
                         <file role="test" name="versionToString.phpt"/>
                         <file role="test" name="__construct.phpt"/>
                     </dir>
+                    <dir name="CairoRecordingSurface">
+                        <file role="test" name="__construct.phpt"/>
+                    </dir>
+                    <dir name="CairoSubSurface">
+                        <file role="test" name="__construct.phpt"/>
+                    </dir>
                 </dir>
             </dir>
         </dir>
@@ -563,7 +578,7 @@
     <dependencies>
       <required>
         <php>
-          <min>5.2.0</min>
+          <min>5.1.6</min>
         </php>
         <pearinstaller>
           <min>1.4.0</min>
@@ -573,6 +588,10 @@
     </dependencies>
    
     <providesextension>cairo</providesextension>
+
+    <extsrcrelease>
+      <configureoption default="autodetect" name="with-cairo" prompt="Please provide the prefix of the Cairo installation" />
+     </extsrcrelease>
    
     <changelog>
     </changelog>
