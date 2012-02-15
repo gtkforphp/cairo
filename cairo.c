@@ -481,6 +481,7 @@ ZEND_BEGIN_ARG_INFO(cairo_surface_create_similar_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, height)
 ZEND_END_ARG_INFO()
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 ZEND_BEGIN_ARG_INFO(cairo_surface_create_for_rectangle_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
 	ZEND_ARG_INFO(0, x)
@@ -488,6 +489,7 @@ ZEND_BEGIN_ARG_INFO(cairo_surface_create_for_rectangle_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, width)
 	ZEND_ARG_INFO(0, height)
 ZEND_END_ARG_INFO()
+#endif
 
 ZEND_BEGIN_ARG_INFO(cairo_surface_mark_dirty_rectangle_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, surface, CairoSurface, 0)
@@ -1067,7 +1069,9 @@ static const zend_function_entry cairo_functions[] = {
 
 	/* Generic Surface Functions */
 	PHP_FE(cairo_surface_create_similar, cairo_surface_create_similar_args)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 	PHP_FE(cairo_surface_create_for_rectangle, cairo_surface_create_similar_args)
+#endif
 	PHP_FE(cairo_surface_status, cairo_surface_args)
 	PHP_FE(cairo_surface_finish, cairo_surface_args)
 	PHP_FE(cairo_surface_flush, cairo_surface_args)

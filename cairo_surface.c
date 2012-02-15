@@ -106,6 +106,7 @@ PHP_FUNCTION(cairo_surface_create_similar)
 	   proto CairoSurface object CairoSurface->createForRectangle(double x, double y, double width, double height)
 	   Create a new surface that is a rectangle within the target surface. */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 PHP_FUNCTION(cairo_surface_create_for_rectangle)
 {
 	zval *surface_zval = NULL;
@@ -130,6 +131,7 @@ PHP_FUNCTION(cairo_surface_create_for_rectangle)
 	new_surface_object->parent_zval = surface_zval;
 	new_surface_object->surface = new_surface;
 }
+#endif
 
 /* }}} */
 
@@ -530,7 +532,9 @@ PHP_FUNCTION(cairo_surface_write_to_png)
 const zend_function_entry cairo_surface_methods[] = {
 	PHP_ME(CairoSurface, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME_MAPPING(createSimilar, cairo_surface_create_similar, CairoSurface_createSimilar_args, ZEND_ACC_PUBLIC)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 	PHP_ME_MAPPING(createForRectangle, cairo_surface_create_for_rectangle, CairoSurface_createForRectangle_args, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME_MAPPING(status, cairo_surface_status, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(finish, cairo_surface_finish, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(flush, cairo_surface_flush, NULL, ZEND_ACC_PUBLIC)
@@ -687,7 +691,7 @@ zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface TSRMLS_DC)
 			break;
 #endif
 
-#ifdef CAIRO_HAS_PS_SURFACE
+#ifdef CAIRO_HAS_RECORDING_SURFACE
 		case CAIRO_SURFACE_TYPE_RECORDING:
 			type = cairo_ce_cairorecordingsurface;
 			break;

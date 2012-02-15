@@ -418,7 +418,9 @@ PHP_FUNCTION(cairo_scaled_font_get_type);
 
 /* Generic Surface Functions */
 PHP_FUNCTION(cairo_surface_create_similar);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 PHP_FUNCTION(cairo_surface_create_for_rectangle);
+#endif
 PHP_FUNCTION(cairo_surface_status);
 PHP_FUNCTION(cairo_surface_finish);
 PHP_FUNCTION(cairo_surface_flush);
