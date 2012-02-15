@@ -10,12 +10,12 @@
      <email>auroraeosrose@php.net</email>
      <active>yes</active>
     </lead>
-    <developer>
+    <lead>
      <name>Michael Maclean</name>
      <user>mgdm</user>
      <email>mgdm@php.net</email>
      <active>yes</active>
-    </developer>
+    </lead>
     <developer>
      <name>Mark Skilbeck</name>
      <user>markskilbeck</user>
@@ -29,18 +29,12 @@
      <active>no</active>
     </developer>
 
-    <date>2011-12-28</date>
-    <version><release>0.3.0</release><api>0.3.0</api></version>
+    <date>2012-02-15</date>
+    <version><release>0.3.1</release><api>0.3.1</api></version>
     <stability><release>beta</release><api>beta</api></stability>
     <license uri="http://www.php.net/license">PHP License</license>
     <notes>
-     * Added support for Cairo 1.10 subsurfaces
-     * Added support for Cairo 1.10 recording surfaces
-     * Added other Cairo 1.10 methods
-     * Fix bug relating to strides for image data
-     * Allow compiling all the way back to Cairo 1.2
-     * Win32 font support
-     * Handle construction and destruction of globals correctly
+     * Fix compilation with older versions of Cairo
     </notes>
 
     <contents>
