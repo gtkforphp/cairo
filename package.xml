@@ -29,12 +29,12 @@
      <active>no</active>
     </developer>
 
-    <date>2012-02-15</date>
-    <version><release>0.3.1</release><api>0.3.1</api></version>
+    <date>2012-04-21</date>
+    <version><release>0.3.2</release><api>0.3.2</api></version>
     <stability><release>beta</release><api>beta</api></stability>
     <license uri="http://www.php.net/license">PHP License</license>
     <notes>
-     * Fix compilation with older versions of Cairo
+     * Fix packaging inconsistencies
     </notes>
 
     <contents>
@@ -44,6 +44,7 @@
             <file role="doc" name="IGNORED"/>
             <file role="doc" name="SYMBOLS"/>
             <file role="doc" name="CREDITS"/>
+            <file role="doc" name="LICENCE"/>
 
             <file role="src" name="php_cairo.h"/>
             <file role="src" name="php_cairo_api.h"/>
