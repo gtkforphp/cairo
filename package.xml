@@ -44,7 +44,7 @@
             <file role="doc" name="IGNORED"/>
             <file role="doc" name="SYMBOLS"/>
             <file role="doc" name="CREDITS"/>
-            <file role="doc" name="LICENCE"/>
+            <file role="doc" name="LICENSE"/>
 
             <file role="src" name="php_cairo.h"/>
             <file role="src" name="php_cairo_api.h"/>
