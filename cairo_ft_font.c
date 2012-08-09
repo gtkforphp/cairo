@@ -87,6 +87,10 @@ static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_f
 	FT_Open_Args open_args;
 	int error;
 
+	if (php_stream_stat(stream,&ssbuf) < 0) {
+		return 1;
+	}
+
 	ft_lib = &CAIROG(ft_lib);
 	font_face_object->ft_face = NULL;
 	font_face_object->ft_stream = NULL;
