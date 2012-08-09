@@ -247,7 +247,7 @@ PHP_METHOD(CairoWin32FontFace, __construct)
 }
 /* }}} */
 
-static function_entry cairo_win32_font_methods[] = {
+const zend_function_entry cairo_win32_font_methods[] = {
     PHP_ME(CairoWin32FontFace, __construct, CairoWin32FontFace_construct_args, \
         ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     {NULL, NULL, NULL}
