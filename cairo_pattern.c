@@ -1129,6 +1129,31 @@ PHP_FUNCTION(cairo_mesh_pattern_set_corner_color_rgba)
 	PHP_CAIRO_ERROR(cairo_pattern_status(pattern_object->pattern));
 }
 /* }}} */
+
+/* {{{ proto void cairo_mesh_pattern_get_patch_count(CairoMeshPattern object)
+   proto void CairoMeshPattern->getPatchCount()
+   Gets the number of patches specified in the given mesh pattern. */
+PHP_FUNCTION(cairo_mesh_pattern_get_patch_count)
+{
+	zval *pattern_zval = NULL;
+	cairo_pattern_object *pattern_object;
+	cairo_status_t status;
+	unsigned int count;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &pattern_zval, cairo_ce_cairopattern) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	pattern_object = (cairo_pattern_object *)cairo_pattern_object_get(pattern_zval TSRMLS_CC);
+	status = cairo_mesh_pattern_get_patch_count(pattern_object->pattern, &count);
+	PHP_CAIRO_ERROR(status);
+
+	RETURN_LONG(count);
+}
+/* }}} */
 #endif
 
 /* }}} */
@@ -1155,6 +1180,7 @@ const zend_function_entry cairo_meshpattern_methods[] = {
 	PHP_ME_MAPPING(setControlPoint, cairo_mesh_pattern_set_control_point, CairoMeshPattern_setControlPoint_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(setCornerColorRGB, cairo_mesh_pattern_set_corner_color_rgb, CairoMeshPattern_setCornerColorRGB_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(setCornerColorRGBA, cairo_mesh_pattern_set_corner_color_rgba, CairoMeshPattern_setCornerColorRGBA_args, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING(getPatchCount, cairo_mesh_pattern_get_patch_count, NULL, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
 /* }}} */
