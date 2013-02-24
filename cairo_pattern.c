@@ -1178,9 +1178,11 @@ PHP_CAIRO_API zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *patter
 		case CAIRO_PATTERN_TYPE_RADIAL:
 			type = cairo_ce_cairoradialgradient;
 			break;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
 		case CAIRO_PATTERN_TYPE_MESH:
 			type = cairo_ce_cairomeshpattern;
 			break;
+#endif
 		default:
 			php_error(E_WARNING, "Unsupported Cairo Surface Type");
 			return NULL;
