@@ -363,6 +363,17 @@ PHP_FUNCTION(cairo_pattern_get_color_stop_rgba);
 #endif
 PHP_FUNCTION(cairo_pattern_create_linear);
 PHP_FUNCTION(cairo_pattern_create_radial);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+PHP_FUNCTION(cairo_pattern_create_mesh);
+PHP_FUNCTION(cairo_mesh_pattern_begin_patch);
+PHP_FUNCTION(cairo_mesh_pattern_end_patch);
+PHP_FUNCTION(cairo_mesh_pattern_move_to);
+PHP_FUNCTION(cairo_mesh_pattern_line_to);
+PHP_FUNCTION(cairo_mesh_pattern_curve_to);
+PHP_FUNCTION(cairo_mesh_pattern_set_control_point);
+PHP_FUNCTION(cairo_mesh_pattern_set_corner_color_rgb);
+PHP_FUNCTION(cairo_mesh_pattern_set_corner_color_rgba);
+#endif
 
 /* Matrix Functions */
 PHP_FUNCTION(cairo_matrix_init);
