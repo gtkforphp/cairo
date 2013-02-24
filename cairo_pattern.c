@@ -135,6 +135,10 @@ ZEND_BEGIN_ARG_INFO(CairoMeshPattern_setCornerColorRGBA_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(CairoMeshPattern_getPath_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, patch)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto void contruct()
    CairoPattern CANNOT be extended in userspace, this will throw an exception on use */
 PHP_METHOD(CairoPattern, __construct)
@@ -1154,6 +1158,31 @@ PHP_FUNCTION(cairo_mesh_pattern_get_patch_count)
 	RETURN_LONG(count);
 }
 /* }}} */
+
+/* {{{ proto void cairo_mesh_pattern_get_path(CairoMeshPattern object, int patch_num)
+   proto void CairoMeshPattern->getPath(int patchNum)
+   Gets path defining the patch patch_num for a mesh pattern. */
+PHP_FUNCTION(cairo_mesh_pattern_get_path)
+{
+	zval *pattern_zval = NULL;
+	cairo_pattern_object *pattern_object;
+	cairo_path_object *path_object;
+	long patch_num;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &pattern_zval, cairo_ce_cairopattern, &patch_num) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	pattern_object = (cairo_pattern_object *)cairo_pattern_object_get(pattern_zval TSRMLS_CC);
+	object_init_ex(return_value, php_cairo_get_path_ce());
+	path_object = (cairo_path_object *) zend_object_store_get_object(return_value TSRMLS_CC);
+	path_object->path = cairo_mesh_pattern_get_path(pattern_object->pattern, patch_num);
+	PHP_CAIRO_ERROR(path_object->path->status);
+}
+/* }}} */
 #endif
 
 /* }}} */
@@ -1181,6 +1210,7 @@ const zend_function_entry cairo_meshpattern_methods[] = {
 	PHP_ME_MAPPING(setCornerColorRGB, cairo_mesh_pattern_set_corner_color_rgb, CairoMeshPattern_setCornerColorRGB_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(setCornerColorRGBA, cairo_mesh_pattern_set_corner_color_rgba, CairoMeshPattern_setCornerColorRGBA_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getPatchCount, cairo_mesh_pattern_get_patch_count, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING(getPath, cairo_mesh_pattern_get_path, CairoMeshPattern_getPath_args, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
 /* }}} */

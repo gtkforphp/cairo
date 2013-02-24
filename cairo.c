@@ -348,6 +348,11 @@ ZEND_BEGIN_ARG_INFO(cairo_mesh_pattern_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, pattern, CairoMeshPattern, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(cairo_mesh_pattern_get_path_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, pattern, CairoMeshPattern, 0)
+	ZEND_ARG_INFO(0, patch)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(cairo_mesh_pattern_translate_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_OBJ_INFO(0, pattern, CairoMeshPattern, 0)
 	ZEND_ARG_INFO(0, x)
@@ -1038,6 +1043,7 @@ static const zend_function_entry cairo_functions[] = {
 	PHP_FE(cairo_mesh_pattern_set_corner_color_rgb, cairo_mesh_pattern_set_corner_color_rgb_args)
 	PHP_FE(cairo_mesh_pattern_set_corner_color_rgba, cairo_mesh_pattern_set_corner_color_rgba_args)
 	PHP_FE(cairo_mesh_pattern_get_patch_count, cairo_mesh_pattern_args)
+	PHP_FE(cairo_mesh_pattern_get_path, cairo_mesh_pattern_get_path_args)
 #endif
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 	PHP_FE(cairo_pattern_get_color_stop_count, cairo_gradientpattern_args)
