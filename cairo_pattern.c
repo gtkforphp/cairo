@@ -139,6 +139,16 @@ ZEND_BEGIN_ARG_INFO(CairoMeshPattern_getPath_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, patch)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(CairoMeshPattern_getControlPoint_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, patch)
+	ZEND_ARG_INFO(0, point)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(CairoMeshPattern_getCornerColorRgba_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, patch)
+	ZEND_ARG_INFO(0, corner)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto void contruct()
    CairoPattern CANNOT be extended in userspace, this will throw an exception on use */
 PHP_METHOD(CairoPattern, __construct)
@@ -1183,6 +1193,63 @@ PHP_FUNCTION(cairo_mesh_pattern_get_path)
 	PHP_CAIRO_ERROR(path_object->path->status);
 }
 /* }}} */
+
+/* {{{ proto array cairo_mesh_pattern_get_control_point(CairoPattern object, long patch, long point)
+   proto array CairoMeshPattern->getCornerColorRgba(long patch, long point)
+   Gets the control point point_num of patch patch_num for a mesh pattern. */
+PHP_FUNCTION(cairo_mesh_pattern_get_control_point)
+{
+	long patch_num, corner_num;
+	double offset, x, y;
+	zval *pattern_zval = NULL;
+	cairo_pattern_object *pattern_object;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &pattern_zval, cairo_ce_cairomeshpattern, &patch_num, &corner_num) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	pattern_object = (cairo_pattern_object *) cairo_pattern_object_get(pattern_zval TSRMLS_CC);
+	cairo_mesh_pattern_get_control_point(pattern_object->pattern, patch_num, corner_num, &x, &y);
+	PHP_CAIRO_ERROR(cairo_pattern_status(pattern_object->pattern));
+
+	array_init(return_value);
+	add_assoc_double(return_value, "x", x);
+	add_assoc_double(return_value, "y", y);
+}
+/* }}} */
+
+/* {{{ proto array cairo_mesh_pattern_get_corner_color_rgba(CairoPattern object)
+   proto array CairoMeshPattern->getCornerColorRgba()
+   Gets the color information in corner corner_num of patch patch_num for a mesh pattern. */
+
+PHP_FUNCTION(cairo_mesh_pattern_get_corner_color_rgba)
+{
+	long patch_num, corner_num;
+	double offset, red, green, blue, alpha;
+	zval *pattern_zval = NULL;
+	cairo_pattern_object *pattern_object;
+
+	PHP_CAIRO_ERROR_HANDLING(FALSE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &pattern_zval, cairo_ce_cairomeshpattern, &patch_num, &corner_num) == FAILURE) {
+		PHP_CAIRO_RESTORE_ERRORS(FALSE)
+		return;
+	}
+	PHP_CAIRO_RESTORE_ERRORS(FALSE)
+
+	pattern_object = (cairo_pattern_object *) cairo_pattern_object_get(pattern_zval TSRMLS_CC);
+	cairo_mesh_pattern_get_corner_color_rgba(pattern_object->pattern, patch_num, corner_num, &red, &green, &blue, &alpha);
+	PHP_CAIRO_ERROR(cairo_pattern_status(pattern_object->pattern));
+
+	array_init(return_value);
+	add_assoc_double(return_value, "red", red);
+	add_assoc_double(return_value, "green", green);
+	add_assoc_double(return_value, "blue", blue);
+	add_assoc_double(return_value, "alpha", alpha);
+}
+/* }}} */
 #endif
 
 /* }}} */
@@ -1211,6 +1278,8 @@ const zend_function_entry cairo_meshpattern_methods[] = {
 	PHP_ME_MAPPING(setCornerColorRGBA, cairo_mesh_pattern_set_corner_color_rgba, CairoMeshPattern_setCornerColorRGBA_args, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getPatchCount, cairo_mesh_pattern_get_patch_count, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME_MAPPING(getPath, cairo_mesh_pattern_get_path, CairoMeshPattern_getPath_args, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING(getControlPoint, cairo_mesh_pattern_get_control_point, CairoMeshPattern_getControlPoint_args, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING(getCornerColorRgba, cairo_mesh_pattern_get_corner_color_rgba, CairoMeshPattern_getCornerColorRgba_args, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
 /* }}} */

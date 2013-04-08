@@ -375,6 +375,8 @@ PHP_FUNCTION(cairo_mesh_pattern_set_corner_color_rgb);
 PHP_FUNCTION(cairo_mesh_pattern_set_corner_color_rgba);
 PHP_FUNCTION(cairo_mesh_pattern_get_patch_count);
 PHP_FUNCTION(cairo_mesh_pattern_get_path);
+PHP_FUNCTION(cairo_mesh_pattern_get_corner_color_rgba);
+PHP_FUNCTION(cairo_mesh_pattern_get_control_point);
 #endif
 
 /* Matrix Functions */
