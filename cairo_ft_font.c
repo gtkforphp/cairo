@@ -33,7 +33,7 @@
 #include <fontconfig/fontconfig.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <cairo/cairo-ft.h>
+#include <cairo-ft.h>
 
 zend_class_entry *cairo_ce_cairoftfont;
 
