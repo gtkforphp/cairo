@@ -3,7 +3,8 @@
 ARG_WITH("cairo", "Cairo Graphics Library Bindings", "no");
 
 if (PHP_CAIRO != "no") {
-	if (CHECK_HEADER_ADD_INCLUDE("cairo/cairo.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true)) {
+	if (CHECK_HEADER_ADD_INCLUDE("cairo/cairo.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true) &&
+		CHECK_HEADER_ADD_INCLUDE("ft2build.h", "CFLAGS_CAIRO", PHP_CAIRO + ";" + PHP_PHP_BUILD + "\\include" + ";" + PHP_PHP_BUILD + "\\include\\freetype")) {
 		/* Check for static lib first, because that will need an extra define */
 		if (CHECK_LIB("cairo_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
 			/* We don't care if this fails, but if it does exists, we need to link */
