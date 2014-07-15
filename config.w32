@@ -26,6 +26,7 @@ if (PHP_CAIRO != "no") {
 			ADD_FLAG("CFLAGS_CAIRO", "/D CAIRO_WIN32_STATIC_BUILD=1");
 
 			AC_DEFINE("HAVE_CAIRO", 1);
+			PHP_INSTALL_HEADERS("ext/cairo", "php_cairo_api.h");
 		} else if (CHECK_LIB("cairo.lib", "cairo", PHP_CAIRO + "\\lib")) {
 			CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib");
 			CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
@@ -44,6 +45,7 @@ if (PHP_CAIRO != "no") {
 			cairo_recording_surface.c cairo_sub_surface.c  cairo_win32_font.c");
 
 			AC_DEFINE("HAVE_CAIRO", 1);
+			PHP_INSTALL_HEADERS("ext/cairo", "php_cairo_api.h");
 		} else {
 			WARNING('Could not find cairo.lib or cairo_a.lib; skipping');
 		}
