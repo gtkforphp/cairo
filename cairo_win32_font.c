@@ -275,7 +275,6 @@ zend_object_value cairo_win32_font_face_create_new(zend_class_entry *ce TSRMLS_D
 {
     zend_object_value retval;
     cairo_win32_font_face_object *font_face;
-    zval *temp;
 
     font_face = ecalloc(1, sizeof(cairo_win32_font_face_object));
     font_face->std.ce = ce;

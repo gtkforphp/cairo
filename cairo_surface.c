@@ -82,7 +82,7 @@ PHP_FUNCTION(cairo_surface_create_similar)
 	zval *surface_zval = NULL;
 	cairo_surface_object *surface_object, *new_surface_object;
 	cairo_surface_t *new_surface;
-	long content;
+	int content;
 	double width, height;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
@@ -272,7 +272,7 @@ PHP_FUNCTION(cairo_surface_mark_dirty_rectangle)
 {
 	zval *surface_zval = NULL;
 	cairo_surface_object *surface_object;
-	double x = 0.0, y = 0.0, width = 0.0, height = 0.0;
+	float x = 0.0, y = 0.0, width = 0.0, height = 0.0;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Odddd", &surface_zval, cairo_ce_cairosurface, &x, &y, &width, &height) == FAILURE) {
@@ -601,7 +601,6 @@ zend_object_value cairo_surface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	cairo_surface_object *surface;
-	zval *temp;
 
 	surface = ecalloc(1, sizeof(cairo_surface_object));
 

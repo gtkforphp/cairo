@@ -74,7 +74,6 @@ static zend_object_value cairo_font_options_object_new(zend_class_entry *ce TSRM
 {
 	zend_object_value retval;
 	cairo_font_options_object *font_options;
-	zval *temp;
 
 	font_options = ecalloc(1, sizeof(cairo_font_options_object));
 	font_options->font_options = NULL;

@@ -614,8 +614,7 @@ ZEND_END_ARG_INFO()
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 
 const char* php_cairo_get_ft_error(int error TSRMLS_DC) {
-	int i;
-	php_cairo_ft_error *current_error = php_cairo_ft_errors;
+	const php_cairo_ft_error *current_error = php_cairo_ft_errors;
 
 	while (current_error->err_msg != NULL) {
 		if (current_error->err_code == error) {
@@ -626,7 +625,7 @@ const char* php_cairo_get_ft_error(int error TSRMLS_DC) {
 	return NULL;
 }
 
-#endif	
+#endif
 
 /* {{{ proto int cairo_version(void) 
        Returns an integer version number of the cairo library being used */

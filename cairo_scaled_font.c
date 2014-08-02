@@ -515,7 +515,6 @@ static zend_object_value cairo_scaled_font_object_new(zend_class_entry *ce TSRML
 {
 	zend_object_value retval;
 	cairo_scaled_font_object *scaled_font;
-	zval *temp;
 
 	scaled_font = ecalloc(1, sizeof(cairo_scaled_font_object));
 
