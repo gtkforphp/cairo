@@ -76,6 +76,17 @@ if test "$PHP_CAIRO" != "no"; then
                     PHP_EVAL_LIBLINE($FREETYPE_LIBS, FREETYPE_SHARED_LIBADD)
                     AC_DEFINE(HAVE_FREETYPE, 1, [whether freetype2 exists in the system])
                 fi
+
+                AC_MSG_CHECKING(for fontconfig)
+                if $PKG_CONFIG --exists fontconfig; then
+                    fontconfig_version_full=`$PKG_CONFIG --modversion fontconfig`
+                    AC_MSG_RESULT([found $fontconfig_version_full])
+                    FONTCONFIG_LIBS="$LDFLAGS `$PKG_CONFIG --libs fontconfig`"
+                    FONTCONFIG_INCS="$CFLAGS `$PKG_CONFIG --cflags-only-I fontconfig`"
+                    PHP_EVAL_INCLINE($FONTCONFIG_INCS)
+                    PHP_EVAL_LIBLINE($FONTCONFIG_LIBS, FONTCONFIG_SHARED_LIBADD)
+                    AC_DEFINE(HAVE_FONTCONFIG, 1, [whether fontconfig exists in the system])
+                fi
                     
             else
                 AC_MSG_RESULT(too old)
