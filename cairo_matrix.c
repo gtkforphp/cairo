@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2011 The PHP Group                                |
+  | Copyright (c) 1997-2014 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -14,11 +14,8 @@
   +----------------------------------------------------------------------+
   | Author: Elizabeth Smith <auroraeosrose@php.net>                      |
   |         Michael Maclean <mgdm@php.net>                               |
-  |         Akshat Gupta <g.akshat@gmail.com>                            |
   +----------------------------------------------------------------------+
 */
-
-/* $Id$ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -552,8 +549,6 @@ PHP_MINIT_FUNCTION(cairo_matrix)
 	cairo_ce_cairomatrix->create_object = cairo_matrix_object_new;
 	memcpy(&cairo_matrix_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	cairo_matrix_object_handlers.clone_obj = cairo_matrix_object_clone;
-	// date_object_handlers_date.compare_objects = date_object_compare_date;
-	// date_object_handlers_date.get_properties = date_object_get_properties; 
 
 	return SUCCESS;
 }
