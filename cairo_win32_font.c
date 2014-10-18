@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2011 The PHP Group                                |
+  | Copyright (c) 1997-2014 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -14,12 +14,10 @@
   +----------------------------------------------------------------------+
   | Author: Elizabeth Smith <auroraeosrose@php.net>                      |
   |         Michael Maclean <mgdm@php.net>                               |
-  |         Akshat Gupta <g.akshat@gmail.com>                            |
   |         Mark Skilbeck <markskilbeck@php.net>                         |
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */
 /** TODO: REGISTER_LONG_CONSTANT support in REGISTER_WIN32_LONG_CONSTANT */
 /** The zend_function_entry's are in php_cairo.h and cairo.c */
 
@@ -34,6 +32,7 @@
 #include "zend.h"
 
 #ifdef CAIRO_HAS_WIN32_FONT
+
 #include <Windows.h>
 #include <Wingdi.h>
 #include <cairo/cairo-win32.h>
@@ -461,3 +460,13 @@ PHP_MINIT_FUNCTION(cairo_win32_font)
 }
 
 #endif /** CAIRO_HAS_WIN32_FONT */
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw=4 ts=4 fdm=marker
+ * vim<600: noet sw=4 ts=4
+ */
+ 

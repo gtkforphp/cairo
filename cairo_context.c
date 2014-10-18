@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2011 The PHP Group                                |
+  | Copyright (c) 1997-2014 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -17,8 +17,6 @@
   |         Akshat Gupta <g.akshat@gmail.com>                            |
   +----------------------------------------------------------------------+
 */
-
-/* $Id$ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2087,7 +2085,7 @@ PHP_FUNCTION(cairo_arc_negative)
 
 /* {{{ proto void cairo_curve_to(CairoContext object, float x1, float y1, float x2, float y2, float x3, float y3)
    proto void CairoContext->curveTo(float x1, float y1, float x2, float y2, float x3, float y3)
-   Adds a cubic Bézier spline to the path from the current point to position (x3, y3) in user-space coordinates, using (x1, y1) and (x2, y2) as the control points.
+   Adds a cubic BÃ©zier spline to the path from the current point to position (x3, y3) in user-space coordinates, using (x1, y1) and (x2, y2) as the control points.
    After this call the current point will be (x3, y3).  */
 PHP_FUNCTION(cairo_curve_to)
 {
@@ -2245,7 +2243,7 @@ PHP_FUNCTION(cairo_text_path)
 
 /* {{{ proto void cairo_rel_curve_to(CairoContext object, float x1, float y1, float x2, float y2, float x3, float y3)
    proto void CairoContext->relCurveTo(float x1, float y1, float x2, float y2, float x3, float y3)
-   Adds a cubic Bézier spline to the path from the current point to a point offset from the current point by (x3, y3),
+   Adds a cubic BÃ©zier spline to the path from the current point to a point offset from the current point by (x3, y3),
    using points offset by (x1, y1) and (x2, y2) as the control points. */
 PHP_FUNCTION(cairo_rel_curve_to)
 {

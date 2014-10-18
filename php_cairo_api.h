@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2011 The PHP Group                                |
+  | Copyright (c) 1997-2014 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -18,12 +18,15 @@
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */
+#ifndef PHP_CAIRO_API_H
+#define PHP_CAIRO_API_H
 
-/* THIS IS NOT USED IN THE EXTENSION - it's provided as an easy way to use cairo in other PHP extensions */
+/* Public C api for use by other extensions */
 
 #include <php.h>
 #include <cairo.h>
+
+#define PHP_CAIRO_API_VERSION "1.0.0"
 
 /* Cairo object stuff */
 typedef struct _stream_closure {
@@ -188,6 +191,9 @@ static inline cairo_font_options_object* cairo_font_options_object_get(zval *zob
     }
     return pobj;
 }
+
+#endif /* PHP_CAIRO_API_H */
+
 /*
  * Local variables:
  * tab-width: 4
