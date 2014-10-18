@@ -612,7 +612,7 @@ ZEND_END_ARG_INFO()
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 
 const char* php_cairo_get_ft_error(int error TSRMLS_DC) {
-	int i;
+
 	php_cairo_ft_error *current_error = php_cairo_ft_errors;
 
 	while (current_error->err_msg != NULL) {

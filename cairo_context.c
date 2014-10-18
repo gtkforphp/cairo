@@ -2974,7 +2974,9 @@ static zend_object_value cairo_context_object_new(zend_class_entry *ce TSRMLS_DC
 {
 	zend_object_value retval;
 	cairo_context_object *context;
+#if PHP_VERSION_ID < 50399
 	zval *temp;
+#endif
 
 	context = ecalloc(1, sizeof(cairo_context_object));
 
