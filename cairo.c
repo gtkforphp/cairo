@@ -613,7 +613,7 @@ ZEND_END_ARG_INFO()
 
 const char* php_cairo_get_ft_error(int error TSRMLS_DC) {
 
-	php_cairo_ft_error *current_error = php_cairo_ft_errors;
+	const php_cairo_ft_error *current_error = php_cairo_ft_errors;
 
 	while (current_error->err_msg != NULL) {
 		if (current_error->err_code == error) {
