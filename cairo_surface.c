@@ -599,7 +599,9 @@ zend_object_value cairo_surface_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	cairo_surface_object *surface;
+#if PHP_VERSION_ID < 50399
 	zval *temp;
+#endif
 
 	surface = ecalloc(1, sizeof(cairo_surface_object));
 

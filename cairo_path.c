@@ -42,7 +42,9 @@ static zend_object_value cairo_path_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	cairo_path_object *path;
+#if PHP_VERSION_ID < 50399
 	zval *temp;
+#endif
 
 	path = ecalloc(1, sizeof(cairo_path_object));
 

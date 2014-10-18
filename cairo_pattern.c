@@ -931,7 +931,9 @@ static zend_object_value cairo_pattern_object_new(zend_class_entry *ce TSRMLS_DC
 {
 	zend_object_value retval;
 	cairo_pattern_object *pattern;
+#if PHP_VERSION_ID < 50399
 	zval *temp;
+#endif
 
 	pattern = ecalloc(1, sizeof(cairo_pattern_object));
 

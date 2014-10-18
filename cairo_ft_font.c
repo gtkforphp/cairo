@@ -200,7 +200,7 @@ PHP_FUNCTION(cairo_ft_font_face_create)
 	error = php_cairo_create_ft_font_face(font_face_object, stream, owned_stream, load_flags, 0 TSRMLS_CC);
 
 	if (error) {
-		char *err_string = php_cairo_get_ft_error(error TSRMLS_CC);
+		const char *err_string = php_cairo_get_ft_error(error TSRMLS_CC);
 		zend_error(E_WARNING, "cairo_ft_font_face_create(): An error occurred opening the file: %s", err_string);
 		RETURN_NULL();
 	} 
@@ -325,7 +325,9 @@ zend_object_value cairo_ft_font_face_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	cairo_ft_font_face_object *font_face;
+#if PHP_VERSION_ID < 50399
 	zval *temp;
+#endif
 
 	font_face = ecalloc(1, sizeof(cairo_ft_font_face_object));
 	font_face->ft_stream = NULL;

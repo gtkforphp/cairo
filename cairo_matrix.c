@@ -520,7 +520,9 @@ static zend_object_value cairo_matrix_object_new(zend_class_entry *ce TSRMLS_DC)
 {
 	zend_object_value retval;
 	cairo_matrix_object *matrix;
+#if PHP_VERSION_ID < 50399
 	zval *temp;
+#endif
 
 	matrix = ecalloc(1, sizeof(cairo_matrix_object));
 
