@@ -138,6 +138,7 @@ typedef struct _cairo_font_face_object {
 typedef struct _cairo_ft_font_face_object {
 	zend_object std;
 	cairo_font_face_t *font_face;
+	FT_Library ft_lib;
 	FT_Stream ft_stream;
 	FT_Face ft_face;
 	cairo_user_data_key_t key;
@@ -161,22 +162,7 @@ PHP_MINIT_FUNCTION(cairo);
 PHP_MINFO_FUNCTION(cairo);
 PHP_MSHUTDOWN_FUNCTION(cairo);
 
-/* Globals */
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
-ZEND_BEGIN_MODULE_GLOBALS(cairo)
-	/* Freetype library */
-	FT_Library ft_lib;
-ZEND_END_MODULE_GLOBALS(cairo)
-
-
-#ifdef ZTS
-# define CAIROG(v) TSRMG(cairo_globals_id, zend_cairo_globals *, v)
-#else
-# define CAIROG(v) (cairo_globals.v)
-#endif
-
-ZEND_EXTERN_MODULE_GLOBALS(cairo)
-
 
 typedef struct _php_cairo_ft_error {
 	int err_code;

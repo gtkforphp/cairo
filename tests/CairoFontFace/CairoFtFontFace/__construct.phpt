@@ -63,6 +63,6 @@ object(CairoFtFontFace)#2 (0) {
 string(86) "CairoFtFontFace::__construct() expects parameter 1 to be a string or a stream resource"
 object(CairoFtFontFace)#2 (0) {
 }
-string(66) "CairoFtFontFace::__construct(): An error occurred opening the file"
+string(91) "CairoFtFontFace::__construct(): An error occurred opening the file invalid stream operation"
 object(CairoFtFontFace)#2 (0) {
 }
