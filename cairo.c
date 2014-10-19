@@ -35,23 +35,9 @@ zend_class_entry *cairo_ce_cairo;
 zend_object_handlers cairo_std_object_handlers;
 
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
-ZEND_DECLARE_MODULE_GLOBALS(cairo)
 
 const php_cairo_ft_error php_cairo_ft_errors[] =
 #include FT_ERRORS_H
-
-PHP_GINIT_FUNCTION(cairo)
-{
-	cairo_globals->ft_lib = NULL;
-}
-
-PHP_GSHUTDOWN_FUNCTION(cairo)
-{
-	if (cairo_globals->ft_lib != NULL) {
-		FT_Done_FreeType(cairo_globals->ft_lib);
-	}
-}
-
 
 #endif
 
@@ -1192,15 +1178,7 @@ zend_module_entry cairo_module_entry = {
 	NULL,
 	PHP_MINFO(cairo),
 	PHP_CAIRO_VERSION,
-#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
-	PHP_MODULE_GLOBALS(cairo),
-	PHP_GINIT(cairo),
-	PHP_GSHUTDOWN(cairo), 
-	NULL,
-	STANDARD_MODULE_PROPERTIES_EX
-#else
 	STANDARD_MODULE_PROPERTIES
-#endif
 };
 /* }}} */
 
