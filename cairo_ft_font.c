@@ -139,13 +139,10 @@ static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_f
 			(cairo_destroy_func_t) ft_face_destroy );
 
 	if (error) {
-		// XXX it will leak now because the destruction handler could not be registered
-		
-		/*
-		   cairo_font_face_destroy (font_face_object->font_face);
-		   FT_Done_Face(face);
-		   return error;
-		*/
+		ft_face_destroy(face);
+		cairo_ft_font_face_destroy(font_face_object->font_face);
+		font_face_object->font_face = NULL;
+		return error;
 	}
 
 	return 0;
