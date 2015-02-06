@@ -140,7 +140,7 @@ static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_f
 
 	if (error) {
 		ft_face_destroy(face);
-		cairo_ft_font_face_destroy(font_face_object->font_face);
+		cairo_font_face_destroy(font_face_object->font_face);
 		font_face_object->font_face = NULL;
 		return error;
 	}
