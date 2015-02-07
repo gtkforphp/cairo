@@ -129,9 +129,7 @@ static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_f
 			(cairo_destroy_func_t) cairo_font_face_destroy  );
 
 	if (error) {
-		FT_Done_Face(font_face_object->ft_face);
-		//cairo_font_face_destroy(font_face_object->font_face);
-		font_face_object->font_face = NULL;
+		cairo_font_face_destroy(font_face_object->font_face);
 		return error;
 	}
 
@@ -257,7 +255,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 
 	if (error) {
 		const char *err_string = php_cairo_get_ft_error(error TSRMLS_CC);
-		//zend_throw_exception_ex(cairo_ce_cairoexception, error, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string TSRMLS_CC);
+		zend_throw_exception_ex(cairo_ce_cairoexception, error, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string TSRMLS_CC);
 		RETURN_NULL();
 	}
 
@@ -284,7 +282,6 @@ static void cairo_ft_font_face_object_destroy(void *object TSRMLS_DC)
 	FREE_HASHTABLE(font_face->std.properties);
 	if(font_face->font_face){
 		FT_Done_Face(font_face->ft_face);
-		//cairo_font_face_destroy(font_face->font_face);
 	}
 
 	if(font_face->ft_stream != NULL) {
