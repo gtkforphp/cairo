@@ -3,7 +3,6 @@ cairo_text_path() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!function_exists('cairo_text_path')) die('skip - cairo_text_path not available');
 ?>
 --FILE--
 <?php

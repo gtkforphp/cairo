@@ -3,7 +3,6 @@ cairo_scaled_font_get_font_options() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!function_exists('cairo_scaled_font_get_font_options')) die('skip - cairo_scaled_font_get_font_options not available');
 ?>
 --FILE--
 <?php

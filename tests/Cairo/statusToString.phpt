@@ -3,7 +3,6 @@ Cairo::statusToString() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!method_exists('Cairo', 'statusToString')) die('skip - Cairo::statusToString not available');
 ?>
 --FILE--
 <?php

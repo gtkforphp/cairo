@@ -3,7 +3,6 @@ CairoContext->textPath() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!method_exists('CairoContext', 'textPath')) die('skip - CairoContext->textPath not available');
 ?>
 --FILE--
 <?php

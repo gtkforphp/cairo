@@ -3,7 +3,6 @@ CairoContext->setScaledFont() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!method_exists('CairoContext', 'setScaledFont')) die('skip - CairoContext->setScaledFont not available');
 ?>
 --FILE--
 <?php
