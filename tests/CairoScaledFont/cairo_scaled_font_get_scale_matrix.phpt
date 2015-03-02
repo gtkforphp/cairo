@@ -3,6 +3,7 @@ cairo_scaled_font_get_scale_matrix() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+if(!function_exists('cairo_scaled_font_get_scale_matrix')) die('skip - cairo_scaled_font_get_scale_matrix not available');
 ?>
 --FILE--
 <?php

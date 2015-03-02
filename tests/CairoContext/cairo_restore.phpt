@@ -3,6 +3,7 @@ cairo_restore function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+if(!function_exists('cairo_restore')) die('skip - cairo_restore not available');
 ?>
 --FILE--
 <?php
