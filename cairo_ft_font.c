@@ -75,10 +75,10 @@ void php_cairo_ft_close_stream(FT_Stream stream)
 	efree(stream);
 }
 
+
 static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_face_object, php_stream *stream, zend_bool owned_stream, int load_flags, zend_bool throw_exceptions TSRMLS_DC) {
 	FT_Library ft_lib;
 	FT_Stream ft_stream;
-	FT_Face face;
 	stream_closure *closure;
 	php_stream_statbuf ssbuf;
 	FT_Open_Args open_args;
@@ -106,7 +106,7 @@ static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_f
 	open_args.flags = FT_OPEN_STREAM;
 	open_args.stream = ft_stream;
 
-	error = FT_Open_Face(font_face_object->ft_lib, &open_args, 0, &face);
+	error = FT_Open_Face(font_face_object->ft_lib, &open_args, 0, &font_face_object->ft_face);
 	
 	if (error) {
 		if (owned_stream) {
@@ -119,18 +119,17 @@ static zend_bool php_cairo_create_ft_font_face(cairo_ft_font_face_object *font_f
 	}
 	
 	font_face_object->ft_stream = ft_stream;
-	font_face_object->font_face = (cairo_font_face_t *)cairo_ft_font_face_create_for_ft_face(face, (int)load_flags);
+	font_face_object->font_face = (cairo_font_face_t *)cairo_ft_font_face_create_for_ft_face(font_face_object->ft_face, (int)load_flags);
 
 	/* Set Cairo to automatically destroy the FT_Face when the cairo_font_face_t is destroyed */
 	error = cairo_font_face_set_user_data (
 			font_face_object->font_face, 
 			&font_face_object->key,
-			face, 
-			(cairo_destroy_func_t) FT_Done_Face);
+			font_face_object->font_face, 
+			(cairo_destroy_func_t) cairo_font_face_destroy  );
 
 	if (error) {
-		cairo_font_face_destroy (font_face_object->font_face);
-		FT_Done_Face(face);
+		cairo_font_face_destroy(font_face_object->font_face);
 		return error;
 	}
 
@@ -282,7 +281,7 @@ static void cairo_ft_font_face_object_destroy(void *object TSRMLS_DC)
 	zend_hash_destroy(font_face->std.properties);
 	FREE_HASHTABLE(font_face->std.properties);
 	if(font_face->font_face){
-		cairo_font_face_destroy(font_face->font_face);
+		FT_Done_Face(font_face->ft_face);
 	}
 
 	if(font_face->ft_stream != NULL) {
