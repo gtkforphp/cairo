@@ -83,6 +83,12 @@ typedef struct _cairo_glyph_object {
 	cairo_glyph_t *glyph;
 } cairo_glyph_object;
 
+typedef struct _pecl_ft_container {
+	FT_Library ft_lib;
+    FT_Face ft_face;
+    FT_Stream ft_stream;
+} pecl_ft_container;
+
 typedef struct _cairo_context_object {
 	zend_object std;
 	zval *surface;
@@ -138,9 +144,7 @@ typedef struct _cairo_font_face_object {
 typedef struct _cairo_ft_font_face_object {
 	zend_object std;
 	cairo_font_face_t *font_face;
-	FT_Library ft_lib;
-	FT_Stream ft_stream;
-	FT_Face ft_face;
+    stream_closure *closure;
 	cairo_user_data_key_t key;
 } cairo_ft_font_face_object;
 #endif
@@ -522,7 +526,6 @@ extern cairo_status_t php_cairo_read_func(void *closure, const unsigned char *da
 extern cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, unsigned int length);
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 static unsigned long php_cairo_ft_read_func(FT_Stream stream, unsigned long offset, unsigned char* buffer, unsigned long count);
-extern void php_cairo_ft_close_stream(FT_Stream stream);
 #endif
 
 extern zend_object_value cairo_font_face_object_new(zend_class_entry *ce TSRMLS_DC);
