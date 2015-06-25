@@ -1,3 +1,9 @@
+2015-06-25  Elizabeth M Smith  <auroraeosrose@php.net>
+    * Ported to PHP7 (phpng)
+    * Removed functional apis
+    * Namespaced as Cairo
+    * Cairo\Matrix now has read/write properties for matrix values
+
 2010-02-02  Michael Maclean  <mgdm@php.net>
     * Complete Freetype font support
 

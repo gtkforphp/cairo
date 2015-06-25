@@ -39,8 +39,20 @@ try {
 }
 ?>
 --EXPECTF--
-object(Cairo\Matrix)#%d (0) {
+object(Cairo\Matrix)#%d (6) {
+  ["xx"]=>
+  float(1)
+  ["xy"]=>
+  float(0)
+  ["x0"]=>
+  float(0)
+  ["yx"]=>
+  float(0)
+  ["yy"]=>
+  float(1)
+  ["y0"]=>
+  float(0)
 }
 Cairo\Matrix::rotate() expects exactly 1 parameter, 0 given
 Cairo\Matrix::rotate() expects exactly 1 parameter, 2 given
-Cairo\Matrix::rotate() expects parameter 1 to be double, array given
+Cairo\Matrix::rotate() expects parameter 1 to be float, array given

@@ -55,7 +55,19 @@ try {
 }
 ?>
 --EXPECTF--
-object(Cairo\Matrix)#%d (0) {
+object(Cairo\Matrix)#%d (6) {
+  ["xx"]=>
+  float(%f)
+  ["xy"]=>
+  float(0)
+  ["x0"]=>
+  float(0)
+  ["yx"]=>
+  float(%f)
+  ["yy"]=>
+  float(1)
+  ["y0"]=>
+  float(0)
 }
 Cairo\Matrix::multiply() expects exactly 2 parameters, 0 given
 Cairo\Matrix::multiply() expects exactly 2 parameters, 1 given

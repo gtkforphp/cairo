@@ -30,9 +30,9 @@ try {
 
 /* Wrong arg type 2 */
 try {
-    new CairoMatrix(1, array());
+    new Matrix(1, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (Exception $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -69,12 +69,24 @@ try {
 }
 ?>
 --EXPECTF--
-object(Cairo\Matrix)#%d (0) {
+object(Cairo\Matrix)#%d (6) {
+  ["xx"]=>
+  float(1)
+  ["xy"]=>
+  float(0)
+  ["x0"]=>
+  float(0)
+  ["yx"]=>
+  float(0)
+  ["yy"]=>
+  float(1)
+  ["y0"]=>
+  float(0)
 }
 Cairo\Matrix::__construct() expects at most 6 parameters, 7 given
-Cairo\Matrix::__construct() expects parameter 1 to be double, array given
-Cairo\Matrix::__construct() expects parameter 2 to be double, array given
-Cairo\Matrix::__construct() expects parameter 3 to be double, array given
-Cairo\Matrix::__construct() expects parameter 4 to be double, array given
-Cairo\Matrix::__construct() expects parameter 5 to be double, array given
-Cairo\Matrix::__construct() expects parameter 6 to be double, array given
+Cairo\Matrix::__construct() expects parameter 1 to be float, array given
+Cairo\Matrix::__construct() expects parameter 2 to be float, array given
+Cairo\Matrix::__construct() expects parameter 3 to be float, array given
+Cairo\Matrix::__construct() expects parameter 4 to be float, array given
+Cairo\Matrix::__construct() expects parameter 5 to be float, array given
+Cairo\Matrix::__construct() expects parameter 6 to be float, array given

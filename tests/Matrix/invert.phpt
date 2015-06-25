@@ -23,6 +23,18 @@ try {
 }
 ?>
 --EXPECTF--
-object(Cairo\Matrix)#%d (0) {
+object(Cairo\Matrix)#%d (6) {
+  ["xx"]=>
+  float(1)
+  ["xy"]=>
+  float(0)
+  ["x0"]=>
+  float(0)
+  ["yx"]=>
+  float(0)
+  ["yy"]=>
+  float(1)
+  ["y0"]=>
+  float(0)
 }
 Cairo\Matrix::invert() expects exactly 0 parameters, 1 given
