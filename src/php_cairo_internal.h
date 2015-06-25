@@ -11,18 +11,21 @@
   +----------------------------------------------------------------------+
 */
 
-#ifndef PHP_CAIRO_EXT_H
-#define PHP_CAIRO_EXT_H
+#ifndef PHP_CAIRO_INTERNAL_H
+#define PHP_CAIRO_INTERNAL_H
 
 #include <php.h>
 
-extern zend_module_entry cairo_module_entry;
-#define phpext_cairo_ptr &cairo_module_entry
+extern zend_class_entry *ce_cairo_exception;
 
-#define PHP_CAIRO_VERSION "1.0.0-dev"
-#define CAIRO_NAMESPACE "Cairo"
+#define PHP_CAIRO_EXCEPTIONS() \
+		zend_error_handling error_handling; \
+		zend_replace_error_handling(EH_THROW, ce_cairo_cairoexception, &error_handling);
 
-#endif /* PHP_CAIRO_EXT_H */
+#define PHP_CAIRO_RESTORE() \
+		zend_restore_error_handling(&error_handling)
+
+#endif /* PHP_CAIRO_INTERNAL_H */
 
 /*
  * Local variables:
