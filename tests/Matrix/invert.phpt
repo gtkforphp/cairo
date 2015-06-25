@@ -1,23 +1,28 @@
 --TEST--
-CairoMatrix::initIdentity method
+Cairo\Matrix->invert method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$matrix = CairoMatrix::initIdentity();
+use Cairo\Matrix;
+use Cairo\Exception;
+
+$matrix = new Matrix();
 var_dump($matrix);
+
+$matrix->invert();
 
 /* Wrong number args */
 try {
-    CairoMatrix::initIdentity('foo');
+    $matrix->invert('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (Exception $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoMatrix)#%d (0) {
+object(Cairo\Matrix)#%d (0) {
 }
-CairoMatrix::initIdentity() expects exactly 0 parameters, 1 given
+Cairo\Matrix::invert() expects exactly 0 parameters, 1 given
