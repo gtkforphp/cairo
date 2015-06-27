@@ -28,6 +28,7 @@ extern zend_class_entry *ce_cairo_exception;
 
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_exception);
+PHP_MINIT_FUNCTION(cairo_enum);
 PHP_MINIT_FUNCTION(cairo_matrix);
 
 #endif /* PHP_CAIRO_INTERNAL_H */

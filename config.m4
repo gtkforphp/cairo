@@ -14,6 +14,7 @@ if test "$PHP_CAIRO" != "no"; then
     src/cairo.c \
     src/exception.c \
     src/matrix.c \
+    src/enum.c \
   , $ext_shared)
 
   EXT_CAIRO_HEADERS="php_cairo_api.h"

@@ -346,7 +346,7 @@ PHP_METHOD(CairoMatrix, transformPoint)
 ------------------------------------------------------------------*/
 
 /* {{{ */
-static void cairo_matrix_object_free_obj(zend_object *object)
+static void cairo_matrix_free_obj(zend_object *object)
 {
 	cairo_matrix_object *intern = (cairo_matrix_object*) ((char*)object - XtOffsetOf(cairo_matrix_object, std));
 
@@ -380,16 +380,16 @@ static zend_object* cairo_matrix_obj_ctor(zend_class_entry *ce, cairo_matrix_obj
 /* {{{ */
 static zend_object* cairo_matrix_create_object(zend_class_entry *ce)
 {
-	cairo_matrix_object *matrix = NULL;
-	zend_object *return_value = cairo_matrix_obj_ctor(ce, &matrix);
+	cairo_matrix_object *intern = NULL;
+	zend_object *return_value = cairo_matrix_obj_ctor(ce, &intern);
 
-	object_properties_init(&(matrix->std), ce);
+	object_properties_init(&(intern->std), ce);
 	return return_value;
 }
 /* }}} */
 
 /* {{{ */
-static zend_object* cairo_matrix_object_clone_obj(zval *this_zval) 
+static zend_object* cairo_matrix_clone_obj(zval *this_zval) 
 {
 	cairo_matrix_object *new_matrix;
 	cairo_matrix_object *old_matrix = CAIRO_MATRIX_FETCH_OBJ(this_zval);
@@ -538,8 +538,8 @@ PHP_MINIT_FUNCTION(cairo_matrix)
 		   sizeof(zend_object_handlers));
 
 	cairo_matrix_object_handlers.offset = XtOffsetOf(cairo_matrix_object, std);
-	cairo_matrix_object_handlers.free_obj = cairo_matrix_object_free_obj;
-	cairo_matrix_object_handlers.clone_obj = cairo_matrix_object_clone_obj;
+	cairo_matrix_object_handlers.free_obj = cairo_matrix_free_obj;
+	cairo_matrix_object_handlers.clone_obj = cairo_matrix_clone_obj;
 	cairo_matrix_object_handlers.read_property = cairo_matrix_object_read_property;
 	cairo_matrix_object_handlers.write_property = cairo_matrix_object_write_property;
 	cairo_matrix_object_handlers.get_property_ptr_ptr = NULL;

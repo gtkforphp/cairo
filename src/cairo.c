@@ -26,7 +26,8 @@
 PHP_MINIT_FUNCTION(cairo)
 {
 	PHP_MINIT(cairo_exception)(INIT_FUNC_ARGS_PASSTHRU);
-    PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_enum)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
 /* }}} */
