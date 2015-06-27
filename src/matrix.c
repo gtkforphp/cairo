@@ -72,12 +72,9 @@ PHP_METHOD(CairoMatrix, __construct)
 	double xx = 1.0, yx = 0.0, xy = 0.0, yy = 1.0, x0 = 0.0, y0 = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|dddddd", &xx, &yx, &xy, &yy, &x0, &y0) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "|dddddd", &xx, &yx, &xy, &yy, &x0, &y0) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
 	CAIRO_ALLOC_MATRIX(matrix_object->matrix);
@@ -95,12 +92,9 @@ PHP_METHOD(CairoMatrix, initIdentity)
 {
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters_none() == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	object_init_ex(return_value, ce_cairo_matrix);
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
@@ -123,12 +117,9 @@ PHP_METHOD(CairoMatrix, initTranslate)
 	double tx = 0.0, ty = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "dd", &tx, &ty) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "dd", &tx, &ty) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	object_init_ex(return_value, ce_cairo_matrix);
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
@@ -151,12 +142,9 @@ PHP_METHOD(CairoMatrix, initScale)
 	double sx = 0.0, sy = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "dd", &sx, &sy) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "dd", &sx, &sy) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	object_init_ex(return_value, ce_cairo_matrix);
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
@@ -177,12 +165,9 @@ PHP_METHOD(CairoMatrix, initRotate)
 	double radians = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "d", &radians) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "d", &radians) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	object_init_ex(return_value, ce_cairo_matrix);
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
@@ -206,12 +191,9 @@ PHP_METHOD(CairoMatrix, translate)
 	double tx = 0.0, ty = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "dd", &tx, &ty) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "dd", &tx, &ty) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
 	cairo_matrix_translate(matrix_object->matrix, tx, ty);
@@ -232,12 +214,9 @@ PHP_METHOD(CairoMatrix, scale)
 	double sx = 0.0, sy = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "dd", &sx, &sy) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "dd", &sx, &sy) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
 	cairo_matrix_scale(matrix_object->matrix, sx, sy);
@@ -257,12 +236,9 @@ PHP_METHOD(CairoMatrix, rotate)
 	double radians = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "d", &radians) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "d", &radians) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
 	cairo_matrix_rotate(matrix_object->matrix, radians);
@@ -281,12 +257,9 @@ PHP_METHOD(CairoMatrix, invert)
 	cairo_status_t status;
 	cairo_matrix_object *matrix_object;
 
-    PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters_none() == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
 	status = cairo_matrix_invert(matrix_object->matrix);
@@ -306,12 +279,10 @@ PHP_METHOD(CairoMatrix, multiply)
 	zval *matrix1 = NULL, *matrix2 = NULL;
 	cairo_matrix_object *matrix_object, *matrix_object1, *matrix_object2;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "OO", &matrix1, ce_cairo_matrix, &matrix2, ce_cairo_matrix) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "OO",
+			&matrix1, ce_cairo_matrix, &matrix2, ce_cairo_matrix) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	object_init_ex(return_value, ce_cairo_matrix);
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
@@ -337,12 +308,9 @@ PHP_METHOD(CairoMatrix, transformDistance)
 	double dx = 0.0, dy = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "dd", &dx, &dy) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "dd", &dx, &dy) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
 	cairo_matrix_transform_distance(matrix_object->matrix, &dx, &dy);
@@ -360,12 +328,9 @@ PHP_METHOD(CairoMatrix, transformPoint)
 	double x = 0.0, y = 0.0;
 	cairo_matrix_object *matrix_object;
 
-	PHP_CAIRO_EXCEPTIONS();
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "dd", &x, &y) == FAILURE) {
-		PHP_CAIRO_RESTORE();
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "dd", &x, &y) == FAILURE) {
 		return;
 	}
-	PHP_CAIRO_RESTORE();
 
 	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
 	cairo_matrix_transform_point(matrix_object->matrix, &x, &y);
@@ -381,7 +346,7 @@ PHP_METHOD(CairoMatrix, transformPoint)
 ------------------------------------------------------------------*/
 
 /* {{{ */
-static void cairo_matrix_free_storage(zend_object *object)
+static void cairo_matrix_object_free_obj(zend_object *object)
 {
 	cairo_matrix_object *intern = (cairo_matrix_object*) ((char*)object - XtOffsetOf(cairo_matrix_object, std));
 
@@ -399,21 +364,21 @@ static void cairo_matrix_free_storage(zend_object *object)
 /* }}} */
 
 /* {{{ */
-static zend_object* cairo_matrix_obj_ctor(zend_class_entry *ce, cairo_matrix_object **pmatrix)
+static zend_object* cairo_matrix_obj_ctor(zend_class_entry *ce, cairo_matrix_object **intern)
 {
 	cairo_matrix_object *object = ecalloc(1, sizeof(cairo_matrix_object) + zend_object_properties_size(ce));
 	object->matrix = NULL;
 
 	zend_object_std_init(&object->std, ce);
 	object->std.handlers = &cairo_matrix_object_handlers;
-	*pmatrix = object;
+	*intern = object;
 
 	return &object->std;
 }
 /* }}} */
 
 /* {{{ */
-static zend_object* cairo_matrix_object_new(zend_class_entry *ce)
+static zend_object* cairo_matrix_create_object(zend_class_entry *ce)
 {
 	cairo_matrix_object *matrix = NULL;
 	zend_object *return_value = cairo_matrix_obj_ctor(ce, &matrix);
@@ -424,7 +389,7 @@ static zend_object* cairo_matrix_object_new(zend_class_entry *ce)
 /* }}} */
 
 /* {{{ */
-static zend_object* cairo_matrix_object_clone(zval *this_zval) 
+static zend_object* cairo_matrix_object_clone_obj(zval *this_zval) 
 {
 	cairo_matrix_object *new_matrix;
 	cairo_matrix_object *old_matrix = CAIRO_MATRIX_FETCH_OBJ(this_zval);
@@ -573,15 +538,15 @@ PHP_MINIT_FUNCTION(cairo_matrix)
 		   sizeof(zend_object_handlers));
 
 	cairo_matrix_object_handlers.offset = XtOffsetOf(cairo_matrix_object, std);
-	cairo_matrix_object_handlers.free_obj = cairo_matrix_free_storage;
-	cairo_matrix_object_handlers.clone_obj = cairo_matrix_object_clone;
+	cairo_matrix_object_handlers.free_obj = cairo_matrix_object_free_obj;
+	cairo_matrix_object_handlers.clone_obj = cairo_matrix_object_clone_obj;
 	cairo_matrix_object_handlers.read_property = cairo_matrix_object_read_property;
 	cairo_matrix_object_handlers.write_property = cairo_matrix_object_write_property;
 	cairo_matrix_object_handlers.get_property_ptr_ptr = NULL;
 	cairo_matrix_object_handlers.get_properties = cairo_matrix_object_get_properties;
 
 	INIT_NS_CLASS_ENTRY(ce,  CAIRO_NAMESPACE, "Matrix", cairo_matrix_methods);
-	ce.create_object = cairo_matrix_object_new;
+	ce.create_object = cairo_matrix_create_object;
 	ce_cairo_matrix = zend_register_internal_class(&ce);
 
 	return SUCCESS;

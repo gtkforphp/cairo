@@ -7,7 +7,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 --FILE--
 <?php
 use Cairo\Matrix;
-use Cairo\Exception;
+use TypeError as Exception;
 
 $matrix1 = new Matrix(0.1, 0.1);
 $matrix2 = new Matrix(0.1);
