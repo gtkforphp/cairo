@@ -18,18 +18,11 @@
 
 extern zend_class_entry *ce_cairo_exception;
 
-/* macros to make zpp to throw exceptions instead of errors */
-#define PHP_CAIRO_EXCEPTIONS() \
-		zend_error_handling error_handling; \
-		zend_replace_error_handling(EH_THROW, ce_cairo_exception, &error_handling);
-
-#define PHP_CAIRO_RESTORE() \
-		zend_restore_error_handling(&error_handling)
-
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_exception);
 PHP_MINIT_FUNCTION(cairo_enum);
 PHP_MINIT_FUNCTION(cairo_matrix);
+PHP_MINIT_FUNCTION(cairo_pattern);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
 

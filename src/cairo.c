@@ -26,8 +26,8 @@
 PHP_MINIT_FUNCTION(cairo)
 {
 	PHP_MINIT(cairo_exception)(INIT_FUNC_ARGS_PASSTHRU);
-	PHP_MINIT(cairo_enum)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_pattern)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
 /* }}} */
@@ -137,9 +137,18 @@ PHP_MINFO_FUNCTION(cairo)
 }
 /* }}} */
 
+/* {{{ cairo_module_deps */
+static const zend_module_dep cairo_module_deps[] = {
+	ZEND_MOD_REQUIRED("eos_datastructures")
+	ZEND_MOD_END
+};
+/* }}} */
+
 /* {{{ cairo_module_entry */
 zend_module_entry cairo_module_entry = {
-	STANDARD_MODULE_HEADER,
+	STANDARD_MODULE_HEADER_EX,
+	NULL,
+	cairo_module_deps,
 	"cairo",
 	NULL,
 	PHP_MINIT(cairo),

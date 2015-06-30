@@ -1,8 +1,10 @@
 --TEST--
 Cairo\Matrix::initRotate function
+--EXTENSIONS--
+eos_datastructures
 --SKIPIF--
 <?php
-if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+include __DIR__ . '/../skipif.inc';
 ?>
 --FILE--
 <?php

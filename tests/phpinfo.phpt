@@ -1,27 +1,22 @@
 --TEST--
 cairo phpinfo information
+--EXTENSIONS--
+eos_datastructures
 --SKIPIF--
 <?php
-if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+include __DIR__ . '/skipif.inc';
 ?>
 --FILE--
 <?php
-ob_start();
-phpinfo(INFO_MODULES);
-$data = ob_get_clean();
-$data = explode("\n\n", $data);
-foreach($data as $key => $info) {
-	if ($info === 'cairo') {
-		break;
-	}
-}
-$data = $data[$key + 1];
-var_dump($data);
+$ext = new ReflectionExtension('cairo');
+$ext->info();
 ?>
 --EXPECTF--
-string(%d) "Cairo Graphics Library Bindings => enabled
+cairo
+
+Cairo Graphics Library Bindings => enabled
                         compiled as %s module                        
-Cairo Library Version => %s
+Cairo Library Version => 1.%d.%d
 Extension Version => %s
                         Surface Backends Available                        
 Image Surface => %s
@@ -37,4 +32,4 @@ Recording Surface => %s
 Freetype Fonts => %s
 Quartz Fonts => %s
 Win32 Fonts => %s
-User Fonts => %s"
+User Fonts => %s

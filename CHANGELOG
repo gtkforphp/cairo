@@ -1,8 +1,13 @@
 2015-06-25  Elizabeth M Smith  <auroraeosrose@php.net>
+    * Rewrote Extension
     * Ported to PHP7 (phpng)
     * Removed functional apis
     * Namespaced as Cairo
+    * Bumped minimum libcairo version requirement to 1.12
+    * Depends on Eos\DataStructures for Enum
     * Cairo\Matrix now has read/write properties for matrix values
+    * Implemented Cairo\MeshPattern (cairo 1.12)
+    * Relicense as MIT as files are replaced
 
 2010-02-02  Michael Maclean  <mgdm@php.net>
     * Complete Freetype font support

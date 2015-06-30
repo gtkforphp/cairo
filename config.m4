@@ -14,7 +14,7 @@ if test "$PHP_CAIRO" != "no"; then
     src/cairo.c \
     src/exception.c \
     src/matrix.c \
-    src/enum.c \
+    src/pattern.c \
   , $ext_shared)
 
   EXT_CAIRO_HEADERS="php_cairo_api.h"
@@ -22,6 +22,8 @@ if test "$PHP_CAIRO" != "no"; then
   ifdef([PHP_INSTALL_HEADERS], [
     PHP_INSTALL_HEADERS(ext/cairo, $EXT_CAIRO_HEADERS)
   ])
+
+  PHP_ADD_EXTENSION_DEP(cairo, eos_datastructures)
 
   if test "$PHP_CAIRO" != "no"; then
       CAIRO_CHECK_DIR=$PHP_CAIRO
