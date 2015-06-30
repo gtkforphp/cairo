@@ -1,6 +1,0 @@
-Cairo OO Extension
-================
-
-Object Oriented interface to Cairo Graphics library
-Requires Cairo 1.4 or higher
-Requires PHP 5.2 or higher
