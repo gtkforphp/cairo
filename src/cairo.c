@@ -21,13 +21,64 @@
 #include "php_cairo.h"
 #include "php_cairo_internal.h"
 
+/* ----------------------------------------------------------------
+    Cairo Namespace
+------------------------------------------------------------------ */
+
+ZEND_BEGIN_ARG_INFO(Cairo_version_args, ZEND_SEND_BY_VAL)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int Cairo\version(void) 
+       Returns an integer version number of the cairo library being used */
+PHP_FUNCTION(version)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	RETURN_LONG(cairo_version());
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO(Cairo_version_string_args, ZEND_SEND_BY_VAL)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto string cairo_version_string(void)
+       Returns a string version of the cairo library being used */
+PHP_FUNCTION(version_string)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	RETURN_STRING(cairo_version_string());
+}
+/* }}} */
+
+/* {{{ cairo_functions[] */
+static const zend_function_entry cairo_functions[] = {
+	ZEND_NS_FE("Cairo", version, Cairo_version_args)
+	ZEND_NS_FE("Cairo", version_string, Cairo_version_string_args)
+	ZEND_FE_END
+};
+/* }}} */
+
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(cairo)
 {
-	PHP_MINIT(cairo_exception)(INIT_FUNC_ARGS_PASSTHRU);
-	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
+	/* Namespaced version constants */
+	REGISTER_NS_LONG_CONSTANT("Cairo", "VERSION",
+		CAIRO_VERSION, CONST_PERSISTENT | CONST_CS | CONST_CT_SUBST);
+	REGISTER_NS_STRING_CONSTANT("Cairo", "VERSION_STRING",
+		CAIRO_VERSION_STRING, CONST_PERSISTENT | CONST_CS | CONST_CT_SUBST);
+
 	PHP_MINIT(cairo_pattern)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_rectangle)(INIT_FUNC_ARGS_PASSTHRU);
+
+	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_exception)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(cairo_region)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
 /* }}} */
@@ -160,7 +211,7 @@ zend_module_entry cairo_module_entry = {
 	NULL,
 	cairo_module_deps,
 	"cairo",
-	NULL,
+	cairo_functions,
 	PHP_MINIT(cairo),
 	PHP_MSHUTDOWN(cairo),
 	NULL,

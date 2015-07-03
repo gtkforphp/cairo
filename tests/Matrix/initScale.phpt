@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix::initScale() method
+Cairo\Matrix::initScale()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

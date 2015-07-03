@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix::initTranslate function
+Cairo\Matrix::initTranslate()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

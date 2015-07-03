@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix clone handler
+Cairo\Rectangle clone handler
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -8,25 +8,25 @@ include __DIR__ . '/../../skipif.inc';
 ?>
 --FILE--
 <?php
-use Cairo\Matrix;
+use Cairo\Rectangle;
 
-$matrix = new Matrix(5);
-$copy = clone $matrix;
-$copy->xx = 9;
+$rect = new Rectangle(5);
+$copy = clone $rect;
+$copy->x = 9;
 
-var_dump($matrix->xx);
-var_dump($copy->xx);
+var_dump($rect->x);
+var_dump($copy->x);
 
-class testing extends Matrix {}
+class testing extends Rectangle {}
 
 $testing = new testing(6);
 $copy = clone $testing;
 var_dump(get_class($copy));
-var_dump($copy->xx);
+var_dump($copy->x);
 
 ?>
 --EXPECT--
-float(5)
-float(9)
+int(5)
+int(9)
 string(7) "testing"
-float(6)
+int(6)

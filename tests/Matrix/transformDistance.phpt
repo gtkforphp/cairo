@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix->transformDistance method
+Cairo\Matrix->transformDistance()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -11,7 +11,7 @@ include __DIR__ . '/../skipif.inc';
 use Cairo\Matrix;
 use TypeError as Exception;
 
-$matrix = new Matrix();
+$matrix = new Matrix(1, 2, 3, 1);
 var_dump($matrix);
 
 var_dump($matrix->transformDistance(1.0, 1.0));
@@ -61,11 +61,11 @@ object(Cairo\Matrix)#%d (6) {
   ["xx"]=>
   float(1)
   ["xy"]=>
-  float(0)
+  float(3)
   ["x0"]=>
   float(0)
   ["yx"]=>
-  float(0)
+  float(2)
   ["yy"]=>
   float(1)
   ["y0"]=>
@@ -73,9 +73,9 @@ object(Cairo\Matrix)#%d (6) {
 }
 array(2) {
   ["x"]=>
-  float(1)
+  float(4)
   ["y"]=>
-  float(1)
+  float(3)
 }
 Cairo\Matrix::transformDistance() expects exactly 2 parameters, 0 given
 Cairo\Matrix::transformDistance() expects exactly 2 parameters, 1 given

@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix object read_property handler;
+Cairo\Matrix read_property handler
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

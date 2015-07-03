@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix::initRotate function
+Cairo\Matrix::initRotate()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

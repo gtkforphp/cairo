@@ -24,10 +24,12 @@ extern zend_class_entry *ce_cairo_matrix;
 cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv);
 
 /* Classes to register */
-PHP_MINIT_FUNCTION(cairo_exception);
-PHP_MINIT_FUNCTION(cairo_enum);
-PHP_MINIT_FUNCTION(cairo_matrix);
 PHP_MINIT_FUNCTION(cairo_pattern);
+PHP_MINIT_FUNCTION(cairo_region);
+
+PHP_MINIT_FUNCTION(cairo_matrix);
+PHP_MINIT_FUNCTION(cairo_exception);
+PHP_MINIT_FUNCTION(cairo_rectangle);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
 

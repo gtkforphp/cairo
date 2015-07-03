@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix object write_property handler;
+Cairo\Matrix object write_property handler
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

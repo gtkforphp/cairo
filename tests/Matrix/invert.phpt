@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix->invert method
+Cairo\Matrix->invert()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -11,7 +11,7 @@ include __DIR__ . '/../skipif.inc';
 use Cairo\Matrix;
 use TypeError as Exception;
 
-$matrix = new Matrix();
+$matrix = new Matrix(1, 0, 0, 1, 0, 0);
 var_dump($matrix);
 
 $matrix->invert();

@@ -1,5 +1,5 @@
 --TEST--
-cairo extension phpversion value
+Cairo namespaced constants
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -8,7 +8,9 @@ include __DIR__ . '/skipif.inc';
 ?>
 --FILE--
 <?php
-var_dump(phpversion('cairo'));
+var_dump(Cairo\VERSION);
+var_dump(Cairo\VERSION_STRING);
 ?>
 --EXPECTF--
-string(%d) "%d.%d.%d%s"
+int(%d)
+string(%d) "%d.%d.%d"

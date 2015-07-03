@@ -12,9 +12,11 @@ if test "$PHP_CAIRO" != "no"; then
 
   PHP_NEW_EXTENSION(cairo, \
     src/cairo.c \
+    src/pattern.c \
+    src/region.c \
     src/exception.c \
     src/matrix.c \
-    src/pattern.c \
+    src/rectangle.c \
   , $ext_shared)
 
   EXT_CAIRO_HEADERS="php_cairo_api.h"

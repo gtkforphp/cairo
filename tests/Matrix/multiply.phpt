@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix::multiply method
+Cairo\Matrix::multiply()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -65,9 +65,9 @@ object(Cairo\Matrix)#%d (6) {
   ["x0"]=>
   float(0)
   ["yx"]=>
-  float(%f)
+  float(0)
   ["yy"]=>
-  float(1)
+  float(0)
   ["y0"]=>
   float(0)
 }

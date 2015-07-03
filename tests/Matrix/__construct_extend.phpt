@@ -1,5 +1,5 @@
 --TEST--
-new Cairo\Matrix [__construct() method ] with extended class
+Cairo\Matrix->__construct() extended
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

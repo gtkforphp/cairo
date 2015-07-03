@@ -1,5 +1,5 @@
 --TEST--
-cairo phpinfo information
+cairo extension phpinfo information
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

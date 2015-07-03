@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix->transformPoint method
+Cairo\Matrix->transformPoint()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -11,7 +11,7 @@ include __DIR__ . '/../skipif.inc';
 use Cairo\Matrix;
 use TypeError as Exception;
 
-$matrix = new Matrix();
+$matrix = new Matrix(1, 1);
 var_dump($matrix);
 
 var_dump($matrix->transformPoint(1.0, 1.0));
@@ -65,9 +65,9 @@ object(Cairo\Matrix)#%d (6) {
   ["x0"]=>
   float(0)
   ["yx"]=>
-  float(0)
-  ["yy"]=>
   float(1)
+  ["yy"]=>
+  float(0)
   ["y0"]=>
   float(0)
 }

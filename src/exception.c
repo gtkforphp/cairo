@@ -49,12 +49,12 @@ void php_cairo_throw_exception(cairo_status_t status)
     Cairo\Status Class API
 ------------------------------------------------------------------*/
 
-ZEND_BEGIN_ARG_INFO(CairoStatus_getStatusMessage_args, ZEND_SEND_BY_VAL)
+ZEND_BEGIN_ARG_INFO(CairoStatus_getMessage_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto string CairoStatus->getStatusMessage
+/* {{{ proto string CairoStatus->getMessage
        Translates the current enums value to it's cairo status message value */
-PHP_METHOD(CairoStatus, getStatusMessage)
+PHP_METHOD(CairoStatus, getMessage)
 {
 	long status = 0;
 
@@ -74,7 +74,7 @@ PHP_METHOD(CairoStatus, getStatusMessage)
 
 /* {{{ cairo_status_methods[] */
 const zend_function_entry cairo_status_methods[] = {
-	PHP_ME(CairoStatus, getStatusMessage, CairoStatus_getStatusMessage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoStatus, getMessage, CairoStatus_getMessage_args, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 /* }}} */

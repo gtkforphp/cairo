@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix->scale method
+Cairo\Matrix->scale()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -11,10 +11,10 @@ include __DIR__ . '/../skipif.inc';
 use Cairo\Matrix;
 use TypeError as Exception;
 
-$matrix = new Matrix();
-var_dump($matrix);
+$matrix = new Matrix(1, 1, 1, 1, 1, 1);
 
-$matrix->scale(0.1, 0.1);
+$matrix->scale(2, 5);
+var_dump($matrix);
 
 /* Wrong number args */
 try {
@@ -59,17 +59,17 @@ try {
 --EXPECTF--
 object(Cairo\Matrix)#%d (6) {
   ["xx"]=>
-  float(1)
+  float(2)
   ["xy"]=>
-  float(0)
+  float(5)
   ["x0"]=>
-  float(0)
-  ["yx"]=>
-  float(0)
-  ["yy"]=>
   float(1)
+  ["yx"]=>
+  float(2)
+  ["yy"]=>
+  float(5)
   ["y0"]=>
-  float(0)
+  float(1)
 }
 Cairo\Matrix::scale() expects exactly 2 parameters, 0 given
 Cairo\Matrix::scale() expects exactly 2 parameters, 1 given

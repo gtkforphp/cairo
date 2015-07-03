@@ -1,5 +1,5 @@
 --TEST--
-cairo class listing
+cairo extension class listing
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -12,33 +12,39 @@ $ext = new ReflectionExtension('cairo');
 var_dump($ext->getClassNames());
 ?>
 --EXPECT--
-array(14) {
+array(17) {
   [0]=>
-  string(15) "Cairo\Exception"
-  [1]=>
-  string(12) "Cairo\Status"
-  [2]=>
-  string(12) "Cairo\Matrix"
-  [3]=>
   string(13) "Cairo\Pattern"
-  [4]=>
+  [1]=>
   string(19) "Cairo\Pattern\Solid"
-  [5]=>
+  [2]=>
   string(22) "Cairo\Pattern\Gradient"
-  [6]=>
+  [3]=>
   string(29) "Cairo\Pattern\Gradient\Radial"
-  [7]=>
+  [4]=>
   string(29) "Cairo\Pattern\Gradient\Linear"
-  [8]=>
+  [5]=>
   string(21) "Cairo\Pattern\Surface"
-  [9]=>
+  [6]=>
   string(18) "Cairo\Pattern\Mesh"
-  [10]=>
+  [7]=>
   string(26) "Cairo\Pattern\RasterSource"
-  [11]=>
+  [8]=>
   string(18) "Cairo\Pattern\Type"
-  [12]=>
+  [9]=>
   string(12) "Cairo\Extend"
-  [13]=>
+  [10]=>
   string(12) "Cairo\Filter"
+  [11]=>
+  string(15) "Cairo\Rectangle"
+  [12]=>
+  string(12) "Cairo\Matrix"
+  [13]=>
+  string(15) "Cairo\Exception"
+  [14]=>
+  string(12) "Cairo\Status"
+  [15]=>
+  string(12) "Cairo\Region"
+  [16]=>
+  string(20) "Cairo\Region\Overlap"
 }

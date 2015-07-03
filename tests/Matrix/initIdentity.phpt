@@ -1,5 +1,5 @@
 --TEST--
-Cairo\Matrix::initIdentity method
+Cairo\Matrix::initIdentity()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

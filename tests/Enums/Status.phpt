@@ -13,10 +13,10 @@ use Cairo\Status;
 $enum = new Status(Status::SUCCESS);
 var_dump($enum);
 
-var_dump($enum->getStatusMessage());
+var_dump($enum->getMessage());
 
 try {
-    $enum->getStatusMessage(1);
+    $enum->getMessage(1);
 } catch(TypeError $e) {
     echo $e->getMessage();
 }
@@ -110,4 +110,4 @@ object(Cairo\Status)#%d (2) {
   int(0)
 }
 string(21) "no error has occurred"
-Cairo\Status::getStatusMessage() expects exactly 0 parameters, 1 given
+Cairo\Status::getMessage() expects exactly 0 parameters, 1 given

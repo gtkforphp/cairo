@@ -1,5 +1,5 @@
 --TEST--
-new Cairo\Matrix [__construct() method ]
+Cairo\Matrix->__construct()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
@@ -73,7 +73,7 @@ try {
 --EXPECTF--
 object(Cairo\Matrix)#%d (6) {
   ["xx"]=>
-  float(1)
+  float(0)
   ["xy"]=>
   float(0)
   ["x0"]=>
@@ -81,7 +81,7 @@ object(Cairo\Matrix)#%d (6) {
   ["yx"]=>
   float(0)
   ["yy"]=>
-  float(1)
+  float(0)
   ["y0"]=>
   float(0)
 }
