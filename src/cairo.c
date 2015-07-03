@@ -32,6 +32,16 @@ PHP_MINIT_FUNCTION(cairo)
 }
 /* }}} */
 
+/* {{{ PHP_MSHUTDOWN_FUNCTION */
+PHP_MSHUTDOWN_FUNCTION(cairo)
+{
+#if defined(ZEND_DEBUG) && ZEND_DEBUG == 1
+	cairo_debug_reset_static_data();
+#endif
+
+	return SUCCESS;
+}
+
 /* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION(cairo)
 {
@@ -152,7 +162,7 @@ zend_module_entry cairo_module_entry = {
 	"cairo",
 	NULL,
 	PHP_MINIT(cairo),
-	NULL,
+	PHP_MSHUTDOWN(cairo),
 	NULL,
 	NULL,
 	PHP_MINFO(cairo),

@@ -17,6 +17,7 @@
 
 #include <cairo.h>
 #include <php.h>
+#include <zend_exceptions.h>
 
 #include "php_cairo.h"
 #include "php_cairo_internal.h"
@@ -29,27 +30,56 @@ typedef struct _cairo_matrix_object {
 	zend_object std;
 } cairo_matrix_object;
 
-#define CAIRO_MATRIX_FETCH_OBJ(zv) ((cairo_matrix_object*) \
-	(((char*)Z_OBJ_P(zv)) - XtOffsetOf(cairo_matrix_object, std)))
+static inline cairo_matrix_object *cairo_matrix_fetch_object(zend_object *object)
+{
+	return (cairo_matrix_object *) ((char*)(object) - XtOffsetOf(cairo_matrix_object, std));
+}
+
+#define Z_CAIRO_MATRIX_P(zv) cairo_matrix_fetch_object(Z_OBJ_P(zv))
+
+static inline cairo_matrix_object *cairo_matrix_object_get(zval *zv)
+{
+	cairo_matrix_object *object = Z_CAIRO_MATRIX_P(zv);
+	if(object->matrix == NULL) {
+		zend_throw_exception_ex(ce_cairo_exception, 0,
+			"Internal matrix object missing in %s, you must call parent::__construct in extended classes",
+			ZSTR_VAL(Z_OBJCE_P(zv)->name));
+		return NULL;
+	}
+	return object;
+}
 
 #define CAIRO_ALLOC_MATRIX(matrix_value) if (!matrix_value) \
 	{ matrix_value = ecalloc(sizeof(cairo_matrix_t), 1); }
 
 #define CAIRO_VALUE_FROM_STRUCT(n,m)         \
 	if(strcmp(Z_STRVAL_P(member), m) == 0) { \
-		value = matrix->matrix->n;           \
+		value = matrix_object->matrix->n;           \
 		break;                               \
 	}
 
 #define CAIRO_VALUE_TO_STRUCT(n,m)                  \
 	if(strcmp(Z_STRVAL_P(member), m) == 0) {        \
-		matrix->matrix->n = zval_get_double(value); \
+		matrix_object->matrix->n = zval_get_double(value); \
 		break;                                      \
 	}
 
 #define CAIRO_ADD_STRUCT_VALUE(n,m)                  \
-	ZVAL_DOUBLE(&tmp, matrix->matrix->n);            \
+	ZVAL_DOUBLE(&tmp, matrix_object->matrix->n);            \
 	zend_hash_str_update(props, m, sizeof(m)-1, &tmp);
+
+/* ----------------------------------------------------------------
+    Cairo\Matrix C API
+------------------------------------------------------------------*/
+
+/* {{{ */
+cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv)
+{
+	cairo_matrix_object *matrix_object = Z_CAIRO_MATRIX_P(zv);
+
+	return matrix_object->matrix;
+}
+/* }}} */
 
 /* ----------------------------------------------------------------
     Cairo\Matrix Class API
@@ -76,8 +106,7 @@ PHP_METHOD(CairoMatrix, __construct)
 		return;
 	}
 
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
-	CAIRO_ALLOC_MATRIX(matrix_object->matrix);
+	matrix_object = Z_CAIRO_MATRIX_P(getThis());
 
 	cairo_matrix_init(matrix_object->matrix, xx, yx, xy, yy, x0, y0);
 }
@@ -97,8 +126,7 @@ PHP_METHOD(CairoMatrix, initIdentity)
 	}
 
 	object_init_ex(return_value, ce_cairo_matrix);
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
-	CAIRO_ALLOC_MATRIX(matrix_object->matrix);
+	matrix_object = Z_CAIRO_MATRIX_P(return_value);
 
 	cairo_matrix_init_identity(matrix_object->matrix);
 }
@@ -122,8 +150,7 @@ PHP_METHOD(CairoMatrix, initTranslate)
 	}
 
 	object_init_ex(return_value, ce_cairo_matrix);
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
-	CAIRO_ALLOC_MATRIX(matrix_object->matrix);
+	matrix_object = Z_CAIRO_MATRIX_P(return_value);
 
 	cairo_matrix_init_translate(matrix_object->matrix, tx, ty);
 }
@@ -147,8 +174,7 @@ PHP_METHOD(CairoMatrix, initScale)
 	}
 
 	object_init_ex(return_value, ce_cairo_matrix);
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
-	CAIRO_ALLOC_MATRIX(matrix_object->matrix);
+	matrix_object = Z_CAIRO_MATRIX_P(return_value);
 
 	cairo_matrix_init_scale(matrix_object->matrix, sx, sy);
 }
@@ -170,8 +196,7 @@ PHP_METHOD(CairoMatrix, initRotate)
 	}
 
 	object_init_ex(return_value, ce_cairo_matrix);
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
-	CAIRO_ALLOC_MATRIX(matrix_object->matrix);
+	matrix_object = Z_CAIRO_MATRIX_P(return_value);
 
 	cairo_matrix_init_rotate(matrix_object->matrix, radians);
 }
@@ -195,7 +220,11 @@ PHP_METHOD(CairoMatrix, translate)
 		return;
 	}
 
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
+	matrix_object = cairo_matrix_object_get(getThis());
+	if(!matrix_object) {
+		return;
+	}
+
 	cairo_matrix_translate(matrix_object->matrix, tx, ty);
 }
 /* }}} */
@@ -218,7 +247,11 @@ PHP_METHOD(CairoMatrix, scale)
 		return;
 	}
 
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
+	matrix_object = cairo_matrix_object_get(getThis());
+	if(!matrix_object) {
+		return;
+	}
+
 	cairo_matrix_scale(matrix_object->matrix, sx, sy);
 }
 /* }}} */
@@ -240,7 +273,11 @@ PHP_METHOD(CairoMatrix, rotate)
 		return;
 	}
 
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
+	matrix_object = cairo_matrix_object_get(getThis());
+	if(!matrix_object) {
+		return;
+	}
+
 	cairo_matrix_rotate(matrix_object->matrix, radians);
 }
 /* }}} */
@@ -261,7 +298,11 @@ PHP_METHOD(CairoMatrix, invert)
 		return;
 	}
 
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
+	matrix_object = cairo_matrix_object_get(getThis());
+	if(!matrix_object) {
+		return;
+	}
+
 	status = cairo_matrix_invert(matrix_object->matrix);
 	php_cairo_throw_exception(status);
 }
@@ -285,19 +326,22 @@ PHP_METHOD(CairoMatrix, multiply)
 	}
 
 	object_init_ex(return_value, ce_cairo_matrix);
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(return_value);
+	matrix_object = Z_CAIRO_MATRIX_P(return_value);
 	CAIRO_ALLOC_MATRIX(matrix_object->matrix);
 
-	matrix_object1 = CAIRO_MATRIX_FETCH_OBJ(matrix1);
-	matrix_object2 = CAIRO_MATRIX_FETCH_OBJ(matrix2);
+	matrix_object1 = cairo_matrix_object_get(matrix1);
+	matrix_object2 = cairo_matrix_object_get(matrix2);
+	if(!matrix_object1 || !matrix_object2) {
+		return;
+	}
 
 	cairo_matrix_multiply(matrix_object->matrix, matrix_object1->matrix, matrix_object2->matrix);
 }
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoMatrix_transform_args, ZEND_SEND_BY_VAL)
-  ZEND_ARG_INFO(0, dx)
-  ZEND_ARG_INFO(0, dy)
+	ZEND_ARG_INFO(0, dx)
+	ZEND_ARG_INFO(0, dy)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto array CairoMatrix->transformDistance(float dx, float dy)
@@ -312,7 +356,11 @@ PHP_METHOD(CairoMatrix, transformDistance)
 		return;
 	}
 
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
+	matrix_object = cairo_matrix_object_get(getThis());
+	if(!matrix_object) {
+		return;
+	}
+
 	cairo_matrix_transform_distance(matrix_object->matrix, &dx, &dy);
 
 	array_init(return_value);
@@ -332,7 +380,11 @@ PHP_METHOD(CairoMatrix, transformPoint)
 		return;
 	}
 
-	matrix_object = CAIRO_MATRIX_FETCH_OBJ(getThis());
+	matrix_object = cairo_matrix_object_get(getThis());
+	if(!matrix_object) {
+		return;
+	}
+
 	cairo_matrix_transform_point(matrix_object->matrix, &x, &y);
 
 	array_init(return_value);
@@ -348,7 +400,7 @@ PHP_METHOD(CairoMatrix, transformPoint)
 /* {{{ */
 static void cairo_matrix_free_obj(zend_object *object)
 {
-	cairo_matrix_object *intern = (cairo_matrix_object*) ((char*)object - XtOffsetOf(cairo_matrix_object, std));
+	cairo_matrix_object *intern = cairo_matrix_fetch_object(object);
 
 	if(!intern) {
 		return;
@@ -367,7 +419,7 @@ static void cairo_matrix_free_obj(zend_object *object)
 static zend_object* cairo_matrix_obj_ctor(zend_class_entry *ce, cairo_matrix_object **intern)
 {
 	cairo_matrix_object *object = ecalloc(1, sizeof(cairo_matrix_object) + zend_object_properties_size(ce));
-	object->matrix = NULL;
+	CAIRO_ALLOC_MATRIX(object->matrix);
 
 	zend_object_std_init(&object->std, ce);
 	object->std.handlers = &cairo_matrix_object_handlers;
@@ -392,11 +444,12 @@ static zend_object* cairo_matrix_create_object(zend_class_entry *ce)
 static zend_object* cairo_matrix_clone_obj(zval *this_zval) 
 {
 	cairo_matrix_object *new_matrix;
-	cairo_matrix_object *old_matrix = CAIRO_MATRIX_FETCH_OBJ(this_zval);
+	cairo_matrix_object *old_matrix = cairo_matrix_object_get(this_zval);
 	zend_object *return_value = cairo_matrix_obj_ctor(Z_OBJCE_P(this_zval), &new_matrix);
 	CAIRO_ALLOC_MATRIX(new_matrix->matrix);
 
-	cairo_matrix_init(new_matrix->matrix, old_matrix->matrix->xx, old_matrix->matrix->yx, old_matrix->matrix->xy,
+	cairo_matrix_init(new_matrix->matrix, old_matrix->matrix->xx, old_matrix->matrix->yx,
+					  old_matrix->matrix->xy,
 		old_matrix->matrix->yy, old_matrix->matrix->x0, old_matrix->matrix->y0);
 
 	zend_objects_clone_members(&new_matrix->std, &old_matrix->std);
@@ -411,14 +464,18 @@ static zval *cairo_matrix_object_read_property(zval *object, zval *member, int t
 	zval *retval;
 	zval tmp_member;
 	double value;
-	cairo_matrix_object *matrix = CAIRO_MATRIX_FETCH_OBJ(object);
+	cairo_matrix_object *matrix_object = cairo_matrix_object_get(object);
 
-	if(Z_TYPE_P(member) != IS_STRING) { \
-		tmp_member = *member; \
-		zval_copy_ctor(&tmp_member); \
-		convert_to_string(&tmp_member); \
-		member = &tmp_member; \
-		cache_slot = NULL; \
+	if(!matrix_object) {
+		return rv;
+	}
+
+	if(Z_TYPE_P(member) != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+		cache_slot = NULL;
 	}
 
 	do {
@@ -454,14 +511,19 @@ static zval *cairo_matrix_object_read_property(zval *object, zval *member, int t
 static void cairo_matrix_object_write_property(zval *object, zval *member, zval *value, void **cache_slot)
 {
 	zval tmp_member;
-	cairo_matrix_object *matrix = CAIRO_MATRIX_FETCH_OBJ(object);
+	cairo_matrix_object *matrix_object = cairo_matrix_object_get(object);
 
-	if(Z_TYPE_P(member) != IS_STRING) { \
-		tmp_member = *member; \
-		zval_copy_ctor(&tmp_member); \
-		convert_to_string(&tmp_member); \
-		member = &tmp_member; \
-		cache_slot = NULL; \
+	if(!matrix_object) {
+		return;
+	}
+
+
+	if(Z_TYPE_P(member) != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+		cache_slot = NULL;
 	}
 
 	do {
@@ -487,11 +549,11 @@ static HashTable *cairo_matrix_object_get_properties(zval *object)
 {
 	HashTable *props;
 	zval tmp;
-	cairo_matrix_object *matrix = CAIRO_MATRIX_FETCH_OBJ(object);
+	cairo_matrix_object *matrix_object = cairo_matrix_object_get(object);
 
 	props = zend_std_get_properties(object);
 
-	if(!matrix->matrix) {
+	if(!matrix_object->matrix) {
 		return props;
 	}
 

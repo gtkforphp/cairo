@@ -15,8 +15,13 @@
 #define PHP_CAIRO_INTERNAL_H
 
 #include <php.h>
+#include <cairo.h>
 
 extern zend_class_entry *ce_cairo_exception;
+extern zend_class_entry *ce_cairo_status;
+extern zend_class_entry *ce_cairo_matrix;
+
+cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv);
 
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_exception);

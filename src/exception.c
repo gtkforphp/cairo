@@ -62,7 +62,7 @@ PHP_METHOD(CairoStatus, getStatusMessage)
 		return;
 	}
 
-	status = php_eosdatastructures_get_enum_value(getThis());
+	status = php_eos_datastructures_get_enum_value(getThis());
 
 	RETURN_STRING(cairo_status_to_string(status));
 }
