@@ -21,7 +21,34 @@ extern zend_class_entry *ce_cairo_exception;
 extern zend_class_entry *ce_cairo_status;
 extern zend_class_entry *ce_cairo_matrix;
 
+extern zend_class_entry *ce_cairo_surface;
+extern zend_class_entry *ce_cairo_content;
+extern zend_class_entry *ce_cairo_surfacetype;
+extern zend_class_entry *ce_cairo_imagesurface;
+extern zend_class_entry *ce_cairo_svgsurface;
+extern zend_class_entry *ce_cairo_pdfsurface;
+extern zend_class_entry *ce_cairo_pssurface;
+extern zend_class_entry *ce_cairo_recordingsurface;
+extern zend_class_entry *ce_cairo_subsurface;
+
+extern zend_class_entry *ce_cairo_fontoptions;
+extern zend_class_entry *ce_cairo_subpixelorder;
+extern zend_class_entry *ce_cairo_hintstyle;
+extern zend_class_entry *ce_cairo_hintmetrics;
+
+extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern);
+extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface);
+extern zend_class_entry* php_cairo_get_fontoptions_ce();
+
 cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv);
+
+typedef struct _cairo_font_options_object {
+	cairo_font_options_t *font_options;
+        zend_object std;
+} cairo_font_options_object;
+
+//cairo_font_options_object *cairo_font_options_fetch_object(zend_object *object);
+#define Z_CAIRO_FONT_OPTIONS_P(zv) cairo_font_options_fetch_object(Z_OBJ_P(zv))
 
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_pattern);
@@ -30,6 +57,7 @@ PHP_MINIT_FUNCTION(cairo_region);
 PHP_MINIT_FUNCTION(cairo_matrix);
 PHP_MINIT_FUNCTION(cairo_exception);
 PHP_MINIT_FUNCTION(cairo_rectangle);
+PHP_MINIT_FUNCTION(cairo_surface);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
 
