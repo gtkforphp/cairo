@@ -26,12 +26,6 @@ zend_class_entry *ce_cairo_surface;
 zend_class_entry *ce_cairo_content;
 zend_class_entry *ce_cairo_surfacetype;
 
-extern zend_class_entry *ce_cairo_imagesurface;
-extern zend_class_entry *ce_cairo_svgsurface;
-extern zend_class_entry *ce_cairo_pdfsurface;
-extern zend_class_entry *ce_cairo_pssurface;
-extern zend_class_entry *ce_cairo_recordingsurface;
-extern zend_class_entry *ce_cairo_subsurface;
 
 static zend_object_handlers cairo_surface_object_handlers; 
 
@@ -91,17 +85,19 @@ ZEND_END_ARG_INFO()
        Create a new surface that is as compatible as possible with an existing surface. */
 PHP_METHOD(CairoSurface, createSimilar)
 {
-	zval *surface_zval = NULL;
 	cairo_surface_object *surface_object, *new_surface_object;
 	cairo_surface_t *new_surface;
 	long content;
 	double width, height;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oldd", &surface_zval, cairo_ce_cairosurface, &content, &width, &height) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "ldd", &content, &width, &height) == FAILURE) {
 		return;
 	}
-
-	surface_object = (cairo_surface_object *)cairo_surface_object_get(surface_zval);
+        
+	surface_object = cairo_surface_object_get(getThis());
+	if(!surface_object) {
+            return;
+        }
 	new_surface = cairo_surface_create_similar(surface_object->surface, content, width, height);
 
 	/* we can't always rely on the same type of surface being returned, so we use php_cairo_get_surface_ce */
@@ -113,6 +109,149 @@ PHP_METHOD(CairoSurface, createSimilar)
         }
         
 	new_surface_object->surface = new_surface;
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO(CairoSurface_createForRectangle_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto CairoSurface object CairoSurface->createForRectangle(double x, double y, double width, double height)
+       create a new surface that is a rectangle within the target surface. */
+PHP_METHOD(CairoSurface, createForRectangle)
+{
+	zval *surface_zval = NULL;
+	cairo_surface_object *surface_object, *new_surface_object;
+	cairo_surface_t *new_surface;
+	double x, y, width, height;
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "dddd", &x, &y, &width, &height) == FAILURE) {
+            return;
+	}
+
+	surface_object = cairo_surface_object_get(getThis());
+	if(!surface_object) {
+            return;
+        }
+	new_surface = cairo_surface_create_for_rectangle(surface_object->surface, x, y, width, height);
+
+        surface_zval = getThis(); //???
+	Z_ADDREF_P(surface_zval);
+
+	object_init_ex(return_value, ce_cairo_subsurface);
+        new_surface_object = Z_CAIRO_SURFACE_P(return_value);
+	new_surface_object->parent_zval = surface_zval;
+	new_surface_object->surface = new_surface;
+}
+/* }}} */
+
+
+/* {{{ proto int CairoSurface->status()
+       Checks whether an error has previously occurred for this surface. */
+PHP_METHOD(CairoSurface, status)
+{
+	cairo_surface_object *surface_object;
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	surface_object = cairo_surface_object_get(getThis());
+	if(!surface_object) {
+            return;
+        }
+        
+        object_init_ex(return_value, ce_cairo_status);
+        php_eos_datastructures_set_enum_value(return_value, cairo_surface_status(surface_object->surface));
+}
+/* }}} */
+
+/* {{{ proto void CairoSurface->finish()
+       This function finishes the surface and drops all references to external resources. For example,
+       for the Xlib backend it means that cairo will no longer access the drawable, which can be freed. */
+PHP_METHOD(CairoSurface, finish)
+{
+	cairo_surface_object *surface_object;
+
+        if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	surface_object = cairo_surface_object_get(getThis());
+	if(!surface_object) {
+            return;
+        }
+        
+	cairo_surface_finish(surface_object->surface);
+}
+/* }}} */
+
+/* {{{ proto void CairoSurface->flush()
+       Do any pending drawing for the surface and also restore any temporary modification's cairo has made
+       to the surface's state. This function must be called before switching from drawing on the surface
+       with cairo to drawing on it directly with native APIs. */
+PHP_METHOD(CairoSurface, flush)
+{
+	cairo_surface_object *surface_object;
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	surface_object = cairo_surface_object_get(getThis());
+	if(!surface_object) {
+            return;
+        }
+	cairo_surface_flush(surface_object->surface);
+}
+/* }}} */
+
+/* {{{ proto CairoFontOptions object CairoSurface->getFontOptions()
+       Retrieves the default font rendering options for the surface.  */
+PHP_METHOD(CairoSurface, getFontOptions)
+{
+	cairo_surface_object *surface_object;
+	cairo_font_options_object *font_object;
+	cairo_font_options_t *options = cairo_font_options_create();
+        
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	surface_object = cairo_surface_object_get(getThis());
+	if(!surface_object) {
+            return;
+        }
+
+	object_init_ex(return_value, ce_cairo_fontoptions);
+        //font_object = cairo_font_options_fetch_object(Z_OBJ_P(return_value));
+        font_object = Z_CAIRO_FONT_OPTIONS_P(return_value);
+
+	cairo_surface_get_font_options(surface_object->surface, options);
+	font_object->font_options = options;
+}
+/* }}} */
+
+/* {{{ proto int CairoSurface->getContent()
+       This function returns the content type of surface which indicates whether the surface contains color and/or alpha information.  */
+PHP_METHOD(CairoSurface, getContent)
+{
+	cairo_surface_object *surface_object;
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	surface_object = cairo_surface_object_get(getThis());
+	if(!surface_object) {
+            return;
+        }
+        
+        object_init_ex(return_value, ce_cairo_content);
+        php_eos_datastructures_set_enum_value(return_value, cairo_surface_get_content(surface_object->surface));
 }
 /* }}} */
 
@@ -195,12 +334,12 @@ static zend_object* cairo_surface_create_object(zend_class_entry *ce)
 const zend_function_entry cairo_surface_methods[] = {
 	PHP_ME(CairoSurface, __construct, CairoSurface___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
         PHP_ME(CairoSurface, createSimilar, CairoSurface_createSimilar_args, ZEND_ACC_PUBLIC)
-//        PHP_ME_MAPPING(createForRectangle, cairo_surface_create_for_rectangle, CairoSurface_createForRectangle_args, ZEND_ACC_PUBLIC)
-//        PHP_ME_MAPPING(status, cairo_surface_status, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME_MAPPING(finish, cairo_surface_finish, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME_MAPPING(flush, cairo_surface_flush, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME_MAPPING(getFontOptions, cairo_surface_get_font_options, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME_MAPPING(getContent, cairo_surface_get_content, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoSurface, createForRectangle, CairoSurface_createForRectangle_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoSurface, status, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoSurface, finish, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoSurface, flush, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoSurface, getFontOptions, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoSurface, getContent, NULL, ZEND_ACC_PUBLIC)
 //        PHP_ME_MAPPING(markDirty, cairo_surface_mark_dirty, NULL, ZEND_ACC_PUBLIC)
 //        PHP_ME_MAPPING(markDirtyRectangle, cairo_surface_mark_dirty_rectangle, CairoSurface_markDirtyRectangle_args, ZEND_ACC_PUBLIC)
 //        PHP_ME_MAPPING(setDeviceOffset, cairo_surface_set_device_offset, CairoSurface_setDeviceOffset_args, ZEND_ACC_PUBLIC)
