@@ -29,25 +29,25 @@ zend_class_entry *ce_cairo_surfacetype;
 
 static zend_object_handlers cairo_surface_object_handlers; 
 
-typedef struct _stream_closure {
-    php_stream *stream;
-    zend_bool owned_stream;
-} stream_closure;
+//typedef struct _stream_closure {
+//    php_stream *stream;
+//    zend_bool owned_stream;
+//} stream_closure;
 
-typedef struct _cairo_surface_object {
-	cairo_surface_t *surface;
-        char * buffer;
-	stream_closure *closure;
-	zval *parent_zval;
-	zend_object std;
-} cairo_surface_object;
+//typedef struct _cairo_surface_object {
+//	cairo_surface_t *surface;
+//        char * buffer;
+//	stream_closure *closure;
+//	zval *parent_zval;
+//	zend_object std;
+//} cairo_surface_object;
 
-static inline cairo_surface_object *cairo_surface_fetch_object(zend_object *object)
+inline cairo_surface_object *cairo_surface_fetch_object(zend_object *object)
 {
     return (cairo_surface_object *) ((char*)(object) - XtOffsetOf(cairo_surface_object, std));
 }
 
-#define Z_CAIRO_SURFACE_P(zv) cairo_surface_fetch_object(Z_OBJ_P(zv))
+//#define Z_CAIRO_SURFACE_P(zv) cairo_surface_fetch_object(Z_OBJ_P(zv))
 
 static inline cairo_surface_object *cairo_surface_object_get(zval *zv)
 {
@@ -71,7 +71,7 @@ ZEND_END_ARG_INFO()
 /* {{{ proto void contruct()
    CairoSurface CANNOT be extended in userspace, this will throw an exception on use */
 PHP_METHOD(CairoSurface, __construct) {
-    zend_throw_exception(ce_cairo_exception, "CairoSurface cannot be constructed", 0 TSRMLS_CC);
+    zend_throw_exception(ce_cairo_exception, "CairoSurface cannot be constructed", 0);
 }
 /* }}} */
 
@@ -597,7 +597,7 @@ static zend_object* cairo_surface_obj_ctor(zend_class_entry *ce, cairo_surface_o
 /* }}} */
 
 /* {{{ */
-static zend_object* cairo_surface_create_object(zend_class_entry *ce)
+zend_object* cairo_surface_create_object(zend_class_entry *ce)
 {
 	cairo_surface_object *surface = NULL;
 	zend_object *return_value = cairo_surface_obj_ctor(ce, &surface);
