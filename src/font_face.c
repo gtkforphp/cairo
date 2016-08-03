@@ -177,6 +177,14 @@ PHP_MINIT_FUNCTION(cairo_font_face)
 	zend_class_entry fontface_ce;
 	zend_class_entry fonttype_ce;
 
+        memcpy(&cairo_font_face_object_handlers,
+                    zend_get_std_object_handlers(),
+                    sizeof(zend_object_handlers));
+
+        /* Surface */
+        cairo_font_face_object_handlers.offset = XtOffsetOf(cairo_font_face_object, std);
+        cairo_font_face_object_handlers.free_obj = cairo_font_face_free_obj;
+        
 	INIT_NS_CLASS_ENTRY(fontface_ce, CAIRO_NAMESPACE, "FontFace", cairo_font_face_methods);
         ce_cairo_fontface = zend_register_internal_class(&fontface_ce);
         ce_cairo_fontface->create_object = cairo_font_face_create_object;
