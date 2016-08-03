@@ -42,7 +42,34 @@ extern zend_class_entry* php_cairo_get_fontoptions_ce();
 
 cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv);
 
+/* FontOptions */
+typedef struct _cairo_font_options_object {
+	cairo_font_options_t *font_options;
+        zend_object std;
+} cairo_font_options_object;
+
+extern cairo_font_options_object *cairo_font_options_fetch_object(zend_object *object);
+
+/* Surface */
+typedef struct _stream_closure {
+    php_stream *stream;
+    zend_bool owned_stream;
+} stream_closure;
+
+typedef struct _cairo_surface_object {
+	cairo_surface_t *surface;
+        char * buffer;
+	stream_closure *closure;
+	zval *parent_zval;
+	zend_object std;
+} cairo_surface_object;
+
+#define Z_CAIRO_SURFACE_P(zv) cairo_surface_fetch_object(Z_OBJ_P(zv))
+
+extern cairo_surface_object *cairo_surface_fetch_object(zend_object *object);
+extern zend_object* cairo_surface_create_object(zend_class_entry *ce);
 extern cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, unsigned int length);
+extern cairo_status_t php_cairo_read_func(void *closure, const unsigned char *data, unsigned int length);
 
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_pattern);
@@ -51,7 +78,9 @@ PHP_MINIT_FUNCTION(cairo_region);
 PHP_MINIT_FUNCTION(cairo_matrix);
 PHP_MINIT_FUNCTION(cairo_exception);
 PHP_MINIT_FUNCTION(cairo_rectangle);
+PHP_MINIT_FUNCTION(cairo_font_options);
 PHP_MINIT_FUNCTION(cairo_surface);
+PHP_MINIT_FUNCTION(cairo_image_surface);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
 
