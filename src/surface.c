@@ -577,6 +577,7 @@ static void cairo_surface_free_obj(zend_object *object)
 
     zend_object_std_dtor(&intern->std);
 }
+/* }}} */
 
 /* {{{ */
 static zend_object* cairo_surface_obj_ctor(zend_class_entry *ce, cairo_surface_object **intern)
@@ -753,59 +754,59 @@ zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface)
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo_surface) 
 {
-    zend_class_entry ce, type_ce, content_ce;
+        zend_class_entry ce, content_ce, type_ce;
 
-    memcpy(&cairo_surface_object_handlers,
-                zend_get_std_object_handlers(),
-                sizeof(zend_object_handlers));
-    
-    /* Surface */
-    cairo_surface_object_handlers.offset = XtOffsetOf(cairo_surface_object, std);
-    cairo_surface_object_handlers.free_obj = cairo_surface_free_obj;
+        memcpy(&cairo_surface_object_handlers,
+                    zend_get_std_object_handlers(),
+                    sizeof(zend_object_handlers));
 
-    INIT_NS_CLASS_ENTRY(ce, CAIRO_NAMESPACE, "Surface", cairo_surface_methods);
-    ce.create_object = cairo_surface_create_object;
-    ce_cairo_surface = zend_register_internal_class(&ce);
-    ce_cairo_surface->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
-    
-    /* CairoContent */
-    INIT_NS_CLASS_ENTRY(content_ce, CAIRO_NAMESPACE, "CairoContent", NULL);
-    ce_cairo_content = zend_register_internal_class(&content_ce);
-    ce_cairo_content->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
+        /* Surface */
+        cairo_surface_object_handlers.offset = XtOffsetOf(cairo_surface_object, std);
+        cairo_surface_object_handlers.free_obj = cairo_surface_free_obj;
 
-    #define CAIRO_CONTENT_DECLARE_ENUM(name) \
-        zend_declare_class_constant_long(ce_cairo_content, #name, \
-        sizeof(#name)-1, CAIRO_CONTENT_## name);
+        INIT_NS_CLASS_ENTRY(ce, CAIRO_NAMESPACE, "Surface", cairo_surface_methods);
+        ce.create_object = cairo_surface_create_object;
+        ce_cairo_surface = zend_register_internal_class(&ce);
+        ce_cairo_surface->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
 
-    CAIRO_CONTENT_DECLARE_ENUM(COLOR);
-    CAIRO_CONTENT_DECLARE_ENUM(ALPHA);
-    CAIRO_CONTENT_DECLARE_ENUM(COLOR_ALPHA);
+        /* CairoContent */
+        INIT_NS_CLASS_ENTRY(content_ce, CAIRO_NAMESPACE, "Content", NULL);
+        ce_cairo_content = zend_register_internal_class(&content_ce);
+        ce_cairo_content->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
 
-    /* SurfaceType */
-    INIT_NS_CLASS_ENTRY(type_ce, CAIRO_NAMESPACE, "CairoSurfaceType", NULL);
-    ce_cairo_surfacetype = zend_register_internal_class(&type_ce);
-    ce_cairo_surfacetype->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
+        #define CAIRO_CONTENT_DECLARE_ENUM(name) \
+            zend_declare_class_constant_long(ce_cairo_content, #name, \
+            sizeof(#name)-1, CAIRO_CONTENT_## name);
 
-    #define CAIRO_SURFACETYPE_DECLARE_ENUM(name) \
-        zend_declare_class_constant_long(ce_cairo_surface, #name, \
-        sizeof(#name)-1, CAIRO_SURFACE_TYPE_## name);
+        CAIRO_CONTENT_DECLARE_ENUM(COLOR);
+        CAIRO_CONTENT_DECLARE_ENUM(ALPHA);
+        CAIRO_CONTENT_DECLARE_ENUM(COLOR_ALPHA);
 
-    CAIRO_SURFACETYPE_DECLARE_ENUM(IMAGE);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(PDF);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(PS);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(XLIB);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(XCB);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(GLITZ);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(QUARTZ);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(WIN32);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(BEOS);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(DIRECTFB);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(SVG);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(OS2);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(WIN32_PRINTING);
-    CAIRO_SURFACETYPE_DECLARE_ENUM(QUARTZ_IMAGE);
+        /* SurfaceType */
+        INIT_NS_CLASS_ENTRY(type_ce, CAIRO_NAMESPACE, "SurfaceType", NULL);
+        ce_cairo_surfacetype = zend_register_internal_class(&type_ce);
+        ce_cairo_surfacetype->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
 
-    return SUCCESS;
+        #define CAIRO_SURFACETYPE_DECLARE_ENUM(name) \
+            zend_declare_class_constant_long(ce_cairo_surfacetype, #name, \
+            sizeof(#name)-1, CAIRO_SURFACE_TYPE_## name);
+
+        CAIRO_SURFACETYPE_DECLARE_ENUM(IMAGE);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(PDF);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(PS);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(XLIB);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(XCB);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(GLITZ);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(QUARTZ);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(WIN32);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(BEOS);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(DIRECTFB);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(SVG);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(OS2);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(WIN32_PRINTING);
+        CAIRO_SURFACETYPE_DECLARE_ENUM(QUARTZ_IMAGE);
+
+        return SUCCESS;
 }
 
 /*
