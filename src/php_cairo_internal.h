@@ -26,10 +26,10 @@ extern zend_class_entry *ce_cairo_content;
 extern zend_class_entry *ce_cairo_surfacetype;
 extern zend_class_entry *ce_cairo_imagesurface;
 extern zend_class_entry *ce_cairo_format;
-extern zend_class_entry *ce_cairo_svgsurface;
-extern zend_class_entry *ce_cairo_pdfsurface;
-extern zend_class_entry *ce_cairo_pssurface;
-extern zend_class_entry *ce_cairo_recordingsurface;
+//extern zend_class_entry *ce_cairo_svgsurface;
+//extern zend_class_entry *ce_cairo_pdfsurface;
+//extern zend_class_entry *ce_cairo_pssurface;
+//extern zend_class_entry *ce_cairo_recordingsurface;
 extern zend_class_entry *ce_cairo_subsurface;
 
 extern zend_class_entry *ce_cairo_fontface;
@@ -47,6 +47,7 @@ extern zend_class_entry *ce_cairo_toyfontface;
 extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern);
 extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface);
 extern zend_class_entry* php_cairo_get_fontoptions_ce();
+extern zend_class_entry* php_cairo_get_fontface_ce();
 
 cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv);
 
@@ -97,10 +98,12 @@ PHP_MINIT_FUNCTION(cairo_region);
 PHP_MINIT_FUNCTION(cairo_matrix);
 PHP_MINIT_FUNCTION(cairo_exception);
 PHP_MINIT_FUNCTION(cairo_rectangle);
+PHP_MINIT_FUNCTION(cairo_font);
+PHP_MINIT_FUNCTION(cairo_font_face);
 PHP_MINIT_FUNCTION(cairo_font_options);
 PHP_MINIT_FUNCTION(cairo_surface);
 PHP_MINIT_FUNCTION(cairo_image_surface);
-PHP_MINIT_FUNCTION(cairo_font);
+PHP_MINIT_FUNCTION(cairo_sub_surface);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
 

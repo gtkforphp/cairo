@@ -138,7 +138,7 @@ PHP_METHOD(CairoSurface, createForRectangle)
         }
 	new_surface = cairo_surface_create_for_rectangle(surface_object->surface, x, y, width, height);
 
-        surface_zval = getThis(); //???
+        surface_zval = getThis(); //don't know if this is correct
 	Z_ADDREF_P(surface_zval);
 
 	object_init_ex(return_value, ce_cairo_subsurface);
@@ -701,28 +701,28 @@ zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface)
                 type = ce_cairo_imagesurface;
                 break;
 
-#ifdef CAIRO_HAS_PDF_SURFACE
-            case CAIRO_SURFACE_TYPE_PDF:
-                type = ce_cairo_pdfsurface;
-                break;
-#endif
-#ifdef CAIRO_HAS_SVG_SURFACE
-            case CAIRO_SURFACE_TYPE_SVG:
-                type = ce_cairo_svgsurface;
-                break;
-#endif
-
-#ifdef CAIRO_HAS_PS_SURFACE
-            case CAIRO_SURFACE_TYPE_PS:
-                type = ce_cairo_pssurface;
-                break;
-#endif
-
-#ifdef CAIRO_HAS_RECORDING_SURFACE
-            case CAIRO_SURFACE_TYPE_RECORDING:
-                type = ce_cairo_recordingsurface;
-                break;
-#endif
+//#ifdef CAIRO_HAS_PDF_SURFACE
+//            case CAIRO_SURFACE_TYPE_PDF:
+//                type = ce_cairo_pdfsurface;
+//                break;
+//#endif
+//#ifdef CAIRO_HAS_SVG_SURFACE
+//            case CAIRO_SURFACE_TYPE_SVG:
+//                type = ce_cairo_svgsurface;
+//                break;
+//#endif
+//
+//#ifdef CAIRO_HAS_PS_SURFACE
+//            case CAIRO_SURFACE_TYPE_PS:
+//                type = ce_cairo_pssurface;
+//                break;
+//#endif
+//
+//#ifdef CAIRO_HAS_RECORDING_SURFACE
+//            case CAIRO_SURFACE_TYPE_RECORDING:
+//                type = ce_cairo_recordingsurface;
+//                break;
+//#endif
                 /*
                 #ifdef CAIRO_HAS_WIN32_SURFACE
         case CAIRO_SURFACE_TYPE_WIN32:
