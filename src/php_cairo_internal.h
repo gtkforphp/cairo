@@ -25,16 +25,24 @@ extern zend_class_entry *ce_cairo_surface;
 extern zend_class_entry *ce_cairo_content;
 extern zend_class_entry *ce_cairo_surfacetype;
 extern zend_class_entry *ce_cairo_imagesurface;
+extern zend_class_entry *ce_cairo_format;
 extern zend_class_entry *ce_cairo_svgsurface;
 extern zend_class_entry *ce_cairo_pdfsurface;
 extern zend_class_entry *ce_cairo_pssurface;
 extern zend_class_entry *ce_cairo_recordingsurface;
 extern zend_class_entry *ce_cairo_subsurface;
 
+extern zend_class_entry *ce_cairo_fontface;
+extern zend_class_entry *ce_cairo_fonttype;
+
 extern zend_class_entry *ce_cairo_fontoptions;
 extern zend_class_entry *ce_cairo_subpixelorder;
 extern zend_class_entry *ce_cairo_hintstyle;
 extern zend_class_entry *ce_cairo_hintmetrics;
+
+extern zend_class_entry *ce_cairo_fontslant;
+extern zend_class_entry *ce_cairo_fontweight;
+extern zend_class_entry *ce_cairo_toyfontface;
 
 extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern);
 extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface);
@@ -71,6 +79,17 @@ extern zend_object* cairo_surface_create_object(zend_class_entry *ce);
 extern cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, unsigned int length);
 extern cairo_status_t php_cairo_read_func(void *closure, const unsigned char *data, unsigned int length);
 
+/* Font + FontFace */
+typedef struct _cairo_font_face_object {
+	cairo_font_face_t *font_face;
+        zend_object std;
+} cairo_font_face_object;
+
+extern zend_object* cairo_font_face_create_object(zend_class_entry *ce);
+extern cairo_font_face_object *cairo_font_face_fetch_object(zend_object *object);
+
+#define Z_CAIRO_FONT_FACE_P(zv) cairo_font_face_fetch_object(Z_OBJ_P(zv))
+
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_pattern);
 PHP_MINIT_FUNCTION(cairo_region);
@@ -81,6 +100,7 @@ PHP_MINIT_FUNCTION(cairo_rectangle);
 PHP_MINIT_FUNCTION(cairo_font_options);
 PHP_MINIT_FUNCTION(cairo_surface);
 PHP_MINIT_FUNCTION(cairo_image_surface);
+PHP_MINIT_FUNCTION(cairo_font);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
 
