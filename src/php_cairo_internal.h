@@ -42,14 +42,6 @@ extern zend_class_entry* php_cairo_get_fontoptions_ce();
 
 cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv);
 
-typedef struct _cairo_font_options_object {
-	cairo_font_options_t *font_options;
-        zend_object std;
-} cairo_font_options_object;
-
-cairo_font_options_object *cairo_font_options_fetch_object(zend_object *object);
-//#define Z_CAIRO_FONT_OPTIONS_P(zv) cairo_font_options_fetch_object(Z_OBJ_P(zv))
-
 extern cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, unsigned int length);
 
 /* Classes to register */
