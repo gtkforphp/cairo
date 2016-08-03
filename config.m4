@@ -17,6 +17,8 @@ if test "$PHP_CAIRO" != "no"; then
     src/exception.c \
     src/matrix.c \
     src/rectangle.c \
+    src/font.c \
+    src/font_face.c \
     src/font_options.c \
     src/surface.c \
     src/image_surface.c \
