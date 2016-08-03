@@ -30,12 +30,12 @@ zend_class_entry *ce_cairo_hintmetrics;
 
 static zend_object_handlers cairo_font_options_object_handlers; 
 
-typedef struct _cairo_font_options_object {
-	cairo_font_options_t *font_options;
-        zend_object std;
-} cairo_font_options_object;
+//typedef struct _cairo_font_options_object {
+//	cairo_font_options_t *font_options;
+//        zend_object std;
+//} cairo_font_options_object;
 
-static inline cairo_font_options_object *cairo_font_options_fetch_object(zend_object *object)
+inline cairo_font_options_object *cairo_font_options_fetch_object(zend_object *object)
 {
     return (cairo_font_options_object *) ((char*)(object) - XtOffsetOf(cairo_font_options_object, std));
 }
@@ -47,7 +47,7 @@ static inline cairo_font_options_object *cairo_font_options_object_get(zval *zv)
 	cairo_font_options_object *object = Z_CAIRO_FONT_OPTIONS_P(zv);
 	if(object->font_options == NULL) {
 		zend_throw_exception_ex(ce_cairo_exception, 0,
-			"Internal font_options object missing in %s, you must call parent::__construct in extended classes",
+			"Internal font options object missing in %s, you must call parent::__construct in extended classes",
 			ZSTR_VAL(Z_OBJCE_P(zv)->name));
 		return NULL;
 	}
@@ -115,8 +115,7 @@ zend_class_entry * php_cairo_get_fontoptions_ce()
     Cairo\FontOptions Class API
 ------------------------------------------------------------------*/
 /* {{{ proto void __contruct(void) 
-       Creates a new CairoFontOptions object with all options initialized to default values.
-   */
+       Creates a new CairoFontOptions object with all options initialized to default values.*/
 PHP_METHOD(CairoFontOptions, __construct) 
 {
         cairo_font_options_object *font_options_object;
@@ -136,8 +135,7 @@ PHP_METHOD(CairoFontOptions, __construct)
 /* }}} */
 
 /* {{{ proto void CairoFontOptions->status(void)
-        Checks whether an error has previously occurred for this font options object
-    */
+        Checks whether an error has previously occurred for this font options object.*/
 PHP_METHOD(CairoFontOptions, status) 
 {
 	cairo_font_options_object *font_options_object;
@@ -161,8 +159,7 @@ ZEND_BEGIN_ARG_INFO(CairoFontOptions_fontoptions_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoFontOptions->merge(CairoFontOptions other)
-        Merges non-default options from other into options, replacing existing values.
-    */
+        Merges non-default options from other into options, replacing existing values.*/
 PHP_METHOD(CairoFontOptions, merge)
 {
 	zval *other_zval = NULL;
@@ -189,8 +186,7 @@ PHP_METHOD(CairoFontOptions, merge)
 
 
 /* {{{ proto long CairoFontOptions->hash(void)
-        Compute a hash for the font options object
-    */
+        Compute a hash for the font options object.*/
 PHP_METHOD(CairoFontOptions, hash) 
 {
 	cairo_font_options_object *font_options_object;
@@ -210,8 +206,7 @@ PHP_METHOD(CairoFontOptions, hash)
 
 
 /* {{{ proto boolean CairoFontOptions->equal(CairoFontOptions other)
-        Compares two font options objects for equality.
-    */
+        Compares two font options objects for equality.*/
 PHP_METHOD(CairoFontOptions, equal)
 {
 	zval *other_zval = NULL;
@@ -240,8 +235,7 @@ ZEND_BEGIN_ARG_INFO(CairoFontOptions_setAntialias_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoFontOptions->setAntialias(void)
-        Sets the antialiasing mode for the font options object.
-    */
+        Sets the antialiasing mode for the font options object.*/
 PHP_METHOD(CairoFontOptions, setAntialias) 
 {
 	long antialias = 0;
@@ -262,8 +256,7 @@ PHP_METHOD(CairoFontOptions, setAntialias)
 /* }}} */
 
 /* {{{ proto int CairoFontOptions->getAntialias(void)
-        Gets the antialiasing mode for the font options object.
-    */
+        Gets the antialiasing mode for the font options object.*/
 PHP_METHOD(CairoFontOptions, getAntialias) 
 {
 	cairo_font_options_object *font_options_object;
@@ -287,8 +280,7 @@ ZEND_BEGIN_ARG_INFO(CairoFontOptions_setSubpixelOrder_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoFontOptions->setSubpixelOrder(void)
-        Sets the subpixel order for the font options object.
-    */
+        Sets the subpixel order for the font options object.*/
 PHP_METHOD(CairoFontOptions, setSubpixelOrder) 
 {
 	long subpixel_order = 0;
@@ -309,8 +301,7 @@ PHP_METHOD(CairoFontOptions, setSubpixelOrder)
 /* }}} */
 
 /* {{{ proto int CairoFontOptions->getSubpixelOrder(void)
-        Gets the subpixel order for the font options object.
-    */
+        Gets the subpixel order for the font options object.*/
 PHP_METHOD(CairoFontOptions, getSubpixelOrder) 
 {
 	cairo_font_options_object *font_options_object;
@@ -333,8 +324,7 @@ ZEND_BEGIN_ARG_INFO(CairoFontOptions_setHintStyle_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoFontOptions->setHintStyle(void)
-        Sets the hint style for font outlines for the font options object.
-    */
+        Sets the hint style for font outlines for the font options object.*/
 PHP_METHOD(CairoFontOptions, setHintStyle) 
 {
 	long hint_style = 0;
@@ -355,8 +345,7 @@ PHP_METHOD(CairoFontOptions, setHintStyle)
 /* }}} */
 
 /* {{{ proto int CairoFontOptions->getHintStyle(void)
-        Gets the hint style for font outlines for the font options object.
-    */
+        Gets the hint style for font outlines for the font options object.*/
 PHP_METHOD(CairoFontOptions, getHintStyle) 
 {
 	cairo_font_options_object *font_options_object;
@@ -379,8 +368,7 @@ ZEND_BEGIN_ARG_INFO(CairoFontOptions_setHintMetrics_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoFontOptions->setHintMetrics(void)
-        Sets the metrics hinting mode for the font options object.
-    */
+        Sets the metrics hinting mode for the font options object.*/
 PHP_METHOD(CairoFontOptions, setHintMetrics) 
 {
 	long hint_metrics = 0;
@@ -402,8 +390,7 @@ PHP_METHOD(CairoFontOptions, setHintMetrics)
 /* }}} */
 
 /* {{{ proto int CairoFontOptions->getHintMetrics(void)
-        Gets the metrics hinting mode for the font options object.
-    */
+        Gets the metrics hinting mode for the font options object.*/
 PHP_METHOD(CairoFontOptions, getHintMetrics) 
 {
 	cairo_font_options_object *font_options_object;
