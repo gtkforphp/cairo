@@ -139,12 +139,12 @@ PHP_MINIT_FUNCTION(cairo_font)
 	zend_class_entry fontslant_ce;
 	zend_class_entry fontweight_ce;
 
-	INIT_CLASS_ENTRY(toyfont_ce, "ToyFontFace", cairo_toy_font_face_methods);
+        INIT_NS_CLASS_ENTRY(toyfont_ce, CAIRO_NAMESPACE, "ToyFontFace", cairo_toy_font_face_methods);
 	ce_cairo_toyfontface = zend_register_internal_class_ex(&toyfont_ce, ce_cairo_fontface);
 	ce_cairo_toyfontface->create_object = cairo_font_face_create_object;
         
         /* FontSlant */
-        INIT_CLASS_ENTRY(fontslant_ce, "FontSlant", NULL);
+        INIT_NS_CLASS_ENTRY(fontslant_ce, CAIRO_NAMESPACE, "FontSlant", NULL);
         ce_cairo_fontslant = zend_register_internal_class(&fontslant_ce);
         ce_cairo_fontslant->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
         
@@ -157,7 +157,7 @@ PHP_MINIT_FUNCTION(cairo_font)
         CAIRO_FONTSLANT_DECLARE_ENUM(OBLIQUE);
         
         /* FontWeight */
-        INIT_CLASS_ENTRY(fontweight_ce, "FontWeight", NULL);
+        INIT_NS_CLASS_ENTRY(fontweight_ce, CAIRO_NAMESPACE, "FontWeight", NULL);
         ce_cairo_fontweight = zend_register_internal_class(&fontweight_ce);
         ce_cairo_fontweight->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
         
