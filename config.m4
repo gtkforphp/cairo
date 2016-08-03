@@ -22,6 +22,7 @@ if test "$PHP_CAIRO" != "no"; then
     src/font_options.c \
     src/surface.c \
     src/image_surface.c \
+    src/sub_surface.c \
   , $ext_shared)
 
   EXT_CAIRO_HEADERS="php_cairo_api.h"
