@@ -334,7 +334,7 @@ const zend_function_entry cairo_format_methods[] = {
 /* }}} */
 
 /* {{{ PHP_MINIT_FUNCTION */
-PHP_MINIT_FUNCTION(cairo_imagesurface)
+PHP_MINIT_FUNCTION(cairo_image_surface)
 {
         zend_class_entry ce, format_ce;
 
