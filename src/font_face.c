@@ -137,7 +137,8 @@ PHP_METHOD(CairoFontFace, status)
             return;
         }
         
-	RETURN_LONG(cairo_font_face_status(font_face_object->font_face));
+        object_init_ex(return_value, ce_cairo_status);
+        php_eos_datastructures_set_enum_value(return_value, cairo_font_face_status(font_face_object->font_face));
 }
 /* }}} */
 
@@ -156,7 +157,6 @@ PHP_METHOD(CairoFontFace, getType)
             return;
         }
         
-	//RETURN_LONG(cairo_font_face_get_type(font_face_object->font_face));
         object_init_ex(return_value, ce_cairo_fonttype);
         php_eos_datastructures_set_enum_value(return_value, cairo_font_face_get_type(font_face_object->font_face));
 }
