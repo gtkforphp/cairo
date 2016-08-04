@@ -19,6 +19,8 @@
 #include <php.h>
 #include <zend_exceptions.h>
 
+#include <ext/eos_datastructures/php_eos_datastructures_api.h>
+
 #include "php_cairo.h"
 #include "php_cairo_internal.h"
 
@@ -759,7 +761,7 @@ PHP_MINIT_FUNCTION(cairo_surface)
         memcpy(&cairo_surface_object_handlers,
                     zend_get_std_object_handlers(),
                     sizeof(zend_object_handlers));
-
+        
         /* Surface */
         cairo_surface_object_handlers.offset = XtOffsetOf(cairo_surface_object, std);
         cairo_surface_object_handlers.free_obj = cairo_surface_free_obj;
@@ -768,29 +770,29 @@ PHP_MINIT_FUNCTION(cairo_surface)
         ce.create_object = cairo_surface_create_object;
         ce_cairo_surface = zend_register_internal_class(&ce);
         ce_cairo_surface->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
-
+        
         /* CairoContent */
-        INIT_NS_CLASS_ENTRY(content_ce, CAIRO_NAMESPACE, "Content", NULL);
-        ce_cairo_content = zend_register_internal_class(&content_ce);
-        ce_cairo_content->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
-
+        INIT_NS_CLASS_ENTRY(content_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "Content"), NULL);
+	ce_cairo_content = zend_register_internal_class_ex(&content_ce, php_eos_datastructures_get_enum_ce());
+	ce_cairo_content->ce_flags |= ZEND_ACC_FINAL;
+        
         #define CAIRO_CONTENT_DECLARE_ENUM(name) \
             zend_declare_class_constant_long(ce_cairo_content, #name, \
             sizeof(#name)-1, CAIRO_CONTENT_## name);
-
+            
         CAIRO_CONTENT_DECLARE_ENUM(COLOR);
         CAIRO_CONTENT_DECLARE_ENUM(ALPHA);
         CAIRO_CONTENT_DECLARE_ENUM(COLOR_ALPHA);
-
+        
         /* SurfaceType */
-        INIT_NS_CLASS_ENTRY(type_ce, CAIRO_NAMESPACE, "SurfaceType", NULL);
-        ce_cairo_surfacetype = zend_register_internal_class(&type_ce);
-        ce_cairo_surfacetype->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
-
+        INIT_NS_CLASS_ENTRY(type_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "Type"), NULL);
+        ce_cairo_surfacetype = zend_register_internal_class_ex(&type_ce, php_eos_datastructures_get_enum_ce());
+        ce_cairo_surfacetype->ce_flags |= ZEND_ACC_FINAL;
+        
         #define CAIRO_SURFACETYPE_DECLARE_ENUM(name) \
             zend_declare_class_constant_long(ce_cairo_surfacetype, #name, \
             sizeof(#name)-1, CAIRO_SURFACE_TYPE_## name);
-
+            
         CAIRO_SURFACETYPE_DECLARE_ENUM(IMAGE);
         CAIRO_SURFACETYPE_DECLARE_ENUM(PDF);
         CAIRO_SURFACETYPE_DECLARE_ENUM(PS);
