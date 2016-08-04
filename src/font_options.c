@@ -19,6 +19,8 @@
 #include <php.h>
 #include <zend_exceptions.h>
 
+#include <ext/eos_datastructures/php_eos_datastructures_api.h>
+
 #include "php_cairo.h"
 #include "php_cairo_internal.h"
 
@@ -26,7 +28,7 @@ zend_class_entry *ce_cairo_fontoptions;
 zend_class_entry *ce_cairo_subpixelorder;
 zend_class_entry *ce_cairo_hintstyle;
 zend_class_entry *ce_cairo_hintmetrics;
-
+zend_class_entry *ce_cairo_antialias;
 
 static zend_object_handlers cairo_font_options_object_handlers; 
 
@@ -149,7 +151,8 @@ PHP_METHOD(CairoFontOptions, status)
             return;
         }
 	
-	RETURN_LONG(cairo_font_options_status(font_options_object->font_options));
+        object_init_ex(return_value, ce_cairo_fontoptions);
+        php_eos_datastructures_set_enum_value(return_value, cairo_font_options_status(font_options_object->font_options));
 }
 /* }}} */
 
@@ -238,7 +241,7 @@ ZEND_END_ARG_INFO()
         Sets the antialiasing mode for the font options object.*/
 PHP_METHOD(CairoFontOptions, setAntialias) 
 {
-	long antialias = 0;
+	zend_long antialias = CAIRO_ANTIALIAS_DEFAULT;
 	cairo_font_options_object *font_options_object;
 	
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &antialias) == FAILURE) {
@@ -270,7 +273,10 @@ PHP_METHOD(CairoFontOptions, getAntialias)
             return;
         }
 	
-	RETURN_LONG(cairo_font_options_get_antialias(font_options_object->font_options));
+	//RETURN_LONG(cairo_font_options_get_antialias(font_options_object->font_options));
+        object_init_ex(return_value, ce_cairo_antialias);
+        php_eos_datastructures_set_enum_value(return_value, cairo_font_options_get_antialias(font_options_object->font_options));
+        
 }
 /* }}} */
 
@@ -434,9 +440,7 @@ const zend_function_entry cairo_font_options_methods[] = {
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo_font_options)
 {
-	zend_class_entry fontoptions_ce;
-	zend_class_entry hintstyle_ce;
-	zend_class_entry hintmetrics_ce;
+	zend_class_entry fontoptions_ce, hintstyle_ce, hintmetrics_ce, antialias_ce;
 
         memcpy(&cairo_font_options_object_handlers,
                     zend_get_std_object_handlers(),
@@ -449,11 +453,30 @@ PHP_MINIT_FUNCTION(cairo_font_options)
         INIT_NS_CLASS_ENTRY(fontoptions_ce, CAIRO_NAMESPACE, "FontOptions", cairo_font_options_methods);
         fontoptions_ce.create_object = cairo_font_options_create_object;
         ce_cairo_fontoptions = zend_register_internal_class(&fontoptions_ce);
+        
+        
+        /* Antialias */
+	INIT_NS_CLASS_ENTRY(antialias_ce, CAIRO_NAMESPACE, "Antialias", NULL);
+        ce_cairo_antialias = zend_register_internal_class_ex(&antialias_ce, php_eos_datastructures_get_enum_ce());
+        ce_cairo_antialias->ce_flags |= ZEND_ACC_FINAL;
+        
+        #define CAIRO_ANTIALIAS_DECLARE_ENUM(name) \
+            zend_declare_class_constant_long(ce_cairo_antialias, #name, \
+            sizeof(#name)-1, CAIRO_ANTIALIAS_## name);
 
+        CAIRO_ANTIALIAS_DECLARE_ENUM(DEFAULT);
+        CAIRO_ANTIALIAS_DECLARE_ENUM(NONE);
+        CAIRO_ANTIALIAS_DECLARE_ENUM(GRAY);
+        CAIRO_ANTIALIAS_DECLARE_ENUM(SUBPIXEL);
+        CAIRO_ANTIALIAS_DECLARE_ENUM(FAST);
+        CAIRO_ANTIALIAS_DECLARE_ENUM(GOOD);
+        CAIRO_ANTIALIAS_DECLARE_ENUM(BEST);
+        
+        
         /* HintStyle */
 	INIT_NS_CLASS_ENTRY(hintstyle_ce, CAIRO_NAMESPACE, "HintStyle", NULL);
-        ce_cairo_hintstyle = zend_register_internal_class(&hintstyle_ce);
-        ce_cairo_hintstyle->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
+        ce_cairo_hintstyle = zend_register_internal_class_ex(&hintstyle_ce, php_eos_datastructures_get_enum_ce());
+        ce_cairo_hintstyle->ce_flags |= ZEND_ACC_FINAL;
         
         #define CAIRO_HINTSTYLE_DECLARE_ENUM(name) \
             zend_declare_class_constant_long(ce_cairo_hintstyle, #name, \
@@ -465,10 +488,11 @@ PHP_MINIT_FUNCTION(cairo_font_options)
         CAIRO_HINTSTYLE_DECLARE_ENUM(MEDIUM);
         CAIRO_HINTSTYLE_DECLARE_ENUM(FULL);
 
+        
         /* HintMetrics */
         INIT_NS_CLASS_ENTRY(hintmetrics_ce, CAIRO_NAMESPACE, "HintMetrics", NULL);
-        ce_cairo_hintmetrics = zend_register_internal_class(&hintmetrics_ce);
-        ce_cairo_hintmetrics->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
+        ce_cairo_hintmetrics = zend_register_internal_class_ex(&hintmetrics_ce, php_eos_datastructures_get_enum_ce());
+        ce_cairo_hintmetrics->ce_flags |= ZEND_ACC_FINAL;
 
         #define CAIRO_HINTMETRICS_DECLARE_ENUM(name) \
             zend_declare_class_constant_long(ce_cairo_hintmetrics, #name, \
