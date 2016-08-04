@@ -89,7 +89,7 @@ PHP_METHOD(CairoSurface, createSimilar)
 {
 	cairo_surface_object *surface_object, *new_surface_object;
 	cairo_surface_t *new_surface;
-	long content; // -> cairo_content_t ?
+	zend_long content;
 	double width, height;
 
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "ldd", &content, &width, &height) == FAILURE) {
@@ -531,6 +531,8 @@ PHP_METHOD(CairoSurface, writeToPng)
             php_stream_close(stream);
 	}
 	efree(closure);
+        
+        php_cairo_throw_exception(status);
 }
 /* }}} */
 #endif
@@ -747,7 +749,7 @@ zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface)
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo_surface) 
 {
-        zend_class_entry ce, content_ce, type_ce;
+        zend_class_entry surface_ce, content_ce, type_ce;
 
         memcpy(&cairo_surface_object_handlers,
                     zend_get_std_object_handlers(),
@@ -757,9 +759,9 @@ PHP_MINIT_FUNCTION(cairo_surface)
         cairo_surface_object_handlers.offset = XtOffsetOf(cairo_surface_object, std);
         cairo_surface_object_handlers.free_obj = cairo_surface_free_obj;
 
-        INIT_NS_CLASS_ENTRY(ce, CAIRO_NAMESPACE, "Surface", cairo_surface_methods);
-        ce.create_object = cairo_surface_create_object;
-        ce_cairo_surface = zend_register_internal_class(&ce);
+        INIT_NS_CLASS_ENTRY(surface_ce, CAIRO_NAMESPACE, "Surface", cairo_surface_methods);
+        surface_ce.create_object = cairo_surface_create_object;
+        ce_cairo_surface = zend_register_internal_class(&surface_ce);
         ce_cairo_surface->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
         
         /* CairoContent */

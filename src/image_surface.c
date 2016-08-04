@@ -41,7 +41,7 @@ ZEND_END_ARG_INFO()
        Returns new CairoSurfaceImage object created on an image surface */
 PHP_METHOD(CairoImageSurface, __construct)
 {
-	long format, width, height;
+	zend_long format, width, height;
 	cairo_surface_object *surface_object;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &format, &width, &height) == FAILURE) {
@@ -70,8 +70,8 @@ PHP_METHOD(CairoImageSurface, createForData)
 {
 	/* NOTE: we have to keep the data buffer around, so we put it in the cairo_surface_object */
 	char *data;
-	int data_len;
-	long format, width, height, stride = -1;
+	size_t data_len;
+	zend_long format, width, height, stride = -1;
 	cairo_surface_object *surface_object;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "slll", &data, &data_len, &format, &width, &height) == FAILURE) {
@@ -79,17 +79,17 @@ PHP_METHOD(CairoImageSurface, createForData)
 	}
 	
 	if (format < 0) {
-		zend_throw_exception(ce_cairo_exception, "CairoImageSurface::createForData(): invalid format", 0);
+		zend_throw_exception(ce_cairo_exception, "Cairo\\Surface\\Image::createForData(): invalid format", 0);
 		return;
 	}
 
 	if (width < 1 || height < 1) {
-		zend_throw_exception(ce_cairo_exception, "CairoImageSurface::createForData(): invalid surface dimensions", 0);
+		zend_throw_exception(ce_cairo_exception, "Cairo\\Surface\\Image::createForData(): invalid surface dimensions", 0);
 		return;
 	}
 	
 	if (stride >= INT_MAX || stride < -1) {
-		zend_error(E_WARNING, "Invalid stride for cairo_image_surface_create_for_data()");
+		zend_error(E_WARNING, "Invalid stride for Cairo\\Surface\\Image::createForData().");
 		return;
 	}
 
@@ -98,7 +98,7 @@ PHP_METHOD(CairoImageSurface, createForData)
 	stride = cairo_format_stride_for_width (format, width);
 
 	if (stride <= 0) {
-		zend_error(E_WARNING, "Could not calculate stride for surface in cairo_image_surface_create_for_data()");
+		zend_error(E_WARNING, "Could not calculate stride for surface in Cairo\\Surface\\Image::createForData().");
 		return;
 	}
 
@@ -114,7 +114,7 @@ PHP_METHOD(CairoImageSurface, createForData)
 	surface_object->buffer = safe_emalloc(stride * height, sizeof(char), 0);
         
 	if(surface_object->buffer == NULL) {
-		zend_throw_exception(ce_cairo_exception, "CairoImageSurface::createForData(): Could not allocate memory for buffer", 0);
+		zend_throw_exception(ce_cairo_exception, "Cairo\\Surface\\Image::createForData(): Could not allocate memory for buffer", 0);
 		return;
 	}
 
@@ -171,7 +171,8 @@ PHP_METHOD(CairoImageSurface, getFormat)
         
 	php_cairo_throw_exception(cairo_surface_status(surface_object->surface));
 
-	RETURN_LONG(cairo_image_surface_get_format(surface_object->surface));
+        object_init_ex(return_value, ce_cairo_format);
+        php_eos_datastructures_set_enum_value(return_value, cairo_image_surface_get_format(surface_object->surface));
 }
 /* }}} */
 
@@ -248,7 +249,7 @@ ZEND_END_ARG_INFO()
         requirements of the accelerated image-rendering code within cairo. */
 PHP_METHOD(CairoFormat, strideForWidth)
 {
-	long format, width;
+	zend_long format, width;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &format, &width) == FAILURE) {
 		return;
@@ -346,18 +347,18 @@ PHP_MINIT_FUNCTION(cairo_image_surface)
 
         INIT_NS_CLASS_ENTRY(format_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "ImageFormat"), cairo_format_methods);
 	ce_cairo_format = zend_register_internal_class_ex(&format_ce, php_eos_datastructures_get_enum_ce());
-	ce_cairo_format->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
+	ce_cairo_format->ce_flags |= ZEND_ACC_FINAL;
         
         #define CAIRO_FORMAT_DECLARE_ENUM(name) \
             zend_declare_class_constant_long(ce_cairo_format, #name, \
             sizeof(#name)-1, CAIRO_FORMAT_## name);
 
         CAIRO_FORMAT_DECLARE_ENUM(ARGB32);
-        CAIRO_FORMAT_DECLARE_ENUM(RGB30);
         CAIRO_FORMAT_DECLARE_ENUM(RGB24);
-        CAIRO_FORMAT_DECLARE_ENUM(RGB16_565);
         CAIRO_FORMAT_DECLARE_ENUM(A8);
         CAIRO_FORMAT_DECLARE_ENUM(A1);
+        CAIRO_FORMAT_DECLARE_ENUM(RGB16_565);
+        CAIRO_FORMAT_DECLARE_ENUM(RGB30);
         
 	return SUCCESS;
 }

@@ -19,6 +19,8 @@
 #include <php.h>
 #include <zend_exceptions.h>
 
+#include <ext/eos_datastructures/php_eos_datastructures_api.h>
+
 #include "php_cairo.h"
 #include "php_cairo_internal.h"
 
@@ -116,7 +118,7 @@ zend_class_entry * php_cairo_get_fontface_ce()
    CairoFontFace CANNOT be extended in userspace, this will throw an exception on use */
 PHP_METHOD(CairoFontFace, __construct)
 {
-	zend_throw_exception(ce_cairo_exception, "CairoFontFace cannot be constructed", 0);
+	zend_throw_exception(ce_cairo_exception, "Cairo\\FontFace cannot be constructed", 0);
 }
 /* }}} */
 
@@ -154,7 +156,9 @@ PHP_METHOD(CairoFontFace, getType)
             return;
         }
         
-	RETURN_LONG(cairo_font_face_get_type(font_face_object->font_face));
+	//RETURN_LONG(cairo_font_face_get_type(font_face_object->font_face));
+        object_init_ex(return_value, ce_cairo_fonttype);
+        php_eos_datastructures_set_enum_value(return_value, cairo_font_face_get_type(font_face_object->font_face));
 }
 /* }}} */
 
@@ -174,8 +178,7 @@ const zend_function_entry cairo_font_face_methods[] = {
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo_font_face)
 {
-	zend_class_entry fontface_ce;
-	zend_class_entry fonttype_ce;
+	zend_class_entry fontface_ce, fonttype_ce;
 
         memcpy(&cairo_font_face_object_handlers,
                     zend_get_std_object_handlers(),
@@ -192,8 +195,9 @@ PHP_MINIT_FUNCTION(cairo_font_face)
         
         /* FontType */
 	INIT_NS_CLASS_ENTRY(fonttype_ce, CAIRO_NAMESPACE, "FontType", NULL);
-	ce_cairo_fonttype = zend_register_internal_class(&fonttype_ce);
-        ce_cairo_fonttype->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
+	//ce_cairo_fonttype = zend_register_internal_class(&fonttype_ce);
+        ce_cairo_fonttype = zend_register_internal_class_ex(&fonttype_ce, php_eos_datastructures_get_enum_ce());
+        ce_cairo_fonttype->ce_flags |= ZEND_ACC_FINAL;
         
         #define CAIRO_FONTTYPE_DECLARE_ENUM(name) \
             zend_declare_class_constant_long(ce_cairo_fonttype, #name, \
