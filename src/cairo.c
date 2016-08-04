@@ -79,6 +79,13 @@ PHP_MINIT_FUNCTION(cairo)
 	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_exception)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_region)(INIT_FUNC_ARGS_PASSTHRU);
+        
+        PHP_MINIT(cairo_font)(INIT_FUNC_ARGS_PASSTHRU);
+        PHP_MINIT(cairo_font_face)(INIT_FUNC_ARGS_PASSTHRU);
+        PHP_MINIT(cairo_font_options)(INIT_FUNC_ARGS_PASSTHRU);
+        PHP_MINIT(cairo_surface)(INIT_FUNC_ARGS_PASSTHRU);
+        PHP_MINIT(cairo_image_surface)(INIT_FUNC_ARGS_PASSTHRU);
+        PHP_MINIT(cairo_sub_surface)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
 /* }}} */
