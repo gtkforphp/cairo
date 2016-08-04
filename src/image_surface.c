@@ -19,6 +19,8 @@
 #include <php.h>
 #include <zend_exceptions.h>
 
+#include <ext/eos_datastructures/php_eos_datastructures_api.h>
+
 #include "php_cairo.h"
 #include "php_cairo_internal.h"
 
@@ -338,20 +340,22 @@ PHP_MINIT_FUNCTION(cairo_image_surface)
 {
         zend_class_entry ce, format_ce;
 
-	INIT_NS_CLASS_ENTRY(ce, CAIRO_NAMESPACE, "ImageSurface", cairo_imagesurface_methods);
+	INIT_NS_CLASS_ENTRY(ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "Image"), cairo_imagesurface_methods);
 	ce_cairo_imagesurface = zend_register_internal_class_ex(&ce, ce_cairo_surface);
 	ce_cairo_imagesurface->create_object = cairo_surface_create_object;
 
-	INIT_NS_CLASS_ENTRY(format_ce, CAIRO_NAMESPACE, "Format", cairo_format_methods);
-	ce_cairo_format = zend_register_internal_class(&format_ce);
+        INIT_NS_CLASS_ENTRY(format_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "ImageFormat"), cairo_format_methods);
+	ce_cairo_format = zend_register_internal_class_ex(&format_ce, php_eos_datastructures_get_enum_ce());
 	ce_cairo_format->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS | ZEND_ACC_FINAL;
-
+        
         #define CAIRO_FORMAT_DECLARE_ENUM(name) \
             zend_declare_class_constant_long(ce_cairo_format, #name, \
             sizeof(#name)-1, CAIRO_FORMAT_## name);
 
         CAIRO_FORMAT_DECLARE_ENUM(ARGB32);
+        CAIRO_FORMAT_DECLARE_ENUM(RGB30);
         CAIRO_FORMAT_DECLARE_ENUM(RGB24);
+        CAIRO_FORMAT_DECLARE_ENUM(RGB16_565);
         CAIRO_FORMAT_DECLARE_ENUM(A8);
         CAIRO_FORMAT_DECLARE_ENUM(A1);
         
