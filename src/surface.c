@@ -89,7 +89,7 @@ PHP_METHOD(CairoSurface, createSimilar)
 {
 	cairo_surface_object *surface_object, *new_surface_object;
 	cairo_surface_t *new_surface;
-	long content;
+	long content; // -> cairo_content_t ?
 	double width, height;
 
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "ldd", &content, &width, &height) == FAILURE) {
@@ -517,7 +517,7 @@ PHP_METHOD(CairoSurface, writeToPng)
 	} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 		php_stream_from_zval(stream, stream_zval);	
 	} else {
-                zend_throw_exception(ce_cairo_exception, "CairoSurface::writeToPng() expects parameter 1 to be a string or a stream resource", 0);
+                zend_throw_exception(ce_cairo_exception, "Cairo\\Surface::writeToPng() expects parameter 1 to be a string or a stream resource", 0);
 		return;
 	}
 
@@ -525,13 +525,10 @@ PHP_METHOD(CairoSurface, writeToPng)
 	closure = ecalloc(1, sizeof(stream_closure));
 	closure->stream = stream;
 	closure->owned_stream = owned_stream;
-#ifdef ZTS
-	closure->TSRMLS_C = TSRMLS_C;
-#endif
 
 	status = cairo_surface_write_to_png_stream(surface_object->surface, php_cairo_write_func, (void *)closure);
 	if (owned_stream) {
-		php_stream_close(stream);
+            php_stream_close(stream);
 	}
 	efree(closure);
 }
@@ -650,22 +647,16 @@ const zend_function_entry cairo_surface_methods[] = {
 /* Helper methods for stream surface read/writes */
 cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, unsigned int length)
 {
-	unsigned int written;
+	size_t written;
 	stream_closure *cast_closure;
-#ifdef ZTS
-	TSRMLS_D;
-#endif
 
 	cast_closure = (stream_closure *)closure;
-#ifdef ZTS
-	TSRMLS_C = cast_closure->TSRMLS_C;
-#endif
 
 	written = php_stream_write(cast_closure->stream, data, length);
 	if (written == length) {
-		return CAIRO_STATUS_SUCCESS;
+            return CAIRO_STATUS_SUCCESS;
 	} else {
-		return CAIRO_STATUS_WRITE_ERROR;
+            return CAIRO_STATUS_WRITE_ERROR;
 	}
 }
 
