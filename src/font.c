@@ -97,7 +97,6 @@ PHP_METHOD(CairoToyFontFace, getSlant)
             return;
         }
         
-	//RETURN_LONG(cairo_toy_font_face_get_slant(font_face_object->font_face));
         object_init_ex(return_value, ce_cairo_fontslant);
         php_eos_datastructures_set_enum_value(return_value, cairo_toy_font_face_get_slant(font_face_object->font_face));
 }
@@ -118,7 +117,6 @@ PHP_METHOD(CairoToyFontFace, getWeight)
             return;
         }
         
-	//RETURN_LONG(cairo_toy_font_face_get_weight(font_face_object->font_face));
         object_init_ex(return_value, ce_cairo_fontweight);
         php_eos_datastructures_set_enum_value(return_value, cairo_toy_font_face_get_weight(font_face_object->font_face));
 }
@@ -141,9 +139,7 @@ const zend_function_entry cairo_toy_font_face_methods[] = {
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(cairo_font)
 {
-	zend_class_entry toyfont_ce;
-	zend_class_entry fontslant_ce;
-	zend_class_entry fontweight_ce;
+	zend_class_entry toyfont_ce, fontslant_ce, fontweight_ce;
 
         //INIT_NS_CLASS_ENTRY(toyfont_ce, CAIRO_NAMESPACE, "ToyFontFace", cairo_toy_font_face_methods);
         INIT_NS_CLASS_ENTRY(toyfont_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("FontFace", "Toy"), cairo_toy_font_face_methods);
