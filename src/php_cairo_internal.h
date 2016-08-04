@@ -48,6 +48,7 @@ extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern);
 extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface);
 extern zend_class_entry* php_cairo_get_fontoptions_ce();
 extern zend_class_entry* php_cairo_get_fontface_ce();
+extern zend_class_entry* php_cairo_get_path_ce();
 
 cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv);
 
@@ -88,8 +89,16 @@ typedef struct _cairo_font_face_object {
 
 extern zend_object* cairo_font_face_create_object(zend_class_entry *ce);
 extern cairo_font_face_object *cairo_font_face_fetch_object(zend_object *object);
-
 #define Z_CAIRO_FONT_FACE_P(zv) cairo_font_face_fetch_object(Z_OBJ_P(zv))
+
+/* Path */
+typedef struct _cairo_path_object {
+	cairo_path_t *path;
+        zend_object std;
+} cairo_path_object;
+
+extern cairo_path_object *cairo_path_fetch_object(zend_object *object);
+#define Z_CAIRO_PATH_P(zv) cairo_path_fetch_object(Z_OBJ_P(zv));
 
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_pattern);
@@ -104,6 +113,7 @@ PHP_MINIT_FUNCTION(cairo_font_options);
 PHP_MINIT_FUNCTION(cairo_surface);
 PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_sub_surface);
+PHP_MINIT_FUNCTION(cairo_path);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
 
