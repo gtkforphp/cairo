@@ -146,9 +146,9 @@ PHP_METHOD(CairoFontOptions, __construct)
 }
 /* }}} */
 
-/* {{{ proto void CairoFontOptions->status(void)
+/* {{{ proto void CairoFontOptions->getStatus(void)
         Checks whether an error has previously occurred for this font options object.*/
-PHP_METHOD(CairoFontOptions, status) 
+PHP_METHOD(CairoFontOptions, getStatus) 
 {
 	cairo_font_options_object *font_options_object;
 	
@@ -433,7 +433,7 @@ PHP_METHOD(CairoFontOptions, getHintMetrics)
 /* {{{ cairo_pattern_methods[] */
 const zend_function_entry cairo_font_options_methods[] = {
         PHP_ME(CairoFontOptions, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME(CairoFontOptions, status, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoFontOptions, getStatus, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoFontOptions, merge, CairoFontOptions_fontoptions_args, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoFontOptions, hash, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoFontOptions, equal, CairoFontOptions_fontoptions_args, ZEND_ACC_PUBLIC)

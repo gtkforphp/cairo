@@ -86,9 +86,9 @@ PHP_METHOD(CairoFontFace, __construct)
 }
 /* }}} */
 
-/* {{{ proto long CairoFontFace->status()
+/* {{{ proto long CairoFontFace->getStatus()
        Returns the current integer status of the CairoFontFace */
-PHP_METHOD(CairoFontFace, status)
+PHP_METHOD(CairoFontFace, getStatus)
 {
 	cairo_font_face_object *font_face_object;
 
@@ -182,7 +182,7 @@ zend_object* cairo_font_face_create_object(zend_class_entry *ce)
 /* {{{ cairo_font_face_methods[] */
 const zend_function_entry cairo_font_face_methods[] = {
 	PHP_ME(CairoFontFace, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME(CairoFontFace, status, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoFontFace, getStatus, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoFontFace, getType, NULL, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
