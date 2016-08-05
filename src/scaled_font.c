@@ -198,9 +198,9 @@ PHP_METHOD(CairoScaledFont, __construct)
 }
 /* }}} */
 
-/* {{{ proto long CairoScaledFont->status()
+/* {{{ proto long CairoScaledFont->getStatus()
        Returns the current integer status of the CairoScaledFont */
-PHP_METHOD(CairoScaledFont, status)
+PHP_METHOD(CairoScaledFont, getStatus)
 {
 	cairo_scaled_font_object *scaled_font_object;
 
@@ -218,10 +218,10 @@ PHP_METHOD(CairoScaledFont, status)
 }
 /* }}} */
 
-/* {{{ proto array CairoScaledFont->extents()
+/* {{{ proto array CairoScaledFont->getExtents()
        Gets the metrics for a scaled font in an assoc array
 */
-PHP_METHOD(CairoScaledFont, extents)
+PHP_METHOD(CairoScaledFont, getExtents)
 {
 	cairo_scaled_font_object *scaled_font_object;
 	cairo_font_extents_t extents;
@@ -526,8 +526,8 @@ PHP_METHOD(CairoScaledFont, getType)
 /* {{{ cairo_scaled_font_methods[] */
 const zend_function_entry cairo_scaled_font_methods[] = {
 	PHP_ME(CairoScaledFont, __construct, CairoScaledFont___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME(CairoScaledFont, status, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(CairoScaledFont, extents, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoScaledFont, getStatus, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoScaledFont, getExtents, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoScaledFont, textExtents, CairoScaledFont_textExtents_args, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoScaledFont, glyphExtents, CairoScaledFont_glyphExtents_args, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoScaledFont, getFontFace, NULL, ZEND_ACC_PUBLIC)
