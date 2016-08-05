@@ -151,9 +151,9 @@ PHP_METHOD(CairoSurface, createForRectangle)
 /* }}} */
 
 
-/* {{{ proto int CairoSurface->status()
+/* {{{ proto int CairoSurface->getStatus()
        Checks whether an error has previously occurred for this surface. */
-PHP_METHOD(CairoSurface, status)
+PHP_METHOD(CairoSurface, getStatus)
 {
 	cairo_surface_object *surface_object;
 
@@ -721,7 +721,7 @@ const zend_function_entry cairo_surface_methods[] = {
 	PHP_ME(CairoSurface, __construct, CairoSurface___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
         PHP_ME(CairoSurface, createSimilar, CairoSurface_createSimilar_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoSurface, createForRectangle, CairoSurface_createForRectangle_args, ZEND_ACC_PUBLIC)
-        PHP_ME(CairoSurface, status, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoSurface, getStatus, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoSurface, finish, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoSurface, flush, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoSurface, getFontOptions, NULL, ZEND_ACC_PUBLIC)
