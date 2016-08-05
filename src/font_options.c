@@ -37,12 +37,12 @@ static zend_object_handlers cairo_font_options_object_handlers;
 //        zend_object std;
 //} cairo_font_options_object;
 
-inline cairo_font_options_object *cairo_font_options_fetch_object(zend_object *object)
+//#define Z_CAIRO_FONT_OPTIONS_P(zv) cairo_font_options_fetch_object(Z_OBJ_P(zv))
+
+cairo_font_options_object *cairo_font_options_fetch_object(zend_object *object)
 {
     return (cairo_font_options_object *) ((char*)(object) - XtOffsetOf(cairo_font_options_object, std));
 }
-
-#define Z_CAIRO_FONT_OPTIONS_P(zv) cairo_font_options_fetch_object(Z_OBJ_P(zv))
 
 static inline cairo_font_options_object *cairo_font_options_object_get(zval *zv)
 {
@@ -107,10 +107,20 @@ static zend_object* cairo_font_options_create_object(zend_class_entry *ce)
     Cairo\FontOptions C API
 ------------------------------------------------------------------*/
 
+/* {{{ */
 zend_class_entry * php_cairo_get_fontoptions_ce()
 {
 	return ce_cairo_fontoptions;
 }
+/* }}} */
+
+/* {{{ */
+cairo_font_options_t *cairo_font_options_object_get_font_options(zval *zv)
+{
+	cairo_font_options_object *font_options_object = Z_CAIRO_FONT_OPTIONS_P(zv);
+	return font_options_object->font_options;
+}
+/* }}} */
 
 
 /* ----------------------------------------------------------------
