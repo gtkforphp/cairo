@@ -54,62 +54,26 @@ static inline cairo_font_face_object *cairo_font_face_object_get(zval *zv)
 	return object;
 }
 
-/* ----------------------------------------------------------------
-    Cairo\FontOptions Object management
-------------------------------------------------------------------*/
-
-/* {{{ */
-static void cairo_font_face_free_obj(zend_object *object)
-{
-    cairo_font_face_object *intern = cairo_font_face_fetch_object(object);
-
-    if(!intern) {
-            return;
-    }
-
-    if (intern->font_face) {
-            cairo_font_face_destroy(intern->font_face);
-    }
-    intern->font_face = NULL;
-
-    zend_object_std_dtor(&intern->std);
-}
-
-/* {{{ */
-static zend_object* cairo_font_face_obj_ctor(zend_class_entry *ce, cairo_font_face_object **intern)
-{
-	cairo_font_face_object *object = ecalloc(1, sizeof(cairo_font_face_object) + zend_object_properties_size(ce));
-        
-        object->font_face = NULL;
-        
-	zend_object_std_init(&object->std, ce);
-	object->std.handlers = &cairo_font_face_object_handlers;
-	*intern = object;
-
-	return &object->std;
-}
-/* }}} */
-
-/* {{{ */
-zend_object* cairo_font_face_create_object(zend_class_entry *ce)
-{
-	cairo_font_face_object *font_face_obj = NULL;
-	zend_object *return_value = cairo_font_face_obj_ctor(ce, &font_face_obj);
-
-	object_properties_init(&(font_face_obj->std), ce);
-	return return_value;
-}
-/* }}} */
 
 /* ----------------------------------------------------------------
     Cairo\FontOptions C API
 ------------------------------------------------------------------*/
 
+/* {{{ */
 zend_class_entry * php_cairo_get_fontface_ce()
 {
 	return ce_cairo_fontface;
 }
+/* }}} */
 
+/* {{{ */
+cairo_font_face_t *cairo_font_face_object_get_font_face(zval *zv)
+{
+	cairo_font_face_object *font_face_object = Z_CAIRO_FONT_FACE_P(zv);
+
+	return font_face_object->font_face;
+}
+/* }}} */
 
 /* ----------------------------------------------------------------
     Cairo\FontOptions Class API
@@ -161,6 +125,55 @@ PHP_METHOD(CairoFontFace, getType)
         php_eos_datastructures_set_enum_value(return_value, cairo_font_face_get_type(font_face_object->font_face));
 }
 /* }}} */
+
+
+/* ----------------------------------------------------------------
+    Cairo\FontOptions Object management
+------------------------------------------------------------------*/
+
+/* {{{ */
+static void cairo_font_face_free_obj(zend_object *object)
+{
+    cairo_font_face_object *intern = cairo_font_face_fetch_object(object);
+
+    if(!intern) {
+            return;
+    }
+
+    if (intern->font_face) {
+            cairo_font_face_destroy(intern->font_face);
+    }
+    intern->font_face = NULL;
+
+    zend_object_std_dtor(&intern->std);
+}
+
+/* {{{ */
+static zend_object* cairo_font_face_obj_ctor(zend_class_entry *ce, cairo_font_face_object **intern)
+{
+	cairo_font_face_object *object = ecalloc(1, sizeof(cairo_font_face_object) + zend_object_properties_size(ce));
+        
+        object->font_face = NULL;
+        
+	zend_object_std_init(&object->std, ce);
+	object->std.handlers = &cairo_font_face_object_handlers;
+	*intern = object;
+
+	return &object->std;
+}
+/* }}} */
+
+/* {{{ */
+zend_object* cairo_font_face_create_object(zend_class_entry *ce)
+{
+	cairo_font_face_object *font_face_obj = NULL;
+	zend_object *return_value = cairo_font_face_obj_ctor(ce, &font_face_obj);
+
+	object_properties_init(&(font_face_obj->std), ce);
+	return return_value;
+}
+/* }}} */
+
 
 /* ----------------------------------------------------------------
     Cairo\FontOptions Definition and registration
