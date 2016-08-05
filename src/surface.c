@@ -230,7 +230,6 @@ PHP_METHOD(CairoSurface, getFontOptions)
 
 	object_init_ex(return_value, ce_cairo_fontoptions);
         font_object = cairo_font_options_fetch_object(Z_OBJ_P(return_value));
-        //font_object = Z_CAIRO_FONT_OPTIONS_P(return_value);
 
 	cairo_surface_get_font_options(surface_object->surface, options);
 	font_object->font_options = options;
@@ -553,14 +552,14 @@ static void cairo_surface_free_obj(zend_object *object)
     /* buffer for the create_from_data image stuff */
     if (intern->buffer) {
             efree(intern->buffer);
+            intern->buffer = NULL;
     }
-    intern->buffer = NULL;
 
     if (intern->surface) {
             cairo_surface_finish(intern->surface);
             cairo_surface_destroy(intern->surface);
+            intern->surface = NULL;
     }
-    intern->surface = NULL;
 
     /* closure free up time */
     if (intern->closure) {
@@ -568,13 +567,13 @@ static void cairo_surface_free_obj(zend_object *object)
                 php_stream_close(intern->closure->stream);
             }
             efree(intern->closure);
+            intern->closure = NULL;
     }
-    intern->closure = NULL;
 
     if (intern->parent_zval) {
             Z_DELREF_P(intern->parent_zval);
+            intern->parent_zval = NULL;
     }
-    intern->parent_zval = NULL;
 
     zend_object_std_dtor(&intern->std);
 }
