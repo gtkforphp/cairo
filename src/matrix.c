@@ -25,12 +25,12 @@
 zend_class_entry *ce_cairo_matrix;
 static zend_object_handlers cairo_matrix_object_handlers; 
 
-typedef struct _cairo_matrix_object {
-	cairo_matrix_t *matrix;
-	zend_object std;
-} cairo_matrix_object;
+//typedef struct _cairo_matrix_object {
+//	cairo_matrix_t *matrix;
+//	zend_object std;
+//} cairo_matrix_object;
 
-static inline cairo_matrix_object *cairo_matrix_fetch_object(zend_object *object)
+cairo_matrix_object *cairo_matrix_fetch_object(zend_object *object)
 {
 	return (cairo_matrix_object *) ((char*)(object) - XtOffsetOf(cairo_matrix_object, std));
 }
@@ -58,7 +58,7 @@ static inline double cairo_matrix_get_property_value(zval *object, char *name) {
 	return zval_get_double(prop);
 }
 
-#define Z_CAIRO_MATRIX_P(zv) cairo_matrix_fetch_object(Z_OBJ_P(zv))
+//#define Z_CAIRO_MATRIX_P(zv) cairo_matrix_fetch_object(Z_OBJ_P(zv))
 
 #define CAIRO_ALLOC_MATRIX(matrix_value) if (!matrix_value) \
 	{ matrix_value = ecalloc(sizeof(cairo_matrix_t), 1); }
