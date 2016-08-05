@@ -20,6 +20,7 @@ if test "$PHP_CAIRO" != "no"; then
     src/font.c \
     src/font_face.c \
     src/font_options.c \
+    src/scaled_font.c \
     src/surface.c \
     src/image_surface.c \
     src/sub_surface.c \
