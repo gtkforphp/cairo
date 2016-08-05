@@ -87,6 +87,7 @@ PHP_MINIT_FUNCTION(cairo)
         PHP_MINIT(cairo_surface)(INIT_FUNC_ARGS_PASSTHRU);
         PHP_MINIT(cairo_image_surface)(INIT_FUNC_ARGS_PASSTHRU);
         PHP_MINIT(cairo_sub_surface)(INIT_FUNC_ARGS_PASSTHRU);
+        PHP_MINIT(cairo_recording_surface)(INIT_FUNC_ARGS_PASSTHRU);
         PHP_MINIT(cairo_path)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
