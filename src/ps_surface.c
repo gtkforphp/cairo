@@ -308,7 +308,7 @@ const zend_function_entry cairo_ps_surface_methods[] = {
 	PHP_ME(CairoPsSurface, dscBeginSetup, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoPsSurface, dscBeginPageSetup, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoPsSurface, dscComment, CairoPsSurface_dscComment_args, ZEND_ACC_PUBLIC)
-	{NULL, NULL, NULL}
+	ZEND_FE_END
 };
 /* }}} */
 
