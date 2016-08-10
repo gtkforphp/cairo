@@ -284,6 +284,10 @@ PHP_METHOD(CairoPsSurface, levelToString)
 		return;
 	}
 
+        if( level > CAIRO_PS_LEVEL_3 ) {
+            zend_throw_exception(ce_cairo_exception, "Cairo\\Surface\\Ps::levelToString(): level-parameter is invalid. Maximum level is 1.", CAIRO_PS_LEVEL_3);
+            return;
+        }
 	RETURN_STRING(cairo_ps_level_to_string(level));
 }
 /* }}} */
