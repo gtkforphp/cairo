@@ -26,6 +26,8 @@ if test "$PHP_CAIRO" != "no"; then
     src/sub_surface.c \
     src/recording_surface.c \
     src/pdf_surface.c \
+    src/svg_surface.c \
+    src/ps_surface.c \
     src/path.c \
   , $ext_shared)
 
