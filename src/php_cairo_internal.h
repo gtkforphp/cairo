@@ -46,6 +46,8 @@ extern zend_class_entry *ce_cairo_fontslant;
 extern zend_class_entry *ce_cairo_fontweight;
 extern zend_class_entry *ce_cairo_toyfontface;
 
+extern zend_class_entry *ce_cairo_ftfont;
+
 extern zend_class_entry *ce_cairo_path;
 
 extern zend_class_entry* php_cairo_get_pattern_ce(cairo_pattern_t *pattern);
@@ -102,6 +104,7 @@ typedef struct _cairo_font_face_object {
 
 extern zend_object* cairo_font_face_create_object(zend_class_entry *ce);
 extern cairo_font_face_object *cairo_font_face_fetch_object(zend_object *object);
+extern cairo_font_face_object *cairo_font_face_object_get(zval *zv);
 #define Z_CAIRO_FONT_FACE_P(zv) cairo_font_face_fetch_object(Z_OBJ_P(zv))
 cairo_font_face_t *cairo_font_face_object_get_font_face(zval *zv);
 
@@ -118,6 +121,44 @@ typedef struct _cairo_path_object {
 extern cairo_path_object *cairo_path_fetch_object(zend_object *object);
 #define Z_CAIRO_PATH_P(zv) cairo_path_fetch_object(Z_OBJ_P(zv));
 
+/* Freetype */
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include <cairo-ft.h>
+
+typedef struct _pecl_ft_container {
+        FT_Library ft_lib;
+        FT_Face ft_face;
+        FT_Stream ft_stream;
+} pecl_ft_container;
+
+typedef struct _cairo_ft_font_face_object {
+	cairo_font_face_t *font_face;
+        stream_closure *closure;
+	cairo_user_data_key_t key;
+        zend_object std;
+} cairo_ft_font_face_object;
+
+
+typedef struct _php_cairo_ft_error {
+	int err_code;
+	const char *err_msg;
+} php_cairo_ft_error;
+
+extern const php_cairo_ft_error php_cairo_ft_errors[];
+
+/* Helper for getting FreeType error strings */
+const char* php_cairo_get_ft_error(int error TSRMLS_DC);
+
+#undef __FTERRORS_H__
+#define FT_ERRORDEF( e, v, s )  { e, s },
+#define FT_ERROR_START_LIST     {
+#define FT_ERROR_END_LIST { 0, 0 } };
+
+#endif
+
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_pattern);
 PHP_MINIT_FUNCTION(cairo_region);
@@ -129,6 +170,7 @@ PHP_MINIT_FUNCTION(cairo_font_face);
 PHP_MINIT_FUNCTION(cairo_font);
 PHP_MINIT_FUNCTION(cairo_font_options);
 PHP_MINIT_FUNCTION(cairo_scaled_font);
+PHP_MINIT_FUNCTION(cairo_ft_font);
 PHP_MINIT_FUNCTION(cairo_surface);
 PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_sub_surface);
