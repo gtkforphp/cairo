@@ -26,9 +26,11 @@ extern zend_class_entry *ce_cairo_content;
 extern zend_class_entry *ce_cairo_surfacetype;
 extern zend_class_entry *ce_cairo_imagesurface;
 extern zend_class_entry *ce_cairo_format;
-//extern zend_class_entry *ce_cairo_svgsurface;
+extern zend_class_entry *ce_cairo_svgsurface;
+extern zend_class_entry *ce_cairo_svgversion;
 extern zend_class_entry *ce_cairo_pdfsurface;
-//extern zend_class_entry *ce_cairo_pssurface;
+extern zend_class_entry *ce_cairo_pssurface;
+extern zend_class_entry *ce_cairo_pslevel;
 extern zend_class_entry *ce_cairo_recordingsurface;
 extern zend_class_entry *ce_cairo_subsurface;
 
@@ -132,6 +134,8 @@ PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_sub_surface);
 PHP_MINIT_FUNCTION(cairo_recording_surface);
 PHP_MINIT_FUNCTION(cairo_pdf_surface);
+PHP_MINIT_FUNCTION(cairo_svg_surface);
+PHP_MINIT_FUNCTION(cairo_ps_surface);
 PHP_MINIT_FUNCTION(cairo_path);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
