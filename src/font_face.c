@@ -42,7 +42,7 @@ cairo_font_face_object *cairo_font_face_fetch_object(zend_object *object)
 
 //#define Z_CAIRO_FONT_FACE_P(zv) cairo_font_face_fetch_object(Z_OBJ_P(zv))
 
-static inline cairo_font_face_object *cairo_font_face_object_get(zval *zv)
+cairo_font_face_object *cairo_font_face_object_get(zval *zv)
 {
 	cairo_font_face_object *object = Z_CAIRO_FONT_FACE_P(zv);
 	if(object->font_face == NULL) {
@@ -208,7 +208,6 @@ PHP_MINIT_FUNCTION(cairo_font_face)
         
         /* FontType */
 	INIT_NS_CLASS_ENTRY(fonttype_ce, CAIRO_NAMESPACE, "FontType", NULL);
-	//ce_cairo_fonttype = zend_register_internal_class(&fonttype_ce);
         ce_cairo_fonttype = zend_register_internal_class_ex(&fonttype_ce, php_eos_datastructures_get_enum_ce());
         ce_cairo_fonttype->ce_flags |= ZEND_ACC_FINAL;
         
