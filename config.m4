@@ -30,6 +30,7 @@ if test "$PHP_CAIRO" != "no"; then
     src/svg_surface.c \
     src/ps_surface.c \
     src/path.c \
+    src/context.c \
   , $ext_shared)
 
   EXT_CAIRO_HEADERS="php_cairo_api.h"

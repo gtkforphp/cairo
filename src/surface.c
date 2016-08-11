@@ -44,14 +44,14 @@ static zend_object_handlers cairo_surface_object_handlers;
 //	zend_object std;
 //} cairo_surface_object;
 
-inline cairo_surface_object *cairo_surface_fetch_object(zend_object *object)
+cairo_surface_object *cairo_surface_fetch_object(zend_object *object)
 {
     return (cairo_surface_object *) ((char*)(object) - XtOffsetOf(cairo_surface_object, std));
 }
 
 //#define Z_CAIRO_SURFACE_P(zv) cairo_surface_fetch_object(Z_OBJ_P(zv))
 
-static inline cairo_surface_object *cairo_surface_object_get(zval *zv)
+cairo_surface_object *cairo_surface_object_get(zval *zv)
 {
 	cairo_surface_object *object = Z_CAIRO_SURFACE_P(zv);
 	if(object->surface == NULL) {
@@ -140,7 +140,7 @@ PHP_METHOD(CairoSurface, createForRectangle)
         }
 	new_surface = cairo_surface_create_for_rectangle(surface_object->surface, x, y, width, height);
 
-        surface_zval = getThis(); //don't know if this is correct
+        surface_zval = getThis();
 	Z_ADDREF_P(surface_zval);
 
 	object_init_ex(return_value, ce_cairo_subsurface);
@@ -632,14 +632,8 @@ cairo_status_t php_cairo_read_func(void *closure, const unsigned char *data, uns
 {
 	unsigned int read;
 	stream_closure *cast_closure;
-#ifdef ZTS
-	TSRMLS_D;
-#endif
 
 	cast_closure = (stream_closure *)closure;
-#ifdef ZTS
-	TSRMLS_C = cast_closure->TSRMLS_C;
-#endif
 
 	read = php_stream_read(cast_closure->stream, (char *)data, length);
 	if (read == length) {
@@ -662,28 +656,28 @@ zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface)
                 type = ce_cairo_imagesurface;
                 break;
 
-//#ifdef CAIRO_HAS_PDF_SURFACE
-//            case CAIRO_SURFACE_TYPE_PDF:
-//                type = ce_cairo_pdfsurface;
-//                break;
-//#endif
-//#ifdef CAIRO_HAS_SVG_SURFACE
-//            case CAIRO_SURFACE_TYPE_SVG:
-//                type = ce_cairo_svgsurface;
-//                break;
-//#endif
-//
-//#ifdef CAIRO_HAS_PS_SURFACE
-//            case CAIRO_SURFACE_TYPE_PS:
-//                type = ce_cairo_pssurface;
-//                break;
-//#endif
-//
-//#ifdef CAIRO_HAS_RECORDING_SURFACE
-//            case CAIRO_SURFACE_TYPE_RECORDING:
-//                type = ce_cairo_recordingsurface;
-//                break;
-//#endif
+#ifdef CAIRO_HAS_PDF_SURFACE
+            case CAIRO_SURFACE_TYPE_PDF:
+                type = ce_cairo_pdfsurface;
+                break;
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
+            case CAIRO_SURFACE_TYPE_SVG:
+                type = ce_cairo_svgsurface;
+                break;
+#endif
+
+#ifdef CAIRO_HAS_PS_SURFACE
+            case CAIRO_SURFACE_TYPE_PS:
+                type = ce_cairo_pssurface;
+                break;
+#endif
+
+#ifdef CAIRO_HAS_RECORDING_SURFACE
+            case CAIRO_SURFACE_TYPE_RECORDING:
+                type = ce_cairo_recordingsurface;
+                break;
+#endif
                 /*
                 #ifdef CAIRO_HAS_WIN32_SURFACE
         case CAIRO_SURFACE_TYPE_WIN32:
@@ -749,17 +743,16 @@ PHP_MINIT_FUNCTION(cairo_surface)
 {
         zend_class_entry surface_ce, content_ce, type_ce;
 
-        memcpy(&cairo_surface_object_handlers,
-                    zend_get_std_object_handlers(),
-                    sizeof(zend_object_handlers));
+        //memcpy(&cairo_surface_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+        memcpy(&cairo_surface_object_handlers, zend_get_std_object_handlers(), sizeof(cairo_surface_object_handlers));
         
         /* Surface */
         cairo_surface_object_handlers.offset = XtOffsetOf(cairo_surface_object, std);
         cairo_surface_object_handlers.free_obj = cairo_surface_free_obj;
 
         INIT_NS_CLASS_ENTRY(surface_ce, CAIRO_NAMESPACE, "Surface", cairo_surface_methods);
-        surface_ce.create_object = cairo_surface_create_object;
         ce_cairo_surface = zend_register_internal_class(&surface_ce);
+        ce_cairo_surface->create_object = cairo_surface_create_object;
         ce_cairo_surface->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
         
         /* CairoContent */

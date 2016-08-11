@@ -71,22 +71,22 @@ static void cairo_scaled_font_free_obj(zend_object *object)
     }
 
     if(intern->font_face != NULL) {
-            Z_DELREF_P(intern->font_face);
+            Z_TRY_DELREF_P(intern->font_face);
     }
     intern->font_face = NULL;
     
     if(intern->font_options != NULL) {
-            Z_DELREF_P(intern->font_options);
+            Z_TRY_DELREF_P(intern->font_options);
     }
     intern->font_options = NULL;
     
     if(intern->matrix != NULL) {
-            Z_DELREF_P(intern->matrix);
+            Z_TRY_DELREF_P(intern->matrix);
     }
     intern->matrix = NULL;
     
     if(intern->ctm != NULL) {
-            Z_DELREF_P(intern->ctm);
+            Z_TRY_DELREF_P(intern->ctm);
     }
     intern->ctm = NULL;
     
@@ -188,13 +188,13 @@ PHP_METHOD(CairoScaledFont, __construct)
         
 	/* we need to be able to get these zvals out later, so ref and store */
 	scaled_font_object->font_face = font_face_zval;
-	Z_ADDREF_P(font_face_zval);
+//	Z_ADDREF_P(font_face_zval);
 	scaled_font_object->matrix = matrix_zval;
-	Z_ADDREF_P(matrix_zval);
+//	Z_ADDREF_P(matrix_zval);
 	scaled_font_object->ctm = ctm_zval;
-	Z_ADDREF_P(ctm_zval);
+//	Z_ADDREF_P(ctm_zval);
 	scaled_font_object->font_options = font_options_zval;
-	Z_ADDREF_P(font_options_zval);
+//	Z_ADDREF_P(font_options_zval);
 }
 /* }}} */
 

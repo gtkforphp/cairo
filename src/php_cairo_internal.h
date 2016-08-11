@@ -21,6 +21,12 @@ extern zend_class_entry *ce_cairo_exception;
 extern zend_class_entry *ce_cairo_status;
 extern zend_class_entry *ce_cairo_matrix;
 
+extern zend_class_entry *ce_cairo_context;
+extern zend_class_entry *ce_cairo_fillrule;
+extern zend_class_entry *ce_cairo_linecap;
+extern zend_class_entry *ce_cairo_linejoin;
+extern zend_class_entry *ce_cairo_operator;
+
 extern zend_class_entry *ce_cairo_surface;
 extern zend_class_entry *ce_cairo_content;
 extern zend_class_entry *ce_cairo_surfacetype;
@@ -41,6 +47,7 @@ extern zend_class_entry *ce_cairo_fontoptions;
 extern zend_class_entry *ce_cairo_subpixelorder;
 extern zend_class_entry *ce_cairo_hintstyle;
 extern zend_class_entry *ce_cairo_hintmetrics;
+extern zend_class_entry *ce_cairo_antialias;
 
 extern zend_class_entry *ce_cairo_fontslant;
 extern zend_class_entry *ce_cairo_fontweight;
@@ -55,6 +62,15 @@ extern zend_class_entry* php_cairo_get_surface_ce(cairo_surface_t *surface);
 extern zend_class_entry* php_cairo_get_fontoptions_ce();
 extern zend_class_entry* php_cairo_get_fontface_ce();
 extern zend_class_entry* php_cairo_get_path_ce();
+
+/* Pattern */
+typedef struct _cairo_pattern_object {
+	//zval *surface;
+        cairo_pattern_t *pattern;
+	zend_object std;
+} cairo_pattern_object;
+extern cairo_pattern_object *cairo_pattern_fetch_object(zend_object *object);
+#define Z_CAIRO_PATTERN_P(zv) cairo_pattern_fetch_object(Z_OBJ_P(zv))
 
 /* Matrix */
 typedef struct _cairo_matrix_object {
@@ -93,6 +109,7 @@ typedef struct _cairo_surface_object {
 
 extern cairo_surface_object *cairo_surface_fetch_object(zend_object *object);
 extern zend_object* cairo_surface_create_object(zend_class_entry *ce);
+extern cairo_surface_object *cairo_surface_object_get(zval *zv);
 extern cairo_status_t php_cairo_write_func(void *closure, const unsigned char *data, unsigned int length);
 extern cairo_status_t php_cairo_read_func(void *closure, const unsigned char *data, unsigned int length);
 
@@ -159,10 +176,26 @@ const char* php_cairo_get_ft_error(int error TSRMLS_DC);
 
 #endif
 
+/* Context */
+typedef struct _cairo_context_object {
+	zval *surface;
+	zval *matrix;
+	zval *pattern;
+	zval *font_face;
+	zval *font_matrix;
+	zval *font_options;
+	zval *scaled_font;
+	cairo_t *context;
+        zend_object std;
+} cairo_context_object;
+
+extern cairo_context_object *cairo_context_fetch_object(zend_object *object);
+#define Z_CAIRO_CONTEXT_P(zv) cairo_context_fetch_object(Z_OBJ_P(zv))
+
+
 /* Classes to register */
 PHP_MINIT_FUNCTION(cairo_pattern);
 PHP_MINIT_FUNCTION(cairo_region);
-
 PHP_MINIT_FUNCTION(cairo_matrix);
 PHP_MINIT_FUNCTION(cairo_exception);
 PHP_MINIT_FUNCTION(cairo_rectangle);
@@ -179,6 +212,7 @@ PHP_MINIT_FUNCTION(cairo_pdf_surface);
 PHP_MINIT_FUNCTION(cairo_svg_surface);
 PHP_MINIT_FUNCTION(cairo_ps_surface);
 PHP_MINIT_FUNCTION(cairo_path);
+PHP_MINIT_FUNCTION(cairo_context);
 
 #endif /* PHP_CAIRO_INTERNAL_H */
 
