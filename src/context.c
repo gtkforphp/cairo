@@ -1587,6 +1587,10 @@ PHP_METHOD(CairoContext, scale)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO(CairoContext_rotate_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, angle)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto void CairoContext->rotate(float angle)
    Modifies the current transformation matrix by rotating the user-space axes by angle radians */
 PHP_METHOD(CairoContext, rotate)
@@ -2134,6 +2138,13 @@ PHP_METHOD(CairoContext, moveTo)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO(CairoContext_rectangle_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, width)
+	ZEND_ARG_INFO(0, height)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto void CairoContext->rectangle(float x, float y, float width, float height)
    Adds a closed sub-path rectangle of the given size to the current path at position (x, y) in user-space coordinates.  */
 PHP_METHOD(CairoContext, rectangle)
@@ -2454,45 +2465,344 @@ PHP_METHOD(CairoContext, getFontMatrix)
 }
 /* }}} */
 
-
-
-
-
-
-
-ZEND_BEGIN_ARG_INFO(CairoContext_rotate_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_INFO(0, angle)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO(CairoContext_rectangle_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_INFO(0, x)
-	ZEND_ARG_INFO(0, y)
-	ZEND_ARG_INFO(0, width)
-	ZEND_ARG_INFO(0, height)
-ZEND_END_ARG_INFO()
-
-
-
-/* Text related methods */
-
-
-
-
 ZEND_BEGIN_ARG_INFO(CairoContext_setFontOptions_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, fontoptions)
 ZEND_END_ARG_INFO()
+
+/* {{{ proto void CairoContext->setFontOptions(CairoFontOptions object)
+       Sets the font options to be used with the context  */
+PHP_METHOD(CairoContext, setFontOptions)
+{
+	zval *font_options_zval = NULL;
+	cairo_context_object *context_object;
+	cairo_font_options_object *font_options_object;
+	
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z",  &font_options_zval) == FAILURE) {
+		return;
+	}
+	
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+	font_options_object = (cairo_font_options_object *)Z_CAIRO_FONT_OPTIONS_P(font_options_zval);
+	cairo_set_font_options(context_object->context, font_options_object->font_options);
+	php_cairo_throw_exception(cairo_status(context_object->context));
+
+	/* If there's already a font_options stored, then we deref and remove it */
+	if(context_object->font_options) {
+		Z_TRY_DELREF_P(context_object->font_options);
+		context_object->font_options = NULL;
+	}
+
+	/* we need to be able to get this zval out later, so ref and store */
+	context_object->font_options = font_options_zval;
+	Z_TRY_ADDREF_P(font_options_zval);
+}
+/* }}} */
+
+/* {{{ proto CairoFontOptions object CairoContext->getFontOptions()
+       Retrieves the font options selected by the context.  If no font options have been selected or set then the default options
+	   will be returned.  */
+PHP_METHOD(CairoContext, getFontOptions)
+{
+	cairo_context_object *context_object;
+	cairo_font_options_object *font_options_object;
+	cairo_font_options_t *font_options = NULL;
+	
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+	/* Grab the font options properly */
+	cairo_get_font_options(context_object->context, font_options);
+	php_cairo_throw_exception(cairo_status(context_object->context));
+
+	/* If we have a font face object stored, grab that zval to use */
+	if(context_object->font_options) {
+		zval_dtor(return_value);
+		*return_value = *context_object->font_options;
+		zval_copy_ctor(return_value);
+		Z_SET_REFCOUNT_P(return_value, 1);
+	/* Otherwise we spawn a new object */
+	} else {
+		object_init_ex(return_value, ce_cairo_fontoptions);	
+	}
+
+	font_options_object = (cairo_font_options_object *)Z_CAIRO_FONT_OPTIONS_P(return_value);
+	font_options_object->font_options = font_options;
+}
+/* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setFontFace_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, fontface)
 ZEND_END_ARG_INFO()
 
+/* {{{ proto void CairoContext->setFontFace(CairoFontFace object)
+       Sets the font face to be used with the context  */
+PHP_METHOD(CairoContext, setFontFace)
+{
+	zval *font_face_zval = NULL;
+	cairo_context_object *context_object;
+	cairo_font_face_object *font_face_object;
+	
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z",  &font_face_zval) == FAILURE) {
+		return;
+	}
+
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+	font_face_object = (cairo_font_face_object *)Z_CAIRO_FONT_FACE_P(font_face_zval);
+	cairo_set_font_face(context_object->context, font_face_object->font_face);
+	php_cairo_throw_exception(cairo_status(context_object->context));
+
+	/* If there's already a font face stored, then we deref and remove it */
+	if(context_object->font_face) {
+		Z_TRY_DELREF_P(context_object->font_face);
+		context_object->font_face = NULL;
+	}
+
+	/* we need to be able to get this zval out later, so ref and store */
+	context_object->font_face = font_face_zval;
+	Z_TRY_ADDREF_P(font_face_zval);
+}
+/* }}} */
+
+/* {{{ proto CairoFontFace object CairoContext->getFontFace()
+       Retrieves the font face selected by the context.  If no font face has been selected or set then the default face
+       will be returned.  */
+PHP_METHOD(CairoContext, getFontFace)
+{
+	cairo_context_object *context_object;
+	cairo_font_face_object *font_face_object;
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+	/* If we have a font face object stored, grab that zval to use */
+	if(context_object->font_face) {
+		zval_dtor(return_value);
+		*return_value = *context_object->font_face;
+		zval_copy_ctor(return_value);
+		Z_SET_REFCOUNT_P(return_value, 1);
+	/* Otherwise we spawn a new object */
+	} else {
+		object_init_ex(return_value, ce_cairo_toyfontface);
+	}
+
+	font_face_object = (cairo_font_face_object *)Z_CAIRO_FONT_FACE_P(return_value);
+	/* if there IS a value in font_face_object, destroy it cause we're getting a new one */
+	if (font_face_object->font_face != NULL) {
+		cairo_font_face_destroy(font_face_object->font_face);
+	}
+	font_face_object->font_face = cairo_get_font_face(context_object->context);
+	cairo_font_face_reference(font_face_object->font_face);
+}
+/* }}} */
+
 ZEND_BEGIN_ARG_INFO(CairoContext_setScaledFont_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, scaledfont)
 ZEND_END_ARG_INFO()
 
+/* {{{ proto void CairoContext->setScaledFont(CairoScaledFont object)
+       Replaces the current font face, font matrix, and font options in the context with those of the scaled font.  */
+PHP_METHOD(CairoContext, setScaledFont)
+{
+	zval *scaled_font_zval = NULL;
+	cairo_context_object *context_object;
+	cairo_scaled_font_object *scaled_font_object;
+	
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z",  &scaled_font_zval) == FAILURE) {
+		return;
+	}
+
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+	scaled_font_object = (cairo_scaled_font_object *)Z_CAIRO_SCALED_FONT_P(scaled_font_zval);
+	cairo_set_scaled_font(context_object->context, scaled_font_object->scaled_font);
+	php_cairo_throw_exception(cairo_status(context_object->context));
+
+	/* If there's already a font face, font matrix, scaled font, and or font options stored, then we deref and remove them */
+	if(context_object->font_face) {
+		Z_TRY_DELREF_P(context_object->font_face);
+		context_object->font_face = NULL;
+	}
+	if(context_object->font_matrix) {
+		Z_TRY_DELREF_P(context_object->font_matrix);
+		context_object->font_matrix = NULL;
+	}
+	if(context_object->font_options) {
+		Z_TRY_DELREF_P(context_object->font_options);
+		context_object->font_options = NULL;
+	}
+	if(context_object->scaled_font) {
+		Z_TRY_DELREF_P(context_object->scaled_font);
+		context_object->scaled_font = NULL;
+	}
+
+	/* if the scaled font has a font_face, matrix, or option zvals stored, move them to context as well and ref again */
+	if(scaled_font_object->font_face) {
+		context_object->font_face = scaled_font_object->font_face;
+		Z_TRY_ADDREF_P(context_object->font_face);
+	}
+	if(scaled_font_object->matrix) {
+		context_object->font_matrix = scaled_font_object->matrix;
+		Z_TRY_ADDREF_P(context_object->font_matrix);
+	}
+	if(scaled_font_object->font_options) {
+		context_object->font_options = scaled_font_object->font_options;
+		Z_TRY_ADDREF_P(context_object->font_options);
+	}
+
+	/* we need to be able to get this zval out later, so ref and store */
+	context_object->scaled_font = scaled_font_zval;
+	Z_TRY_ADDREF_P(scaled_font_zval);
+}
+/* }}} */
+
+/* {{{ proto CairoScaledFont object CairoContext->getScaledFont()
+       Retrieves the scaled font face selected by the context.  If no scaled font has been selected or set then the default face
+	   will be returned.  */
+PHP_METHOD(CairoContext, getScaledFont)
+{
+	cairo_context_object *context_object;
+	cairo_scaled_font_object *scaled_font_object;
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+	/* If we have a scaled font object stored, grab that zval to use */
+	if(context_object->scaled_font) {
+		zval_dtor(return_value);
+		*return_value = *context_object->scaled_font;
+		zval_copy_ctor(return_value);
+		Z_SET_REFCOUNT_P(return_value, 1);
+	/* Otherwise we spawn a new object */
+	} else {
+		object_init_ex(return_value, ce_cairo_scaled_font);
+	}
+
+	scaled_font_object = (cairo_scaled_font_object *)Z_CAIRO_SCALED_FONT_P(return_value);
+	/* if there IS a value in scaled_font_object, destroy it cause we're getting a new one */
+	if (scaled_font_object->scaled_font != NULL) {
+		cairo_scaled_font_destroy(scaled_font_object->scaled_font);
+	}
+	scaled_font_object->scaled_font = cairo_get_scaled_font(context_object->context);
+	cairo_scaled_font_reference(scaled_font_object->scaled_font);
+}
+/* }}} */
+
 ZEND_BEGIN_ARG_INFO(CairoContext_text_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, text)
 ZEND_END_ARG_INFO()
+
+/* {{{ proto array CairoContext->showText(string text)
+   A drawing operator that generates the shape from a string of UTF-8 characters,
+   rendered according to the current font_face, font_size (font_matrix), and font_options. */
+PHP_METHOD(CairoContext, showText)
+{
+	char *text, *cairo_text;
+	size_t text_len;
+	cairo_context_object *context_object;
+	
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "s", &text, &text_len ) == FAILURE) {
+		return;
+	}
+
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+	cairo_text = estrdup(text);
+	cairo_show_text(context_object->context, text);
+	efree(cairo_text);
+}
+/* }}} */
+
+/* {{{ proto array CairoContext->fontExtents()
+       Gets the metrics for a font in an assoc array. */
+PHP_METHOD(CairoContext, fontExtents)
+{
+	cairo_context_object *context_object;
+	cairo_font_extents_t extents;
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+		return;
+	}
+
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+	cairo_font_extents(context_object->context, &extents);
+
+	array_init(return_value);
+	add_assoc_double(return_value, "ascent", extents.ascent);
+	add_assoc_double(return_value, "descent", extents.descent);
+	add_assoc_double(return_value, "height", extents.height);
+	add_assoc_double(return_value, "max_x_advance", extents.max_x_advance);
+	add_assoc_double(return_value, "max_y_advance", extents.max_y_advance);
+}
+/* }}} */
+
+/* {{{ proto array CairoContext->textExtents(string text)
+   Gets the extents for a string of text.
+   */
+PHP_METHOD(CairoContext, textExtents)
+{
+	char *text, *cairo_text;
+	size_t text_len;
+	cairo_context_object *context_object;
+	cairo_text_extents_t extents;
+	
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "s", &text, &text_len ) == FAILURE) {
+		return;
+	}
+
+	context_object = Z_CAIRO_CONTEXT_P(getThis());
+	if(!context_object) {
+            return;
+        }
+        
+        cairo_text = estrdup(text);
+	cairo_text_extents(context_object->context, cairo_text, &extents);
+	efree(cairo_text);
+
+	array_init(return_value);
+	add_assoc_double(return_value, "x_bearing", extents.x_bearing);
+	add_assoc_double(return_value, "y_bearing", extents.y_bearing);
+	add_assoc_double(return_value, "width", extents.width);
+	add_assoc_double(return_value, "height", extents.height);
+	add_assoc_double(return_value, "x_advance", extents.x_advance);
+	add_assoc_double(return_value, "y_advance", extents.y_advance);
+}
+/* }}} */
 
 
 /* ----------------------------------------------------------------
@@ -2593,15 +2903,15 @@ const zend_function_entry cairo_context_methods[] = {
         PHP_ME(CairoContext, setFontSize, CairoContext_setFontSize_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setFontMatrix, CairoContext_setFontMatrix_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getFontMatrix, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, setFontOptions, CairoContext_setFontOptions_args, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, getFontOptions, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, setFontFace, CairoContext_setFontFace_args, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, getFontFace, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, setScaledFont, CairoContext_setScaledFont_args, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, getScaledFont, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, showText, CairoContext_text_args, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, fontExtents, NULL, ZEND_ACC_PUBLIC)
-//        PHP_ME(CairoContext, textExtents, CairoContext_text_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, setFontOptions, CairoContext_setFontOptions_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, getFontOptions, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, setFontFace, CairoContext_setFontFace_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, getFontFace, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, setScaledFont, CairoContext_setScaledFont_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, getScaledFont, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, showText, CairoContext_text_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, fontExtents, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, textExtents, CairoContext_text_args, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 /* }}} */
