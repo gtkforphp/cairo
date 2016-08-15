@@ -167,8 +167,8 @@ PHP_METHOD(CairoFontOptions, getStatus)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoFontOptions_fontoptions_args, ZEND_SEND_BY_VAL)
-	/* ZEND_ARG_OBJ_INFO(0, other, CairoFontOptions, 0) - dang E_RECOVERABLE_ERROR */
-	ZEND_ARG_INFO(0, other)
+	ZEND_ARG_OBJ_INFO(1, other, Cairo\\FontOptions, 0)
+	//ZEND_ARG_INFO(0, other)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoFontOptions->merge(CairoFontOptions other)
@@ -178,7 +178,7 @@ PHP_METHOD(CairoFontOptions, merge)
 	zval *other_zval = NULL;
 	cairo_font_options_object *options_object, *other_object;
 	
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "O", &other_zval, ce_cairo_fontoptions) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &other_zval) == FAILURE) {
 		return;
 	}
 	
@@ -225,7 +225,7 @@ PHP_METHOD(CairoFontOptions, equal)
 	zval *other_zval = NULL;
 	cairo_font_options_object *options_object, *other_object;
 	
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "O", &other_zval, ce_cairo_fontoptions) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &other_zval, ce_cairo_fontoptions) == FAILURE) {
 		return;
 	}
 	
@@ -298,7 +298,7 @@ ZEND_END_ARG_INFO()
         Sets the subpixel order for the font options object.*/
 PHP_METHOD(CairoFontOptions, setSubpixelOrder) 
 {
-	long subpixel_order = 0;
+	zend_long subpixel_order = 0;
 	cairo_font_options_object *font_options_object;
 	
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &subpixel_order) == FAILURE) {
@@ -343,7 +343,7 @@ ZEND_END_ARG_INFO()
         Sets the hint style for font outlines for the font options object.*/
 PHP_METHOD(CairoFontOptions, setHintStyle) 
 {
-	long hint_style = 0;
+	zend_long hint_style = 0;
 	cairo_font_options_object *font_options_object;
 	
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &hint_style) == FAILURE) {
@@ -388,7 +388,7 @@ ZEND_END_ARG_INFO()
         Sets the metrics hinting mode for the font options object.*/
 PHP_METHOD(CairoFontOptions, setHintMetrics) 
 {
-	long hint_metrics = 0;
+	zend_long hint_metrics = 0;
 	cairo_font_options_object *font_options_object;
 
 	

@@ -102,32 +102,32 @@ static void cairo_context_free_obj(zend_object *object)
     }
 
     if(intern->surface) {
-            Z_TRY_DELREF_P(intern->surface);
+            Z_DELREF_P(intern->surface);
+            intern->surface = NULL;
     }
-    intern->surface = NULL;
     
     if(intern->matrix) {
-            Z_TRY_DELREF_P(intern->matrix);
+            Z_DELREF_P(intern->matrix);
             intern->matrix = NULL;
     }
     if(intern->pattern) {
-            Z_TRY_DELREF_P(intern->pattern);
+            Z_DELREF_P(intern->pattern);
             intern->pattern = NULL;
     }
     if(intern->font_face) {
-            Z_TRY_DELREF_P(intern->font_face);
+            Z_DELREF_P(intern->font_face);
             intern->font_face = NULL;
     }
     if(intern->font_matrix) {
-            Z_TRY_DELREF_P(intern->font_matrix);
+            Z_DELREF_P(intern->font_matrix);
             intern->font_matrix = NULL;
     }
     if(intern->font_options) {
-            Z_TRY_DELREF_P(intern->font_options);
+            Z_DELREF_P(intern->font_options);
             intern->font_options = NULL;
     }
     if(intern->scaled_font) {
-            Z_TRY_DELREF_P(intern->scaled_font);
+            Z_DELREF_P(intern->scaled_font);
             intern->scaled_font = NULL;
     }
 
@@ -176,7 +176,7 @@ zend_object* cairo_context_create_object(zend_class_entry *ce)
 
 /* Basic Context */
 ZEND_BEGIN_ARG_INFO(CairoContext___construct_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(0, surface, Cairo\\Surface, 0)
+	ZEND_ARG_OBJ_INFO(1, surface, Cairo\\Surface, 0)
 	//ZEND_ARG_INFO(0, surface)
 ZEND_END_ARG_INFO()
 
@@ -188,7 +188,7 @@ PHP_METHOD(CairoContext, __construct)
 	cairo_context_object *context_object;
 	cairo_surface_object *surface_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &surface_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &surface_zval) == FAILURE) {
 		return;
 	}
         
@@ -207,7 +207,7 @@ PHP_METHOD(CairoContext, __construct)
 
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->surface = surface_zval;
-        Z_TRY_ADDREF_P(surface_zval);
+        Z_ADDREF_P(surface_zval);
 }
 /* }}} */
 
@@ -494,7 +494,7 @@ PHP_METHOD(CairoContext, setSourceRGBA)
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setSource_args, ZEND_SEND_BY_VAL)
 	//ZEND_ARG_INFO(0, pattern)
-	ZEND_ARG_OBJ_INFO(0, pattern, Cairo\\Pattern, 0)
+	ZEND_ARG_OBJ_INFO(1, pattern, Cairo\\Pattern, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setSource(CairoPattern object)
@@ -506,7 +506,7 @@ PHP_METHOD(CairoContext, setSource)
 	cairo_context_object *context_object;
 	cairo_pattern_object *pattern_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &pattern_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &pattern_zval) == FAILURE) {
 		return;
 	}
 
@@ -521,18 +521,18 @@ PHP_METHOD(CairoContext, setSource)
 
 	/* If there's already a pattern, then we deref and remove it */
 	if(context_object->pattern) {
-		Z_TRY_DELREF_P(context_object->pattern);
+		Z_DELREF_P(context_object->pattern);
 		context_object->pattern = NULL;
 	}
 
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->pattern = pattern_zval;
-	Z_TRY_ADDREF_P(pattern_zval);
+	Z_ADDREF_P(pattern_zval);
 }
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(CairoContext_setSourceSurface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_OBJ_INFO(0, surface, Cairo\\Surface, 0)
+	ZEND_ARG_OBJ_INFO(1, surface, Cairo\\Surface, 0)
 	//ZEND_ARG_INFO(0, surface)
 	ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
@@ -548,7 +548,7 @@ PHP_METHOD(CairoContext, setSourceSurface)
 	cairo_surface_object *surface_object;
 	double x = 0.0, y = 0.0;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z|dd", &surface_zval, &x, &y) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/|dd", &surface_zval, &x, &y) == FAILURE) {
 		return;
 	}
 
@@ -564,7 +564,7 @@ PHP_METHOD(CairoContext, setSourceSurface)
 
 	/* If there's already a pattern, then we deref and remove it because we just overwrote it */
 	if(context_object->pattern) {
-		Z_TRY_DELREF_P(context_object->pattern);
+		Z_DELREF_P(context_object->pattern);
 		context_object->pattern = NULL;
 	}
 }
@@ -728,7 +728,7 @@ PHP_METHOD(CairoContext, getDashCount)
    Gets the current dash array and offset */
 PHP_METHOD(CairoContext, getDash)
 {
-	zval *sub_array;
+	zval sub_array;
 	cairo_context_object *context_object;
 	double *dashes = NULL;
 	double offset = 0;
@@ -750,15 +750,15 @@ PHP_METHOD(CairoContext, getDash)
 	/* Get dashes and push into PHP array */
 	cairo_get_dash(context_object->context, dashes, &offset);
 
-	array_init(sub_array);
+	array_init(&sub_array);
 	for(i = 0; i < num_dashes; i++) {
-		add_next_index_double(sub_array, dashes[i]);
+		add_next_index_double(&sub_array, dashes[i]);
 	}
 	efree(dashes);
 	
 	/* Put dashes and offset into return */
 	array_init(return_value);
-	add_assoc_zval(return_value, "dashes", sub_array);
+	add_assoc_zval(return_value, "dashes", &sub_array);
 	add_assoc_double(return_value, "offset", offset);
 }
 /* }}} */
@@ -1186,7 +1186,7 @@ PHP_METHOD(CairoContext, clipRectangleList)
 {
 	cairo_context_object *context_object;
 	cairo_rectangle_list_t *rectangles;
-        zval *new_array;
+        zval new_array;
 	int i;
 
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
@@ -1207,12 +1207,12 @@ PHP_METHOD(CairoContext, clipRectangleList)
 	for (i = 0; i < rectangles->num_rectangles; i++) {
 		cairo_rectangle_t rectangle = rectangles->rectangles[i];
                 
-		array_init(new_array);
-		add_assoc_double(new_array, "x", rectangle.x);
-		add_assoc_double(new_array, "y", rectangle.y);
-		add_assoc_double(new_array, "width", rectangle.width);
-		add_assoc_double(new_array, "height", rectangle.height);
-		add_next_index_zval(return_value, new_array);
+		array_init(&new_array);
+		add_assoc_double(&new_array, "x", rectangle.x);
+		add_assoc_double(&new_array, "y", rectangle.y);
+		add_assoc_double(&new_array, "width", rectangle.width);
+		add_assoc_double(&new_array, "height", rectangle.height);
+		add_next_index_zval(return_value, &new_array);
 	}
 
 	/* don't forget to clean up */
@@ -1314,7 +1314,7 @@ PHP_METHOD(CairoContext, inFill)
 
 ZEND_BEGIN_ARG_INFO(CairoContext_mask_args, ZEND_SEND_BY_VAL)
 	//ZEND_ARG_INFO(0, pattern)
-	ZEND_ARG_OBJ_INFO(0, pattern, Cairo\\Pattern, 0)
+	ZEND_ARG_OBJ_INFO(1, pattern, Cairo\\Pattern, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->mask(CairoPattern object)
@@ -1325,7 +1325,7 @@ PHP_METHOD(CairoContext, mask)
 	cairo_context_object *context_object;
 	cairo_pattern_object *pattern_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &pattern_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &pattern_zval) == FAILURE) {
 		return;
 	}
 
@@ -1341,7 +1341,7 @@ PHP_METHOD(CairoContext, mask)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_maskSurface_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(0, surface, Cairo\\Surface, 0)
+	ZEND_ARG_OBJ_INFO(1, surface, Cairo\\Surface, 0)
         ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
@@ -1356,7 +1356,7 @@ PHP_METHOD(CairoContext, maskSurface)
 	cairo_surface_object *surface_object;
 	double x = 0.0, y = 0.0;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z|dd", &surface_zval, &x, &y) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/|dd", &surface_zval, &x, &y) == FAILURE) {
 		return;
 	}
 
@@ -1622,7 +1622,7 @@ PHP_METHOD(CairoContext, rotate)
 
 ZEND_BEGIN_ARG_INFO(CairoContext_transform_args, ZEND_SEND_BY_VAL)
 	//ZEND_ARG_INFO(0, matrix)
-        ZEND_ARG_OBJ_INFO(0, matrix, Cairo\\Matrix, 0)
+        ZEND_ARG_OBJ_INFO(1, matrix, Cairo\\Matrix, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->transform(CairoMatrix matrix)
@@ -1633,7 +1633,7 @@ PHP_METHOD(CairoContext, transform)
 	cairo_context_object *context_object;
 	cairo_matrix_object *matrix_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &matrix_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &matrix_zval) == FAILURE) {
 		return;
 	}
 
@@ -1650,7 +1650,7 @@ PHP_METHOD(CairoContext, transform)
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setMatrix_args, ZEND_SEND_BY_VAL)
         //ZEND_ARG_INFO(0, matrix)
-	ZEND_ARG_OBJ_INFO(0, matrix, Cairo\\Matrix, 0)
+	ZEND_ARG_OBJ_INFO(1, matrix, Cairo\\Matrix, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setMatrix(CairoMatrix matrix)
@@ -1661,7 +1661,7 @@ PHP_METHOD(CairoContext, setMatrix)
 	cairo_context_object *context_object;
 	cairo_matrix_object *matrix_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &matrix_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &matrix_zval) == FAILURE) {
 		return;
 	}
 
@@ -1676,13 +1676,13 @@ PHP_METHOD(CairoContext, setMatrix)
 
 	/* If there's already a matrix, then we deref and remove it */
 	if(context_object->matrix) {
-		Z_TRY_DELREF_P(context_object->matrix);
+		Z_DELREF_P(context_object->matrix);
 		context_object->matrix = NULL;
 	}
         
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->matrix = matrix_zval;
-	Z_TRY_ADDREF_P(matrix_zval);
+	Z_ADDREF_P(matrix_zval);
 }
 /* }}} */
 
@@ -1892,7 +1892,7 @@ PHP_METHOD(CairoContext, copyPathFlat)
 
 ZEND_BEGIN_ARG_INFO(CairoContext_appendPath_args, ZEND_SEND_BY_VAL)
 	//ZEND_ARG_INFO(0, path)
-        ZEND_ARG_OBJ_INFO(0, path, Cairo\\Path, 0)
+        ZEND_ARG_OBJ_INFO(1, path, Cairo\\Path, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->appendPath(CairoPath object)
@@ -1904,7 +1904,7 @@ PHP_METHOD(CairoContext, appendPath)
 	cairo_path_object *path_object;
 	cairo_context_object *context_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &path_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &path_zval) == FAILURE) {
 		return;
 	}
 
@@ -2181,7 +2181,7 @@ PHP_METHOD(CairoContext, rectangle)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_glyphPath_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_ARRAY_INFO(0, glyphs, 0)
+	ZEND_ARG_ARRAY_INFO(1, glyphs, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->glyphPath(array glyphs)
@@ -2195,7 +2195,7 @@ PHP_METHOD(CairoContext, glyphPath)
 	HashTable *glyphs_hash = NULL;
         int i = 0;
         
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &php_glyphs) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &php_glyphs) == FAILURE) {
 		return;
 	}
         
@@ -2402,14 +2402,14 @@ PHP_METHOD(CairoContext, setFontSize)
 
 	/* If there's a font matrix stored, we've just reset it */
 	if(context_object->font_matrix) {
-		Z_TRY_DELREF_P(context_object->font_matrix);
+		Z_DELREF_P(context_object->font_matrix);
 		context_object->font_matrix = NULL;
 	}
 }
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setFontMatrix_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(0, matrix, Cairo\\Matrix, 0)
+	ZEND_ARG_OBJ_INFO(1, matrix, Cairo\\Matrix, 0)
 	//ZEND_ARG_INFO(0, matrix)
 ZEND_END_ARG_INFO()
 
@@ -2421,7 +2421,7 @@ PHP_METHOD(CairoContext, setFontMatrix)
 	cairo_context_object *context_object;
 	cairo_matrix_object *matrix_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &matrix_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &matrix_zval) == FAILURE) {
 		return;
 	}
 
@@ -2436,13 +2436,13 @@ PHP_METHOD(CairoContext, setFontMatrix)
 
 	/* If there's already a matrix, then we deref and remove it */
 	if(context_object->font_matrix) {
-		Z_TRY_DELREF_P(context_object->font_matrix);
+		Z_DELREF_P(context_object->font_matrix);
 		context_object->font_matrix = NULL;
 	}
 
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->font_matrix = matrix_zval;
-	Z_TRY_ADDREF_P(matrix_zval);
+	Z_ADDREF_P(matrix_zval);
 }
 /* }}} */
 
@@ -2474,14 +2474,14 @@ PHP_METHOD(CairoContext, getFontMatrix)
 	}
 
 	matrix_object = Z_CAIRO_MATRIX_P(return_value);
-	matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
+	//matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
 	cairo_get_font_matrix(context_object->context, matrix_object->matrix);
 }
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setFontOptions_args, ZEND_SEND_BY_VAL)
 	//ZEND_ARG_INFO(0, fontoptions)
-        ZEND_ARG_OBJ_INFO(0, fontoptions, Cairo\\FontOptions, 0)
+        ZEND_ARG_OBJ_INFO(1, fontoptions, Cairo\\FontOptions, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setFontOptions(CairoFontOptions object)
@@ -2492,7 +2492,7 @@ PHP_METHOD(CairoContext, setFontOptions)
 	cairo_context_object *context_object;
 	cairo_font_options_object *font_options_object;
 	
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z",  &font_options_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/",  &font_options_zval) == FAILURE) {
 		return;
 	}
 	
@@ -2507,13 +2507,13 @@ PHP_METHOD(CairoContext, setFontOptions)
 
 	/* If there's already a font_options stored, then we deref and remove it */
 	if(context_object->font_options) {
-		Z_TRY_DELREF_P(context_object->font_options);
+		Z_DELREF_P(context_object->font_options);
 		context_object->font_options = NULL;
 	}
 
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->font_options = font_options_zval;
-	Z_TRY_ADDREF_P(font_options_zval);
+	Z_ADDREF_P(font_options_zval);
 }
 /* }}} */
 
@@ -2557,7 +2557,7 @@ PHP_METHOD(CairoContext, getFontOptions)
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setFontFace_args, ZEND_SEND_BY_VAL)
 	//ZEND_ARG_INFO(0, fontface)
-        ZEND_ARG_OBJ_INFO(0, fontface, Cairo\\FontFace, 0)
+        ZEND_ARG_OBJ_INFO(1, fontface, Cairo\\FontFace, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setFontFace(CairoFontFace object)
@@ -2568,7 +2568,7 @@ PHP_METHOD(CairoContext, setFontFace)
 	cairo_context_object *context_object;
 	cairo_font_face_object *font_face_object;
 	
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z",  &font_face_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/",  &font_face_zval) == FAILURE) {
 		return;
 	}
 
@@ -2583,13 +2583,13 @@ PHP_METHOD(CairoContext, setFontFace)
 
 	/* If there's already a font face stored, then we deref and remove it */
 	if(context_object->font_face) {
-		Z_TRY_DELREF_P(context_object->font_face);
+		Z_DELREF_P(context_object->font_face);
 		context_object->font_face = NULL;
 	}
 
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->font_face = font_face_zval;
-	Z_TRY_ADDREF_P(font_face_zval);
+	Z_ADDREF_P(font_face_zval);
 }
 /* }}} */
 
@@ -2634,7 +2634,7 @@ PHP_METHOD(CairoContext, getFontFace)
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setScaledFont_args, ZEND_SEND_BY_VAL)
 	//ZEND_ARG_INFO(0, scaledfont)
-        ZEND_ARG_OBJ_INFO(0, scaledfont, Cairo\\ScaledFont, 0)
+        ZEND_ARG_OBJ_INFO(1, scaledfont, Cairo\\ScaledFont, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setScaledFont(CairoScaledFont object)
@@ -2645,7 +2645,7 @@ PHP_METHOD(CairoContext, setScaledFont)
 	cairo_context_object *context_object;
 	cairo_scaled_font_object *scaled_font_object;
 	
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z",  &scaled_font_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/",  &scaled_font_zval) == FAILURE) {
 		return;
 	}
 
@@ -2660,39 +2660,39 @@ PHP_METHOD(CairoContext, setScaledFont)
 
 	/* If there's already a font face, font matrix, scaled font, and or font options stored, then we deref and remove them */
 	if(context_object->font_face) {
-		Z_TRY_DELREF_P(context_object->font_face);
+		Z_DELREF_P(context_object->font_face);
 		context_object->font_face = NULL;
 	}
 	if(context_object->font_matrix) {
-		Z_TRY_DELREF_P(context_object->font_matrix);
+		Z_DELREF_P(context_object->font_matrix);
 		context_object->font_matrix = NULL;
 	}
 	if(context_object->font_options) {
-		Z_TRY_DELREF_P(context_object->font_options);
+		Z_DELREF_P(context_object->font_options);
 		context_object->font_options = NULL;
 	}
 	if(context_object->scaled_font) {
-		Z_TRY_DELREF_P(context_object->scaled_font);
+		Z_DELREF_P(context_object->scaled_font);
 		context_object->scaled_font = NULL;
 	}
 
 	/* if the scaled font has a font_face, matrix, or option zvals stored, move them to context as well and ref again */
 	if(scaled_font_object->font_face) {
 		context_object->font_face = scaled_font_object->font_face;
-		Z_TRY_ADDREF_P(context_object->font_face);
+		Z_ADDREF_P(context_object->font_face);
 	}
 	if(scaled_font_object->matrix) {
 		context_object->font_matrix = scaled_font_object->matrix;
-		Z_TRY_ADDREF_P(context_object->font_matrix);
+		Z_ADDREF_P(context_object->font_matrix);
 	}
 	if(scaled_font_object->font_options) {
 		context_object->font_options = scaled_font_object->font_options;
-		Z_TRY_ADDREF_P(context_object->font_options);
+		Z_ADDREF_P(context_object->font_options);
 	}
 
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->scaled_font = scaled_font_zval;
-	Z_TRY_ADDREF_P(scaled_font_zval);
+	Z_ADDREF_P(scaled_font_zval);
 }
 /* }}} */
 

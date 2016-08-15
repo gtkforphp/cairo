@@ -193,7 +193,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 		php_stream_from_zval(stream, stream_zval);	
 	} else {	
-		zend_throw_exception(ce_cairo_exception, "CairoFtFontFace::__construct() expects parameter 1 to be a string or a stream resource", 0);
+		zend_throw_exception(ce_cairo_exception, "Cairo\\FontFace\\Ft::__construct() expects parameter 1 to be a string or a stream resource", 0);
 		return;
 	}
 
@@ -226,7 +226,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 
 	if (error) {
 		const char *err_string = php_cairo_get_ft_error(error);
-		zend_throw_exception_ex(ce_cairo_exception, error, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string);
+		zend_throw_exception_ex(ce_cairo_exception, error, "Cairo\\FontFace\\Ft::__construct(): An error occurred opening the file %s", err_string);
                 pefree(ft_container, 1);
 		RETURN_NULL();
 	}
