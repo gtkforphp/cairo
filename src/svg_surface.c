@@ -173,7 +173,6 @@ PHP_MINIT_FUNCTION(cairo_svg_surface)
         /* Svg-Surface */
 	INIT_NS_CLASS_ENTRY(surface_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "Svg"), cairo_svg_surface_methods);
 	ce_cairo_svgsurface = zend_register_internal_class_ex(&surface_ce, ce_cairo_surface);
-	ce_cairo_svgsurface->create_object = cairo_surface_create_object;
         
         /* Svg-Version */
         INIT_NS_CLASS_ENTRY(version_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", ZEND_NS_NAME("Svg", "Version")), NULL);

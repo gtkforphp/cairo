@@ -320,7 +320,6 @@ PHP_MINIT_FUNCTION(cairo_ps_surface)
 
 	INIT_NS_CLASS_ENTRY(pssurface_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "Ps"), cairo_ps_surface_methods);
 	ce_cairo_pssurface = zend_register_internal_class_ex(&pssurface_ce, ce_cairo_surface);
-	ce_cairo_pssurface->create_object = cairo_surface_create_object;
 
         INIT_NS_CLASS_ENTRY(pslevel_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", ZEND_NS_NAME("Ps", "Level")), NULL);
         ce_cairo_pslevel = zend_register_internal_class_ex(&pslevel_ce, php_eos_datastructures_get_enum_ce());

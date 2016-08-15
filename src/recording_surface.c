@@ -139,7 +139,6 @@ PHP_MINIT_FUNCTION(cairo_recording_surface)
         
         INIT_NS_CLASS_ENTRY(ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "Recording"), cairo_recording_surface_methods);
 	ce_cairo_recordingsurface = zend_register_internal_class_ex(&ce, ce_cairo_surface);
-	ce_cairo_recordingsurface->create_object = cairo_surface_create_object;
 
 	return SUCCESS;
 }

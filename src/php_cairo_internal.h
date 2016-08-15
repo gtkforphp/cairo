@@ -42,6 +42,7 @@ extern zend_class_entry *ce_cairo_subsurface;
 
 extern zend_class_entry *ce_cairo_fontface;
 extern zend_class_entry *ce_cairo_fonttype;
+extern zend_class_entry *ce_cairo_scaled_font;
 
 extern zend_class_entry *ce_cairo_fontoptions;
 extern zend_class_entry *ce_cairo_subpixelorder;
@@ -65,8 +66,8 @@ extern zend_class_entry* php_cairo_get_path_ce();
 
 /* Pattern */
 typedef struct _cairo_pattern_object {
-	//zval *surface;
         cairo_pattern_t *pattern;
+        //zval *surface;
 	zend_object std;
 } cairo_pattern_object;
 extern cairo_pattern_object *cairo_pattern_fetch_object(zend_object *object);
@@ -106,7 +107,6 @@ typedef struct _cairo_surface_object {
 } cairo_surface_object;
 
 #define Z_CAIRO_SURFACE_P(zv) cairo_surface_fetch_object(Z_OBJ_P(zv))
-
 extern cairo_surface_object *cairo_surface_fetch_object(zend_object *object);
 extern zend_object* cairo_surface_create_object(zend_class_entry *ce);
 extern cairo_surface_object *cairo_surface_object_get(zval *zv);
@@ -124,6 +124,19 @@ extern cairo_font_face_object *cairo_font_face_fetch_object(zend_object *object)
 extern cairo_font_face_object *cairo_font_face_object_get(zval *zv);
 #define Z_CAIRO_FONT_FACE_P(zv) cairo_font_face_fetch_object(Z_OBJ_P(zv))
 cairo_font_face_t *cairo_font_face_object_get_font_face(zval *zv);
+
+/* ScaledFont */
+typedef struct _cairo_scaled_font_object {
+	zval *font_face;
+	zval *font_options;
+	zval *matrix;
+	zval *ctm;
+	cairo_scaled_font_t *scaled_font;
+        zend_object std;
+} cairo_scaled_font_object;
+
+extern cairo_scaled_font_object *cairo_scaled_font_fetch_object(zend_object *object);
+#define Z_CAIRO_SCALED_FONT_P(zv) cairo_scaled_font_fetch_object(Z_OBJ_P(zv))
 
 /* Fon-Options */
 #define Z_CAIRO_FONT_OPTIONS_P(zv) cairo_font_options_fetch_object(Z_OBJ_P(zv))

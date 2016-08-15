@@ -343,7 +343,6 @@ PHP_MINIT_FUNCTION(cairo_image_surface)
 
 	INIT_NS_CLASS_ENTRY(ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "Image"), cairo_imagesurface_methods);
 	ce_cairo_imagesurface = zend_register_internal_class_ex(&ce, ce_cairo_surface);
-	ce_cairo_imagesurface->create_object = cairo_surface_create_object;
 
         INIT_NS_CLASS_ENTRY(format_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("Surface", "ImageFormat"), cairo_format_methods);
 	ce_cairo_format = zend_register_internal_class_ex(&format_ce, php_eos_datastructures_get_enum_ce());

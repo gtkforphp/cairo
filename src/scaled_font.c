@@ -29,21 +29,21 @@ zend_class_entry *ce_cairo_scaled_font;
 
 static zend_object_handlers cairo_scaled_font_object_handlers; 
 
-typedef struct _cairo_scaled_font_object {
-	zval *font_face;
-	zval *font_options;
-	zval *matrix;
-	zval *ctm;
-	cairo_scaled_font_t *scaled_font;
-        zend_object std;
-} cairo_scaled_font_object;
+//typedef struct _cairo_scaled_font_object {
+//	zval *font_face;
+//	zval *font_options;
+//	zval *matrix;
+//	zval *ctm;
+//	cairo_scaled_font_t *scaled_font;
+//        zend_object std;
+//} cairo_scaled_font_object;
 
-static inline cairo_scaled_font_object *cairo_scaled_font_fetch_object(zend_object *object)
+cairo_scaled_font_object *cairo_scaled_font_fetch_object(zend_object *object)
 {
     return (cairo_scaled_font_object *) ((char*)(object) - XtOffsetOf(cairo_scaled_font_object, std));
 }
 
-#define Z_CAIRO_SCALED_FONT_P(zv) cairo_scaled_font_fetch_object(Z_OBJ_P(zv))
+//#define Z_CAIRO_SCALED_FONT_P(zv) cairo_scaled_font_fetch_object(Z_OBJ_P(zv))
 
 static inline cairo_scaled_font_object *cairo_scaled_font_object_get(zval *zv)
 {
