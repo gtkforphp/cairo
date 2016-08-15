@@ -188,7 +188,7 @@ PHP_METHOD(CairoContext, __construct)
 	cairo_context_object *context_object;
 	cairo_surface_object *surface_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &surface_zval, ce_cairo_surface) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &surface_zval) == FAILURE) {
 		return;
 	}
         
@@ -207,8 +207,7 @@ PHP_METHOD(CairoContext, __construct)
 
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->surface = surface_zval;
-//	Z_ADDREF_P(surface_zval);
-        //Z_TRY_ADDREF_P(surface_zval);
+        Z_TRY_ADDREF_P(surface_zval);
 }
 /* }}} */
 
@@ -298,7 +297,7 @@ PHP_METHOD(CairoContext, getTarget)
 		zval_dtor(return_value);
 		*return_value = *context_object->surface;
 		zval_copy_ctor(return_value);
-//		Z_SET_REFCOUNT_P(return_value, 1);
+		Z_SET_REFCOUNT_P(return_value, 1);
 	/* Otherwise we spawn a new object */
 	} else {
 		object_init_ex(return_value, php_cairo_get_surface_ce(surface));
@@ -312,7 +311,6 @@ PHP_METHOD(CairoContext, getTarget)
 		cairo_surface_destroy(surface_object->surface);
 	}
         
-	/* Grab the surface properly */
 	surface_object->surface = surface;
 	cairo_surface_reference(surface_object->surface);
 }
@@ -495,8 +493,8 @@ PHP_METHOD(CairoContext, setSourceRGBA)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setSource_args, ZEND_SEND_BY_VAL)
-	/* ZEND_ARG_OBJ_INFO(0, pattern, CairoPattern, 0) */
-	ZEND_ARG_INFO(0, pattern)
+	//ZEND_ARG_INFO(0, pattern)
+	ZEND_ARG_OBJ_INFO(0, pattern, Cairo\\Pattern, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setSource(CairoPattern object)
@@ -508,7 +506,7 @@ PHP_METHOD(CairoContext, setSource)
 	cairo_context_object *context_object;
 	cairo_pattern_object *pattern_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "O", &pattern_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &pattern_zval) == FAILURE) {
 		return;
 	}
 
@@ -1314,6 +1312,11 @@ PHP_METHOD(CairoContext, inFill)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO(CairoContext_mask_args, ZEND_SEND_BY_VAL)
+	//ZEND_ARG_INFO(0, pattern)
+	ZEND_ARG_OBJ_INFO(0, pattern, Cairo\\Pattern, 0)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto void CairoContext->mask(CairoPattern object)
    A drawing operator that paints the current source using the alpha channel of pattern as a mask.  */
 PHP_METHOD(CairoContext, mask)
@@ -1336,6 +1339,12 @@ PHP_METHOD(CairoContext, mask)
 	php_cairo_throw_exception(cairo_status(context_object->context));
 }
 /* }}} */
+
+ZEND_BEGIN_ARG_INFO(CairoContext_maskSurface_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_OBJ_INFO(0, surface, Cairo\\Surface, 0)
+        ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->maskSurface(object surface [,float x, float y])
        A drawing operator that paints the current source using the alpha channel of surface as a mask.
@@ -1612,8 +1621,8 @@ PHP_METHOD(CairoContext, rotate)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_transform_args, ZEND_SEND_BY_VAL)
-	/* ZEND_ARG_OBJ_INFO(0, matrix, CairoMatrix, 0) - STUPID E_RECOVERABLE FROM THIS */
-	ZEND_ARG_INFO(0, matrix)
+	//ZEND_ARG_INFO(0, matrix)
+        ZEND_ARG_OBJ_INFO(0, matrix, Cairo\\Matrix, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->transform(CairoMatrix matrix)
@@ -1638,6 +1647,11 @@ PHP_METHOD(CairoContext, transform)
 	php_cairo_throw_exception(cairo_status(context_object->context));
 }
 /* }}} */
+
+ZEND_BEGIN_ARG_INFO(CairoContext_setMatrix_args, ZEND_SEND_BY_VAL)
+        //ZEND_ARG_INFO(0, matrix)
+	ZEND_ARG_OBJ_INFO(0, matrix, Cairo\\Matrix, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setMatrix(CairoMatrix matrix)
    Sets the current transformation matrix */
@@ -1680,24 +1694,24 @@ PHP_METHOD(CairoContext, getMatrix)
 	cairo_matrix_object *matrix_object;
 
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
-            return;
+                return;
         }
 
         context_object = Z_CAIRO_CONTEXT_P(getThis());
 	if(!context_object) {
-            return;
+                return;
         }
         
 	/* If we have a matrix object stored, grab that zval to use */
-//	if(context_object->matrix) {
-//		zval_dtor(return_value);
-//		*return_value = *context_object->matrix;
-//		zval_copy_ctor(return_value);
-//		Z_SET_REFCOUNT_P(return_value, 1);
-//	/* Otherwise we spawn a new object */
-//	} else {
+	if(context_object->matrix) {
+		zval_dtor(return_value);
+		*return_value = *context_object->matrix;
+		zval_copy_ctor(return_value);
+		Z_SET_REFCOUNT_P(return_value, 1);
+	/* Otherwise we spawn a new object */
+	} else {
 		object_init_ex(return_value, ce_cairo_matrix);	
-//	}
+	}
 
 	matrix_object = Z_CAIRO_MATRIX_P(return_value);
 	matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
@@ -1877,8 +1891,8 @@ PHP_METHOD(CairoContext, copyPathFlat)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_appendPath_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(0, path, Cairo\\Path, 0)
 	//ZEND_ARG_INFO(0, path)
+        ZEND_ARG_OBJ_INFO(0, path, Cairo\\Path, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->appendPath(CairoPath object)
@@ -2445,7 +2459,7 @@ PHP_METHOD(CairoContext, getFontMatrix)
 
 	context_object = Z_CAIRO_CONTEXT_P(getThis());
 	if(!context_object) {
-            return;
+                return;
         }
         
 	/* If we have a matrix object stored, grab that zval to use */
@@ -2466,7 +2480,8 @@ PHP_METHOD(CairoContext, getFontMatrix)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setFontOptions_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_INFO(0, fontoptions)
+	//ZEND_ARG_INFO(0, fontoptions)
+        ZEND_ARG_OBJ_INFO(0, fontoptions, Cairo\\FontOptions, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setFontOptions(CairoFontOptions object)
@@ -2486,7 +2501,7 @@ PHP_METHOD(CairoContext, setFontOptions)
             return;
         }
         
-	font_options_object = (cairo_font_options_object *)Z_CAIRO_FONT_OPTIONS_P(font_options_zval);
+	font_options_object = Z_CAIRO_FONT_OPTIONS_P(font_options_zval);
 	cairo_set_font_options(context_object->context, font_options_object->font_options);
 	php_cairo_throw_exception(cairo_status(context_object->context));
 
@@ -2503,8 +2518,8 @@ PHP_METHOD(CairoContext, setFontOptions)
 /* }}} */
 
 /* {{{ proto CairoFontOptions object CairoContext->getFontOptions()
-       Retrieves the font options selected by the context.  If no font options have been selected or set then the default options
-	   will be returned.  */
+       Retrieves the font options selected by the context. 
+       If no font options have been selected or set then the default options will be returned. */
 PHP_METHOD(CairoContext, getFontOptions)
 {
 	cairo_context_object *context_object;
@@ -2535,13 +2550,14 @@ PHP_METHOD(CairoContext, getFontOptions)
 		object_init_ex(return_value, ce_cairo_fontoptions);	
 	}
 
-	font_options_object = (cairo_font_options_object *)Z_CAIRO_FONT_OPTIONS_P(return_value);
+	font_options_object = Z_CAIRO_FONT_OPTIONS_P(return_value);
 	font_options_object->font_options = font_options;
 }
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setFontFace_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_INFO(0, fontface)
+	//ZEND_ARG_INFO(0, fontface)
+        ZEND_ARG_OBJ_INFO(0, fontface, Cairo\\FontFace, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setFontFace(CairoFontFace object)
@@ -2561,7 +2577,7 @@ PHP_METHOD(CairoContext, setFontFace)
             return;
         }
         
-	font_face_object = (cairo_font_face_object *)Z_CAIRO_FONT_FACE_P(font_face_zval);
+	font_face_object = Z_CAIRO_FONT_FACE_P(font_face_zval);
 	cairo_set_font_face(context_object->context, font_face_object->font_face);
 	php_cairo_throw_exception(cairo_status(context_object->context));
 
@@ -2605,7 +2621,8 @@ PHP_METHOD(CairoContext, getFontFace)
 		object_init_ex(return_value, ce_cairo_toyfontface);
 	}
 
-	font_face_object = (cairo_font_face_object *)Z_CAIRO_FONT_FACE_P(return_value);
+	font_face_object = Z_CAIRO_FONT_FACE_P(return_value);
+        
 	/* if there IS a value in font_face_object, destroy it cause we're getting a new one */
 	if (font_face_object->font_face != NULL) {
 		cairo_font_face_destroy(font_face_object->font_face);
@@ -2616,7 +2633,8 @@ PHP_METHOD(CairoContext, getFontFace)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setScaledFont_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_INFO(0, scaledfont)
+	//ZEND_ARG_INFO(0, scaledfont)
+        ZEND_ARG_OBJ_INFO(0, scaledfont, Cairo\\ScaledFont, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setScaledFont(CairoScaledFont object)
@@ -2636,7 +2654,7 @@ PHP_METHOD(CairoContext, setScaledFont)
             return;
         }
         
-	scaled_font_object = (cairo_scaled_font_object *)Z_CAIRO_SCALED_FONT_P(scaled_font_zval);
+	scaled_font_object = Z_CAIRO_SCALED_FONT_P(scaled_font_zval);
 	cairo_set_scaled_font(context_object->context, scaled_font_object->scaled_font);
 	php_cairo_throw_exception(cairo_status(context_object->context));
 
@@ -2679,8 +2697,8 @@ PHP_METHOD(CairoContext, setScaledFont)
 /* }}} */
 
 /* {{{ proto CairoScaledFont object CairoContext->getScaledFont()
-       Retrieves the scaled font face selected by the context.  If no scaled font has been selected or set then the default face
-	   will be returned.  */
+       Retrieves the scaled font face selected by the context.  
+       If no scaled font has been selected or set then the default face will be returned.  */
 PHP_METHOD(CairoContext, getScaledFont)
 {
 	cairo_context_object *context_object;
@@ -2706,7 +2724,7 @@ PHP_METHOD(CairoContext, getScaledFont)
 		object_init_ex(return_value, ce_cairo_scaled_font);
 	}
 
-	scaled_font_object = (cairo_scaled_font_object *)Z_CAIRO_SCALED_FONT_P(return_value);
+	scaled_font_object = Z_CAIRO_SCALED_FONT_P(return_value);
 	/* if there IS a value in scaled_font_object, destroy it cause we're getting a new one */
 	if (scaled_font_object->scaled_font != NULL) {
 		cairo_scaled_font_destroy(scaled_font_object->scaled_font);
@@ -2855,8 +2873,8 @@ const zend_function_entry cairo_context_methods[] = {
         PHP_ME(CairoContext, fillPreserve, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, fillExtents, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, inFill, CairoContext_translate_args, ZEND_ACC_PUBLIC)
-        PHP_ME(CairoContext, mask, CairoContext_setSource_args, ZEND_ACC_PUBLIC)
-        PHP_ME(CairoContext, maskSurface, CairoContext_setSourceSurface_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, mask, CairoContext_mask_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, maskSurface, CairoContext_maskSurface_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, paint, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, paintWithAlpha, CairoContext_paintWithAlpha_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, stroke, NULL, ZEND_ACC_PUBLIC)
@@ -2870,7 +2888,7 @@ const zend_function_entry cairo_context_methods[] = {
         PHP_ME(CairoContext, scale, CairoContext_translate_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, rotate, CairoContext_rotate_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, transform, CairoContext_transform_args, ZEND_ACC_PUBLIC)
-        PHP_ME(CairoContext, setMatrix, CairoContext_transform_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, setMatrix, CairoContext_setMatrix_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getMatrix, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, identityMatrix, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, userToDevice, CairoContext_translate_args, ZEND_ACC_PUBLIC)
