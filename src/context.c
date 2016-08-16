@@ -615,7 +615,7 @@ PHP_METHOD(CairoContext, getSource)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(CairoContext_setAntialias_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+ZEND_BEGIN_ARG_INFO(CairoContext_setAntialias_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, antialias)
 ZEND_END_ARG_INFO()
 
@@ -623,12 +623,23 @@ ZEND_END_ARG_INFO()
    Set the antialiasing mode of the rasterizer used for drawing shapes. */
 PHP_METHOD(CairoContext, setAntialias)
 {
-	long antialias = CAIRO_ANTIALIAS_DEFAULT;
 	cairo_context_object *context_object;
+        zend_long antialias = CAIRO_ANTIALIAS_DEFAULT;
+        zval *antialias_enum;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "|l", &antialias) == FAILURE) {
-		return;
+	if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET|ZEND_PARSE_PARAMS_THROW,
+		ZEND_NUM_ARGS(), "O", &antialias_enum, ce_cairo_antialias) == FAILURE) {
+		if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "|l", &antialias) == FAILURE) {
+			return;
+		} else {
+			if(!php_eos_datastructures_check_value(ce_cairo_antialias, antialias)) {
+				return;
+			}
+		}
+	} else {
+		antialias = php_eos_datastructures_get_enum_value(antialias_enum);
 	}
+        
 	context_object = Z_CAIRO_CONTEXT_P(getThis());
 	if(!context_object) {
             return;
@@ -764,7 +775,7 @@ PHP_METHOD(CairoContext, getDash)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO(CairoContext_setFillRule_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_INFO(0, setting)
+	ZEND_ARG_INFO(0, fillrule)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setFillRule(int setting)
@@ -773,10 +784,20 @@ ZEND_END_ARG_INFO()
 PHP_METHOD(CairoContext, setFillRule)
 {
 	cairo_context_object *context_object;
-	long fill_rule = 0;
+	zend_long fillrule = 0;
+	zval *fillrule_enum;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &fill_rule) == FAILURE) {
-		return;
+	if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET|ZEND_PARSE_PARAMS_THROW,
+		ZEND_NUM_ARGS(), "O", &fillrule_enum, ce_cairo_fillrule) == FAILURE) {
+		if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &fillrule) == FAILURE) {
+			return;
+		} else {
+			if(!php_eos_datastructures_check_value(ce_cairo_fillrule, fillrule)) {
+				return;
+			}
+		}
+	} else {
+		fillrule = php_eos_datastructures_get_enum_value(fillrule_enum);
 	}
 
 	context_object = Z_CAIRO_CONTEXT_P(getThis());
@@ -784,7 +805,7 @@ PHP_METHOD(CairoContext, setFillRule)
             return;
         }
         
-	cairo_set_fill_rule(context_object->context, fill_rule);
+	cairo_set_fill_rule(context_object->context, fillrule);
 	php_cairo_throw_exception(cairo_status(context_object->context));
 }
 /* }}} */
@@ -804,7 +825,8 @@ PHP_METHOD(CairoContext, getFillRule)
             return;
         }
         
-	RETURN_LONG(cairo_get_fill_rule(context_object->context));
+        object_init_ex(return_value, ce_cairo_fillrule);
+        php_eos_datastructures_set_enum_value(return_value, cairo_get_fill_rule(context_object->context));
 }
 /* }}}  */
 
@@ -817,10 +839,20 @@ ZEND_END_ARG_INFO()
 PHP_METHOD(CairoContext, setLineCap)
 {
 	cairo_context_object *context_object;
-	zend_long line_cap = 0;
+	zend_long linecap = 0;
+	zval *linecap_enum;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &line_cap) == FAILURE) {
-		return;
+	if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET|ZEND_PARSE_PARAMS_THROW,
+		ZEND_NUM_ARGS(), "O", &linecap_enum, ce_cairo_linecap) == FAILURE) {
+		if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &linecap) == FAILURE) {
+			return;
+		} else {
+			if(!php_eos_datastructures_check_value(ce_cairo_linecap, linecap)) {
+				return;
+			}
+		}
+	} else {
+		linecap = php_eos_datastructures_get_enum_value(linecap_enum);
 	}
 
 	context_object = Z_CAIRO_CONTEXT_P(getThis());
@@ -828,7 +860,7 @@ PHP_METHOD(CairoContext, setLineCap)
             return;
         }
         
-	cairo_set_line_cap(context_object->context, line_cap);
+	cairo_set_line_cap(context_object->context, linecap);
 	php_cairo_throw_exception(cairo_status(context_object->context));
 }
 /* }}} */
@@ -853,15 +885,29 @@ PHP_METHOD(CairoContext, getLineCap)
 }
 /* }}}  */
 
+ZEND_BEGIN_ARG_INFO(CairoContext_setLineJoin_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, linejoin)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto void CairoContext->setLineJoin(int setting)
    Sets the current line join style within the cairo context. */
 PHP_METHOD(CairoContext, setLineJoin)
 {
 	cairo_context_object *context_object;
-	zend_long line_join = 0;
+	zend_long linejoin = 0;
+	zval *linejoin_enum;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &line_join) == FAILURE) {
-		return;
+	if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET|ZEND_PARSE_PARAMS_THROW,
+		ZEND_NUM_ARGS(), "O", &linejoin_enum, ce_cairo_linejoin) == FAILURE) {
+		if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &linejoin) == FAILURE) {
+			return;
+		} else {
+			if(!php_eos_datastructures_check_value(ce_cairo_linejoin, linejoin)) {
+				return;
+			}
+		}
+	} else {
+		linejoin = php_eos_datastructures_get_enum_value(linejoin_enum);
 	}
 
 	context_object = Z_CAIRO_CONTEXT_P(getThis());
@@ -869,7 +915,7 @@ PHP_METHOD(CairoContext, setLineJoin)
             return;
         }
         
-	cairo_set_line_join(context_object->context, line_join);
+	cairo_set_line_join(context_object->context, linejoin);
 	php_cairo_throw_exception(cairo_status(context_object->context));
 }
 /* }}} */
@@ -983,15 +1029,29 @@ PHP_METHOD(CairoContext, getMiterLimit)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO(CairoPattern_setOperator_args, ZEND_SEND_BY_VAL)
+	ZEND_ARG_INFO(0, operator)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto void CairoContext->setOperator(int setting)
    Sets the compositing operator to be used for all drawing operations. */
 PHP_METHOD(CairoContext, setOperator)
 {
 	cairo_context_object *context_object;
-	long op = 0;
+	zend_long operator = 0;
+	zval *operator_enum;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &op) == FAILURE) {
-		return;
+	if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET|ZEND_PARSE_PARAMS_THROW,
+		ZEND_NUM_ARGS(), "O", &operator_enum, ce_cairo_operator) == FAILURE) {
+		if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &operator) == FAILURE) {
+			return;
+		} else {
+			if(!php_eos_datastructures_check_value(ce_cairo_operator, operator)) {
+				return;
+			}
+		}
+	} else {
+		operator = php_eos_datastructures_get_enum_value(operator_enum);
 	}
 
 	context_object = Z_CAIRO_CONTEXT_P(getThis());
@@ -999,7 +1059,7 @@ PHP_METHOD(CairoContext, setOperator)
             return;
         }
         
-	cairo_set_operator(context_object->context, op);
+	cairo_set_operator(context_object->context, operator);
 	php_cairo_throw_exception(cairo_status(context_object->context));
 }
 /* }}} */
@@ -2854,13 +2914,13 @@ const zend_function_entry cairo_context_methods[] = {
         PHP_ME(CairoContext, getFillRule, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setLineCap, CairoContext_setLineCap_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getLineCap, NULL, ZEND_ACC_PUBLIC)
-        PHP_ME(CairoContext, setLineJoin, CairoContext_setFillRule_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, setLineJoin, CairoContext_setLineJoin_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getLineJoin, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setLineWidth, CairoContext_setLineWidth_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getLineWidth, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setMiterLimit, CairoContext_setMiterLimit_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getMiterLimit, NULL, ZEND_ACC_PUBLIC)
-        PHP_ME(CairoContext, setOperator, CairoContext_setFillRule_args, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, setOperator, CairoPattern_setOperator_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getOperator, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setTolerance, CairoContext_setTolerance_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getTolerance, NULL, ZEND_ACC_PUBLIC)
