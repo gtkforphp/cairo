@@ -72,28 +72,28 @@ static void cairo_scaled_font_free_obj(zend_object *object)
 
     if(intern->font_face != NULL) {
             Z_DELREF_P(intern->font_face);
+            intern->font_face = NULL;
     }
-    intern->font_face = NULL;
     
     if(intern->font_options != NULL) {
             Z_DELREF_P(intern->font_options);
+            intern->font_options = NULL;
     }
-    intern->font_options = NULL;
     
     if(intern->matrix != NULL) {
             Z_DELREF_P(intern->matrix);
+            intern->matrix = NULL;
     }
-    intern->matrix = NULL;
     
     if(intern->ctm != NULL) {
             Z_DELREF_P(intern->ctm);
+            intern->ctm = NULL;
     }
-    intern->ctm = NULL;
     
     if(intern->scaled_font){
             cairo_scaled_font_destroy(intern->scaled_font);
+            intern->scaled_font = NULL;
     }
-    intern->scaled_font = NULL;
 
     zend_object_std_dtor(&intern->std);
 }

@@ -2725,6 +2725,7 @@ PHP_METHOD(CairoContext, getScaledFont)
 	}
 
 	scaled_font_object = Z_CAIRO_SCALED_FONT_P(return_value);
+        
 	/* if there IS a value in scaled_font_object, destroy it cause we're getting a new one */
 	if (scaled_font_object->scaled_font != NULL) {
 		cairo_scaled_font_destroy(scaled_font_object->scaled_font);

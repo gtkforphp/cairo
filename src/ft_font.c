@@ -50,12 +50,12 @@ const char* php_cairo_get_ft_error(int error) {
 }
 
 
-static inline cairo_ft_font_face_object *cairo_ft_font_face_fetch_object(zend_object *object)
+cairo_ft_font_face_object *cairo_ft_font_face_fetch_object(zend_object *object)
 {
     return (cairo_ft_font_face_object *) ((char*)(object) - XtOffsetOf(cairo_ft_font_face_object, std));
 }
 
-#define Z_CAIRO_FT_FONT_FACE_P(zv) cairo_ft_font_face_fetch_object(Z_OBJ_P(zv))
+//#define Z_CAIRO_FT_FONT_FACE_P(zv) cairo_ft_font_face_fetch_object(Z_OBJ_P(zv))
 
 //static inline cairo_ft_font_face_object *cairo_ft_font_face_object_get(zval *zv)
 //{
@@ -164,7 +164,7 @@ static zend_bool php_cairo_create_ft_font_face(pecl_ft_container *ft_container, 
 ------------------------------------------------------------------*/
 
 ZEND_BEGIN_ARG_INFO_EX(CairoFtFontFace_construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_INFO(0, face)
+	ZEND_ARG_INFO(0, stream)
 	ZEND_ARG_INFO(0, load_flags)
 ZEND_END_ARG_INFO()
 
@@ -273,6 +273,19 @@ PHP_METHOD(CairoFtFontFace, getType)
         
         object_init_ex(return_value, ce_cairo_fonttype);
         php_eos_datastructures_set_enum_value(return_value, cairo_font_face_get_type(font_face_object->font_face));
+}
+/* }}} */
+
+/* ----------------------------------------------------------------
+    Cairo\FtFontFace C API
+------------------------------------------------------------------*/
+
+/* {{{ */
+cairo_font_face_t *cairo_ft_font_face_object_get_font_face(zval *zv)
+{
+	cairo_ft_font_face_object *font_face_object = Z_CAIRO_FT_FONT_FACE_P(zv);
+
+	return font_face_object->font_face;
 }
 /* }}} */
 

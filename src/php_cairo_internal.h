@@ -67,7 +67,7 @@ extern zend_class_entry* php_cairo_get_path_ce();
 /* Pattern */
 typedef struct _cairo_pattern_object {
         cairo_pattern_t *pattern;
-        //zval *surface;
+        zval *surface;
 	zend_object std;
 } cairo_pattern_object;
 extern cairo_pattern_object *cairo_pattern_fetch_object(zend_object *object);
@@ -164,6 +164,11 @@ typedef struct _pecl_ft_container {
         FT_Stream ft_stream;
 } pecl_ft_container;
 
+typedef struct _php_cairo_ft_error {
+	int err_code;
+	const char *err_msg;
+} php_cairo_ft_error;
+
 typedef struct _cairo_ft_font_face_object {
 	cairo_font_face_t *font_face;
         stream_closure *closure;
@@ -171,12 +176,9 @@ typedef struct _cairo_ft_font_face_object {
         zend_object std;
 } cairo_ft_font_face_object;
 
-
-typedef struct _php_cairo_ft_error {
-	int err_code;
-	const char *err_msg;
-} php_cairo_ft_error;
-
+extern cairo_ft_font_face_object *cairo_ft_font_face_fetch_object(zend_object *object);
+#define Z_CAIRO_FT_FONT_FACE_P(zv) cairo_ft_font_face_fetch_object(Z_OBJ_P(zv))
+extern cairo_font_face_t *cairo_ft_font_face_object_get_font_face(zval *zv);
 extern const php_cairo_ft_error php_cairo_ft_errors[];
 
 /* Helper for getting FreeType error strings */
