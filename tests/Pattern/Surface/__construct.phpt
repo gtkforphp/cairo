@@ -1,44 +1,46 @@
 --TEST--
-new CairoSurfacePattern [ __construct method ]
+Cairo\Pattern\Surface->__construct()
+--EXTENSIONS--
+eos_datastructures
 --SKIPIF--
 <?php
-if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+include __DIR__ . '/../skipif.inc';
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+use Cairo\Surface\Image;
+use Cairo\Pattern\Surface;
+
+$surface = new Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$pattern = new CairoSurfacePattern($surface);
+$pattern = new Surface($surface);
 var_dump($pattern);
 
 /* Total number of args needed = 1 */
 try {
-    new CairoSurfacePattern();
-    trigger_error('CairoSurfacePattern with no args');
-} catch (CairoException $e) {
+    new Surface();
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 try {
-    new CairoSurfacePattern($surface, 1);
-    trigger_error('CairoSurfacePattern with too many args');
-} catch (CairoException $e) {
+    new Surface($surface, 1);
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
-/* arg must be instanceof CairoSurface */
+/* arg must be instanceof Cairo\Surface */
 try {
-    new CairoSurfacePattern(1);
-    trigger_error('Arg 1 must be CairoSurface');
-} catch (CairoException $e) {
+    new Surface(1);
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoSurfacePattern)#%d (0) {
+object(Cairo\Pattern\Surface)#%d (0) {
 }
-CairoSurfacePattern::__construct() expects exactly 1 parameter, 0 given
-CairoSurfacePattern::__construct() expects exactly 1 parameter, 2 given
-CairoSurfacePattern::__construct() expects parameter 1 to be CairoSurface, integer given
+Cairo\Pattern\Surface::__construct() expects exactly 1 parameter, 0 given
+Cairo\Pattern\Surface::__construct() expects exactly 1 parameter, 2 given
+Argument 1 passed to Cairo\Pattern\Surface::__construct() must be an instance of Cairo\Surface, integer given

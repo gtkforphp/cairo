@@ -1,5 +1,5 @@
 --TEST--
-new Cairo\Pattern\Mesh [__construct() method ]
+Cairo\Pattern\Mesh->__construct()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

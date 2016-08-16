@@ -1,34 +1,48 @@
 --TEST--
-CairoSurfacePattern->getExtend() method
+Cairo\Pattern\Surface->getExtend()
 --SKIPIF--
 <?php
-if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+include __DIR__ . '/../skipif.inc';
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$pattern = new CairoSurfacePattern($surface);
+$pattern = new Cairo\Pattern\Surface($surface);
 var_dump($pattern);
 
 $extend = $pattern->getExtend();
 var_dump($extend);
-var_dump($extend == CairoExtend::NONE);
+var_dump($extend == Cairo\Extend::NONE);
 
 /* Total number of args needed = 0 */
 try {
     $pattern->getExtend(1);
     trigger_error('getExtend with too many args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoSurfacePattern)#%d (0) {
+object(Cairo\Pattern\Surface)#%d (0) {
 }
-int(0)
+object(Cairo\Extend)#%d (2) {
+  ["__elements"]=>
+  array(4) {
+    ["NONE"]=>
+    int(0)
+    ["REPEAT"]=>
+    int(1)
+    ["REFLECT"]=>
+    int(2)
+    ["PAD"]=>
+    int(3)
+  }
+  ["__value"]=>
+  int(0)
+}
 bool(true)
-CairoSurfacePattern::getExtend() expects exactly 0 parameters, 1 given
+Cairo\Pattern::getExtend() expects exactly 0 parameters, 1 given

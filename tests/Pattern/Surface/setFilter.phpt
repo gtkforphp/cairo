@@ -1,34 +1,36 @@
 --TEST--
-CairoSurfacePattern->setFilter() method
+Cairo\Pattern->setFilter() method [using Surface]
 --SKIPIF--
 <?php
-if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+include __DIR__ . '/../skipif.inc';
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$pattern = new CairoSurfacePattern($surface);
+$pattern = new Cairo\Pattern\Surface($surface);
 var_dump($pattern);
 
-$pattern->setFilter(CairoFilter::NEAREST);
-
+$pattern->setFilter(Cairo\Filter::NEAREST);
 $filter = $pattern->getFilter();
-var_dump($filter);
-var_dump($filter == CairoFilter::NEAREST);
+var_dump($filter == Cairo\Filter::NEAREST);
+
+$pattern->setFilter(new Cairo\Filter('FAST'));
+$filter = $pattern->getFilter();
+var_dump($filter == Cairo\Filter::FAST);
 
 /* Total number of args needed = 1 */
 try {
     $pattern->setFilter();
     trigger_error('setFilter with no args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 try {
     $pattern->setFilter(1, 1);
     trigger_error('setFilter with too many args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -36,17 +38,26 @@ try {
 try {
     $pattern->setFilter(array());
     trigger_error('Arg 1 must be int');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
+    echo $e->getMessage(), PHP_EOL;
+}
+
+/* int must be in enum */
+try {
+    $pattern->setFilter(999);
+    trigger_error('Arg 1 must be int');
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoSurfacePattern)#%d (0) {
+object(Cairo\Pattern\Surface)#%d (0) {
 }
-int(3)
 bool(true)
-CairoSurfacePattern::setFilter() expects exactly 1 parameter, 0 given
-CairoSurfacePattern::setFilter() expects exactly 1 parameter, 2 given
-CairoSurfacePattern::setFilter() expects parameter 1 to be long, array given
+bool(true)
+Cairo\Pattern::setFilter() expects exactly 1 parameter, 0 given
+Cairo\Pattern::setFilter() expects exactly 1 parameter, 2 given
+Cairo\Pattern::setFilter() expects parameter 1 to be integer, array given
+Value 999 provided is not a const in enum Cairo\Filter

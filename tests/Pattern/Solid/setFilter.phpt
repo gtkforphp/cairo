@@ -13,7 +13,6 @@ use Cairo\Pattern\Solid;
 $pattern = new Solid(1, 1, 1);
 
 $pattern->setFilter(Cairo\Filter::GOOD);
-
 $filter = $pattern->getFilter();
 var_dump($filter == Cairo\Filter::GOOD);
 
