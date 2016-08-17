@@ -140,20 +140,17 @@ static void cairo_font_face_free_obj(zend_object *object)
             return;
     }
 
-    if (intern->font_face) {
+    if(intern->font_face /*&& cairo_font_face_get_reference_count(intern->font_face) > 0 */ ){
             cairo_font_face_destroy(intern->font_face);
-            
-    // from ft-font-face
-//    if (intern->font_face && cairo_font_face_get_reference_count(intern->font_face) > 0){
-//        cairo_font_face_destroy(intern->font_face);
-//    }
-            
-            // from win32-font-face...
-//            if (cairo_font_face_get_reference_count(intern->font_face) == 0){
-//                efree(font_face);
-//            }
     }
     intern->font_face = NULL;
+    
+    if(intern->closure != NULL) {
+        if(intern->closure->owned_stream) {
+            php_stream_close(intern->closure->stream);
+        }
+        efree(intern->closure);
+    }
 
     zend_object_std_dtor(&intern->std);
 }
@@ -164,6 +161,7 @@ static zend_object* cairo_font_face_obj_ctor(zend_class_entry *ce, cairo_font_fa
 	cairo_font_face_object *object = ecalloc(1, sizeof(cairo_font_face_object) + zend_object_properties_size(ce));
         
         object->font_face = NULL;
+        object->closure = NULL;
         
 	zend_object_std_init(&object->std, ce);
 	object->std.handlers = &cairo_font_face_object_handlers;

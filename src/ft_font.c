@@ -34,42 +34,6 @@ const php_cairo_ft_error php_cairo_ft_errors[] =
 
 zend_class_entry *ce_cairo_ftfont;
 
-static zend_object_handlers cairo_ft_font_face_object_handlers; 
-
-const char* php_cairo_get_ft_error(int error) {
-
-	const php_cairo_ft_error *current_error = php_cairo_ft_errors;
-
-	while (current_error->err_msg != NULL) {
-		if (current_error->err_code == error) {
-			return current_error->err_msg;
-		}
-		current_error++;
-	}
-	return NULL;
-}
-
-
-cairo_ft_font_face_object *cairo_ft_font_face_fetch_object(zend_object *object)
-{
-    return (cairo_ft_font_face_object *) ((char*)(object) - XtOffsetOf(cairo_ft_font_face_object, std));
-}
-
-//#define Z_CAIRO_FT_FONT_FACE_P(zv) cairo_ft_font_face_fetch_object(Z_OBJ_P(zv))
-
-//static inline cairo_ft_font_face_object *cairo_ft_font_face_object_get(zval *zv)
-//{
-//	cairo_ft_font_face_object *object = Z_CAIRO_FT_FONT_FACE_P(zv);
-//	if(object->font_face == NULL) {
-//		zend_throw_exception_ex(ce_cairo_exception, 0,
-//			"Internal ft_font_face object missing in %s, you must call parent::__construct in extended classes",
-//			ZSTR_VAL(Z_OBJCE_P(zv)->name));
-//		return NULL;
-//	}
-//	return object;
-//}
-
-
 /* Functions for stream handling */
 static unsigned long php_cairo_ft_read_func(FT_Stream stream, unsigned long offset, unsigned char* buffer, unsigned long count) {
 	stream_closure *closure;
@@ -94,7 +58,7 @@ static void cairo_user_data_callback_ft_free(pecl_ft_container *ft_container) {
     pefree(ft_container, 1);
 }
 
-static zend_bool php_cairo_create_ft_font_face(pecl_ft_container *ft_container, cairo_ft_font_face_object *font_face_object, php_stream *stream, zend_bool owned_stream, int load_flags, zend_bool throw_exceptions) 
+static zend_bool php_cairo_create_ft_font_face(pecl_ft_container *ft_container, cairo_font_face_object *font_face_object, php_stream *stream, zend_bool owned_stream, int load_flags, zend_bool throw_exceptions) 
 {
 	FT_Stream ft_stream;
 	stream_closure *closure;
@@ -114,8 +78,7 @@ static zend_bool php_cairo_create_ft_font_face(pecl_ft_container *ft_container, 
 	closure = ecalloc(1, sizeof(stream_closure));
 	closure->stream = stream;
 	closure->owned_stream = owned_stream;
-
-
+        
 	ft_stream = pecalloc(1, sizeof(*ft_stream), 1);
 	ft_stream->descriptor.pointer = (void *)closure;
 	ft_stream->pos = php_stream_tell(stream);
@@ -175,7 +138,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	zend_long load_flags = 0;
 	int error = 0;
 	zval *stream_zval = NULL;
-	cairo_ft_font_face_object *font_face_object;
+	cairo_font_face_object *font_face_object;
         pecl_ft_container *ft_container;
 
 	php_stream *stream;
@@ -206,8 +169,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 		return;
 	}
 
-	//font_face_object = (cairo_ft_font_face_object *)zend_object_store_get_object(getThis());
-        font_face_object = Z_CAIRO_FT_FONT_FACE_P(getThis());
+        font_face_object = Z_CAIRO_FONT_FACE_P(getThis());
         
         if(!font_face_object) {
             return;
@@ -236,114 +198,6 @@ PHP_METHOD(CairoFtFontFace, __construct)
 
 /* }}} */
 
-/* {{{ proto long Cairo\FtFontFace->getStatus()
-       Returns the current integer status of the CairoFontFace */
-PHP_METHOD(CairoFtFontFace, getStatus)
-{
-	cairo_ft_font_face_object *font_face_object;
-
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
-            return;
-        }
-
-        font_face_object = Z_CAIRO_FT_FONT_FACE_P(getThis());
-	if(!font_face_object) {
-            return;
-        }
-        
-        object_init_ex(return_value, ce_cairo_status);
-        php_eos_datastructures_set_enum_value(return_value, cairo_font_face_status(font_face_object->font_face));
-}
-/* }}} */
-
-/* {{{ proto long Cairo\FtFontFace->getType()
-       Returns the current integer type of the CairoFontFace backend */
-PHP_METHOD(CairoFtFontFace, getType)
-{
-	cairo_ft_font_face_object *font_face_object;
-
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
-            return;
-        }
-
-        font_face_object = Z_CAIRO_FT_FONT_FACE_P(getThis());
-	if(!font_face_object) {
-            return;
-        }
-        
-        object_init_ex(return_value, ce_cairo_fonttype);
-        php_eos_datastructures_set_enum_value(return_value, cairo_font_face_get_type(font_face_object->font_face));
-}
-/* }}} */
-
-/* ----------------------------------------------------------------
-    Cairo\FtFontFace C API
-------------------------------------------------------------------*/
-
-/* {{{ */
-cairo_font_face_t *cairo_ft_font_face_object_get_font_face(zval *zv)
-{
-	cairo_ft_font_face_object *font_face_object = Z_CAIRO_FT_FONT_FACE_P(zv);
-
-	return font_face_object->font_face;
-}
-/* }}} */
-
-/* ----------------------------------------------------------------
-    Cairo\FtFontFace Object management
-------------------------------------------------------------------*/
-
-/* {{{ */
-static void cairo_ft_font_face_free_obj(zend_object *object)
-{
-    cairo_ft_font_face_object *intern = cairo_ft_font_face_fetch_object(object);
-
-    if(!intern) {
-            return;
-    }
-
-    if(intern->font_face /*&& cairo_font_face_get_reference_count(intern->font_face) > 0 */ ){
-            cairo_font_face_destroy(intern->font_face);
-    }
-    intern->font_face = NULL;
-    
-    if(intern->closure != NULL) {
-        if(intern->closure->owned_stream) {
-            php_stream_close(intern->closure->stream);
-        }
-        efree(intern->closure);
-    }
-
-    zend_object_std_dtor(&intern->std);
-}
-
-/* {{{ */
-static zend_object* cairo_ft_font_face_obj_ctor(zend_class_entry *ce, cairo_ft_font_face_object **intern)
-{
-	cairo_ft_font_face_object *object = ecalloc(1, sizeof(cairo_ft_font_face_object) + zend_object_properties_size(ce));
-        
-        object->font_face = NULL;
-        object->closure = NULL;
-        
-	zend_object_std_init(&object->std, ce);
-	object->std.handlers = &cairo_ft_font_face_object_handlers;
-	*intern = object;
-
-	return &object->std;
-}
-/* }}} */
-
-/* {{{ */
-static zend_object* cairo_ft_font_face_create_object(zend_class_entry *ce)
-{
-	cairo_ft_font_face_object *ft_font_face_obj = NULL;
-	zend_object *return_value = cairo_ft_font_face_obj_ctor(ce, &ft_font_face_obj);
-
-	object_properties_init(&(ft_font_face_obj->std), ce);
-	return return_value;
-}
-/* }}} */
-
 /* ----------------------------------------------------------------
     Cairo\FtFontFace Definition and registration
 ------------------------------------------------------------------*/
@@ -351,8 +205,6 @@ static zend_object* cairo_ft_font_face_create_object(zend_class_entry *ce)
 /* {{{ cairo_ft_font_methods */
 const zend_function_entry cairo_ft_font_methods[] = {
 	PHP_ME(CairoFtFontFace, __construct, CairoFtFontFace_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-        PHP_ME(CairoFtFontFace, getStatus, NULL, ZEND_ACC_PUBLIC)
-        PHP_ME(CairoFtFontFace, getType, NULL, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 /* }}} */
@@ -362,16 +214,7 @@ PHP_MINIT_FUNCTION(cairo_ft_font)
 {
 	zend_class_entry ft_font_face_ce;
 
-        memcpy(&cairo_ft_font_face_object_handlers,
-                    zend_get_std_object_handlers(),
-                    sizeof(zend_object_handlers));
-        
-        /* FontOptions */
-        cairo_ft_font_face_object_handlers.offset = XtOffsetOf(cairo_ft_font_face_object, std);
-        cairo_ft_font_face_object_handlers.free_obj = cairo_ft_font_face_free_obj;
-        
         INIT_NS_CLASS_ENTRY(ft_font_face_ce, CAIRO_NAMESPACE, ZEND_NS_NAME("FontFace", "Ft"), cairo_ft_font_methods);
-        ft_font_face_ce.create_object = cairo_ft_font_face_create_object;
         ce_cairo_ftfont = zend_register_internal_class_ex(&ft_font_face_ce, ce_cairo_fontface);
 
 	return SUCCESS;
