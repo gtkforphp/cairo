@@ -142,6 +142,16 @@ static void cairo_font_face_free_obj(zend_object *object)
 
     if (intern->font_face) {
             cairo_font_face_destroy(intern->font_face);
+            
+    // from ft-font-face
+//    if (intern->font_face && cairo_font_face_get_reference_count(intern->font_face) > 0){
+//        cairo_font_face_destroy(intern->font_face);
+//    }
+            
+            // from win32-font-face...
+//            if (cairo_font_face_get_reference_count(intern->font_face) == 0){
+//                efree(font_face);
+//            }
     }
     intern->font_face = NULL;
 
@@ -174,6 +184,26 @@ zend_object* cairo_font_face_create_object(zend_class_entry *ce)
 }
 /* }}} */
 
+/* {{{ */
+static zend_object* cairo_font_face_clone_obj(zval *old_zval) 
+{
+	cairo_font_face_object *new_font, *old_font;
+	old_font = Z_CAIRO_FONT_FACE_P(old_zval);
+        
+        zend_object *return_value = cairo_font_face_obj_ctor(Z_OBJCE_P(old_zval), &new_font);
+        zend_objects_clone_members(&new_font->std, &old_font->std);
+        
+	/* Fonts are created and then never changed, with the exception of
+	 * the set_user_data stuff. That means we don't have to do any
+	 * real cloning of the font -- just increase it's ref count and
+	 * point the new font to the old one. Simples.
+	 */
+	cairo_font_face_reference(old_font->font_face);
+	new_font->font_face = old_font->font_face;
+	
+	return return_value;
+}
+/* }}} */
 
 /* ----------------------------------------------------------------
     Cairo\FontOptions Definition and registration
@@ -200,6 +230,7 @@ PHP_MINIT_FUNCTION(cairo_font_face)
         /* FontFace */
         cairo_font_face_object_handlers.offset = XtOffsetOf(cairo_font_face_object, std);
         cairo_font_face_object_handlers.free_obj = cairo_font_face_free_obj;
+        cairo_font_face_object_handlers.clone_obj = cairo_font_face_clone_obj;
         
 	INIT_NS_CLASS_ENTRY(fontface_ce, CAIRO_NAMESPACE, "FontFace", cairo_font_face_methods);
         ce_cairo_fontface = zend_register_internal_class(&fontface_ce);

@@ -302,7 +302,7 @@ static void cairo_ft_font_face_free_obj(zend_object *object)
             return;
     }
 
-    if(intern->font_face && cairo_font_face_get_reference_count(intern->font_face) > 0){
+    if(intern->font_face /*&& cairo_font_face_get_reference_count(intern->font_face) > 0 */ ){
             cairo_font_face_destroy(intern->font_face);
     }
     intern->font_face = NULL;
@@ -343,6 +343,10 @@ static zend_object* cairo_ft_font_face_create_object(zend_class_entry *ce)
 	return return_value;
 }
 /* }}} */
+
+/* ----------------------------------------------------------------
+    Cairo\FtFontFace Definition and registration
+------------------------------------------------------------------*/
 
 /* {{{ cairo_ft_font_methods */
 const zend_function_entry cairo_ft_font_methods[] = {

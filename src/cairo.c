@@ -75,16 +75,22 @@ PHP_MINIT_FUNCTION(cairo)
 
 	PHP_MINIT(cairo_pattern)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_rectangle)(INIT_FUNC_ARGS_PASSTHRU);
-
 	PHP_MINIT(cairo_matrix)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_exception)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(cairo_region)(INIT_FUNC_ARGS_PASSTHRU);
-        
         PHP_MINIT(cairo_font_face)(INIT_FUNC_ARGS_PASSTHRU);
         PHP_MINIT(cairo_font)(INIT_FUNC_ARGS_PASSTHRU);
         PHP_MINIT(cairo_font_options)(INIT_FUNC_ARGS_PASSTHRU);
         PHP_MINIT(cairo_scaled_font)(INIT_FUNC_ARGS_PASSTHRU);
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
         PHP_MINIT(cairo_ft_font)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+#if defined(CAIRO_HAS_QUARTZ_FONT)
+        PHP_MINIT(cairo_quartz_font)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
+#if defined(CAIRO_HAS_WIN32_FONT)
+        PHP_MINIT(cairo_win32_font)(INIT_FUNC_ARGS_PASSTHRU);
+#endif
         PHP_MINIT(cairo_surface)(INIT_FUNC_ARGS_PASSTHRU);
         PHP_MINIT(cairo_image_surface)(INIT_FUNC_ARGS_PASSTHRU);
         PHP_MINIT(cairo_sub_surface)(INIT_FUNC_ARGS_PASSTHRU);

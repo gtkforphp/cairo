@@ -22,6 +22,8 @@ if test "$PHP_CAIRO" != "no"; then
     src/font_options.c \
     src/scaled_font.c \
     src/ft_font.c \
+    src/quartz_font.c \
+    src/win32_font.c \
     src/surface.c \
     src/image_surface.c \
     src/sub_surface.c \

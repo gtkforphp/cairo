@@ -218,7 +218,15 @@ PHP_MINIT_FUNCTION(cairo_font_face);
 PHP_MINIT_FUNCTION(cairo_font);
 PHP_MINIT_FUNCTION(cairo_font_options);
 PHP_MINIT_FUNCTION(cairo_scaled_font);
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 PHP_MINIT_FUNCTION(cairo_ft_font);
+#endif
+#if defined(CAIRO_HAS_QUARTZ_FONT)
+PHP_MINIT_FUNCTION(cairo_quartz_font);
+#endif
+#if defined(CAIRO_HAS_WIN32_FONT)
+PHP_MINIT_FUNCTION(cairo_win32_font);
+#endif
 PHP_MINIT_FUNCTION(cairo_surface);
 PHP_MINIT_FUNCTION(cairo_image_surface);
 PHP_MINIT_FUNCTION(cairo_sub_surface);
