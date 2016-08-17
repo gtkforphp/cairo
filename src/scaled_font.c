@@ -155,9 +155,6 @@ PHP_METHOD(CairoScaledFont, __construct)
 {
 	zval *font_face_zval, *matrix_zval, *ctm_zval, *font_options_zval;
 	cairo_scaled_font_object *scaled_font_object;
-//	cairo_font_face_object *font_face_object;
-//	cairo_matrix_object *matrix_object, *ctm_object;
-//	cairo_font_options_object *font_options_object;
         
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/z/z/z/", 
                 &font_face_zval,
@@ -166,18 +163,12 @@ PHP_METHOD(CairoScaledFont, __construct)
                 &font_options_zval) == FAILURE) {
 		return;
 	}
-        
-//	font_face_object = Z_CAIRO_FONT_FACE_P(font_face_zval);
-//	matrix_object = Z_CAIRO_MATRIX_P(matrix_zval);
-//	ctm_object = Z_CAIRO_MATRIX_P(ctm_zval);
-//	font_options_object = Z_CAIRO_FONT_OPTIONS_P(font_options_zval);
 	
         scaled_font_object = Z_CAIRO_SCALED_FONT_P(getThis());
 	if(!scaled_font_object) {
             return;
         }
         
-//        scaled_font_object->scaled_font = cairo_scaled_font_create(font_face_object->font_face, matrix_object->matrix, ctm_object->matrix, font_options_object->font_options);
 	scaled_font_object->scaled_font = cairo_scaled_font_create(
                 cairo_font_face_object_get_font_face(font_face_zval), 
                 cairo_matrix_object_get_matrix(matrix_zval), 
@@ -468,7 +459,7 @@ PHP_METHOD(CairoScaledFont, getCtm)
 	}
 
 	matrix_object = Z_CAIRO_MATRIX_P(return_value);
-	matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
+	//matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
 	cairo_scaled_font_get_ctm(scaled_font_object->scaled_font, matrix_object->matrix);
 }
 /* }}} */
