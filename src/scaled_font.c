@@ -435,7 +435,7 @@ PHP_METHOD(CairoScaledFont, getFontMatrix)
 	}
 
 	matrix_object = Z_CAIRO_MATRIX_P(return_value);
-	matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
+	//matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
 	cairo_scaled_font_get_font_matrix(scaled_font_object->scaled_font, matrix_object->matrix);
 }
 /* }}} */
