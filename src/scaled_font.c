@@ -237,14 +237,15 @@ PHP_METHOD(CairoScaledFont, getExtents)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO(CairoScaledFont_textExtents_args, ZEND_SEND_BY_VAL)
+ZEND_BEGIN_ARG_INFO(CairoScaledFont_getTextExtents_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, text)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto array CairoScaledFont->textExtents(string text)
+/* {{{ proto array CairoScaledFont->getTextExtents(string text)
+       previous method-name was textExtents()
        Gets the extents for a string of UTF8 text.
 */
-PHP_METHOD(CairoScaledFont, textExtents)
+PHP_METHOD(CairoScaledFont, getTextExtents)
 {
 	cairo_scaled_font_object *scaled_font_object;
 	char *text, *cairo_text;
@@ -274,13 +275,14 @@ PHP_METHOD(CairoScaledFont, textExtents)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO(CairoScaledFont_glyphExtents_args, ZEND_SEND_BY_VAL)
+ZEND_BEGIN_ARG_INFO(CairoScaledFont_getGlyphExtents_args, ZEND_SEND_BY_VAL)
 	ZEND_ARG_INFO(0, glyphs)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto array CairoScaledFont->glyphExtents(array glyphs)
+/* {{{ proto array CairoScaledFont->getGlyphExtents(array glyphs)
+       previous method-name was glyphExtents
        Gets the extents for an array of glyphs. The extents describe a user-space rectangle that encloses the "inked" portion of the glyphs. */
-PHP_METHOD(CairoScaledFont, glyphExtents)
+PHP_METHOD(CairoScaledFont, getGlyphExtents)
 {
 	cairo_scaled_font_object *scaled_font_object;
 	const cairo_glyph_t *glyphs = NULL;
@@ -519,8 +521,8 @@ const zend_function_entry cairo_scaled_font_methods[] = {
 	PHP_ME(CairoScaledFont, __construct, CairoScaledFont___construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(CairoScaledFont, getStatus, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoScaledFont, getExtents, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(CairoScaledFont, textExtents, CairoScaledFont_textExtents_args, ZEND_ACC_PUBLIC)
-	PHP_ME(CairoScaledFont, glyphExtents, CairoScaledFont_glyphExtents_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoScaledFont, getTextExtents, CairoScaledFont_getTextExtents_args, ZEND_ACC_PUBLIC)
+	PHP_ME(CairoScaledFont, getGlyphExtents, CairoScaledFont_getGlyphExtents_args, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoScaledFont, getFontFace, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoScaledFont, getFontOptions, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(CairoScaledFont, getFontMatrix , NULL, ZEND_ACC_PUBLIC)
