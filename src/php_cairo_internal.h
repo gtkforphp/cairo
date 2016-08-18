@@ -171,16 +171,6 @@ typedef struct _php_cairo_ft_error {
 	const char *err_msg;
 } php_cairo_ft_error;
 
-//typedef struct _cairo_ft_font_face_object {
-//	cairo_font_face_t *font_face;
-//        stream_closure *closure;
-//	cairo_user_data_key_t key;
-//        zend_object std;
-//} cairo_ft_font_face_object;
-
-//extern cairo_ft_font_face_object *cairo_ft_font_face_fetch_object(zend_object *object);
-//#define Z_CAIRO_FT_FONT_FACE_P(zv) cairo_ft_font_face_fetch_object(Z_OBJ_P(zv))
-//extern cairo_font_face_t *cairo_ft_font_face_object_get_font_face(zval *zv);
 extern const php_cairo_ft_error php_cairo_ft_errors[];
 
 /* Helper for getting FreeType error strings */
