@@ -51,7 +51,7 @@ PHP_METHOD(CairoSvgSurface, __construct)
 	zend_bool owned_stream = 0;
 	cairo_surface_object *surface_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &stream_zval, &width, &height) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "zdd", &stream_zval, &width, &height) == FAILURE) {
 		return;
 	}
 
@@ -71,11 +71,11 @@ PHP_METHOD(CairoSvgSurface, __construct)
 		} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE) {
 			php_stream_from_zval(stream, stream_zval);	
 		} else {
-			zend_throw_exception(ce_cairo_exception, "CairoSvgSurface::__construct() expects parameter 1 to be null, a string, or a stream resource", 0 TSRMLS_CC);
+			zend_throw_exception(ce_cairo_exception, "CairoSvgSurface::__construct() expects parameter 1 to be null, a string, or a stream resource", 0);
 			return;
 		}
 
-		/* Pack TSRMLS info and stream into struct */
+		/* Pack stream into struct */
 		closure = ecalloc(1, sizeof(stream_closure));
 		closure->stream = stream;
 		closure->owned_stream = owned_stream;
@@ -103,7 +103,7 @@ PHP_METHOD(CairoSvgSurface, restrictToVersion)
 		return;
 	}
 
-	surface_object = Z_CAIRO_SURFACE_P(getThis());
+	surface_object = cairo_surface_object_get(getThis());
 	if(!surface_object) {
             return;
         }

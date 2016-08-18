@@ -520,7 +520,7 @@ PHP_METHOD(CairoSurface, writeToPng)
 		return;
 	}
 
-	/* Pack TSRMLS info and stream into struct */
+	/* Pack stream into struct */
 	closure = ecalloc(1, sizeof(stream_closure));
 	closure->stream = stream;
 	closure->owned_stream = owned_stream;

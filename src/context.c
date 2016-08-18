@@ -363,7 +363,7 @@ PHP_METHOD(CairoContext, popGroupToSource)
 /* }}} */
 
 /* {{{ proto CairoSurface object CairoContext->getGroupSurface()
-   renamed from getGroupTarget()
+   previous method-name was getGroupTarget()
    Gets the current destination surface for the context */
 PHP_METHOD(CairoContext, getGroupSurface)
 {
@@ -453,7 +453,7 @@ ZEND_BEGIN_ARG_INFO_EX(CairoContext_setSurface_args, ZEND_SEND_BY_VAL, ZEND_RETU
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setSurface(object surface [,float x, float y])
-       renamed from setSourceSurface()
+       previous method-name was setSourceSurface()
        This is a convenience function for creating a pattern from surface and setting it as the source
    */
 PHP_METHOD(CairoContext, setSurface)
@@ -497,7 +497,7 @@ PHP_METHOD(CairoContext, setSurface)
 
 
 /* {{{ proto CairoSurface object CairoContext->getSurface
-   renamed from getTarget()
+   previous method-name was getTarget()
    Gets the target surface for the cairo context that was set on creation */
 PHP_METHOD(CairoContext, getSurface)
 {
@@ -547,7 +547,7 @@ ZEND_BEGIN_ARG_INFO(CairoContext_setPattern_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void CairoContext->setPattern(CairoPattern object)
-   renamed from setSource()
+   previous method-name was setSource()
    Sets the source pattern within context to source. 
    This pattern will then be used for any subsequent drawing operation until a new source pattern is set. */
 PHP_METHOD(CairoContext, setPattern)
@@ -582,7 +582,7 @@ PHP_METHOD(CairoContext, setPattern)
 /* }}} */
 
 /* {{{ proto CairoPattern object CairoContext->getPattern()
-   renamed from getSource()
+   previous method-name was getSource()
    Gets the current source pattern for the context. */
 PHP_METHOD(CairoContext, getPattern)
 {

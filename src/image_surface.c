@@ -44,7 +44,7 @@ PHP_METHOD(CairoImageSurface, __construct)
 	zend_long format, width, height;
 	cairo_surface_object *surface_object;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &format, &width, &height) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "lll", &format, &width, &height) == FAILURE) {
 		return;
 	}
 
@@ -74,7 +74,7 @@ PHP_METHOD(CairoImageSurface, createForData)
 	zend_long format, width, height, stride = -1;
 	cairo_surface_object *surface_object;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "slll", &data, &data_len, &format, &width, &height) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "slll", &data, &data_len, &format, &width, &height) == FAILURE) {
 		return;
 	}
 	
@@ -139,7 +139,7 @@ PHP_METHOD(CairoImageSurface, getData)
             return;
         }
 
-        surface_object = Z_CAIRO_SURFACE_P(getThis());
+        surface_object = cairo_surface_object_get(getThis());
 	if(!surface_object) {
             return;
         }
@@ -164,7 +164,7 @@ PHP_METHOD(CairoImageSurface, getFormat)
             return;
         }
 
-        surface_object = Z_CAIRO_SURFACE_P(getThis());
+        surface_object = cairo_surface_object_get(getThis());
 	if(!surface_object) {
             return;
         }
@@ -186,7 +186,7 @@ PHP_METHOD(CairoImageSurface, getWidth)
             return;
         }
 
-        surface_object = Z_CAIRO_SURFACE_P(getThis());
+        surface_object = cairo_surface_object_get(getThis());
 	if(!surface_object) {
             return;
         }
@@ -207,7 +207,7 @@ PHP_METHOD(CairoImageSurface, getHeight)
             return;
         }
 
-        surface_object = Z_CAIRO_SURFACE_P(getThis());
+        surface_object = cairo_surface_object_get(getThis());
 	if(!surface_object) {
             return;
         }
@@ -228,7 +228,7 @@ PHP_METHOD(CairoImageSurface, getStride)
             return;
         }
 
-        surface_object = Z_CAIRO_SURFACE_P(getThis());
+        surface_object = cairo_surface_object_get(getThis());
 	if(!surface_object) {
             return;
         }
@@ -251,7 +251,7 @@ PHP_METHOD(CairoFormat, strideForWidth)
 {
 	zend_long format, width;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &format, &width) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "ll", &format, &width) == FAILURE) {
 		return;
 	}
         
@@ -275,7 +275,7 @@ PHP_METHOD(CairoImageSurface, createFromPng)
 	zend_bool owned_stream = 0;
 	php_stream *stream = NULL;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "z", &stream_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &stream_zval) == FAILURE) {
 		return;
 	}
 
@@ -297,7 +297,7 @@ PHP_METHOD(CairoImageSurface, createFromPng)
 		return;
 	}
 
-	// Pack TSRMLS info and stream into struct
+	// Pack stream into struct
 	closure = ecalloc(1, sizeof(stream_closure));
 	closure->stream = stream;
 	closure->owned_stream = owned_stream;

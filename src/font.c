@@ -49,7 +49,7 @@ PHP_METHOD(CairoToyFontFace, __construct)
 	zend_long slant = CAIRO_FONT_SLANT_NORMAL, weight = CAIRO_FONT_WEIGHT_NORMAL;
 	cairo_font_face_object *fontface_object;
 
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", &family, &family_len, &slant, &weight) == FAILURE) {
+	if(zend_parse_parameters_throw(ZEND_NUM_ARGS(), "s|ll", &family, &family_len, &slant, &weight) == FAILURE) {
             return;
 	}
         

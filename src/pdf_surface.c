@@ -70,11 +70,11 @@ PHP_METHOD(CairoPdfSurface, __construct)
 		} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 			php_stream_from_zval(stream, stream_zval);	
 		} else {
-			zend_throw_exception(ce_cairo_exception, "Cairo\\Surface\\Pdf::__construct() expects parameter 1 to be null, a string, or a stream resource", 0 TSRMLS_CC);
+			zend_throw_exception(ce_cairo_exception, "Cairo\\Surface\\Pdf::__construct() expects parameter 1 to be null, a string, or a stream resource", 0);
 			return;
 		}
 
-		/* Pack TSRMLS info and stream into struct*/
+		/* Pack stream into struct*/
 		closure = ecalloc(1, sizeof(stream_closure));
 		closure->stream = stream;
 		closure->owned_stream = owned_stream;
@@ -83,7 +83,7 @@ PHP_METHOD(CairoPdfSurface, __construct)
 		surface_object->surface = cairo_pdf_surface_create_for_stream(php_cairo_write_func, (void *)closure, width, height);
 	}
 
-	php_cairo_throw_exception(cairo_surface_status(surface_object->surface) TSRMLS_CC);
+	php_cairo_throw_exception(cairo_surface_status(surface_object->surface));
 }
 /* }}} */
 

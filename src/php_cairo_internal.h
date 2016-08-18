@@ -174,7 +174,7 @@ typedef struct _php_cairo_ft_error {
 extern const php_cairo_ft_error php_cairo_ft_errors[];
 
 /* Helper for getting FreeType error strings */
-const char* php_cairo_get_ft_error(int error TSRMLS_DC);
+const char* php_cairo_get_ft_error(int error);
 
 #undef __FTERRORS_H__
 #define FT_ERRORDEF( e, v, s )  { e, s },
