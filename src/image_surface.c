@@ -133,7 +133,7 @@ PHP_METHOD(CairoImageSurface, getData)
 {
 	cairo_surface_object *surface_object;
 	unsigned char *data;	
-	long height, stride;
+	zend_long height, stride;
 
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
             return;
@@ -145,7 +145,7 @@ PHP_METHOD(CairoImageSurface, getData)
         }
         
 	php_cairo_throw_exception(cairo_surface_status(surface_object->surface));
-
+        
 	data = cairo_image_surface_get_data(surface_object->surface);
 	height = cairo_image_surface_get_height(surface_object->surface);
 	stride = cairo_image_surface_get_stride(surface_object->surface);
