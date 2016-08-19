@@ -81,6 +81,7 @@ typedef struct _cairo_matrix_object {
 
 #define Z_CAIRO_MATRIX_P(zv) cairo_matrix_fetch_object(Z_OBJ_P(zv))
 extern cairo_matrix_object *cairo_matrix_fetch_object(zend_object *object);
+extern cairo_matrix_object *cairo_matrix_object_get(zval *zv);
 cairo_matrix_t *cairo_matrix_object_get_matrix(zval *zv);
 
 /* FontOptions */
