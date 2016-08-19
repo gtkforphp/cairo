@@ -186,7 +186,7 @@ PHP_METHOD(CairoContext, __construct)
 	cairo_context_object *context_object;
 	cairo_surface_object *surface_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &surface_zval) == FAILURE) {
+        if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "o", &surface_zval) == FAILURE) {
 		return;
 	}
         
@@ -463,7 +463,7 @@ PHP_METHOD(CairoContext, setSurface)
 	cairo_surface_object *surface_object;
 	double x = 0.0, y = 0.0;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/|dd", &surface_zval, &x, &y) == FAILURE) {
+        if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "o|dd", &surface_zval, &x, &y) == FAILURE) {
 		return;
 	}
 
@@ -488,7 +488,7 @@ PHP_METHOD(CairoContext, setSurface)
 //		Z_DELREF_P(context_object->surface);
 		context_object->surface = NULL;
 	}
-
+        
 	/* we need to be able to get this zval out later, so ref and store */
 	context_object->surface = surface_zval;
 	//Z_ADDREF_P(surface_zval);
@@ -520,25 +520,29 @@ PHP_METHOD(CairoContext, getSurface)
 
 	/* If we have a surface stored, grab that zval to use */
 	if(context_object->surface != NULL) {
+                //php_printf("context_object->surface != NULL<br\n");
 		zval_dtor(return_value);
 		*return_value = *context_object->surface;
 		zval_copy_ctor(return_value);
-//		Z_SET_REFCOUNT_P(return_value, 1);
 	/* Otherwise we spawn a new object */
 	} else {
+                //php_printf("no context_object->surface!<br\n");
 		object_init_ex(return_value, php_cairo_get_surface_ce(surface));
+                surface_object = Z_CAIRO_SURFACE_P(return_value);
+                surface_object->surface = surface;
+        	cairo_surface_reference(surface_object->surface);
 	}
 	
 	/* Get the surface_object and replace the internal surface pointer with what we fetched (should be the same) */
-	surface_object = Z_CAIRO_SURFACE_P(return_value);
-        
-	/* if there IS a value in surface, destroy it cause we're getting a new one */
-	if (surface_object->surface != NULL) {
-		cairo_surface_destroy(surface_object->surface);
-	}
-        
-	surface_object->surface = surface;
-	cairo_surface_reference(surface_object->surface);
+//	surface_object = Z_CAIRO_SURFACE_P(return_value);
+//        
+//	/* if there IS a value in surface, destroy it cause we're getting a new one */
+//	if (surface_object->surface != NULL) {
+//		cairo_surface_destroy(surface_object->surface);
+//	}
+//        
+//	surface_object->surface = surface;
+//	cairo_surface_reference(surface_object->surface);
 }
 /* }}} */
 
