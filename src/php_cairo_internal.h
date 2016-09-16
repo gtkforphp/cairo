@@ -186,7 +186,7 @@ const char* php_cairo_get_ft_error(int error);
 
 /* Context */
 typedef struct _cairo_context_object {
-	zval *surface;
+	zval surface;
 	zval *matrix;
 	zval *pattern;
 	zval *font_face;

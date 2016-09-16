@@ -101,6 +101,11 @@ static void cairo_context_free_obj(zend_object *object)
             return;
     }
 
+    if (Z_TYPE(intern->surface) != IS_NULL &&
+        !Z_ISUNDEF(intern->surface)) {
+        Z_TRY_DELREF_P(&intern->surface);
+        //ZVAL_UNDEF(&intern->surface);
+    }
 //    if(intern->surface) {
 //            Z_DELREF_P(intern->surface);
 //            intern->surface = NULL;
@@ -143,7 +148,8 @@ static zend_object* cairo_context_obj_ctor(zend_class_entry *ce, cairo_context_o
 {
 	cairo_context_object *object = ecalloc(1, sizeof(cairo_context_object) + zend_object_properties_size(ce));
         
-        object->surface = NULL;
+        //object->surface = NULL;
+        ZVAL_UNDEF(&object->surface);
 	object->matrix = NULL;
 	object->pattern = NULL;
 	object->font_face = NULL;
@@ -172,10 +178,59 @@ zend_object* cairo_context_create_object(zend_class_entry *ce)
 /* ----------------------------------------------------------------
     Cairo\Context Class API
 ------------------------------------------------------------------*/
+/*
+static void tellMeWhatYouAre(zval *arg) {
+    zval *zv;
+
+    php_printf("\nThe Element is of type: ");
+    switch (Z_TYPE_P(arg)) {
+        case IS_NULL:
+            php_printf("NULL");
+            break;
+        case IS_OBJECT:
+            php_printf("Object");
+            break;
+        case IS_REFERENCE:
+            php_printf("Reference");
+            break;
+        case IS_INDIRECT:
+            php_printf("Indirect");
+            break;
+        case IS_TRUE:
+        case IS_FALSE:
+            php_printf("Boolean: %s", Z_LVAL_P(arg) ? "TRUE" : "FALSE");
+            break;
+        case IS_LONG:
+            php_printf("Long: %ld", Z_LVAL_P(arg));
+            break;
+        case IS_DOUBLE:
+            php_printf("Double: %f", Z_DVAL_P(arg));
+            break;
+        case IS_STRING:
+            //php_printf("String: ");
+            //PHPWRITE(Z_STRVAL_P(arg), Z_STRLEN_P(arg));
+            php_printf("String: %s", Z_STRVAL_P(arg));
+            php_printf("");
+            break;
+        case IS_ARRAY:
+            php_printf("Array, with this content:\n");
+            HashTable *hash = Z_ARR_P(arg);
+
+            ZEND_HASH_FOREACH_VAL(hash, zv) {
+                tellMeWhatYouAre(zv);
+            }
+            ZEND_HASH_FOREACH_END();
+            break;
+        default:
+            php_printf("Unknown");
+    }
+    php_printf("<br>\n");
+}
+*/
 
 /* Basic Context */
 ZEND_BEGIN_ARG_INFO(CairoContext___construct_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(1, surface, Cairo\\Surface, 0)
+	ZEND_ARG_OBJ_INFO(0, surface, Cairo\\Surface, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void __construct(object surface) 
@@ -190,21 +245,31 @@ PHP_METHOD(CairoContext, __construct)
 		return;
 	}
         
-        surface_object = cairo_surface_object_get( surface_zval );
-        if(!surface_object) {
-            return;
-        }
-        
         context_object = Z_CAIRO_CONTEXT_P(getThis());
 	if (!context_object) {
             return;
         }
         
+        surface_object = cairo_surface_object_get( surface_zval );
+        if(!surface_object) {
+            return;
+        }
+        
 	context_object->context = cairo_create(surface_object->surface);
 	php_cairo_throw_exception(cairo_status(context_object->context));
-
-	/* we need to be able to get this zval out later, so ref and store */
-	context_object->surface = surface_zval;
+        
+        // we need to be able to get this zval out later, so ref and store
+//        php_printf("num references surface_zval: %ld <br>\n", Z_REFCOUNT_P(surface_zval));
+        
+        //context_object->surface = surface_zval;
+        ZVAL_COPY(&context_object->surface, surface_zval);
+        //zval_ptr_dtor(&context_object->surface);
+        
+//        php_printf("num references surface_zval after copy: %ld <br>\n", Z_REFCOUNT_P(surface_zval));
+//	php_printf("num references context_object->surface: %ld <br>\n", Z_REFCOUNT(context_object->surface));
+        
+        //Z_TRY_ADDREF_P(&context_object->surface);
+        //php_printf("num references context_object->surface after Z_TRY_ADDREF_P: %ld <br>\n", Z_REFCOUNT(context_object->surface));
 }
 /* }}} */
 
@@ -446,7 +511,7 @@ PHP_METHOD(CairoContext, setSourceRGBA)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(CairoContext_setSurface_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-	ZEND_ARG_OBJ_INFO(1, surface, Cairo\\Surface, 0)
+	ZEND_ARG_OBJ_INFO(0, surface, Cairo\\Surface, 0)
 	ZEND_ARG_INFO(0, x)
 	ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
@@ -471,7 +536,7 @@ PHP_METHOD(CairoContext, setSurface)
             return;
         }
         
-	surface_object = Z_CAIRO_SURFACE_P(surface_zval);
+	surface_object = cairo_surface_object_get(surface_zval);
         
 	cairo_set_source_surface(context_object->context, surface_object->surface, x, y);
 	php_cairo_throw_exception(cairo_status(context_object->context));
@@ -482,15 +547,50 @@ PHP_METHOD(CairoContext, setSurface)
 	}
         
         /* If there's already a surface, then we deref and remove it */
-	if(context_object->surface) {
-		context_object->surface = NULL;
+	//if(context_object->surface) {
+        if( Z_TYPE(context_object->surface) != IS_NULL &&
+            !Z_ISUNDEF(context_object->surface )) {
+		//context_object->surface = NULL;
+                ZVAL_UNDEF(&context_object->surface);
 	}
         
 	/* we need to be able to get this zval out later, so ref and store */
-	context_object->surface = surface_zval;
+	//context_object->surface = surface_zval;
+        ZVAL_COPY(&context_object->surface, surface_zval);
 }
 /* }}} */
 
+/* {{{ proto CairoSurface object CairoContext->getSurface
+   previous method-name was getTarget()
+   Gets the target surface for the cairo context that was set on creation */
+PHP_METHOD(CairoContext, getInternalSurfaceInfo)
+{
+	cairo_context_object *context_object;
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
+            return;
+        }
+
+        context_object = cairo_context_object_get(getThis());
+
+        php_printf("---------------------------------------------------------------------------------------<br>\n");
+        php_printf("current num references (Z_REFCOUNT_P): %ld <br>\n", Z_REFCOUNT_P(&context_object->surface));
+        php_printf("current num references (Z_REFCOUNT): %ld <br>\n", Z_REFCOUNT(context_object->surface));
+        
+        if (Z_TYPE_P(&context_object->surface) != IS_NULL &&
+            !Z_ISUNDEF(context_object->surface) &&
+            Z_REFCOUNT(context_object->surface) > 0)
+        {
+            php_printf("surface zval is not null<br>\n");
+            if( Z_REFCOUNT(context_object->surface) == 1) {
+                php_printf("surface zval has no outer reference anymore<br>\n");
+            } else {
+                php_printf("surface zval is referenced multiple times<br>\n");
+            }
+        } else {
+            php_printf("surface zval seems to be null<br>\n");
+        }
+}
 
 /* {{{ proto CairoSurface object CairoContext->getSurface
    previous method-name was getTarget()
@@ -514,15 +614,25 @@ PHP_METHOD(CairoContext, getSurface)
 	surface = cairo_get_target(context_object->context);
 	php_cairo_throw_exception(cairo_status(context_object->context));
 
+        //php_printf("current num references (Z_REFCOUNT): %ld <br>\n", Z_REFCOUNT(context_object->surface));
+        
 	/* If we have a surface stored, grab that zval to use */
-	if (context_object->surface) {
-                //php_printf("we have a surface inside<br>\n");
-		zval_dtor(return_value);
-		*return_value = *context_object->surface;
-		zval_copy_ctor(return_value);
+	if (Z_TYPE_P(&context_object->surface) != IS_NULL &&
+            !Z_ISUNDEF(context_object->surface) &&
+            Z_REFCOUNT(context_object->surface) > 0) {
+                
+            // old way
+//            zval_dtor(return_value);
+//            *return_value = *context_object->surface;
+//            zval_copy_ctor(return_value);
+            
+            // new way
+            zval_ptr_dtor(return_value);
+            ZVAL_COPY(return_value, &context_object->surface);
+//            php_printf("num references now (Z_REFCOUNT): %ld <br>\n", Z_REFCOUNT(context_object->surface));
 	/* Otherwise we spawn a new object */
 	} else {
-                //php_printf("there is no surface inside<br>\n");
+//                php_printf("there is no surface inside<br>\n");
 		object_init_ex(return_value, php_cairo_get_surface_ce(surface));
                 surface_object = Z_CAIRO_SURFACE_P(return_value);
                 surface_object->surface = surface;
@@ -2860,6 +2970,7 @@ const zend_function_entry cairo_context_methods[] = {
         PHP_ME(CairoContext, setSourceRGBA, CairoContext_setSourceRGBA_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setSurface, CairoContext_setSurface_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getSurface, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(CairoContext, getInternalSurfaceInfo, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getGroupSurface, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setPattern, CairoContext_setPattern_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getPattern, NULL, ZEND_ACC_PUBLIC)
