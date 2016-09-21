@@ -70,26 +70,26 @@ static void cairo_scaled_font_free_obj(zend_object *object)
             return;
     }
 
-//    if(intern->font_face != NULL) {
-//            Z_DELREF_P(intern->font_face);
-//            intern->font_face = NULL;
-//    }
-//    
-//    if(intern->matrix != NULL) {
-//            Z_DELREF_P(intern->matrix);
-//            intern->matrix = NULL;
-//    }
-//    
-//    if(intern->ctm != NULL) {
-//            Z_DELREF_P(intern->ctm);
-//            intern->ctm = NULL;
-//    }
-//    
-//    if(intern->font_options != NULL) {
-//            Z_DELREF_P(intern->font_options);
-//            intern->font_options = NULL;
-//    }
-    
+    if (!Z_ISNULL(intern->font_face) &&
+        !Z_ISUNDEF(intern->font_face)) {
+            Z_TRY_DELREF_P(&intern->font_face);
+            ZVAL_UNDEF(&intern->font_face);
+    }
+    if (!Z_ISNULL(intern->matrix) &&
+        !Z_ISUNDEF(intern->matrix)) {
+            Z_TRY_DELREF_P(&intern->matrix);
+            ZVAL_UNDEF(&intern->matrix);
+    }
+    if (!Z_ISNULL(intern->ctm) &&
+        !Z_ISUNDEF(intern->ctm)) {
+            Z_TRY_DELREF_P(&intern->ctm);
+            ZVAL_UNDEF(&intern->ctm);
+    }
+    if (!Z_ISNULL(intern->font_options) &&
+        !Z_ISUNDEF(intern->font_options)) {
+            Z_TRY_DELREF_P(&intern->font_options);
+            ZVAL_UNDEF(&intern->font_options);
+    }
     if(intern->scaled_font){
             cairo_scaled_font_destroy(intern->scaled_font);
             intern->scaled_font = NULL;
@@ -103,10 +103,10 @@ static zend_object* cairo_scaled_font_obj_ctor(zend_class_entry *ce, cairo_scale
 {
 	cairo_scaled_font_object *object = ecalloc(1, sizeof(cairo_scaled_font_object) + zend_object_properties_size(ce));
         
-        object->font_face = NULL;
-        object->matrix = NULL;
-	object->ctm = NULL;
-        object->font_options = NULL;
+        ZVAL_UNDEF(&object->font_face);
+        ZVAL_UNDEF(&object->matrix);
+        ZVAL_UNDEF(&object->ctm);
+        ZVAL_UNDEF(&object->font_options);
         object->scaled_font = NULL;
         
 	zend_object_std_init(&object->std, ce);
@@ -142,11 +142,11 @@ zend_class_entry * php_cairo_get_scaled_font_ce()
     Cairo\FontOptions Class API
 ------------------------------------------------------------------*/
 
-ZEND_BEGIN_ARG_INFO_EX(CairoScaledFont___construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 1)
-        ZEND_ARG_OBJ_INFO(1, font_face, Cairo\\FontFace, 0)
-	ZEND_ARG_OBJ_INFO(1, matrix, Cairo\\Matrix, 0)
-	ZEND_ARG_OBJ_INFO(1, ctm, Cairo\\Matrix, 0)
-	ZEND_ARG_OBJ_INFO(1, options, Cairo\\FontOptions, 0)
+ZEND_BEGIN_ARG_INFO_EX(CairoScaledFont___construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 4)
+        ZEND_ARG_OBJ_INFO(0, font_face, Cairo\\FontFace, 0)
+	ZEND_ARG_OBJ_INFO(0, matrix, Cairo\\Matrix, 0)
+	ZEND_ARG_OBJ_INFO(0, ctm, Cairo\\Matrix, 0)
+	ZEND_ARG_OBJ_INFO(0, options, Cairo\\FontOptions, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void __construct(CairoFontFace font_face[, CairoMatrix matrix, CairoMatrix ctm, CairoFontOptions options]) 
@@ -156,7 +156,7 @@ PHP_METHOD(CairoScaledFont, __construct)
 	zval *font_face_zval, *matrix_zval, *ctm_zval, *font_options_zval;
 	cairo_scaled_font_object *scaled_font_object;
         
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/z/z/z/", 
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "oooo", 
                 &font_face_zval,
                 &matrix_zval,
                 &ctm_zval,
@@ -177,15 +177,11 @@ PHP_METHOD(CairoScaledFont, __construct)
         );
 	php_cairo_throw_exception(cairo_scaled_font_status(scaled_font_object->scaled_font));
         
-	/* we need to be able to get these zvals out later, so ref and store */
-	scaled_font_object->font_face = font_face_zval;
-	//Z_ADDREF_P(font_face_zval);
-	scaled_font_object->matrix = matrix_zval;
-	//Z_ADDREF_P(matrix_zval);
-	scaled_font_object->ctm = ctm_zval;
-	//Z_ADDREF_P(ctm_zval);
-	scaled_font_object->font_options = font_options_zval;
-	//Z_ADDREF_P(font_options_zval);
+	/* we need to be able to get these zvals out later, so store them */
+        ZVAL_COPY(&scaled_font_object->font_face, font_face_zval);
+        ZVAL_COPY(&scaled_font_object->matrix, matrix_zval);
+        ZVAL_COPY(&scaled_font_object->ctm, ctm_zval);
+        ZVAL_COPY(&scaled_font_object->font_options, font_options_zval);
 }
 /* }}} */
 
@@ -348,18 +344,17 @@ PHP_METHOD(CairoScaledFont, getFontFace)
 	php_cairo_throw_exception(cairo_scaled_font_status(scaled_font_object->scaled_font));
         
 	/* If we have a font face object stored, grab that zval to use */
-	if(scaled_font_object->font_face) {
-		zval_dtor(return_value);
-		*return_value = *scaled_font_object->font_face;
-		zval_copy_ctor(return_value);
-//		Z_SET_REFCOUNT_P(return_value, 1);
+	if (!Z_ISNULL(scaled_font_object->font_face) &&
+            !Z_ISUNDEF(scaled_font_object->font_face) &&
+            Z_REFCOUNT(scaled_font_object->font_face) > 0) {
+                zval_ptr_dtor(return_value);
+                ZVAL_COPY(return_value, &scaled_font_object->font_face);
 	/* Otherwise we spawn a new object */
 	} else {
 		object_init_ex(return_value, ce_cairo_toyfontface);	
-	}
-
-	font_face_object = Z_CAIRO_FONT_FACE_P(return_value);
-	font_face_object->font_face = font_face;
+                font_face_object = Z_CAIRO_FONT_FACE_P(return_value);
+                font_face_object->font_face = font_face;
+        }
 }
 /* }}} */
 
@@ -385,18 +380,17 @@ PHP_METHOD(CairoScaledFont, getFontOptions)
 	php_cairo_throw_exception(cairo_scaled_font_status(scaled_font_object->scaled_font));
 
 	/* If we have a font options object stored, grab that zval to use */
-	if(scaled_font_object->font_options) {
-		zval_dtor(return_value);
-		*return_value = *scaled_font_object->font_options;
-		zval_copy_ctor(return_value);
-//		Z_SET_REFCOUNT_P(return_value, 1);
+        if (!Z_ISNULL(scaled_font_object->font_options) &&
+            !Z_ISUNDEF(scaled_font_object->font_options) &&
+            Z_REFCOUNT(scaled_font_object->font_options) > 0) {
+                zval_ptr_dtor(return_value);
+                ZVAL_COPY(return_value, &scaled_font_object->font_options);
 	/* Otherwise we spawn a new object */
 	} else {
 		object_init_ex(return_value, ce_cairo_fontoptions);	
-	}
-
-	font_options_object = Z_CAIRO_FONT_OPTIONS_P(return_value);
-	font_options_object->font_options = font_options;
+                font_options_object = Z_CAIRO_FONT_OPTIONS_P(return_value);
+                font_options_object->font_options = font_options;
+        }
 }
 /* }}} */
 
@@ -417,19 +411,17 @@ PHP_METHOD(CairoScaledFont, getFontMatrix)
         }
         
 	/* If we have a matrix object stored, grab that zval to use */
-	if(scaled_font_object->matrix) {
-		zval_dtor(return_value);
-		*return_value = *scaled_font_object->matrix;
-		zval_copy_ctor(return_value);
-//		Z_SET_REFCOUNT_P(return_value, 1);
+        if (!Z_ISNULL(scaled_font_object->matrix) &&
+            !Z_ISUNDEF(scaled_font_object->matrix) &&
+            Z_REFCOUNT(scaled_font_object->matrix) > 0) {
+                zval_ptr_dtor(return_value);
+                ZVAL_COPY(return_value, &scaled_font_object->matrix);
 	/* Otherwise we spawn a new object */
 	} else {
 		object_init_ex(return_value, ce_cairo_matrix);	
-	}
-
-	matrix_object = Z_CAIRO_MATRIX_P(return_value);
-	//matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
-	cairo_scaled_font_get_font_matrix(scaled_font_object->scaled_font, matrix_object->matrix);
+                matrix_object = Z_CAIRO_MATRIX_P(return_value);
+                cairo_scaled_font_get_font_matrix(scaled_font_object->scaled_font, matrix_object->matrix);
+        }
 }
 /* }}} */
 
@@ -450,19 +442,17 @@ PHP_METHOD(CairoScaledFont, getCtm)
         }
         
 	/* If we have a matrix object stored, grab that zval to use */
-	if(scaled_font_object->ctm) {
-		zval_dtor(return_value);
-		*return_value = *scaled_font_object->ctm;
-		zval_copy_ctor(return_value);
-//		Z_SET_REFCOUNT_P(return_value, 1);
+        if (!Z_ISNULL(scaled_font_object->ctm) &&
+            !Z_ISUNDEF(scaled_font_object->ctm) &&
+            Z_REFCOUNT(scaled_font_object->ctm) > 0) {
+                zval_ptr_dtor(return_value);
+                ZVAL_COPY(return_value, &scaled_font_object->ctm);
 	/* Otherwise we spawn a new object */
 	} else {
-		object_init_ex(return_value, ce_cairo_matrix);	
+		object_init_ex(return_value, ce_cairo_matrix);
+                matrix_object = Z_CAIRO_MATRIX_P(return_value);
+                cairo_scaled_font_get_ctm(scaled_font_object->scaled_font, matrix_object->matrix);
 	}
-
-	matrix_object = Z_CAIRO_MATRIX_P(return_value);
-	//matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
-	cairo_scaled_font_get_ctm(scaled_font_object->scaled_font, matrix_object->matrix);
 }
 /* }}} */
 
@@ -487,7 +477,6 @@ PHP_METHOD(CairoScaledFont, getScaleMatrix)
 	object_init_ex(return_value, ce_cairo_matrix);	
 
 	matrix_object = Z_CAIRO_MATRIX_P(return_value);
-	matrix_object->matrix = ecalloc(sizeof(cairo_matrix_t), 1); 
 	cairo_scaled_font_get_scale_matrix(scaled_font_object->scaled_font, matrix_object->matrix);
 }
 /* }}} */

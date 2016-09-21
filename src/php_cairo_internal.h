@@ -67,7 +67,7 @@ extern zend_class_entry* php_cairo_get_path_ce();
 /* Pattern */
 typedef struct _cairo_pattern_object {
         cairo_pattern_t *pattern;
-        zval *surface;
+        zval surface;
 	zend_object std;
 } cairo_pattern_object;
 extern cairo_pattern_object *cairo_pattern_fetch_object(zend_object *object);
@@ -130,10 +130,10 @@ cairo_font_face_t *cairo_font_face_object_get_font_face(zval *zv);
 
 /* ScaledFont */
 typedef struct _cairo_scaled_font_object {
-	zval *font_face;
-	zval *font_options;
-	zval *matrix;
-	zval *ctm;
+	zval font_face;
+	zval font_options;
+	zval matrix;
+	zval ctm;
 	cairo_scaled_font_t *scaled_font;
         zend_object std;
 } cairo_scaled_font_object;
@@ -187,12 +187,12 @@ const char* php_cairo_get_ft_error(int error);
 /* Context */
 typedef struct _cairo_context_object {
 	zval surface;
-	zval *matrix;
-	zval *pattern;
-	zval *font_face;
-	zval *font_matrix;
-	zval *font_options;
-	zval *scaled_font;
+	zval matrix;
+	zval pattern;
+	zval font_face;
+	zval font_matrix;
+	zval font_options;
+	zval scaled_font;
 	cairo_t *context;
         zend_object std;
 } cairo_context_object;

@@ -665,7 +665,7 @@ PHP_METHOD(CairoPatternGradientLinear, getPoints)
 ------------------------------------------------------------------ */
 
 ZEND_BEGIN_ARG_INFO(CairoPatternSurface___construct_args, ZEND_SEND_BY_VAL)
-	ZEND_ARG_OBJ_INFO(1, surface, Cairo\\Surface, 0)
+	ZEND_ARG_OBJ_INFO(0, surface, Cairo\\Surface, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void contruct(float red, float green, float blue[, float alpha])
@@ -676,7 +676,7 @@ PHP_METHOD(CairoPatternSurface, __construct)
         cairo_surface_object *surface_object;
 	zval * surface_zval = NULL;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z/", &surface_zval) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "|o", &surface_zval) == FAILURE) {
 		return;
 	}
 
@@ -685,17 +685,20 @@ PHP_METHOD(CairoPatternSurface, __construct)
 		return;
 	}
         
-        surface_object = Z_CAIRO_SURFACE_P(surface_zval);
-	if(!surface_object) {
+        if( surface_zval == NULL ) {
             return;
         }
         
-        /* we need to be able to get these zvals out later, so ref and store */
-	pattern_object->surface = surface_zval;
-//	Z_ADDREF_P(surface_zval);
-        
+        surface_object = cairo_surface_object_get(surface_zval);
+	if(!surface_object) {
+            return;
+        }
+                
         pattern_object->pattern = cairo_pattern_create_for_surface(surface_object->surface);
 	php_cairo_throw_exception(cairo_pattern_status(pattern_object->pattern));
+        
+        /* we need to be able to get these zvals out later, so store it*/
+        ZVAL_COPY(&pattern_object->surface, surface_zval);
 }
 /* }}} */
 
@@ -723,27 +726,31 @@ PHP_METHOD(CairoPatternSurface, getSurface)
 	cairo_pattern_get_surface(pattern_object->pattern, &surface);
         
         /* If we have a surface, grab that zval to use */
-	if(pattern_object->surface) {
-		zval_dtor(return_value);
-		*return_value = *pattern_object->surface;
-		zval_copy_ctor(return_value);
-//		Z_SET_REFCOUNT_P(return_value, 1);
+//	if(pattern_object->surface) {
+//		zval_dtor(return_value);
+//		*return_value = *pattern_object->surface;
+//		zval_copy_ctor(return_value);
+        if (!Z_ISNULL(pattern_object->surface) &&
+            !Z_ISUNDEF(pattern_object->surface) &&
+            Z_REFCOUNT(pattern_object->surface) > 0) {
+                zval_ptr_dtor(return_value);
+                ZVAL_COPY(return_value, &pattern_object->surface);
 	/* Otherwise we spawn a new object */
 	} else {
                 /* we can't always rely on the same type of surface being returned, so we use php_cairo_get_surface_ce */
 		object_init_ex(return_value, php_cairo_get_surface_ce(surface));	
-	}
+                
+                //cairo_surface_create_object(php_cairo_get_surface_ce(surface));
+                surface_object = Z_CAIRO_SURFACE_P(return_value);
 
-        //cairo_surface_create_object(php_cairo_get_surface_ce(surface));
-	surface_object = Z_CAIRO_SURFACE_P(return_value);
-        
-	/* if there IS a value in surface, destroy it cause we're getting a new one */
-	if (surface_object->surface != NULL) {
-		cairo_surface_destroy(surface_object->surface);
-	}
-        
-	surface_object->surface = surface;
-        cairo_surface_reference(surface_object->surface);
+                /* if there IS a value in surface, destroy it cause we're getting a new one */
+                if (surface_object->surface != NULL) {
+                        cairo_surface_destroy(surface_object->surface);
+                }
+
+                surface_object->surface = surface;
+                cairo_surface_reference(surface_object->surface);
+        }
 }
 /* }}} */
 
@@ -1178,10 +1185,10 @@ static void cairo_pattern_free_obj(zend_object *object)
 		return;
 	}
 
-//        if(intern->surface != NULL) {
-//                Z_DELREF_P(intern->surface);
-//        }
-//        intern->surface = NULL;
+        if (!Z_ISNULL(intern->surface) &&
+            !Z_ISUNDEF(intern->surface)) {
+            Z_TRY_DELREF_P(&intern->surface);
+        }
 
 	if(intern->pattern){
 		cairo_pattern_destroy(intern->pattern);
@@ -1197,7 +1204,7 @@ static zend_object* cairo_pattern_obj_ctor(zend_class_entry *ce, cairo_pattern_o
 {
 	cairo_pattern_object *object = ecalloc(1, sizeof(cairo_pattern_object) + zend_object_properties_size(ce));
 	
-        object->surface = NULL;
+        ZVAL_UNDEF(&object->surface);
         object->pattern = NULL;
         
 	zend_object_std_init(&object->std, ce);
