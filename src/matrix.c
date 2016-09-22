@@ -658,11 +658,11 @@ PHP_MINIT_FUNCTION(cairo_matrix)
 	ce.create_object = cairo_matrix_create_object;
 	ce_cairo_matrix = zend_register_internal_class(&ce);
 
-	zend_declare_property_long(ce_cairo_matrix, "xx", sizeof("xx")-1, 10, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(ce_cairo_matrix, "xx", sizeof("xx")-1, 1, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(ce_cairo_matrix, "xy", sizeof("xy")-1, 0, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(ce_cairo_matrix, "x0", sizeof("x0")-1, 0, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(ce_cairo_matrix, "yx", sizeof("yx")-1, 0, ZEND_ACC_PUBLIC);
-	zend_declare_property_long(ce_cairo_matrix, "yy", sizeof("yy")-1, 10, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(ce_cairo_matrix, "yy", sizeof("yy")-1, 1, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(ce_cairo_matrix, "y0", sizeof("y0")-1, 0, ZEND_ACC_PUBLIC);
 
 	return SUCCESS;
