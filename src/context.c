@@ -103,32 +103,38 @@ static void cairo_context_free_obj(zend_object *object)
 
     if (!Z_ISNULL(intern->surface) &&
         !Z_ISUNDEF(intern->surface)) {
-        Z_TRY_DELREF_P(&intern->surface);
-        //ZVAL_UNDEF(&intern->surface);
+            Z_TRY_DELREF_P(&intern->surface);
+            ZVAL_UNDEF(&intern->surface);
     }
     if (!Z_ISNULL(intern->matrix) &&
         !Z_ISUNDEF(intern->matrix)) {
-        Z_TRY_DELREF_P(&intern->matrix);
+            Z_TRY_DELREF_P(&intern->matrix);
+            ZVAL_UNDEF(&intern->matrix);
     }
     if (!Z_ISNULL(intern->pattern) &&
         !Z_ISUNDEF(intern->pattern)) {
-        Z_TRY_DELREF_P(&intern->pattern);
+            Z_TRY_DELREF_P(&intern->pattern);
+            ZVAL_UNDEF(&intern->pattern);
     }
     if (!Z_ISNULL(intern->font_face) &&
         !Z_ISUNDEF(intern->font_face)) {
-        Z_TRY_DELREF_P(&intern->font_face);
+            Z_TRY_DELREF_P(&intern->font_face);
+            ZVAL_UNDEF(&intern->font_face);
     }
     if (!Z_ISNULL(intern->font_matrix) &&
         !Z_ISUNDEF(intern->font_matrix)) {
-        Z_TRY_DELREF_P(&intern->font_matrix);
+            Z_TRY_DELREF_P(&intern->font_matrix);
+            ZVAL_UNDEF(&intern->font_matrix);
     }
     if (!Z_ISNULL(intern->font_options) &&
         !Z_ISUNDEF(intern->font_options)) {
-        Z_TRY_DELREF_P(&intern->font_options);
+            Z_TRY_DELREF_P(&intern->font_options);
+            ZVAL_UNDEF(&intern->font_options);
     }
     if (!Z_ISNULL(intern->scaled_font) &&
         !Z_ISUNDEF(intern->scaled_font)) {
-        Z_TRY_DELREF_P(&intern->scaled_font);
+            Z_TRY_DELREF_P(&intern->scaled_font);
+            ZVAL_UNDEF(&intern->scaled_font);
     }
 
     if(intern->context){
@@ -173,55 +179,6 @@ zend_object* cairo_context_create_object(zend_class_entry *ce)
 /* ----------------------------------------------------------------
     Cairo\Context Class API
 ------------------------------------------------------------------*/
-//*
-static void tellMeWhatYouAre(zval *arg) {
-    zval *zv;
-
-    php_printf("\nThe Element is of type: ");
-    switch (Z_TYPE_P(arg)) {
-        case IS_NULL:
-            php_printf("NULL");
-            break;
-        case IS_OBJECT:
-            php_printf("Object");
-            break;
-        case IS_REFERENCE:
-            php_printf("Reference");
-            break;
-        case IS_INDIRECT:
-            php_printf("Indirect");
-            break;
-        case IS_TRUE:
-        case IS_FALSE:
-            php_printf("Boolean: %s", Z_LVAL_P(arg) ? "TRUE" : "FALSE");
-            break;
-        case IS_LONG:
-            php_printf("Long: %ld", Z_LVAL_P(arg));
-            break;
-        case IS_DOUBLE:
-            php_printf("Double: %f", Z_DVAL_P(arg));
-            break;
-        case IS_STRING:
-            //php_printf("String: ");
-            //PHPWRITE(Z_STRVAL_P(arg), Z_STRLEN_P(arg));
-            php_printf("String: %s", Z_STRVAL_P(arg));
-            php_printf("");
-            break;
-        case IS_ARRAY:
-            php_printf("Array, with this content:\n");
-            HashTable *hash = Z_ARR_P(arg);
-
-            ZEND_HASH_FOREACH_VAL(hash, zv) {
-                tellMeWhatYouAre(zv);
-            }
-            ZEND_HASH_FOREACH_END();
-            break;
-        default:
-            php_printf("Unknown");
-    }
-    php_printf("<br>\n");
-}
-//*/
 
 /* Basic Context */
 ZEND_BEGIN_ARG_INFO(CairoContext___construct_args, ZEND_SEND_BY_VAL)
@@ -551,46 +508,6 @@ PHP_METHOD(CairoContext, setSurface)
         ZVAL_COPY(&context_object->surface, surface_zval);
 }
 /* }}} */
-
-/* {{{ proto CairoSurface object CairoContext->getSurface
-   previous method-name was getTarget()
-   Gets the target surface for the cairo context that was set on creation */
-PHP_METHOD(CairoContext, getInternalSurfaceInfo)
-{
-	cairo_context_object *context_object;
-        
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
-            return;
-        }
-        
-        context_object = cairo_context_object_get(getThis());
-        if (!context_object) {
-            return;
-        }
-        
-        php_printf("---------------------------------------------------------------------------------------<br>\n");
-        tellMeWhatYouAre(&context_object->surface);
-        
-        if (!Z_ISNULL(context_object->surface) &&
-            !Z_ISUNDEF(context_object->surface) )
-        {
-            php_printf("current num references (Z_REFCOUNT): %ld <br>\n", Z_REFCOUNT(context_object->surface));
-        }
-        
-        if (!Z_ISNULL(context_object->surface) &&
-            !Z_ISUNDEF(context_object->surface) &&
-            Z_REFCOUNT(context_object->surface) > 0)
-        {
-            php_printf("surface zval is not null<br>\n");
-            if( Z_REFCOUNT(context_object->surface) == 1) {
-                php_printf("surface zval has no outer reference anymore<br>\n");
-            } else {
-                php_printf("surface zval is referenced multiple times<br>\n");
-            }
-        } else {
-            php_printf("surface zval seems to be null<br>\n");
-        }
-}
 
 /* {{{ proto CairoSurface object CairoContext->getSurface
    previous method-name was getTarget()
@@ -2986,7 +2903,6 @@ const zend_function_entry cairo_context_methods[] = {
         PHP_ME(CairoContext, setSourceRGBA, CairoContext_setSourceRGBA_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setSurface, CairoContext_setSurface_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getSurface, NULL, ZEND_ACC_PUBLIC)
-        PHP_ME(CairoContext, getInternalSurfaceInfo, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getGroupSurface, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, setPattern, CairoContext_setPattern_args, ZEND_ACC_PUBLIC)
         PHP_ME(CairoContext, getPattern, NULL, ZEND_ACC_PUBLIC)
