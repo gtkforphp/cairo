@@ -1188,6 +1188,7 @@ static void cairo_pattern_free_obj(zend_object *object)
         if (!Z_ISNULL(intern->surface) &&
             !Z_ISUNDEF(intern->surface)) {
             Z_TRY_DELREF_P(&intern->surface);
+            ZVAL_UNDEF(&intern->surface);
         }
 
 	if(intern->pattern){
