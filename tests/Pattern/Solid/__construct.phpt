@@ -1,5 +1,5 @@
 --TEST--
-new Cairo\Pattern\Solid [__construct() method ]
+Cairo\Pattern\Solid->__construct()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--

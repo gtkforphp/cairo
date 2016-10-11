@@ -1,34 +1,37 @@
 --TEST--
-CairoSurfacePattern->getExtend() method
+Cairo\Pattern->setExtend() method [using Surface]
 --SKIPIF--
 <?php
-if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
+include __DIR__ . '/../skipif.inc';
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+use Cairo\Surface\Image;
+use Cairo\Pattern\Surface;
+
+$surface = new Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$pattern = new CairoSurfacePattern($surface);
+$pattern = new Surface($surface);
 var_dump($pattern);
 
-$pattern->setExtend(CairoExtend::PAD);
+$pattern->setExtend(Cairo\Extend::PAD);
 
 $extend = $pattern->getExtend();
 var_dump($extend);
-var_dump($extend == CairoExtend::PAD);
+var_dump($extend == Cairo\Extend::PAD);
 
 /* Total number of args needed = 1 */
 try {
     $pattern->setExtend();
     trigger_error('setExtend with no args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 try {
     $pattern->setExtend(1, 1);
     trigger_error('setExtend with too many args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -36,17 +39,31 @@ try {
 try {
     $pattern->setExtend(array());
     trigger_error('Arg 1 must be int');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoSurfacePattern)#%d (0) {
+object(Cairo\Pattern\Surface)#%d (0) {
 }
-int(3)
+object(Cairo\Extend)#3 (2) {
+  ["__elements"]=>
+  array(4) {
+    ["NONE"]=>
+    int(0)
+    ["REPEAT"]=>
+    int(1)
+    ["REFLECT"]=>
+    int(2)
+    ["PAD"]=>
+    int(3)
+  }
+  ["__value"]=>
+  int(3)
+}
 bool(true)
-CairoSurfacePattern::setExtend() expects exactly 1 parameter, 0 given
-CairoSurfacePattern::setExtend() expects exactly 1 parameter, 2 given
-CairoSurfacePattern::setExtend() expects parameter 1 to be long, array given
+Cairo\Pattern::setExtend() expects exactly 1 parameter, 0 given
+Cairo\Pattern::setExtend() expects exactly 1 parameter, 2 given
+Cairo\Pattern::setExtend() expects parameter 1 to be integer, array given

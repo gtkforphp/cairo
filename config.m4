@@ -17,6 +17,22 @@ if test "$PHP_CAIRO" != "no"; then
     src/exception.c \
     src/matrix.c \
     src/rectangle.c \
+    src/font.c \
+    src/font_face.c \
+    src/font_options.c \
+    src/scaled_font.c \
+    src/ft_font.c \
+    src/quartz_font.c \
+    src/win32_font.c \
+    src/surface.c \
+    src/image_surface.c \
+    src/sub_surface.c \
+    src/recording_surface.c \
+    src/pdf_surface.c \
+    src/svg_surface.c \
+    src/ps_surface.c \
+    src/path.c \
+    src/context.c \
   , $ext_shared)
 
   EXT_CAIRO_HEADERS="php_cairo_api.h"

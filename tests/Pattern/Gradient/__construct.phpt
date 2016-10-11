@@ -1,5 +1,5 @@
 --TEST--
- new Cairo\Pattern\Gradient [__construct method]
+Cairo\Pattern\Gradient->__construct()
 --EXTENSIONS--
 eos_datastructures
 --SKIPIF--
