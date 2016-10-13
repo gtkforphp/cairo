@@ -1,6 +1,8 @@
 Cairo OO Extension
 ================
 
+[![Build Status](https://travis-ci.org/gtkforphp/cairo.svg?branch=master)](https://travis-ci.org/gtkforphp/cairo)
+
 Object Oriented interface to Cairo Graphics library
 Requires Cairo 1.10 or higher
 Requires PHP 5.2 or higher
