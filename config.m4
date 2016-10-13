@@ -57,7 +57,7 @@ if test "$PHP_CAIRO" != "no"; then
         AC_MSG_CHECKING(for cairo)
     
         if $PKG_CONFIG --exists cairo; then
-            if $PKG_CONFIG --atleast-version=1.2 cairo; then
+            if $PKG_CONFIG --atleast-version=1.10 cairo; then
                 cairo_version_full=`$PKG_CONFIG --modversion cairo`
                 AC_MSG_RESULT([found $cairo_version_full])
                 CAIRO_LIBS="$LDFLAGS `$PKG_CONFIG --libs cairo`"
@@ -90,7 +90,7 @@ if test "$PHP_CAIRO" != "no"; then
                     
             else
                 AC_MSG_RESULT(too old)
-                AC_MSG_ERROR(Ooops ! You need at least cairo 1.4)
+                AC_MSG_ERROR(Ooops ! You need at least cairo 1.10)
             fi
         else
             AC_MSG_RESULT(not found)
