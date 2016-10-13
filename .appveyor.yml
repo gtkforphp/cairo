@@ -123,7 +123,7 @@ test_script:
     - echo "phpize"
     - phpize
     - echo "./configure"
-    - configure --with-cairo=shared
+    - configure --with-cairo=shared --with-php-build=c:\projects\deps
     - echo "make"
     - nmake 2> compile-errors.log 1>compile.log
     - echo "make test"
