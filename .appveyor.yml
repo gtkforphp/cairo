@@ -107,7 +107,7 @@ install:
   - appveyor DownloadFile http://windows.php.net/downloads/pecl/deps/cairo-1.12.16-vc11-x86.zip
   - appveyor DownloadFile http://windows.php.net/downloads/pecl/deps/fontconfig-2.8.0-vc11-x86.zip
   - appveyor DownloadFile http://windows.php.net/downloads/php-sdk/deps/vc11/x86/freetype-2.7.0-vc11-x86.zip
-  - 7z.exe x *.zip | FIND /V "ing  "
+  - 7z.exe -aos x *.zip | FIND /V "ing  "
   - echo Building PHP [%PHP_VERSION%]
   - '%PHP_SDK%\bin\phpsdk_setvars'
   - 'cd %APPVEYOR_BUILD_FOLDER%\..\php'
