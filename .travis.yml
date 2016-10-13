@@ -23,3 +23,12 @@ install:
 
 script: 
   - TESTS="--show-diff" make test
+
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#gtkforphp"
+    on_success: change
+    on_failure: always
+    use_notice: true
+    skip_join: true
