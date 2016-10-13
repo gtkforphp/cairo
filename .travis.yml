@@ -9,9 +9,9 @@ sudo: false
 addons:
   apt:
     packages:
-	- libcairo2-dev
-	- libfreetype6-dev
-	- fontconfig
+      - libcairo2-dev
+      - libfreetype6-dev
+      - fontconfig
     
 env: 
   - REPORT_EXIT_STATUS=1 NO_INTERACTION=1
