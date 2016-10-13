@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - 5.6
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+	libcairo2-dev
+	libfreetype6-dev
+	fontconfig
+    
+env: 
+  - REPORT_EXIT_STATUS=1 NO_INTERACTION=1
+
+install:
+  - phpize
+  - ./configure
+  - make
+
+script: 
+  - make test
