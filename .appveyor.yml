@@ -97,10 +97,6 @@ install:
   - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-devel-pack-' + ${env:PHP_VERSION} + '-' + ${env:PHP_TYPE} + '-VC' + ${env:PHP_VC} + '-' + ${env:PLATFORM} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-dev.zip')
   - 7z.exe x php-dev.zip | FIND /V "ing  "
   - mv php-%PHP_VERSION%-devel-VC%PHP_VC%-%PLATFORM% php-devpack
-  - echo Downloading deps
-  - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-devel-pack-' + ${env:PHP_VERSION} + '-' + ${env:PHP_TYPE} + '-VC' + ${env:PHP_VC} + '-' + ${env:PLATFORM} + '.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-dev.zip')
-  - 7z.exe x php-dev.zip | FIND /V "ing  "
-  - mv php-%PHP_VERSION%-devel-VC%PHP_VC%-%PLATFORM% php-devpack
   - cd ..
   - echo Downloading Cairo deps
   - 'mkdir deps && cd deps'
@@ -108,12 +104,13 @@ install:
   - appveyor DownloadFile http://windows.php.net/downloads/pecl/deps/fontconfig-2.8.0-vc11-x86.zip
   - appveyor DownloadFile http://windows.php.net/downloads/php-sdk/deps/vc11/x86/freetype-2.7.0-vc11-x86.zip
   - 7z.exe -aos x *.zip | FIND /V "ing  "
+  - pwd
+  - ls
   - echo Building PHP [%PHP_VERSION%]
   - '%PHP_SDK%\bin\phpsdk_setvars'
   - 'cd %APPVEYOR_BUILD_FOLDER%\..\php'
   - 'echo extension_dir=%APPVEYOR_BUILD_FOLDER%\..\php\ext > php.ini'
   - 'set PATH=%cd%;%PATH%'
-  - cd c:\projects\extension
 
 test_script:
     - cd c:\projects\extension
