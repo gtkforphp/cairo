@@ -22,4 +22,4 @@ install:
   - make
 
 script: 
-  - make test
+  - TESTS="--show-diff" make test
