@@ -248,6 +248,9 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	}
 	
 	if(php_stream_stat(stream, &ssbuf) != 0) {
+        if(owned_stream) {
+			php_stream_close(stream);
+		}
 		zend_throw_exception(cairo_ce_cairoexception, "Cannot determine size of stream", 0 TSRMLS_CC);
 		return;
 	}
