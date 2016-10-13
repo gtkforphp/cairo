@@ -244,7 +244,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	if(!stream) {
-		return;
+		RETURN_NULL();
 	}
 	
 	if(php_stream_stat(stream, &ssbuf) != 0) {
