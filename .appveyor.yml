@@ -111,7 +111,7 @@ test_script:
     - echo "phpize"
     - phpize
     - echo "./configure"
-    - configure --enable-cairo=shared
+    - configure --with-cairo=shared
     - echo "make"
     - nmake 2> compile-errors.log 1>compile.log
     - echo "make test"
