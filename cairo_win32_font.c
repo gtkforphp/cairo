@@ -30,7 +30,6 @@
 #include "php_cairo.h"
 #include "zend_exceptions.h"
 
-#ifdef CAIRO_HAS_WIN32_FONT
 #if defined(CAIRO_HAS_WIN32_FONT) && defined(HAVE_WIN32_FONT)
 
 #include <Windows.h>
