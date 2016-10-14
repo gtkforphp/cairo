@@ -122,6 +122,7 @@ on_failure:
   - 'dir'
   - 'type compile-errors.log'
   - 'type compile.log'
+  - 'type Makefile'
 
 artifacts:
   - path: '$(RELEASE_FOLDER)\php_cairo.dll'
