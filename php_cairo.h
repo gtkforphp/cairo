@@ -83,11 +83,13 @@ typedef struct _cairo_glyph_object {
 	cairo_glyph_t *glyph;
 } cairo_glyph_object;
 
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 typedef struct _pecl_ft_container {
 	FT_Library ft_lib;
     FT_Face ft_face;
     FT_Stream ft_stream;
 } pecl_ft_container;
+#endif
 
 typedef struct _cairo_context_object {
 	zend_object std;
