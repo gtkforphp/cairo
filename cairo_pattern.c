@@ -1197,7 +1197,7 @@ PHP_FUNCTION(cairo_mesh_pattern_get_path)
 PHP_FUNCTION(cairo_mesh_pattern_get_control_point)
 {
 	long patch_num, corner_num;
-	double offset, x, y;
+	double x, y;
 	zval *pattern_zval = NULL;
 	cairo_pattern_object *pattern_object;
 
@@ -1225,7 +1225,7 @@ PHP_FUNCTION(cairo_mesh_pattern_get_control_point)
 PHP_FUNCTION(cairo_mesh_pattern_get_corner_color_rgba)
 {
 	long patch_num, corner_num;
-	double offset, red, green, blue, alpha;
+	double red, green, blue, alpha;
 	zval *pattern_zval = NULL;
 	cairo_pattern_object *pattern_object;
 

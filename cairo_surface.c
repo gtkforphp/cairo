@@ -73,18 +73,17 @@ PHP_METHOD(CairoSurface, __construct)
 /* }}} */
 
 /* {{{ proto CairoSurface object cairo_surface_create_similar(CairoSurface object, int content, double width, double height)
-       proto CairoSurface object CairoSurface->createSimilar(int content, double width, double height)
+       proto CairoSurface object CairoSurface->createSimilar(int content, int width, int height)
        Create a new surface that is as compatible as possible with an existing surface. */
 PHP_FUNCTION(cairo_surface_create_similar)
 {
 	zval *surface_zval = NULL;
 	cairo_surface_object *surface_object, *new_surface_object;
 	cairo_surface_t *new_surface;
-	long content;
-	double width, height;
+	long content, width, height;
 
 	PHP_CAIRO_ERROR_HANDLING(FALSE)
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oldd", &surface_zval, cairo_ce_cairosurface, &content, &width, &height) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Olll", &surface_zval, cairo_ce_cairosurface, &content, &width, &height) == FAILURE) {
 		PHP_CAIRO_RESTORE_ERRORS(FALSE)
 		return;
 	}
