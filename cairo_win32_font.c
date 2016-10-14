@@ -29,9 +29,9 @@
 #include "php.h"
 #include "php_cairo.h"
 #include "zend_exceptions.h"
-#include "zend.h"
 
 #ifdef CAIRO_HAS_WIN32_FONT
+#if defined(CAIRO_HAS_WIN32_FONT) && defined(HAVE_WIN32_FONT)
 
 #include <Windows.h>
 #include <Wingdi.h>
