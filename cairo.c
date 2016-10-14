@@ -1289,7 +1289,7 @@ PHP_MINIT_FUNCTION(cairo)
 #if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
 	PHP_MINIT(cairo_ft_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
-#ifdef CAIRO_HAS_WIN32_FONT
+#if defined(CAIRO_HAS_WIN32_FONT) && defined(HAVE_WIN32_FONT)
 	PHP_MINIT(cairo_win32_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
 /*
