@@ -11,6 +11,9 @@ if (PHP_CAIRO != "no") {
 			CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib");
 			CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
 
+			if (CHECK_LIB("libpng_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
+				CHECK_HEADER_ADD_INCLUDE("png.h", "CFLAGS_CAIRO", PHP_CAIRO + ";" + PHP_PHP_BUILD + "\\include" + ";" + PHP_PHP_BUILD + "\\include\\png");
+			}
 			if (CHECK_LIB("freetype_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
 				CHECK_HEADER_ADD_INCLUDE("freetype/freetype.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
 				AC_DEFINE("HAVE_FREETYPE", 1);
@@ -33,6 +36,9 @@ if (PHP_CAIRO != "no") {
 			CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib");
 			CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
 
+			if (CHECK_LIB("libpng_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
+				CHECK_HEADER_ADD_INCLUDE("png.h", "CFLAGS_CAIRO", PHP_CAIRO + ";" + PHP_PHP_BUILD + "\\include" + ";" + PHP_PHP_BUILD + "\\include\\png");
+			}
 			if (CHECK_LIB("freetype_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
 				CHECK_HEADER_ADD_INCLUDE("freetype/freetype.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
 				AC_DEFINE("HAVE_FREETYPE", 1);
