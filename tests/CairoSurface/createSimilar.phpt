@@ -78,5 +78,5 @@ CairoSurface::createSimilar() expects exactly 3 parameters, 1 given
 CairoSurface::createSimilar() expects exactly 3 parameters, 2 given
 CairoSurface::createSimilar() expects exactly 3 parameters, 4 given
 CairoSurface::createSimilar() expects parameter 1 to be long, array given
-CairoSurface::createSimilar() expects parameter 2 to be double, array given
-CairoSurface::createSimilar() expects parameter 3 to be double, array given
+CairoSurface::createSimilar() expects parameter 2 to be long, array given
+CairoSurface::createSimilar() expects parameter 3 to be long, array given

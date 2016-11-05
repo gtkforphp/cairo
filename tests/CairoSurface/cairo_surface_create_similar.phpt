@@ -51,6 +51,6 @@ Warning: cairo_surface_create_similar() expects parameter 1 to be CairoSurface, 
 
 Warning: cairo_surface_create_similar() expects parameter 2 to be long, array given in %s on line %d
 
-Warning: cairo_surface_create_similar() expects parameter 3 to be double, array given in %s on line %d
+Warning: cairo_surface_create_similar() expects parameter 3 to be long, array given in %s on line %d
 
-Warning: cairo_surface_create_similar() expects parameter 4 to be double, array given in %s on line %d
+Warning: cairo_surface_create_similar() expects parameter 4 to be long, array given in %s on line %d
