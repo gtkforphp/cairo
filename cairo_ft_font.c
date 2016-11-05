@@ -277,7 +277,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
                  * in ubuntu 12.04 and 14.04 - do things the hard way
                  * allocate big enough for the format string plus the err_string
                  */
-                 emalloc(exception_message, 68 + strlen(err_string));
+                 exception_message = safe_emalloc(68 + strlen(err_string));
                  php_sprintf(exception_message, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string);
                 
 php_printf("before exception");
