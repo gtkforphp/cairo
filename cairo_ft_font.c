@@ -222,8 +222,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	php_stream *stream;
 	php_stream_statbuf ssbuf;
 	zend_bool owned_stream = 0;
-	
-	php_printf("we worked before");
+
 	PHP_CAIRO_ERROR_HANDLING(TRUE)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z|l",
 				&stream_zval, &load_flags) == FAILURE)
@@ -231,7 +230,6 @@ PHP_METHOD(CairoFtFontFace, __construct)
 		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
-	php_printf("we worked after");
 
 	if(Z_TYPE_P(stream_zval) == IS_STRING) {
 		stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "rb", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
@@ -246,9 +244,9 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	if(!stream) {
-		php_printf("no stream!");
 		RETURN_NULL();
 	}
+	php_printf("we have a stream omg");
 	
 	if(php_stream_stat(stream, &ssbuf) != 0) {
         if(owned_stream) {
@@ -268,7 +266,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 		zend_throw_exception(cairo_ce_cairoexception, "Failed to initalise FreeType library", 0 TSRMLS_CC);
 		RETURN_NULL();
 	}
-	
+	php_printf("trying to create a font face yo");
 	error = php_cairo_create_ft_font_face(ft_container, font_face_object, stream, owned_stream, load_flags, 1 TSRMLS_CC);
 
 	if (error) {
