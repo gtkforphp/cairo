@@ -167,19 +167,19 @@ PHP_FUNCTION(cairo_ft_font_face_create)
 		php_stream_from_zval(stream, &stream_zval);	
 	} else {
 		zend_error(E_WARNING, "cairo_ft_font_face_create expects parameter 1 to be a string or a stream resource");
-		return;
+		RETURN_NULL();
 	}
 
 	if(!stream) {
-		return;
+		RETURN_NULL();
 	}
 
 	if(php_stream_stat(stream, &ssbuf) != 0) {
-		zend_error(E_WARNING, "cairo_ft_font_face_create(): Cannot determine size of stream");
 		if(owned_stream) {
 			php_stream_close(stream);
 		}
-		return;
+		zend_error(E_WARNING, "cairo_ft_font_face_create(): Cannot determine size of stream");
+		RETURN_NULL();
 	}
 
 	object_init_ex(return_value, cairo_ce_cairoftfont);
@@ -239,12 +239,12 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	} else {	
 		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		zend_throw_exception(cairo_ce_cairoexception, "CairoFtFontFace::__construct() expects parameter 1 to be a string or a stream resource", 0 TSRMLS_CC);
-		return;
+		RETURN_NULL();
 	}
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	if(!stream) {
-		return;
+		RETURN_NULL();
 	}
 	
 	if(php_stream_stat(stream, &ssbuf) != 0) {
