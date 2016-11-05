@@ -220,9 +220,9 @@ PHP_METHOD(CairoFtFontFace, __construct)
     pecl_ft_container *ft_container;
 
 	php_stream *stream;
-	zend_bool owned_stream = 0;
 	php_stream_statbuf ssbuf;
-
+	zend_bool owned_stream = 0;
+	
 	PHP_CAIRO_ERROR_HANDLING(TRUE)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z|l",
 				&stream_zval, &load_flags) == FAILURE)
@@ -244,7 +244,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	if(!stream) {
-		RETURN_NULL();
+		return;
 	}
 	
 	if(php_stream_stat(stream, &ssbuf) != 0) {
