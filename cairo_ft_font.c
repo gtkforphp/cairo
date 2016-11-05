@@ -273,7 +273,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 		pefree(ft_container, 1);
 php_printf("before exception");
 		//zend_throw_exception_ex(cairo_ce_cairoexception, error, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string TSRMLS_CC);
-zend_throw_exception_ex(cairo_ce_cairoexception, error, "CairoFtFontFace::__construct(): An error occurred opening the file" TSRMLS_CC);
+zend_throw_exception(cairo_ce_cairoexception, "CairoFtFontFace::__construct(): An error occurred opening the file", error TSRMLS_CC);
 php_printf("after exception");
 		RETURN_NULL();
 	}
