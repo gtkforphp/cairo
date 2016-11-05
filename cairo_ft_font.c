@@ -270,11 +270,21 @@ PHP_METHOD(CairoFtFontFace, __construct)
 
 	if (error) {
 		const char *err_string = php_cairo_get_ft_error(error TSRMLS_CC);
-		pefree(ft_container, 1);
+                char *exception_message;
+		
+                /**
+                 * zend_throw_exception_ex is segfaulting in PHP 5.6
+                 * in ubuntu 12.04 and 14.04 - do things the hard way
+                 * allocate big enough for the format string plus the err_string
+                 */
+                 emalloc(exception_message, 68 + strlen(err_string));
+                 php_sprintf(exception_message, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string);
+                
 php_printf("before exception");
 		//zend_throw_exception_ex(cairo_ce_cairoexception, error, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string TSRMLS_CC);
-zend_throw_exception(cairo_ce_cairoexception, "CairoFtFontFace::__construct(): An error occurred opening the file", error TSRMLS_CC);
+zend_throw_exception(cairo_ce_cairoexception, exception_message, error TSRMLS_CC);
 php_printf("after exception");
+                pefree(ft_container, 1);
 		RETURN_NULL();
 	}
 	
