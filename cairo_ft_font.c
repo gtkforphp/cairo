@@ -223,6 +223,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	php_stream_statbuf ssbuf;
 	zend_bool owned_stream = 0;
 	
+	php_printf("we worked before");
 	PHP_CAIRO_ERROR_HANDLING(TRUE)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z|l",
 				&stream_zval, &load_flags) == FAILURE)
@@ -230,6 +231,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 		PHP_CAIRO_RESTORE_ERRORS(TRUE)
 		return;
 	}
+	php_printf("we worked after");
 
 	if(Z_TYPE_P(stream_zval) == IS_STRING) {
 		stream = php_stream_open_wrapper(Z_STRVAL_P(stream_zval), "rb", REPORT_ERRORS|ENFORCE_SAFE_MODE, NULL);
@@ -244,6 +246,7 @@ PHP_METHOD(CairoFtFontFace, __construct)
 	PHP_CAIRO_RESTORE_ERRORS(TRUE)
 
 	if(!stream) {
+		php_printf("no stream!");
 		RETURN_NULL();
 	}
 	
