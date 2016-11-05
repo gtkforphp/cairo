@@ -270,11 +270,12 @@ PHP_METHOD(CairoFtFontFace, __construct)
 
 	if (error) {
 		const char *err_string = php_cairo_get_ft_error(error TSRMLS_CC);
+		php_printf("no we're erroring here?");
 		pefree(ft_container, 1);
 		zend_throw_exception_ex(cairo_ce_cairoexception, error, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string TSRMLS_CC);
 		RETURN_NULL();
 	}
-	php_printf("wait are we erroring here?");
+	
 
 	php_cairo_throw_exception(cairo_font_face_status(font_face_object->font_face) TSRMLS_CC);
 }
