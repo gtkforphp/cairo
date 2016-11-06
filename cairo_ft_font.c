@@ -265,14 +265,14 @@ PHP_METHOD(CairoFtFontFace, __construct)
 		zend_throw_exception(cairo_ce_cairoexception, "Failed to initalise FreeType library", 0 TSRMLS_CC);
 		RETURN_NULL();
 	}
-	php_printf("trying to create a font face yo");
+
 	error = php_cairo_create_ft_font_face(ft_container, font_face_object, stream, owned_stream, load_flags, 1 TSRMLS_CC);
 
 	if (error) {
 		const char *err_string = php_cairo_get_ft_error(error TSRMLS_CC);
                 php_printf("our string is %s", err_string);
 		//zend_throw_exception_ex(cairo_ce_cairoexception, error, "CairoFtFontFace::__construct(): An error occurred opening the file %s", err_string TSRMLS_CC);
-zend_throw_exception(cairo_ce_cairoexception, "Error message", error TSRMLS_CC);
+zend_throw_exception(cairo_ce_cairoexception, err_string, error TSRMLS_CC);
 php_printf("after exception");
                 pefree(ft_container, 1);
 		RETURN_NULL();
