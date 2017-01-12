@@ -7,7 +7,7 @@ if (PHP_CAIRO != "no") {
 	var PHP_CAIRO_SOURCES="";
 	for (var i=0; i<PHP_CAIRO_SRC_ARRAY.length; ++i) {
 		var basename = FSO.GetFileName(PHP_CAIRO_SRC_ARRAY[i]);
-		PHP_CAIRO_SOURCES = PHP_CAIRO_SOURCES + " " + basename;
+		if (basename != 'cairo.c') PHP_CAIRO_SOURCES = PHP_CAIRO_SOURCES + " " + basename;
 	}
 	if (CHECK_HEADER_ADD_INCLUDE("cairo/cairo.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true) &&
 		CHECK_HEADER_ADD_INCLUDE("ft2build.h", "CFLAGS_CAIRO", PHP_CAIRO + ";" + PHP_PHP_BUILD + "\\include" + ";" + PHP_PHP_BUILD + "\\include\\freetype")) {
