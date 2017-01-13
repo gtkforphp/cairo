@@ -88,7 +88,7 @@ PHP_MINIT_FUNCTION(cairo)
 #if defined(CAIRO_HAS_QUARTZ_FONT)
         PHP_MINIT(cairo_quartz_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
-#if defined(CAIRO_HAS_WIN32_FONT)
+#if defined(CAIRO_HAS_WIN32_FONT) && defined(HAVE_WIN32_FONT)
         PHP_MINIT(cairo_win32_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
         PHP_MINIT(cairo_surface)(INIT_FUNC_ARGS_PASSTHRU);
