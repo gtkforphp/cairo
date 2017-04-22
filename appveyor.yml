@@ -57,12 +57,12 @@ build_script:
   - echo Building PHP [%PHP_VERSION%]
   - '%PHP_SDK%\bin\phpsdk_setvars'
   - buildconf
-  - configure --disable-all --enable-zlib --enable-cli --enable-eos_datastructures --with-cairo %CONFIGURE_EXTRA%
+  - configure --disable-all --enable-cli --enable-zlib --enable-eos_datastructures=shared --with-cairo=shared %CONFIGURE_EXTRA%
   - nmake
 
 after_build:
   - cd %OUTDIR%
-  - 7z a %ARTIFACT_NAME% cairo.dll php_cairo.dll
+  - 7z a %ARTIFACT_NAME% cairo.dll php_cairo.dll php_eos_datastructures.dll
   - ps: Push-AppveyorArtifact $env:ARTIFACT_NAME
 
 test_script:
