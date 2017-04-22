@@ -27,8 +27,8 @@ if (PHP_CAIRO != "no") {
                 }
             }
             if (CHECK_LIB("Gdi32.lib", "cairo", PHP_CAIRO + "\\lib")) {
-                //AC_DEFINE("HAVE_WIN32_FONT", 1);
-                //ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_WIN32_FONT");
+                AC_DEFINE("HAVE_WIN32_FONT", 1);
+                ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_WIN32_FONT");
             }
 
             EXTENSION("cairo", PHP_CAIRO_SOURCES);
@@ -51,8 +51,8 @@ if (PHP_CAIRO != "no") {
                 }
             }
             if (CHECK_LIB("Gdi32.lib", "cairo", PHP_CAIRO + "\\lib")) {
-                //AC_DEFINE("HAVE_WIN32_FONT", 1);
-                //ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_WIN32_FONT");
+                AC_DEFINE("HAVE_WIN32_FONT", 1);
+                ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_WIN32_FONT");
             }
 
             EXTENSION("cairo", PHP_CAIRO_SOURCES);
