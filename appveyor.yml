@@ -1,8 +1,8 @@
 environment:
   matrix:
-  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_ts.zip
-    OUTDIR: Release_TS
-    V8_ASSETS: cairo-1.14.6-%Platform%.zip
+#  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_ts.zip
+#    OUTDIR: Release_TS
+#    V8_ASSETS: cairo-1.14.6-%Platform%.zip
   - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_nts.zip
     OUTDIR: Release
     CONFIGURE_EXTRA: --disable-zts
