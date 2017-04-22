@@ -16,7 +16,7 @@ clone_folder: c:\projects\php-sdk\cairo-ci\vc14\%Platform%\php\ext\cairo
 
 platform:
   - x64
-  - x86
+  # - x86
 
 install:
   - cd %PHP_SDK%
