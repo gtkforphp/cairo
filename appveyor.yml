@@ -57,7 +57,7 @@ build_script:
   - echo Building PHP [%PHP_VERSION%]
   - '%PHP_SDK%\bin\phpsdk_setvars'
   - buildconf
-  - configure --disable-all --enable-cli --enable-eos_datastructures --with-cairo %CONFIGURE_EXTRA%
+  - configure --disable-all --enable-zlib --enable-cli --enable-eos_datastructures --with-cairo %CONFIGURE_EXTRA%
   - nmake
 
 after_build:
