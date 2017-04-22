@@ -19,11 +19,11 @@ if (PHP_CAIRO != "no") {
 			}
 			if (CHECK_LIB("freetype_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
 				CHECK_HEADER_ADD_INCLUDE("freetype/freetype.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
-				//AC_DEFINE("HAVE_FREETYPE", 1);
-                //ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_FREETYPE");
+				AC_DEFINE("HAVE_FREETYPE", 1);
+                ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_FREETYPE");
                 if (CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib") &&
                     CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true)) {
-                    //AC_DEFINE("CAIRO_HAS_FT_FONT", 1);
+                    AC_DEFINE("CAIRO_HAS_FT_FONT", 1);
                 }
             }
             if (CHECK_LIB("Gdi32.lib", "cairo", PHP_CAIRO + "\\lib")) {
@@ -43,11 +43,11 @@ if (PHP_CAIRO != "no") {
             }
             if (CHECK_LIB("freetype_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
                 CHECK_HEADER_ADD_INCLUDE("freetype/freetype.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
-                //AC_DEFINE("HAVE_FREETYPE", 1);
-                //ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_FREETYPE");
+                AC_DEFINE("HAVE_FREETYPE", 1);
+                ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_FREETYPE");
                 if (CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib") &&
                     CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true)) {
-                    //AC_DEFINE("CAIRO_HAS_FT_FONT", 1);
+                    AC_DEFINE("CAIRO_HAS_FT_FONT", 1);
                 }
             }
             if (CHECK_LIB("Gdi32.lib", "cairo", PHP_CAIRO + "\\lib")) {
