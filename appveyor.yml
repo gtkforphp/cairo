@@ -25,6 +25,10 @@ install:
   - call bin\phpsdk_setvars.bat
   - call bin\phpsdk_buildtree.bat cairo-ci
   - cd cairo-ci\vc14\%Platform%
+  - if not exist php mkdir php
+  - if not exist php\ext mkdir php\ext
+  - cd php\ext
+  - git clone https://github.com/eosforphp/datastructures.git eos_datastructures
   - md deps
   - cd deps
   - curl -fSL -o %V8_ASSETS% "https://phpdev.toolsforresearch.com/%V8_ASSETS%"
@@ -52,7 +56,7 @@ build_script:
   - echo Building PHP [%PHP_VERSION%]
   - '%PHP_SDK%\bin\phpsdk_setvars'
   - buildconf
-  - configure --disable-all --enable-cli --with-cairo %CONFIGURE_EXTRA%
+  - configure --disable-all --enable-cli --enable-eos_datastructures --with-cairo %CONFIGURE_EXTRA%
   - nmake
 
 after_build:
