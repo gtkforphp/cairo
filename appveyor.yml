@@ -29,6 +29,7 @@ install:
   - if not exist php\ext mkdir php\ext
   - cd php\ext
   - git clone https://github.com/eosforphp/datastructures.git eos_datastructures
+  - cd ..\..
   - md deps
   - cd deps
   - curl -fSL -o %V8_ASSETS% "https://phpdev.toolsforresearch.com/%V8_ASSETS%"
