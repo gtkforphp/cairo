@@ -1,0 +1,72 @@
+environment:
+  matrix:
+  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_ts.zip
+    OUTDIR: Release_TS
+    V8_ASSETS: cairo-1.14.6-%Platform%.zip
+  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_nts.zip
+    OUTDIR: Release
+    CONFIGURE_EXTRA: --disable-zts
+    V8_ASSETS: cairo-1.14.6-%Platform%.zip
+
+  PHP_VERSION: 7.0.18
+  PHP_SDK: c:\projects\php-sdk
+
+os: Windows Server 2012
+clone_folder: c:\projects\php-sdk\cairo-ci\vc14\%Platform%\php\ext\cairo
+
+platform:
+  - x64
+  - x86
+
+install:
+  - cd %PHP_SDK%
+  - curl -fSL -o php-sdk-binary-tools-20110915.zip "http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip"
+  - 7z.exe x php-sdk-binary-tools-20110915.zip
+  - call bin\phpsdk_setvars.bat
+  - call bin\phpsdk_buildtree.bat cairo-ci
+  - cd cairo-ci\vc14\%Platform%
+  - if not exist php mkdir php
+  - if not exist php\ext mkdir php\ext
+  - cd php\ext
+  - git clone https://github.com/eosforphp/datastructures.git eos_datastructures
+  - cd ..\..
+  - md deps
+  - cd deps
+  - curl -fSL -o %V8_ASSETS% "https://phpdev.toolsforresearch.com/%V8_ASSETS%"
+  - 7z.exe x %V8_ASSETS%
+  - cd ..
+  - curl -fSL -o "php-%PHP_VERSION%.tar.gz" "http://us1.php.net/distributions/php-%PHP_VERSION%.tar.gz"
+  - ren php php-%PHP_VERSION%
+  - 7z.exe x php-%PHP_VERSION%.tar.gz -y
+  - 7z.exe x php-%PHP_VERSION%.tar -y | find /v "Extracting"
+  - cd php-%PHP_VERSION%
+  - IF "%Platform%" == "x64" SET OUTDIR=x64\%OUTDIR%
+  - mkdir %OUTDIR%
+  - move ..\deps\bin\*.dll %OUTDIR%\
+
+build_script:
+  - ps: >-
+      If ($env:Platform -Match "x86") {
+        $env:VCVARS_PLATFORM="x86"
+        $env:ENV_PLATFORM="x86"
+      } Else {
+        $env:VCVARS_PLATFORM="amd64"
+        $env:ENV_PLATFORM="x64"
+      }
+  - call "%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %VCVARS_PLATFORM%
+  - echo Building PHP [%PHP_VERSION%]
+  - '%PHP_SDK%\bin\phpsdk_setvars'
+  - buildconf
+  - configure --disable-all --enable-cli --enable-zlib --enable-eos_datastructures=shared --with-cairo=shared %CONFIGURE_EXTRA%
+  - nmake
+
+after_build:
+  - cd %OUTDIR%
+  - 7z a %ARTIFACT_NAME% cairo.dll php_cairo.dll php_eos_datastructures.dll
+  - ps: Push-AppveyorArtifact $env:ARTIFACT_NAME
+
+test_script:
+
+on_finish:
+
+deploy:

@@ -28,6 +28,23 @@
 ZEND_BEGIN_ARG_INFO(Cairo_version_args, ZEND_SEND_BY_VAL)
 ZEND_END_ARG_INFO()
 
+#if defined(CAIRO_HAS_FT_FONT) && defined(HAVE_FREETYPE)
+
+const char* php_cairo_get_ft_error(int error) {
+	int i;
+	php_cairo_ft_error *current_error = php_cairo_ft_errors;
+
+	while (current_error->err_msg != NULL) {
+		if (current_error->err_code == error) {
+			return current_error->err_msg;
+		}
+		current_error++;
+	}
+	return NULL;
+}
+
+#endif
+
 /* {{{ proto int Cairo\version(void) 
        Returns an integer version number of the cairo library being used */
 PHP_FUNCTION(version)
@@ -88,7 +105,7 @@ PHP_MINIT_FUNCTION(cairo)
 #if defined(CAIRO_HAS_QUARTZ_FONT)
         PHP_MINIT(cairo_quartz_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
-#if defined(CAIRO_HAS_WIN32_FONT)
+#if defined(CAIRO_HAS_WIN32_FONT) && defined(HAVE_WIN32_FONT)
         PHP_MINIT(cairo_win32_font)(INIT_FUNC_ARGS_PASSTHRU);
 #endif
         PHP_MINIT(cairo_surface)(INIT_FUNC_ARGS_PASSTHRU);

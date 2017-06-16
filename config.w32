@@ -3,53 +3,67 @@
 ARG_WITH("cairo", "Cairo Graphics Library Bindings", "no");
 
 if (PHP_CAIRO != "no") {
+	configure_module_dirname = configure_module_dirname + "\\src";
+	var PHP_CAIRO_SRC_ARRAY = glob(configure_module_dirname + "/*.c");
+	var PHP_CAIRO_SOURCES="";
+	for (var i=0; i<PHP_CAIRO_SRC_ARRAY.length; ++i) {
+		var basename = FSO.GetFileName(PHP_CAIRO_SRC_ARRAY[i]);
+		PHP_CAIRO_SOURCES = PHP_CAIRO_SOURCES + " " + basename;
+	}
 	if (CHECK_HEADER_ADD_INCLUDE("cairo/cairo.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true) &&
 		CHECK_HEADER_ADD_INCLUDE("ft2build.h", "CFLAGS_CAIRO", PHP_CAIRO + ";" + PHP_PHP_BUILD + "\\include" + ";" + PHP_PHP_BUILD + "\\include\\freetype")) {
 		/* Check for static lib first, because that will need an extra define */
 		if (CHECK_LIB("cairo_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
-			/* We don't care if this fails, but if it does exists, we need to link */
-			CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib");
-			CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
-
+			if (CHECK_LIB("libpng_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
+				CHECK_HEADER_ADD_INCLUDE("png.h", "CFLAGS_CAIRO", PHP_CAIRO + ";" + PHP_PHP_BUILD + "\\include" + ";" + PHP_PHP_BUILD + "\\include\\png");
+			}
 			if (CHECK_LIB("freetype_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
 				CHECK_HEADER_ADD_INCLUDE("freetype/freetype.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
 				AC_DEFINE("HAVE_FREETYPE", 1);
-			}
-			if (CHECK_LIB("Gdi32.lib", "cairo", PHP_CAIRO + "\\lib")) {
-				AC_DEFINE("HAVE_WIN32_FONT", 1);
-			}
+                ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_FREETYPE");
+                if (CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib") &&
+                    CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true)) {
+                    AC_DEFINE("CAIRO_HAS_FT_FONT", 1);
+                }
+            }
+            if (CHECK_LIB("Gdi32.lib", "cairo", PHP_CAIRO + "\\lib")) {
+                AC_DEFINE("HAVE_WIN32_FONT", 1);
+                ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_WIN32_FONT");
+            }
 
-			EXTENSION("cairo", "cairo.c cairo_error.c cairo_context.c cairo_pattern.c cairo_matrix.c cairo_path.c \
-			cairo_surface.c cairo_image_surface.c cairo_svg_surface.c cairo_pdf_surface.c cairo_ps_surface.c \
-			cairo_font.c cairo_font_options.c cairo_font_face.c cairo_scaled_font.c cairo_ft_font.c \
-			cairo_recording_surface.c cairo_sub_surface.c cairo_win32_font.c");
-			ADD_FLAG("CFLAGS_CAIRO", "/D CAIRO_WIN32_STATIC_BUILD=1");
+            EXTENSION("cairo", PHP_CAIRO_SOURCES);
+            ADD_EXTENSION_DEP("cairo", "eos_datastructures");
+            ADD_FLAG("CFLAGS_CAIRO", "/D CAIRO_WIN32_STATIC_BUILD=1");
 
-			AC_DEFINE("HAVE_CAIRO", 1);
-			PHP_INSTALL_HEADERS("ext/cairo", "php_cairo_api.h");
-		} else if (CHECK_LIB("cairo.lib", "cairo", PHP_CAIRO + "\\lib")) {
-			CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib");
-			CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
+            AC_DEFINE("HAVE_CAIRO", 1);
+            PHP_INSTALL_HEADERS("ext/cairo", "src/php_cairo_api.h");
+        } else if (CHECK_LIB("cairo.lib", "cairo", PHP_CAIRO + "\\lib")) {
+            if (CHECK_LIB("libpng_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
+                CHECK_HEADER_ADD_INCLUDE("png.h", "CFLAGS_CAIRO", PHP_CAIRO + ";" + PHP_PHP_BUILD + "\\include" + ";" + PHP_PHP_BUILD + "\\include\\png");
+            }
+            if (CHECK_LIB("freetype_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
+                CHECK_HEADER_ADD_INCLUDE("freetype/freetype.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
+                AC_DEFINE("HAVE_FREETYPE", 1);
+                ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_FREETYPE");
+                if (CHECK_LIB("fontconfig.lib", "cairo", PHP_CAIRO + "\\lib") &&
+                    CHECK_HEADER_ADD_INCLUDE("fontconfig/fontconfig.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true)) {
+                    AC_DEFINE("CAIRO_HAS_FT_FONT", 1);
+                }
+            }
+            if (CHECK_LIB("Gdi32.lib", "cairo", PHP_CAIRO + "\\lib")) {
+                AC_DEFINE("HAVE_WIN32_FONT", 1);
+                ADD_FLAG("CFLAGS_CAIRO", "/D HAVE_WIN32_FONT");
+            }
 
-			if (CHECK_LIB("freetype_a.lib", "cairo", PHP_CAIRO + "\\lib")) {
-				CHECK_HEADER_ADD_INCLUDE("freetype/freetype.h", "CFLAGS_CAIRO", PHP_CAIRO + "\\include", null, true);
-				AC_DEFINE("HAVE_FREETYPE", 1);
-			}
-			if (CHECK_LIB("Gdi32.lib", "cairo", PHP_CAIRO + "\\lib")) {
-				AC_DEFINE("HAVE_WIN32_FONT", 1);
-			}
+            EXTENSION("cairo", PHP_CAIRO_SOURCES);
+            ADD_EXTENSION_DEP("cairo", "eos_datastructures");
 
-			EXTENSION("cairo", "cairo.c cairo_error.c cairo_context.c cairo_pattern.c cairo_matrix.c cairo_path.c \
-			cairo_surface.c cairo_image_surface.c cairo_svg_surface.c cairo_pdf_surface.c cairo_ps_surface.c \
-			cairo_font.c cairo_font_options.c cairo_font_face.c cairo_scaled_font.c cairo_ft_font.c \
-			cairo_recording_surface.c cairo_sub_surface.c  cairo_win32_font.c");
-
-			AC_DEFINE("HAVE_CAIRO", 1);
-			PHP_INSTALL_HEADERS("ext/cairo", "php_cairo_api.h");
-		} else {
-			WARNING('Could not find cairo.lib or cairo_a.lib; skipping');
-		}
-	} else {
-		WARNING('Could not find cairo.h; skipping');
-	}
+            AC_DEFINE("HAVE_CAIRO", 1);
+            PHP_INSTALL_HEADERS("ext/cairo", "src/php_cairo_api.h");
+        } else {
+            WARNING('Could not find cairo.lib or cairo_a.lib; skipping');
+        }
+    } else {
+        WARNING('Could not find cairo.h; skipping');
+    }
 }

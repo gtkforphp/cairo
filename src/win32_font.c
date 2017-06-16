@@ -85,6 +85,13 @@ static zend_class_entry *ce_cairo_win32fontpitch;
 static zend_class_entry *ce_cairo_win32fontfamily;
 static zend_object_handlers cairo_win32_font_face_object_handlers;
 
+/**
+ * CairoWin32FontFace::__construct takes 1 optional argument
+ */
+ZEND_BEGIN_ARG_INFO_EX(CairoWin32FontFace_construct_args, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+    ZEND_ARG_INFO(0, font_options)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto CairoWin32FontFace::__construct([array font_options])
        Creates a new font face for the Win32 backend */
 PHP_METHOD(CairoWin32FontFace, __construct)
