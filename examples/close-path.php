@@ -1,28 +1,33 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 32, 16);
-$con = new CairoContext($sur);
 
-$con->save();
-$con->setSourceRgb(1,1,1);
-$con->paint();
-$con->restore();
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$con->arc(8, 8, 4, 0, M_PI);
-$con->closePath();
-$con->arc(8,8,4,M_PI,2*M_PI);
-$con->fill();
+$surface = new Image(ImageFormat::ARGB32, 32, 16);
+$context = new Context($surface);
 
-$con->translate(16,0);
-$con->moveTo(8,4);
-$con->arcNegative(8,8,4,3*M_PI/2,M_PI/2);
-$con->closePath();
-$con->curveTo(12,4,12,12,8,12);
+$context->save();
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+$context->restore();
 
-$path = $con->copyPathFlat();
-$con->newPath();
-$con->appendPath($path);
-$con->fill();
+$context->arc(8, 8, 4, 0, M_PI);
+$context->closePath();
+$context->arc(8, 8, 4, M_PI, 2 * M_PI);
+$context->fill();
 
-$sur->writeToPng(dirname(__FILE__)  . "/close-path-php.png");
-?>
+$context->translate(16, 0);
+$context->moveTo(8, 4);
+$context->arcNegative(8, 8, 4, 3 * M_PI / 2, M_PI / 2);
+$context->closePath();
+$context->curveTo(12, 4, 12, 12, 8, 12);
+
+$path = $context->copyPathFlat();
+$context->newPath();
+$context->appendPath($path);
+$context->fill();
+
+$surface->writeToPng(dirname(__FILE__).'/close-path-php.png');
+
 

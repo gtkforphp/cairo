@@ -1,111 +1,96 @@
 <?php
-function spline_path ()
+
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
+function splinePath($spline, $context)
 {
-    global $spline,$con;
-    $con->save ();
-    {
-	$con->moveTo (
-		       - $spline, 0);
-	$con->curveTo (
-			- $spline / 4, - $spline,
-			  $spline / 4,   $spline,
-			  $spline, 0);
-    }
-    $con->restore ();
+	$context->save();
+	$context->moveTo(-$spline, 0);
+	$context->curveTo(-$spline / 4, -$spline, $spline / 4, $spline, $spline, 0);
+	$context->restore();
 }
 
-function scale_then_set_line_width_and_stroke ()
+function scaleThenSetLineWidthAndStroke($context, $spline, $scaleX, $scaleY, $lineWidth)
 {
-    global $con,$xscale,$yscale,$linewidth;
-    $con->scale ( $xscale, $yscale);
-    $con->setLineWidth ( $linewidth);
-    spline_path ();
-    $con->stroke ();
+	$context->scale($scaleX, $scaleY);
+	$context->setLineWidth($lineWidth);
+	splinePath($spline, $context);
+	$context->stroke();
 }
 
-function scale_path_and_line_width ()
+function scalePathAndLineWidth($context, $spline, $scaleX, $scaleY, $lineWidth)
 {
-    global $con, $xscale, $yscale,$linewidth;
-    $con->save ();
-    {
-	$con->scale ( $xscale, $yscale);
-	spline_path ();
-    }
-    $con->restore ();
-
-    $con->save ();
-    {
-	$con->scale ( $xscale, $yscale);
-	$con->setLineWidth ( $linewidth);
-	$con->stroke ();
-    }
-    $con->restore ();
+	$context->save();
+	$context->scale($scaleX, $scaleY);
+	splinePath($spline, $context);
+	$context->restore();
+	$context->save();
+	$context->scale($scaleX, $scaleY);
+	$context->setLineWidth($lineWidth);
+	$context->stroke();
+	$context->restore();
 }
 
-function set_line_width_then_scale_and_stroke()
+function setLineWidthThenScaleAndStroke($context, $spline, $scaleX, $scaleY, $lineWidth)
 {
-    global $con, $xscale, $yscale,$linewidth;
-    $con->setLineWidth ( $linewidth);
-    $con->scale ( $xscale, $yscale);
-    spline_path ();
-    $con->stroke ();
+	$context->setLineWidth($lineWidth);
+	$context->scale($scaleX, $scaleY);
+	splinePath($spline, $context);
+	$context->stroke();
 }
 
-function scale_path_not_line_width ()
+function scalePathNotLineWidth($context, $spline, $scaleX, $scaleY, $lineWidth)
 {
-    global $con, $xscale, $yscale,$linewidth;
-
-    $con->save ();
-    {
-	$con->scale ( $xscale, $yscale);
-	spline_path ();
-    }
-    $con->restore ();
-
-    $con->save ();
-    {
-	$con->setLineWidth ( $linewidth);
-	$con->stroke ();
-    }
-    $con->restore ();
+	$context->save();
+	$context->scale($scaleX, $scaleY);
+	splinePath($spline, $context);
+	$context->restore();
+	$context->save();
+	$context->setLineWidth($lineWidth);
+	$context->stroke();
+	$context->restore();
 }
 
- $linewidth = 13;
- $spline = 50.0;
- $xscale  = 0.5;
- $yscale  = 2.0;
- $width = ($xscale * $spline * 6.0);
- $height = ($yscale * $spline * 2.0);    
- $sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
- $con = new CairoContext($sur);
- $con->setSourceRgb ( 1.0, 1.0, 1.0); /* white */
- $con->paint ();
- $con->setSourceRgb ( 0.0, 0.0, 0.0); /* black */
- for($i =0 ; $i<4;$i++) {
- 	$con->save();
-//	$con->translate($width/4 + ($i % 2)*$width/2, $height/4 + ($i/2)*$height/2);
-	switch($i) {
-	case 0:
- 		$con->translate($width/4 , $height/4);
-		scale_then_set_line_width_and_stroke();
-		break;
-	case 1:
- 		$con->translate($width/4 + $width/2, $height/4);
-		scale_path_and_line_width();
-		break;
-	case 2:
- 		$con->translate($width/4, $height/4 + $height/2);
- 		set_line_width_then_scale_and_stroke();
-		break;
-	case 3:
- 		$con->translate($width/4 + $width/2, $height/4 + $height/2);
-		scale_path_not_line_width();
-		break;
+$spline = 50.0;
+$lineWidth = 13;
+$scaleX = 0.5;
+$scaleY = 2.0;
+$width = ($scaleX * $spline * 6.0);
+$height = ($scaleY * $spline * 2.0);
+
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
+$context->setSourceRgb(1.0, 1.0, 1.0); /* white */
+$context->paint();
+$context->setSourceRgb(0.0, 0.0, 0.0); /* black */
+
+for ($i = 0; $i < 4; $i++)
+{
+	$context->save();
+	
+	switch ($i)
+	{
+		case 0:
+			$context->translate($width / 4, $height / 4);
+			scaleThenSetLineWidthAndStroke($context, $spline, $scaleX, $scaleY, $lineWidth);
+			break;
+		case 1:
+			$context->translate($width / 4 + $width / 2, $height / 4);
+			scalePathAndLineWidth($context, $spline, $scaleX, $scaleY, $lineWidth);
+			break;
+		case 2:
+			$context->translate($width / 4, $height / 4 + $height / 2);
+			setLineWidthThenScaleAndStroke($context, $spline, $scaleX, $scaleY, $lineWidth);
+			break;
+		case 3:
+			$context->translate($width / 4 + $width / 2, $height / 4 + $height / 2);
+			scalePathNotLineWidth($context, $spline, $scaleX, $scaleY, $lineWidth);
+			break;
 	}
-$con->restore();
+	
+	$context->restore();
 }
-$sur->writeToPng(dirname(__FILE__)  . "/line-width-scale-php.png");
-?>
 
-
-
+$surface->writeToPng(dirname(__FILE__).'/line-width-scale-php.png');

@@ -1,34 +1,39 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32,100, 100);
-$con = new CairoContext($sur);
 
-$s = new CairoImageSurface(CairoFormat::ARGB32,20, 20);
-$con2 = new CairoContext($s);
+use Cairo\Context;
+use Cairo\Extend;
+use Cairo\Operator;
+use Cairo\Pattern\Surface as PatternSurface;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$con2->setSourceRgba(1,0,0,1);
-$con2->rectangle(0,0,10,10);
+$surface = new Image(ImageFormat::ARGB32, 100, 100);
+$context = new Context($surface);
+
+$s = new Image(ImageFormat::ARGB32, 20, 20);
+$con2 = new Context($s);
+
+$con2->setSourceRgba(1, 0, 0, 1);
+$con2->rectangle(0, 0, 10, 10);
 $con2->fill();
-$con2->setSourceRgba(0,1,0,1);
-$con2->rectangle(10,0,10,10);
+$con2->setSourceRgba(0, 1, 0, 1);
+$con2->rectangle(10, 0, 10, 10);
 $con2->fill();
-$con2->setSourceRgba(0,0,1,1);
-$con2->rectangle(0,10,10,10);
+$con2->setSourceRgba(0, 0, 1, 1);
+$con2->rectangle(0, 10, 10, 10);
 $con2->fill();
-$con2->setSourceRgba(1,1,0,1);
-$con2->rectangle(10,10,10,10);
+$con2->setSourceRgba(1, 1, 0, 1);
+$con2->rectangle(10, 10, 10, 10);
 $con2->fill();
 
-$pat = new CairoSurfacePattern($s);
-$pat->setExtend(CairoExtend::REPEAT);
-$con->setSourceRgba(0,0,0,1);
-$con->rectangle(0,0,100,100);
-$con->fill();
-$con->translate(10,10);
-$con->setOperator(CairoOperator::OVER);
-$con->setSource($pat);
-$con->rectangle(0,0,90,90);
-$con->fill();
-$sur->writeToPng(dirname(__FILE__) . "/composite-integer-translate-over-repeat-php.png");
-?>
-
-
+$pat = new PatternSurface($s);
+$pat->setExtend(Extend::REPEAT);
+$context->setSourceRgba(0, 0, 0, 1);
+$context->rectangle(0, 0, 100, 100);
+$context->fill();
+$context->translate(10, 10);
+$context->setOperator(Operator::OVER);
+$context->setPattern($pat);
+$context->rectangle(0, 0, 90, 90);
+$context->fill();
+$surface->writeToPng(dirname(__FILE__).'/composite-integer-translate-over-repeat-php.png');

@@ -1,36 +1,42 @@
 <?php
+
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $width = 64;
 $height = 64;
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
-$con = new CairoContext($sur);
-$con->newPath();
-$con->arc($width/2, $height/2, $width/3, 0, 2 * M_PI);
-$con->clip();
-$con->newPath();
-$con->moveTo(0,0);
-$con->lineTo($width/4, $height/2);
-$con->lineTo(0, $height);
-$con->lineTo($width, $height);
-$con->lineTo(3*$width/4, $height/2);
-$con->lineTo($width, 0);
-$con->closePath();
-$con->clip();
-$con->setSourceRgb(0,0,0.6);
-$con->newPath();
-$con->moveTo(0,0);
-$con->lineTo(0, $height);
-$con->lineTo($width/2, 3*$height/4);
-$con->lineTo($width, $height);
-$con->lineTo($width, 0);
-$con->lineTo($width/2, $height/4);
-$con->closePath();
-$con->fill();
-$con->newPath();
-$con->arc($width/2, $height/2, $width/5, 0, 2 * M_PI);
-$con->clip();
-$con->setSourceRgb(1,1,0);
-$con->paint();
+
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
+$context->newPath();
+$context->arc($width / 2, $height / 2, $width / 3, 0, 2 * M_PI);
+$context->clip();
+$context->newPath();
+$context->moveTo(0, 0);
+$context->lineTo($width / 4, $height / 2);
+$context->lineTo(0, $height);
+$context->lineTo($width, $height);
+$context->lineTo(3 * $width / 4, $height / 2);
+$context->lineTo($width, 0);
+$context->closePath();
+$context->clip();
+$context->setSourceRgb(0, 0, 0.6);
+$context->newPath();
+$context->moveTo(0, 0);
+$context->lineTo(0, $height);
+$context->lineTo($width / 2, 3 * $height / 4);
+$context->lineTo($width, $height);
+$context->lineTo($width, 0);
+$context->lineTo($width / 2, $height / 4);
+$context->closePath();
+$context->fill();
+$context->newPath();
+$context->arc($width / 2, $height / 2, $width / 5, 0, 2 * M_PI);
+$context->clip();
+$context->setSourceRgb(1, 1, 0);
+$context->paint();
 
 
-$sur->writeToPng(dirname(__FILE__)  . "/clip-twice-php.png");
-?>
+$surface->writeToPng(dirname(__FILE__).'/clip-twice-php.png');
+

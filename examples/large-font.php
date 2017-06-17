@@ -1,15 +1,20 @@
 <?php
+
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $width = 800;
 $height = 800;
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
-$con = new CairoContext($sur);
-$con->setSourceRgb(1,1,1);
-$con->paint();
-$con->selectFontFace("Bitstream Vera Sans");
-$con->setFontSize(10000);
-$con->setSourceRgb(0,0,0);
-$con->moveTo(-5000, 5000);
-$con->showText("xW");
 
-$sur->writeToPng(dirname(__FILE__)  . "/large-font-php.png");
-?>
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+$context->selectFontFace('Bitstream Vera Sans');
+$context->setFontSize(10000);
+$context->setSourceRgb(0, 0, 0);
+$context->moveTo(-5000, 5000);
+$context->showText('xW');
+
+$surface->writeToPng(dirname(__FILE__).'/large-font-php.png');

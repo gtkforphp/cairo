@@ -1,22 +1,26 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 76,76);
-$con = new CairoContext($sur);
 
-$con->setSourceRgb ( 1, 1, 1);
-$con->paint ();
-$con->setAntialias (CairoAntialias::MODE_NONE);
-$con->setSourceRgb ( 0, 0, 0);
+use Cairo\Antialias;
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$con->translate( -300, -300);
-$con->scale( 677.0/26, 677.0/26);
-$con->translate( 1, 1);
-$con->rectangle( 11, 11, 1, 1);
-$con->rectangle( 11, 12, 1, 1);
-$con->rectangle( 12, 11, 1, 1);
-$con->rectangle( 12, 12, 1, 1);
-$con->setSourceRgb( 0, 0, 0);
-$con->fill();
+$surface = new Image(ImageFormat::ARGB32, 76, 76);
+$context = new Context($surface);
 
-$sur->writeToPng(dirname(__FILE__)  . "/rectangle-rounding-error-php.png");
-?>
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+$context->setAntialias(Antialias::NONE);
+$context->setSourceRgb(0, 0, 0);
 
+$context->translate(-300, -300);
+$context->scale(677.0 / 26, 677.0 / 26);
+$context->translate(1, 1);
+$context->rectangle(11, 11, 1, 1);
+$context->rectangle(11, 12, 1, 1);
+$context->rectangle(12, 11, 1, 1);
+$context->rectangle(12, 12, 1, 1);
+$context->setSourceRgb(0, 0, 0);
+$context->fill();
+
+$surface->writeToPng(dirname(__FILE__).'/rectangle-rounding-error-php.png');

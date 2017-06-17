@@ -32,8 +32,8 @@ for ($i = 0; $i < $points; $i++)
 		$t1 = (2 * $i) + (($i + 1) * $step);
 		$t2 = (2 * $j) + (($j + 1) * $step);
 		
-		$context->setSourceSurface($s, $t1, $t2);
-		$source = $context->getSource();
+		$context->setSurface($s, $t1, $t2);
+		$source = $context->getPattern();
 		$source->setFilter(Filter::NEAREST);
 		$context->paint();
 	}

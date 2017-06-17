@@ -1,53 +1,62 @@
 <?php
+
+use Cairo\Context;
+use Cairo\FontOptions;
+use Cairo\HintMetrics;
+use Cairo\HintStyle;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $width = 247;
 $height = 26;
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
-$con = new CairoContext($sur);
-$con->selectFontFace("6x13.pcf");
-$con->setFontSize(11.5);
-$fo = new CairoFontOptions();
-$fo->setHintMetrics(CairoHintMetrics::METRICS_ON);
-$con->setFontOptions($fo);
-$fe = $con->fontExtents();
-$con->moveTo(1,$fe["ascent"] - 1);
-$con->setSourceRgb(0,0,1);
-$fo->setHintStyle(Cairo::HINT_STYLE_NONE);
-$con->setFontOptions($fo);
-$con->showText("the ");
-$fo->setHintStyle(Cairo::HINT_STYLE_SLIGHT);
-$con->setFontOptions($fo);
-$con->showText("quick ");
-$fo->setHintStyle(Cairo::HINT_STYLE_MEDIUM);
-$con->setFontOptions($fo);
-$con->showText("brown");
-$fo->setHintStyle(Cairo::HINT_STYLE_FULL);
-$con->setFontOptions($fo);
-$con->showText(" fox");
 
-$con->textPath(" jumps over a lazy dog");
-$con->fill();
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
+$context->selectFontFace('6x13.pcf');
+$context->setFontSize(11.5);
 
-$con->translate($width, $height);
-$con->rotate(M_PI);
+$fo = new FontOptions();
+$fo->setHintMetrics(HintMetrics::ON);
 
-$con->moveTo(1, $fe["height"]-$fe["descent"]-1);
-$fo->setHintMetrics(CairoHintMetrics::METRICS_OFF);
-$fo->setHintStyle(Cairo::HINT_STYLE_NONE);
-$con->setFontOptions($fo);
-$con->showText("the ");
-$fo->setHintStyle(Cairo::HINT_STYLE_SLIGHT);
-$con->setFontOptions($fo);
-$con->showText("quick");
-$fo->setHintStyle(Cairo::HINT_STYLE_MEDIUM);
-$con->setFontOptions($fo);
-$con->showText(" brown");
-$fo->setHintStyle(Cairo::HINT_STYLE_FULL);
-$con->setFontOptions($fo);
-$con->showText(" fox");
+$context->setFontOptions($fo);
+$fe = $context->getFontExtents();
+$context->moveTo(1, $fe['ascent'] - 1);
+$context->setSourceRgb(0, 0, 1);
+$fo->setHintStyle(HintStyle::NONE);
+$context->setFontOptions($fo);
+$context->showText('the ');
+$fo->setHintStyle(HintStyle::SLIGHT);
+$context->setFontOptions($fo);
+$context->showText('quick ');
+$fo->setHintStyle(HintStyle::MEDIUM);
+$context->setFontOptions($fo);
+$context->showText('brown');
+$fo->setHintStyle(HintStyle::FULL);
+$context->setFontOptions($fo);
+$context->showText(' fox');
 
-$con->textPath(" jumps over");
-$con->textPath(" a lazy dog");
-$con->fill();
-$sur->writeToPng(dirname(__FILE__)  . "/bitmap-font-php.png");
-?>
+$context->textPath(' jumps over a lazy dog');
+$context->fill();
 
+$context->translate($width, $height);
+$context->rotate(M_PI);
+
+$context->moveTo(1, $fe['height'] - $fe['descent'] - 1);
+$fo->setHintMetrics(HintMetrics::OFF);
+$fo->setHintStyle(HintStyle::NONE);
+$context->setFontOptions($fo);
+$context->showText('the ');
+$fo->setHintStyle(HintStyle::SLIGHT);
+$context->setFontOptions($fo);
+$context->showText('quick');
+$fo->setHintStyle(HintStyle::MEDIUM);
+$context->setFontOptions($fo);
+$context->showText(' brown');
+$fo->setHintStyle(HintStyle::FULL);
+$context->setFontOptions($fo);
+$context->showText(' fox');
+
+$context->textPath(' jumps over');
+$context->textPath(' a lazy dog');
+$context->fill();
+$surface->writeToPng(dirname(__FILE__).'/bitmap-font-php.png');

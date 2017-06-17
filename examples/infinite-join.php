@@ -1,24 +1,29 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 8, 8);
-$con = new CairoContext($sur);
 
-$con->setSourceRgb(1,1,1);
-$con->paint();
+use Cairo\Context;
+use Cairo\LineJoin;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$con->setSourceRgb(0,0,0);
-$con->setLineJoin(CairoLineJoin::ROUND);
-$con->scale(20.0/100.0, 20/100.);
-$con->scale(1./20, 1./20);
-$con->setLineWidth(20);
-$con->translate ( -18300, -13200);
+$surface = new Image(ImageFormat::ARGB32, 8, 8);
+$context = new Context($surface);
 
-$con->newPath ();
-$con->moveTo ( 18928, 13843);
-$con->lineTo ( 18500, 13843);
-$con->lineTo ( 18500, 13400);
-$con->lineTo ( 18928, 13400);
-$con->lineTo ( 18928, 13843);
-$con->stroke ();
-$sur->writeToPng(dirname(__FILE__)  . "/infinite-join-php.png");
-?>
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
 
+$context->setSourceRgb(0, 0, 0);
+$context->setLineJoin(LineJoin::ROUND);
+$context->scale(20.0 / 100.0, 20 / 100.);
+$context->scale(1. / 20, 1. / 20);
+$context->setLineWidth(20);
+$context->translate(-18300, -13200);
+
+$context->newPath();
+$context->moveTo(18928, 13843);
+$context->lineTo(18500, 13843);
+$context->lineTo(18500, 13400);
+$context->lineTo(18928, 13400);
+$context->lineTo(18928, 13843);
+$context->stroke();
+
+$surface->writeToPng(dirname(__FILE__).'/infinite-join-php.png');

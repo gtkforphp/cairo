@@ -1,150 +1,157 @@
 <?php
+
+use Cairo\Context;
+use Cairo\LineCap;
+use Cairo\LineJoin;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $linewidth = 8.0;
-$size = 5*$linewidth;
-$pad = 2*$linewidth;
+$size = 5 * $linewidth;
+$pad = 2 * $linewidth;
+$dash = [1.5 * $linewidth];
 
-$imwidth = 3*($pad + $size) + $pad;
-$imheight = $size*5 + 6*$pad;
+$imwidth = 3 * ($pad + $size) + $pad;
+$imheight = ($size * 5) + (6 * $pad);
 
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $imwidth, $imheight);
-$con = new CairoContext($sur);
+$surface = new Image(ImageFormat::ARGB32, $imwidth, $imheight);
+$context = new Context($surface);
 
-$dash= array(1.5*$linewidth);
-$con->save();
-$con->setSourceRgb(1,1,1);
-$con->paint();
-$con->restore();
 
-$con->translate($pad, $pad);
+$context->save();
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+$context->restore();
 
-$con->setDash($dash, -2*$linewidth);
-$con->setLineWidth($linewidth);
+$context->translate($pad, $pad);
 
-$con->save();
+$context->setDash($dash, -2 * $linewidth);
+$context->setLineWidth($linewidth);
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
+$context->save();
 
-$con->setLineCap(CairoLineCap::BUTT);
-$con->setLineJoin(CairoLineJoin::BEVEL);
-$con->stroke();
-$con->translate($size+$pad,0);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
+$context->setLineCap(LineCap::BUTT);
+$context->setLineJoin(LineJoin::BEVEL);
+$context->stroke();
+$context->translate($size + $pad, 0);
 
-$con->setLineCap(CairoLineCap::ROUND);
-$con->setLineJoin(CairoLineJoin::ROUND);
-$con->stroke();
-$con->translate($size+$pad, 0);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
+$context->setLineCap(LineCap::ROUND);
+$context->setLineJoin(LineJoin::ROUND);
+$context->stroke();
+$context->translate($size + $pad, 0);
 
-$con->setLineCap(CairoLineCap::SQUARE);
-$con->setLineJoin(CairoLineJoin::MITER);
-$con->stroke();
-$con->restore();
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->translate(0, $size + 2*$pad);
-//$con->save();
+$context->setLineCap(LineCap::SQUARE);
+$context->setLineJoin(LineJoin::MITER);
+$context->stroke();
+$context->restore();
 
-$con->save();
-$con->scale(1,2);
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
+$context->translate(0, $size + 2 * $pad);
 
-$con->setLineCap(CairoLineCap::BUTT);
-$con->setLineJoin(CairoLineJoin::BEVEL);
-$con->stroke();
-$con->translate($size+$pad, 0);
+$context->save();
+$context->scale(1, 2);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
+$context->setLineCap(LineCap::BUTT);
+$context->setLineJoin(LineJoin::BEVEL);
+$context->stroke();
+$context->translate($size + $pad, 0);
 
-$con->setLineCap(CairoLineCap::ROUND);
-$con->setLineJoin(CairoLineJoin::ROUND);
-$con->stroke();
-$con->translate($size+$pad, 0);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
+$context->setLineCap(LineCap::ROUND);
+$context->setLineJoin(LineJoin::ROUND);
+$context->stroke();
+$context->translate($size + $pad, 0);
 
-$con->setLineCap(CairoLineCap::SQUARE);
-$con->setLineJoin(CairoLineJoin::MITER);
-$con->stroke();
-$con->restore();
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->translate(0, 2*$size + 2*$pad);
-$con->save();
-$con->scale(1,2);
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
+$context->setLineCap(LineCap::SQUARE);
+$context->setLineJoin(LineJoin::MITER);
+$context->stroke();
+$context->restore();
 
-$con->setLineCap(CairoLineCap::BUTT);
-$con->setLineJoin(CairoLineJoin::BEVEL);
-$con->stroke();
-$con->translate($size+$pad, 0);
+$context->translate(0, 2 * $size + 2 * $pad);
+$context->save();
+$context->scale(1, 2);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
+$context->setLineCap(LineCap::BUTT);
+$context->setLineJoin(LineJoin::BEVEL);
+$context->stroke();
+$context->translate($size + $pad, 0);
 
-$con->setLineCap(CairoLineCap::ROUND);
-$con->setLineJoin(CairoLineJoin::ROUND);
-$con->stroke();
-$con->translate($size+$pad, 0);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0, 3 * $linewidth);
-$con->setLineCap(CairoLineCap::SQUARE);
-$con->setLineJoin(CairoLineJoin::MITER);
-$con->stroke();
-$con->restore();
+$context->setLineCap(LineCap::ROUND);
+$context->setLineJoin(LineJoin::ROUND);
+$context->stroke();
+$context->translate($size + $pad, 0);
 
-$sur->writeToPng(dirname(__FILE__)  . "/dash-scale-php.png");
-?>
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
+$context->setLineCap(LineCap::SQUARE);
+$context->setLineJoin(LineJoin::MITER);
+$context->stroke();
+$context->restore();
+
+$surface->writeToPng(dirname(__FILE__).'/dash-scale-php.png');
+

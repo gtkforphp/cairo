@@ -1,63 +1,71 @@
 <?php
+
+use Cairo\Context;
+use Cairo\LineCap;
+use Cairo\LineJoin;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $linewidth = 10.0;
 $size = 5 * $linewidth;
 $pad = 2 * $linewidth;
-$width = 3*($pad + $size) + $pad;
+$width = 3 * ($pad + $size) + $pad;
 $height = $pad + $size + $pad;
-$sur = new CairoImageSurface(CairoFormat::ARGB32,$width, $height);
-$con = new CairoContext($sur);
-$con->save();
-$con->setSourceRgb(1,1,1);
-$con->paint();
-$con->restore();
 
-$con->setLineWidth($linewidth);
-$con->translate($pad, $pad);
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
+$context->save();
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+$context->restore();
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
+$context->setLineWidth($linewidth);
+$context->translate($pad, $pad);
 
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0,3*$linewidth);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
 
-$con->setLineCap(CairoLineCap::BUTT);
-$con->setLineJoin(CairoLineJoin::BEVEL);
-$con->stroke();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->translate($size+$pad, 0);
+$context->setLineCap(LineCap::BUTT);
+$context->setLineJoin(LineJoin::BEVEL);
+$context->stroke();
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
+$context->translate($size + $pad, 0);
 
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0,3*$linewidth);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
 
-$con->setLineCap(CairoLineCap::ROUND);
-$con->setLineJoin(CairoLineJoin::ROUND);
-$con->stroke();
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
 
-$con->translate($size+$pad,0);
+$context->setLineCap(LineCap::ROUND);
+$context->setLineJoin(LineJoin::ROUND);
+$context->stroke();
 
-$con->moveTo(0,0);
-$con->relLineTo(0,$size);
-$con->relLineTo($size,0);
-$con->closePath();
+$context->translate($size + $pad, 0);
 
-$con->moveTo(2*$linewidth, 0);
-$con->relLineTo(3*$linewidth, 0);
-$con->relLineTo(0,3*$linewidth);
+$context->moveTo(0, 0);
+$context->relLineTo(0, $size);
+$context->relLineTo($size, 0);
+$context->closePath();
 
-$con->setLineCap(CairoLineCap::SQUARE);
-$con->setLineJoin(CairoLineJoin::MITER);
-$con->stroke();
-$sur->writeToPng(dirname(__FILE__) . "/caps-joins-php.png");
-?>
+$context->moveTo(2 * $linewidth, 0);
+$context->relLineTo(3 * $linewidth, 0);
+$context->relLineTo(0, 3 * $linewidth);
+
+$context->setLineCap(LineCap::SQUARE);
+$context->setLineJoin(LineJoin::MITER);
+$context->stroke();
+$surface->writeToPng(dirname(__FILE__).'/caps-joins-php.png');
+
 
 
 

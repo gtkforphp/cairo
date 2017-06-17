@@ -1,24 +1,31 @@
 <?php
-$char = 'Cairo';
-$sur = new CairoImageSurface(0,500,500);
-$con = new CairoContext($sur);
 
-$con->selectFontFace('Sans');
-$con->setFontSize(100);
-$ext = $con->textExtents($char);
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
+
+$char = 'Cairo';
+$surface = new Image(0, 500, 500);
+$context = new Context($surface);
+
+$context->selectFontFace('Sans');
+$context->setFontSize(100);
+$ext = $context->getTextExtents($char);
 
 $x = 25.0;
 $y = 150.0;
-$con->moveTo($x, $y);
-$con->showText($char);
+$context->moveTo($x, $y);
+$context->showText($char);
 
-$con->setSourceRgba(1,0.2,0.2,0.6);
-$con->setLineWidth(6.0);
-$con->arc($x, $y, 10, 0, 2*3.14);
-$con->fill();
-$con->moveTo($x, $y);
-$con->relLineTo(0, -1*$ext['height']);
-$con->relLineTo($ext['width'], 0);
-$con->relLineTo($ext['x_bearing'], -1*$ext['y_bearing']);
-$con->stroke();
-$sur->writeToPng(dirname(__FILE__) . '/text-extents.png');
+$context->setSourceRgba(1, 0.2, 0.2, 0.6);
+$context->setLineWidth(6.0);
+$context->arc($x, $y, 10, 0, 2 * 3.14);
+$context->fill();
+$context->moveTo($x, $y);
+$context->relLineTo(0, -1 * $ext['height']);
+$context->relLineTo($ext['width'], 0);
+$context->relLineTo($ext['x_bearing'], -1 * $ext['y_bearing']);
+$context->stroke();
+
+$surface->writeToPng(dirname(__FILE__).'/text-extents-php.png');

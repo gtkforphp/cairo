@@ -55,5 +55,5 @@ tests/**/*.sh
 run-tests.php
 
 # Example specific ignores
-examples/a1-image-sample-php.png
-examples/a1-mask-php.png
+examples/*-php.png
+examples/temp.*

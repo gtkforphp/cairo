@@ -1,15 +1,19 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 10, 10);
-$con = new CairoContext($sur);
 
-$con->pushGroup();
-$con->setSourceRgb(0,0,1);
-$con->paint();
+use Cairo\Context;
+use Cairo\Operator;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$con->popGroupToSource();
-$con->setOperator(CairoOperator::SOURCE);
-$con->paint();
+$surface = new Image(ImageFormat::ARGB32, 10, 10);
+$context = new Context($surface);
 
-$sur->writeToPng(dirname(__FILE__)  . "/group-paint-php.png");
-?>
+$context->pushGroup();
+$context->setSourceRgb(0, 0, 1);
+$context->paint();
 
+$context->popGroupToSource();
+$context->setOperator(Operator::SOURCE);
+$context->paint();
+
+$surface->writeToPng(dirname(__FILE__).'/group-paint-php.png');

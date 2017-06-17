@@ -1,28 +1,33 @@
 <?php
+
+use Cairo\Context;
+use Cairo\Surface\Ps;
+
 $width = 100;
 $height = 100;
-$sur = new CairoPSSurface("temp.ps", $width, $height);
-$con = new CairoContext($sur);
 
-$con->setSourceRgb(0,0,1);
-$con->moveTo(50,50);
-$con->lineTo(50000,50000);
-$con->stroke();
+$surface = new Ps('temp.ps', $width, $height);
+$context = new Context($surface);
 
-$con->setSourceRgb(0,1,0);
-$con->moveTo(50,50);
-$con->lineTo(-50000,50000);
-$con->stroke();
+$context->setSourceRgb(1, 1, 0);
+$context->moveTo(50, 50);
+$context->lineTo(50000, 50000);
+$context->stroke();
 
-$con->setSourceRgb(1,0,0);
-$con->moveTo(50,50);
-$con->lineTo(50000,-50000);
-$con->stroke();
+$context->setSourceRgb(1, 0, 0);
+$context->moveTo(50, 50);
+$context->lineTo(-50000, 50000);
+$context->stroke();
 
-$con->setSourceRgb(1,1,0);
-$con->moveTo(50,50);
-$con->lineTo(-50000,-50000);
-$con->stroke();
+$context->setSourceRgb(0, 1, 0);
+$context->moveTo(50, 50);
+$context->lineTo(50000, -50000);
+$context->stroke();
 
-$sur->writeToPng(dirname(__FILE__)  . "/big-line-php.png");
-?>
+$context->setSourceRgb(0, 0, 1);
+$context->moveTo(50, 50);
+$context->lineTo(-50000, -50000);
+$context->stroke();
+
+$surface->writeToPng(dirname(__FILE__).'/big-line-php.png');
+

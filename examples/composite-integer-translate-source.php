@@ -1,19 +1,23 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32,100, 100);
-$con = new CairoContext($sur);
 
-$s = new CairoImageSurface(CairoFormat::ARGB32,1,1);
-$s->createFromPng(dirname(__FILE__)  . "/romedalen.png");
+use Cairo\Context;
+use Cairo\Operator;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$con->setSourceRgb(0,0,0);
-$con->rectangle(0,0,100,100);
-$con->fill();
+$surface = new Image(ImageFormat::ARGB32, 100, 100);
+$context = new Context($surface);
 
-$con->translate(10,10);
-$con->setOperator(CairoOperator::SOURCE);
-$con->setSourceSurface($s,0,0);
-$con->rectangle(0,0,90,90);
-$con->fill();
-$sur->writeToPng(dirname(__FILE__)  . "/composite-integer-translate-source-php.png");
-?>
+$s = new Image(ImageFormat::ARGB32, 1, 1);
+$s->createFromPng(dirname(__FILE__).'/romedalen.png');
 
+$context->setSourceRgb(0, 0, 0);
+$context->rectangle(0, 0, 100, 100);
+$context->fill();
+
+$context->translate(10, 10);
+$context->setOperator(Operator::SOURCE);
+$context->setSurface($s, 0, 0);
+$context->rectangle(0, 0, 90, 90);
+$context->fill();
+$surface->writeToPng(dirname(__FILE__).'/composite-integer-translate-source-php.png');

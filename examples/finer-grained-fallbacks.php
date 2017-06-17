@@ -1,48 +1,50 @@
 <?php
+
+use Cairo\Context;
+use Cairo\Operator;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $cisize = 10;
 $pad = 2;
-$width = $cisize*6.5 + $pad;
-$height = $cisize*3.5 + $pad;
+$width = $cisize * 6.5 + $pad;
+$height = $cisize * 3.5 + $pad;
 
-function draw_circle($x, $y)
+function drawCircle($context, $cisize, $x, $y)
 {
-	global $con, $cisize;
-	$con->save();
-	$con->translate($x,$y);
-	$con->arc(0,0,$cisize / 2,0,2*M_PI);
-	$con->fill();
-	$con->restore();
+	$context->save();
+	$context->translate($x, $y);
+	$context->arc(0, 0, $cisize / 2, 0, 2 * M_PI);
+	$context->fill();
+	$context->restore();
 }
 
-function draw_circles()
+function drawCircles($context, $cisize)
 {
-	global $con, $cisize;
-	draw_circle(0, $cisize*-0.1);
-	draw_circle($cisize*0.4, $cisize*0.25);
-	draw_circle($cisize*2,0);
-	draw_circle($cisize*4,0);
-	draw_circle($cisize*6,0);
+	drawCircle($context, $cisize, 0, $cisize * -0.1);
+	drawCircle($context, $cisize, $cisize * 0.4, $cisize * 0.25);
+	drawCircle($context, $cisize, $cisize * 2, 0);
+	drawCircle($context, $cisize, $cisize * 4, 0);
+	drawCircle($context, $cisize, $cisize * 6, 0);
 }
 
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
-$con = new CairoContext($sur);
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
 
-$con->translate($pad, $pad);
-$con->setSourceRgb(0,1,0);
-$con->setOperator(CairoOperator::OVER);
-draw_circle($cisize*0.5, $cisize*1.5);
-$con->setSourceRgb(1,0,0);
-$con->setOperator(CairoOperator::ADD);
-draw_circle($cisize*0.75, $cisize*1.75);
-$con->setSourceRgb(0,1,0);
-$con->setOperator(CairoOperator::OVER);
-$con->translate($cisize*2.5, $cisize*0.6);
-draw_circles();
-$con->setSourceRgb(1,0,0);
-$con->setOperator(CairoOperator::ADD);
-$con->translate(0, $cisize*2);
-draw_circles();
+$context->translate($pad, $pad);
+$context->setSourceRgb(0, 1, 0);
+$context->setOperator(Operator::OVER);
+drawCircle($context, $cisize, $cisize * 0.5, $cisize * 1.5);
+$context->setSourceRgb(1, 0, 0);
+$context->setOperator(Operator::ADD);
+drawCircle($context, $cisize, $cisize * 0.75, $cisize * 1.75);
+$context->setSourceRgb(0, 1, 0);
+$context->setOperator(Operator::OVER);
+$context->translate($cisize * 2.5, $cisize * 0.6);
+drawCircles($context, $cisize);
+$context->setSourceRgb(1, 0, 0);
+$context->setOperator(Operator::ADD);
+$context->translate(0, $cisize * 2);
+drawCircles($context, $cisize);
 
-$sur->writeToPng(dirname(__FILE__)  . "/finer-grained-fallbacks-php.png");
-?>
-
+$surface->writeToPng(dirname(__FILE__).'/finer-grained-fallbacks-php.png');

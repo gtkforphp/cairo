@@ -1,29 +1,38 @@
 <?php
+
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $width = 8;
 $height = 8;
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
-$con = new CairoContext($sur);
-$s = new CairoImageSurface(CairoFormat::A8,$width,$height);
-$str="";
+$string = '';
+
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
+
+$s = new Image(ImageFormat::A8, $width, $height);
 $stride = $s->getStride();
 
-for($i=0; $i<8; $i++) {
-	$str=$str . chr(0);
-	$str=$str . chr(0);
-	$str=$str . chr(255);
-	$str=$str . chr(0);
-	$str=$str . chr(255);
-	$str=$str . chr(0);
-	$str=$str . chr(0);
-	$str=$str . chr(0);
+for ($i = 0; $i < 8; $i++)
+{
+	$string = $string.chr(0);
+	$string = $string.chr(0);
+	$string = $string.chr(255);
+	$string = $string.chr(0);
+	$string = $string.chr(255);
+	$string = $string.chr(0);
+	$string = $string.chr(0);
+	$string = $string.chr(0);
 }
 
-echo $str;
-$s->createForData($str, CairoFormat::A8, $width, $height);
-$con->setSourceRgb(0,0,1);
-$con->paint();
+echo $string;
 
-$con->setSourceRgb(1,0,0);
-$con->maskSurface($s,0,0);
-$sur->writeToPng(dirname(__FILE__)  . "/a8-mask-php.png");
-?>
+$s->createForData($string, ImageFormat::A8, $width, $height);
+
+$context->setSourceRgb(0, 0, 1);
+$context->paint();
+$context->setSourceRgb(1, 0, 0);
+$context->maskSurface($s, 0, 0);
+
+$surface->writeToPng(dirname(__FILE__).'/a8-mask-php.png');

@@ -1,50 +1,47 @@
 <?php
-	$size = 20;
-	$pad = 2;
-	$surface_size = sqrt(($size - 2*$pad)*($size-2*$pad)/2);
-	$sur = new CairoImageSurface(CairoFormat::ARGB32, $size, $size);
-    $con = new CairoContext($sur);
-	$s = new CairoImageSurface(CairoFormat::RGB24,
-					  $surface_size, $surface_size);
-    $con2 = new CairoContext($s);
-    $con2->setSourceRgb ( 1, 1, 1);
-    $con2->rectangle (
-		     0, 0,
-		     $surface_size / 2, $surface_size / 2);
-    $con2->fill ();
-    $con2->setSourceRgb ( 1, 0, 0);
-    $con2->rectangle (
-		     $surface_size / 2, 0,
-		     $surface_size / 2, $surface_size / 2);
-    $con2->fill ();
-    $con2->setSourceRgb ( 0, 1, 0);
-    $con2->rectangle (
-		     0, $surface_size / 2,
-		     $surface_size / 2, $surface_size / 2);
-    $con2->fill ();
-    $con2->setSourceRgb ( 0, 0, 1);
-    $con2->rectangle (
-		     $surface_size / 2, $surface_size / 2,
-		     $surface_size / 2, $surface_size / 2);
-    $con2->fill ();
-    
 
-    /* First paint opaque background (black) so we don't need separate
-     * ARGB32 and RGB24 reference images. */
-    $con->setSourceRgb ( 0, 0, 0); /* black */
-    $con->paint ();
+use Cairo\Context;
+use Cairo\Filter;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-    $con->translate( $size/2, $size/2);
-    $con->rotate ( M_PI / 4.0);
-    $con->translate ( -$surface_size/2, -$surface_size/2);
+$size = 20;
+$pad = 2;
+$surfaceSize = sqrt(($size - 2 * $pad) * ($size - 2 * $pad) / 2);
 
-    $con->setSourceSurface ( $s, 0, 0);
-    $pat = $con->getSource();
+$surface = new Image(ImageFormat::ARGB32, $size, $size);
+$context = new Context($surface);
 
-	$pat->setFilter(CairoFilter::NEAREST);
-    $con->setSource($pat);
-	$con->paint ();
-	$sur->writeToPng(dirname(__FILE__)  . "/rotate-image-surface-paint-php.png");
+$s = new Image(ImageFormat::RGB24, $surfaceSize, $surfaceSize);
+$con2 = new Context($s);
 
+$con2->setSourceRgb(1, 1, 1);
+$con2->rectangle(0, 0, $surfaceSize / 2, $surfaceSize / 2);
+$con2->fill();
+$con2->setSourceRgb(1, 0, 0);
+$con2->rectangle($surfaceSize / 2, 0, $surfaceSize / 2, $surfaceSize / 2);
+$con2->fill();
+$con2->setSourceRgb(0, 1, 0);
+$con2->rectangle(0, $surfaceSize / 2, $surfaceSize / 2, $surfaceSize / 2);
+$con2->fill();
+$con2->setSourceRgb(0, 0, 1);
+$con2->rectangle($surfaceSize / 2, $surfaceSize / 2, $surfaceSize / 2, $surfaceSize / 2);
+$con2->fill();
 
-?>
+/* First paint opaque background (black) so we don't need separate
+ * ARGB32 and RGB24 reference images. */
+$context->setSourceRgb(0, 0, 0); /* black */
+$context->paint();
+
+$context->translate($size / 2, $size / 2);
+$context->rotate(M_PI / 4.0);
+$context->translate(-$surfaceSize / 2, -$surfaceSize / 2);
+
+$context->setSurface($s, 0, 0);
+$pat = $context->getPattern();
+
+$pat->setFilter(Filter::NEAREST);
+$context->setPattern($pat);
+$context->paint();
+
+$surface->writeToPng(dirname(__FILE__).'/rotate-image-surface-paint-php.png');
