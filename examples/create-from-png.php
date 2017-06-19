@@ -1,11 +1,16 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 2, 2);
-$con = new CairoContext($sur);
-$s = new CairoImageSurface(CairoFormat::ARGB32, 2, 2);
 
-$s->createFromPng(dirname(__FILE__)  ."/create-from-png-ref.png");
-$con->setSourceSurface($s);
-$con->paint();
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$sur->writeToPng(dirname(__FILE__)  . "/create-from-png-php.png");
-?>
+$surface = new Image(ImageFormat::ARGB32, 2, 2);
+$context = new Context($surface);
+$s = new Image(ImageFormat::ARGB32, 2, 2);
+
+$s->createFromPng(dirname(__FILE__).'/create-from-png-ref.png');
+$context->setSurface($s);
+$context->paint();
+
+$surface->writeToPng(dirname(__FILE__).'/create-from-png-php.png');
+

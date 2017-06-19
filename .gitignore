@@ -53,3 +53,7 @@ tests/**/*.exp
 tests/**/*.log
 tests/**/*.sh
 run-tests.php
+
+# Example specific ignores
+examples/*-php.png
+examples/temp.*

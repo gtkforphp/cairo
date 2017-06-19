@@ -1,44 +1,47 @@
 <?php
-    $width = 60;
-    $height = 60;
-    $sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
-    $con = new CairoContext($sur);
- 
-    $dash = array(4.0, 2.0);
 
-    $con->setSourceRgb ( 1, 1, 1);
-    $con->paint ();
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-    $con->setSourceRgb ( 0., 0., 0);
+$width = 60;
+$height = 60;
+$dash = [4.0, 2.0];
 
-    $con->translate ( 0.5, .5);
-    $con->setLineWidth ( 1); /* This is vital to reproduce the bug. */
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
 
-    /* First check simple rectangles */
-    $con->setSourceRgb ( 0., 0., 0);
-    $con->rectangle ( -$width/4, -$height/4, $width, $height);
-    $con->stroke ();
-    $con->rectangle ( $width+$width/4, -$height/4, -$width, $height);
-    $con->stroke ();
-    $con->rectangle ( -$width/4, $height+$height/4, $width, -$height);
-    $con->stroke ();
-    $con->rectangle ( $width+$width/4, $height+$height/4, -$width, -$height);
-    $con->stroke ();
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+$context->setSourceRgb(0., 0., 0);
+$context->translate(0.5, .5);
+$context->setLineWidth(1); /* This is vital to reproduce the bug. */
 
-    $con->setDash ( $dash, 0);
+/* First check simple rectangles */
+$context->setSourceRgb(0., 0., 0);
+$context->rectangle(-$width / 4, -$height / 4, $width, $height);
+$context->stroke();
+$context->rectangle($width + $width / 4, -$height / 4, -$width, $height);
+$context->stroke();
+$context->rectangle(-$width / 4, $height + $height / 4, $width, -$height);
+$context->stroke();
+$context->rectangle($width + $width / 4, $height + $height / 4, -$width, -$height);
+$context->stroke();
 
-    /* And now dashed. */
-    $con->setSourceRgb ( 1., 0., 0);
-    $con->rectangle ( -$width/4, -$height/4, $width, $height);
-    $con->stroke ();
-    $con->setSourceRgb ( 0., 1., 0);
-    $con->rectangle ( $width+$width/4, -$height/4, -$width, $height);
-    $con->stroke ();
-    $con->setSourceRgb ( 0., 0., 1);
-    $con->rectangle ( -$width/4, $height+$height/4, $width, -$height);
-    $con->stroke ();
-    $con->setSourceRgb ( 1., 1., 0);
-    $con->rectangle ( $width+$width/4, $height+$height/4, -$width, -$height);
-    $con->stroke ();
-    $sur->writeToPng(dirname(__FILE__)  . "/leaky-dashed-rectangle-php.png");
-?>
+$context->setDash($dash, 0);
+
+/* And now dashed. */
+$context->setSourceRgb(1., 0., 0);
+$context->rectangle(-$width / 4, -$height / 4, $width, $height);
+$context->stroke();
+$context->setSourceRgb(0., 1., 0);
+$context->rectangle($width + $width / 4, -$height / 4, -$width, $height);
+$context->stroke();
+$context->setSourceRgb(0., 0., 1);
+$context->rectangle(-$width / 4, $height + $height / 4, $width, -$height);
+$context->stroke();
+$context->setSourceRgb(1., 1., 0);
+$context->rectangle($width + $width / 4, $height + $height / 4, -$width, -$height);
+$context->stroke();
+
+$surface->writeToPng(dirname(__FILE__).'/leaky-dashed-rectangle-php.png');

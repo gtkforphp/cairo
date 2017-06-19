@@ -1,36 +1,43 @@
 <?php
+
+use Cairo\Context;
+use Cairo\FillRule;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $starsize = 20;
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $starsize * 2 + 2, $starsize+2);
-$con = new CairoContext($sur);
-$con->setSourceRgb(1,0,0);
-$con->translate(1,1);
-$con->save();
 
-$con->moveTo(10, 0);
-$con->relLineTo ( 6, 20);
-$con->relLineTo ( -16, -12);
-$con->relLineTo ( 20, 0);
-$con->relLineTo ( -16, 12);
+$surface = new Image(ImageFormat::ARGB32, $starsize * 2 + 2, $starsize + 2);
+$context = new Context($surface);
+$context->setSourceRgb(1, 0, 0);
+$context->translate(1, 1);
+$context->save();
 
-$con->setFillRule (CairoFillRule::WINDING);
-$con->clip ();
-$con->paint ();
+$context->moveTo(10, 0);
+$context->relLineTo(6, 20);
+$context->relLineTo(-16, -12);
+$context->relLineTo(20, 0);
+$context->relLineTo(-16, 12);
 
-$con->restore ();
-$con->translate ($starsize + 1, 0);
-$con->save ();
+$context->setFillRule(FillRule::WINDING);
+$context->clip();
+$context->paint();
 
-$con->moveTo(10, 0);
-$con->relLineTo ( 6, 20);
-$con->relLineTo ( -16, -12);
-$con->relLineTo ( 20, 0);
-$con->relLineTo ( -16, 12);
+$context->restore();
+$context->translate($starsize + 1, 0);
+$context->save();
 
-$con->setFillRule (CairoFillRule::EVEN_ODD);
-$con->clip ();
-$con->paint ();
+$context->moveTo(10, 0);
+$context->relLineTo(6, 20);
+$context->relLineTo(-16, -12);
+$context->relLineTo(20, 0);
+$context->relLineTo(-16, 12);
 
-$con->restore();
-$sur->writeToPng(dirname(__FILE__) . "/clip-fill-rule-php.png");
-?>
+$context->setFillRule(FillRule::EVEN_ODD);
+$context->clip();
+$context->paint();
+
+$context->restore();
+$surface->writeToPng(dirname(__FILE__).'/clip-fill-rule-php.png');
+
 

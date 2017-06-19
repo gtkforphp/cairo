@@ -1,90 +1,95 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::RGB24,165, 30);
-$con = new CairoContext($sur);
-$con->moveTo(0,0);
 
-	$con->setSourceRgb ( 1, 1, 1);
-    $con->paint ();
+use Cairo\Context;
+use Cairo\LineJoin;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-    $con->setSourceRgb ( 0, 0, 0);
-	$con->moveTo(0,0);
-    $con->translate ( 5, 5);
+$surface = new Image(ImageFormat::RGB24, 165, 30);
+$context = new Context($surface);
+$context->moveTo(0, 0);
 
-    /* First compress the pen to a vertical line. */
-    $con->rectangle ( 0, 0, 20, 20);
-    $con->curveTo ( 20 / 2, 0, 20, 20 / 2, 20, 20);
-    $con->save ();
-    {
-	$con->scale ( 0.00001, 1.0);
-	$con->stroke ();
-    }
-    $con->restore ();
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
 
-    $con->translate ( 5 + 20, 0);
+$context->setSourceRgb(0, 0, 0);
+$context->moveTo(0, 0);
+$context->translate(5, 5);
 
-    /* Then compress the pen to a horizontal line. */
-    $con->rectangle ( 0, 0, 20, 20);
-    $con->curveTo ( 20 / 2, 0, 20, 20 / 2, 20, 20);
-    $con->save ();
-    {
-	$con->scale ( 1.0, 0.00001);
-	$con->stroke ();
-    }
-    $con->restore ();
+/* First compress the pen to a vertical line. */
+$context->rectangle(0, 0, 20, 20);
+$context->curveTo(20 / 2, 0, 20, 20 / 2, 20, 20);
+$context->save();
 
-    $con->translate ( 5 + 20, 0);
+$context->scale(0.00001, 1.0);
+$context->stroke();
 
-    /* Finally a line at an angle. */
-    $con->rectangle ( 0, 0, 20, 20);
-    $con->curveTo ( 20 / 2, 0, 20, 20 / 2, 20, 20);
-    $con->save ();
-    {
-	$con->rotate ( M_PI / 4.0);
-	$con->scale ( 0.00001, 1.0);
-	$con->stroke ();
-    }
-    $con->restore ();
-$con->setSourceRgb ( 1, 1, 1);
-    $con->paint ();
+$context->restore();
+$context->translate(5 + 20, 0);
 
-    $con->setSourceRgb ( 0, 0, 0);
-    $con->setLineJoin (CairoLineJoin::ROUND);
+/* Then compress the pen to a horizontal line. */
+$context->rectangle(0, 0, 20, 20);
+$context->curveTo(20 / 2, 0, 20, 20 / 2, 20, 20);
+$context->save();
 
-    $con->translate ( 5, 5);
+$context->scale(1.0, 0.00001);
+$context->stroke();
 
-    /* First compress the pen to a vertical line. */
-    $con->rectangle ( 0, 0, 20, 20);
-    $con->curveTo ( 20 / 2, 0, 20, 20 / 2, 20, 20);
-    $con->save ();
-    {
-	$con->scale ( 0.00001, 1.0);
-	$con->stroke ();
-    }
-    $con->restore ();
+$context->restore();
 
-    $con->translate ( 5 + 20, 0);
+$context->translate(5 + 20, 0);
 
-    /* Then compress the pen to a horizontal line. */
-    $con->rectangle ( 0, 0, 20, 20);
-    $con->curveTo ( 20 / 2, 0, 20, 20 / 2, 20, 20);
-    $con->save ();
-    {
-	$con->scale ( 1.0, 0.00001);
-	$con->stroke ();
-    }
-    $con->restore ();
+/* Finally a line at an angle. */
+$context->rectangle(0, 0, 20, 20);
+$context->curveTo(20 / 2, 0, 20, 20 / 2, 20, 20);
+$context->save();
 
-    $con->translate ( 5 + 20, 0);
+$context->rotate(M_PI / 4.0);
+$context->scale(0.00001, 1.0);
+$context->stroke();
 
-    /* Finally a line at an angle. */
-    $con->rectangle ( 0, 0, 20, 20);
-    $con->curveTo ( 20 / 2, 0, 20, 20 / 2, 20, 20);
-    $con->save ();
-    {
-	$con->rotate ( M_PI / 4.0);
-	$con->scale ( 0.00001, 1.0);
-	$con->stroke ();
-    }
-    $con->restore ();
-	$sur->writeToPng(dirname(__FILE__)  . "/degenerate-pen-php.png"); 
-?>
+$context->restore();
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+
+$context->setSourceRgb(0, 0, 0);
+$context->setLineJoin(LineJoin::ROUND);
+
+$context->translate(5, 5);
+
+/* First compress the pen to a vertical line. */
+$context->rectangle(0, 0, 20, 20);
+$context->curveTo(20 / 2, 0, 20, 20 / 2, 20, 20);
+$context->save();
+
+$context->scale(0.00001, 1.0);
+$context->stroke();
+
+$context->restore();
+
+$context->translate(5 + 20, 0);
+
+/* Then compress the pen to a horizontal line. */
+$context->rectangle(0, 0, 20, 20);
+$context->curveTo(20 / 2, 0, 20, 20 / 2, 20, 20);
+$context->save();
+
+$context->scale(1.0, 0.00001);
+$context->stroke();
+
+$context->restore();
+
+$context->translate(5 + 20, 0);
+
+/* Finally a line at an angle. */
+$context->rectangle(0, 0, 20, 20);
+$context->curveTo(20 / 2, 0, 20, 20 / 2, 20, 20);
+$context->save();
+
+$context->rotate(M_PI / 4.0);
+$context->scale(0.00001, 1.0);
+$context->stroke();
+
+$context->restore();
+$surface->writeToPng(dirname(__FILE__).'/degenerate-pen-php.png'); 
+

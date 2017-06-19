@@ -1,42 +1,46 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 5, 5);
-$con = new CairoContext($sur);
+
+use Cairo\Context;
+use Cairo\Extend;
+use Cairo\Pattern\Surface as PatternSurface;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
+$surface = new Image(ImageFormat::ARGB32, 5, 5);
+$context = new Context($surface);
 
 $color = '';
+$color .= chr(0x4c);
+$color .= chr(0x33);
+$color .= chr(0x19);
+$color .= chr(0x80);
 
-$color.= chr(0x4c);
+$s = new Image(ImageFormat::ARGB32, 1, 1);
+$s->createForData($color, ImageFormat::ARGB32, 1, 1, 4);
 
-$color.= chr(0x33);
+$pat = new PatternSurface($s);
+$pat->setExtend(Extend::REPEAT);
 
-$color.= chr(0x19);
-
-$color.= chr(0x80);
-
-$s = new CairoImageSurface(CairoFormat::ARGB32, 1, 1);
-$s->createForData($color, CairoFormat::ARGB32, 1,1,4);
-
-$pat = new CairoSurfacePattern($s);
-$pat->setExtend(CairoExtend::REPEAT);
-
-for($i=0; $i<5; $i++) {
-    switch($i) {
-        case 0:
-            $con->setSourceRgb(.6,.7,.8);
-            break;
-        case 1:
-            $con->setSourceRgba(.2,.4,.6,.5);
-            break;
-        case 2:
-            $con->setSourceRgba(.2,.4,.6,.5);
-            break;
-        case 3:
-        default:
-            $con->setSource($pat);
-    }
-
-    $con->rectangle($i,0,1,5);
-
-    $con->fill();
+for ($i = 0; $i < 5; $i++)
+{
+	switch ($i)
+	{
+		case 0:
+			$context->setSourceRgb(.6, .7, .8);
+			break;
+		case 1:
+			$context->setSourceRgba(.2, .4, .6, .5);
+			break;
+		case 2:
+			$context->setSourceRgba(.2, .4, .6, .5);
+			break;
+		case 3:
+		default:
+			$context->setPattern($pat);
+	}
+	
+	$context->rectangle($i, 0, 1, 5);
+	$context->fill();
 }
 
-$sur->writeToPng(dirname(__FILE__)  . '/set-source.png');
+$surface->writeToPng(dirname(__FILE__).'/set-source-php.png');

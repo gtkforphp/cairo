@@ -1,21 +1,26 @@
 <?php
+
+use Cairo\Context;
+use Cairo\Extend;
+use Cairo\Pattern\Gradient\Linear;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $width = 50;
 $height = 50;
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $width, $height);
-$con = new CairoContext($sur);
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
 
-$con->setSourceRgb ( 0.5, 0.5, 0.5);
-$con->paint ();
-$con->save ();
-$pattern = new CairoLinearGradient(0, 0, 10.0, 0);
-$pattern->addColorStopRgb ( 0.0, 0.0, 0.0, 1.0);
-$pattern->addColorStopRgb ( 1.0,1.0, 0.0, 0.0);
-$pattern->setExtend (CairoExtend::REFLECT);
-$con->setSource ($pattern);
-$con->rectangle ( 0.0, 0.0, $width, $height);
-$con->fill ();
-$con->restore ();
+$context->setSourceRgb(0.5, 0.5, 0.5);
+$context->paint();
+$context->save();
+$pattern = new Linear(0, 0, 10.0, 0);
+$pattern->addColorStopRgb(0.0, 0.0, 0.0, 1.0);
+$pattern->addColorStopRgb(1.0, 1.0, 0.0, 0.0);
+$pattern->setExtend(Extend::REFLECT);
+$context->setPattern($pattern);
+$context->rectangle(0.0, 0.0, $width, $height);
+$context->fill();
+$context->restore();
 
-$sur->writeToPng(dirname(__FILE__)  . "/linear-gradient-reflect-php.png");
-?>
-
+$surface->writeToPng(dirname(__FILE__).'/linear-gradient-reflect-php.png');

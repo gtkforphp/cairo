@@ -1,39 +1,43 @@
 <?php
-function box_text($str, $x, $y)
+
+use Cairo\Context;
+use Cairo\Matrix;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
+function boxText($context, $string, $x, $y)
 {
-	global $con;
-	$con->save();
-	$ext = $con->textExtents($str);
-	$sf = $con->getScaledFont();
-	$sext = $sf->textExtents("text");
-	$lw = $con->getLineWidth();
-	$con->rectangle($x + $ext["x_bearing"]-$lw/2, $y + $ext["y_bearing"] - $lw/2, $ext["width"]+$lw, $ext["height"]+ $lw);
-	$con->stroke();
-	$con->moveTo($x,$y);
-	$con->showText($str);
-	$con->restore();
+	$context->save();
+	$ext = $context->getTextExtents($string);
+	$lw = $context->getLineWidth();
+	$context->rectangle($x + $ext['x_bearing'] - $lw / 2, $y + $ext['y_bearing'] - $lw / 2, $ext['width'] + $lw, $ext['height'] + $lw);
+	$context->stroke();
+	$context->moveTo($x, $y);
+	$context->showText($string);
+	$context->restore();
 }
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 38, 34);
-$con = new CairoContext($sur);
 
-$con->setSourceRgb(1,1,1);
-$con->paint();
+$surface = new Image(ImageFormat::ARGB32, 38, 34);
+$context = new Context($surface);
 
-$con->selectFontFace("Bitstream Vera Sans");
-$con->setFontSize(12);
-$con->translate(4,4);
-$con->setLineWidth(1);
-$ext = $con->textExtents("text");
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+$context->selectFontFace('Bitstream Vera Sans');
+$context->setFontSize(12);
+$context->translate(4, 4);
+$context->setLineWidth(1);
+$context->setSourceRgb(0, 0, 0);
 
-$con->setSourceRgb(0,0,0);
-box_text("text", 0, -$ext["y_bearing"]);
-$mat = new CairoMatrix();
-$mat->translate(6,16);
-$mat->scale(12,12);
-$con->setFontMatrix($mat);
-$con->setSourceRgb(0,0,1);
-box_text("text", 0, -$ext["y_bearing"]);
+$ext = $context->getTextExtents('text');
 
-$sur->writeToPng(dirname(__FILE__)  . "/font-matrix-translation-php.png");
-?>
+boxText($context, 'text', 0, -$ext['y_bearing']);
 
+$matrix = new Matrix();
+$matrix->translate(6, 16);
+$matrix->scale(12, 12);
+$context->setFontMatrix($matrix);
+$context->setSourceRgb(0, 0, 1);
+
+boxText($context, 'text', 0, -$ext['y_bearing']);
+
+$surface->writeToPng(dirname(__FILE__).'/font-matrix-translation-php.png');

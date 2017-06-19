@@ -1,68 +1,74 @@
 <?php
+
+use Cairo\Context;
+use Cairo\LineCap;
+use Cairo\LineJoin;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $linewidth = 10.0;
-$size = 5*$linewidth;
-$pad = 2*$linewidth;
+$size = 5 * $linewidth;
+$pad = 2 * $linewidth;
 
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 3 * ($pad+$size) + $pad, 3*$pad+2*$size);
-$con = new CairoContext($sur);
+$surface = new Image(ImageFormat::ARGB32, 3 * ($pad + $size) + $pad, 3 * $pad + 2 * $size);
+$context = new Context($surface);
 
-$dash = array($linewidth, 1.5*$linewidth);
-$dashoff = -2*$linewidth;
+$dash = [$linewidth, 1.5 * $linewidth];
+$dashoff = -2 * $linewidth;
 
-$con->save();
-$con->setSourceRgb(1,1,1);
-$con->paint();
-$con->restore();
+$context->save();
+$context->setSourceRgb(1, 1, 1);
+$context->paint();
+$context->restore();
 
-for($i = 0; $i<2 ; $i++) {
-	$con->save();
-	$con->setLineWidth($linewidth);
-	$con->setDash($dash, $dashoff);
-	$con->translate($pad, $pad);
-
-	$con->moveTo(0,0);
-	$con->relLineTo(0,$size);
-	$con->relLineTo($size, 0);
-	$con->closePath();
-	$con->moveTo(2*$linewidth,0);
-	$con->relLineTo(3*$linewidth, 0);
-	$con->relLineTo(0,3*$linewidth);
-
-	$con->setLineCap(CairoLineCap::BUTT);
-	$con->setLineJoin(CairoLineJoin::BEVEL);
-	$con->stroke();
-
-	$con->translate($size+$pad, 0);
-
-	$con->moveTo(0,0);
-    $con->relLineTo(0,$size);
-    $con->relLineTo($size, 0);
-    $con->closePath();
-    $con->moveTo(2*$linewidth,0);
-    $con->relLineTo(3*$linewidth, 0);
-    $con->relLineTo(0,3*$linewidth);
-
-    $con->setLineCap(CairoLineCap::ROUND);
-    $con->setLineJoin(CairoLineJoin::ROUND);
-    $con->stroke();
-    $con->translate($size+$pad, 0);
-				
-    $con->moveTo(0,0);
-    $con->relLineTo(0,$size);
-    $con->relLineTo($size, 0);
-    $con->closePath();
-    $con->moveTo(2*$linewidth,0);
-    $con->relLineTo(3*$linewidth, 0);
-    $con->relLineTo(0,3*$linewidth);
-
-	$con->setLineCap(CairoLineCap::SQUARE);
-    $con->setLineJoin(CairoLineJoin::MITER);
-    $con->stroke();
-	$con->restore();
-	$con->translate(0,$size+$pad);
-	$dashoff = 0;
-	}
-	$sur->writeToPng(dirname(__FILE__)  . "/dash-caps-joins-php.png");
-?>
+for ($i = 0; $i < 2; $i++)
+{
+	$context->save();
+	$context->setLineWidth($linewidth);
+	$context->setDash($dash, $dashoff);
+	$context->translate($pad, $pad);
 	
+	$context->moveTo(0, 0);
+	$context->relLineTo(0, $size);
+	$context->relLineTo($size, 0);
+	$context->closePath();
+	$context->moveTo(2 * $linewidth, 0);
+	$context->relLineTo(3 * $linewidth, 0);
+	$context->relLineTo(0, 3 * $linewidth);
+	
+	$context->setLineCap(LineCap::BUTT);
+	$context->setLineJoin(LineJoin::BEVEL);
+	$context->stroke();
+	
+	$context->translate($size + $pad, 0);
+	
+	$context->moveTo(0, 0);
+	$context->relLineTo(0, $size);
+	$context->relLineTo($size, 0);
+	$context->closePath();
+	$context->moveTo(2 * $linewidth, 0);
+	$context->relLineTo(3 * $linewidth, 0);
+	$context->relLineTo(0, 3 * $linewidth);
+	
+	$context->setLineCap(LineCap::ROUND);
+	$context->setLineJoin(LineJoin::ROUND);
+	$context->stroke();
+	$context->translate($size + $pad, 0);
+	
+	$context->moveTo(0, 0);
+	$context->relLineTo(0, $size);
+	$context->relLineTo($size, 0);
+	$context->closePath();
+	$context->moveTo(2 * $linewidth, 0);
+	$context->relLineTo(3 * $linewidth, 0);
+	$context->relLineTo(0, 3 * $linewidth);
+	
+	$context->setLineCap(LineCap::SQUARE);
+	$context->setLineJoin(LineJoin::MITER);
+	$context->stroke();
+	$context->restore();
+	$context->translate(0, $size + $pad);
+	$dashoff = 0;
+}
 
+$surface->writeToPng(dirname(__FILE__).'/dash-caps-joins-php.png');

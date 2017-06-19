@@ -1,18 +1,24 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 1, 1);
-$con = new CairoContext($sur);
 
-$con2 = new CairoContext($sur);
-$s = new CairoImageSurface(CairoFormat::ARGB32, 0, 0);
+use Cairo\Context;
+use Cairo\Pattern\Surface as PatternSurface;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
+$surface = new Image(ImageFormat::ARGB32, 1, 1);
+$context = new Context($surface);
+
+$con2 = new Context($surface);
+$s = new Image(ImageFormat::ARGB32, 0, 0);
 $s->createFromPng('__THIS_FILE_DOES_NOT_EXIST');
 
-$pat = new CairoSurfacePattern($s);
-$con2->setSource($pat);
+$patternSurface = new PatternSurface($s);
+$con2->setPattern($patternSurface);
 $con2->paint();
 
-$con2=$con->getTarget();
-$pat = new CairoSurfacePattern(NULL);
-$con2->setSource($pat);
+$con2 = $context->getSurface();
+$patternSurface = new PatternSurface(null);
+$con2->setPattern($patternSurface);
 $con2->paint();
 
-$sur->writeToPng(dirname(__FILE__)  . '/nil-surface-php.png');
+$surface->writeToPng(dirname(__FILE__).'/nil-surface-php.png');

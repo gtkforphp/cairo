@@ -1,15 +1,20 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 256 + 32*2, 192 + 32*2);
-$con = new CairoContext($sur);
 
-$s = new CairoImageSurface(CairoFormat::ARGB32,1,1);
-$s->createFromPng(dirname(__FILE__)  ."/romedalen.png");
+use Cairo\Context;
+use Cairo\Extend;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$con->setSourceSurface($s,32,32);
+$surface = new Image(ImageFormat::ARGB32, 256 + 32 * 2, 192 + 32 * 2);
+$context = new Context($surface);
 
-$pat = $con->getSource();
-$pat->setExtend(CairoExtend::REFLECT);
-$con->paint();
+$s = new Image(ImageFormat::ARGB32, 1, 1);
+$s->createFromPng(dirname(__FILE__).'/romedalen.png');
 
-$sur->writeToPng(dirname(__FILE__)  . "/extend-reflect-php.png");
-?>
+$context->setSurface($s, 32, 32);
+
+$pat = $context->getPattern();
+$pat->setExtend(Extend::REFLECT);
+$context->paint();
+
+$surface->writeToPng(dirname(__FILE__).'/extend-reflect-php.png');

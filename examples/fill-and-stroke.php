@@ -1,18 +1,23 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 28, 14);
-$con = new CairoContext($sur);
-$con->rectangle(2,2,10,10);
-$con->setSourceRgb(0,0,1);
-$con->fillPreserve();
-$con->setSourceRgb(1,0,0);
-$con->stroke();
 
-$con->translate(14,0);
-$con->arc(7, 7, 5, 0, 2*M_PI);
-$con->fillPreserve();
-$con->setSourceRgb(0,0,1);
-$con->stroke();
+use Cairo\Context;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$sur->writeToPng(dirname(__FILE__)  . "/fill-and-stroke-php.png");
-?>
+$surface = new Image(ImageFormat::ARGB32, 28, 14);
+$context = new Context($surface);
+$context->rectangle(2, 2, 10, 10);
+$context->setSourceRgb(0, 0, 1);
+$context->fillPreserve();
+$context->setSourceRgb(1, 0, 0);
+$context->stroke();
+
+$context->translate(14, 0);
+$context->arc(7, 7, 5, 0, 2 * M_PI);
+$context->fillPreserve();
+$context->setSourceRgb(0, 0, 1);
+$context->stroke();
+
+$surface->writeToPng(dirname(__FILE__).'/fill-and-stroke-php.png');
+
 

@@ -1,43 +1,46 @@
 <?php
-function uniform_random($minval, $maxval)
+
+use Cairo\Context;
+use Cairo\FillRule;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
+function uniformRandom($state, $minValue, $maxValue)
 {
-	global $state;
 	$poly = 0x9a795537;
-	$n=32;
-	$state = 2*$state < $state ? (2*$state ^ $poly) : 2*$state;
-	return floor($minval + $state * ($maxval - $minval) / 4294967296.0);
+	$state = 2 * $state < $state ? (2 * $state ^ $poly) : 2 * $state;
+	
+	return floor($minValue + $state * ($maxValue - $minValue) / 4294967296.0);
 }
 
 $size = 512;
-$numseg = 128;
-$width = $size+3;
+$segments = 128;
+$width = $size + 3;
 $height = $size + 3;
-$sur = new CairoImageSurface(CairoFormat::ARGB32, $size+3, $size + 3);
-$con = new CairoContext($sur);
-
-$con->setSourceRgb(0,0,0);
-$con->paint();
-
 $state = 0x123456;
 
-$con->translate(1,1);
-$con->setFillRule(CairoFillRule::EVEN_ODD);
-$con->moveTo(0,0);
+$surface = new Image(ImageFormat::ARGB32, $size + 3, $size + 3);
+$context = new Context($surface);
 
-for($i=0; $i<$numseg;$i++) {
-$x = uniform_random(0,$width);
-$y = uniform_random(0,$height);
-$con->lineTo($x,$y);
-//echo "x = $x";
-//echo "y = $y";
+$context->setSourceRgb(0, 0, 0);
+$context->paint();
+
+$context->translate(1, 1);
+$context->setFillRule(FillRule::EVEN_ODD);
+$context->moveTo(0, 0);
+
+for ($i = 0; $i < $segments; $i++)
+{
+	$x = uniformRandom($state, 0, $width);
+	$y = uniformRandom($state, 0, $height);
+	$context->lineTo($x, $y);
 }
 
-$con->closePath();
-$con->setSourceRgb(1,0,0);
-$con->fillPreserve();
-$con->setSourceRgb(0,1,0);
-$con->setLineWidth(0.5);
-$con->stroke();
+$context->closePath();
+$context->setSourceRgb(1, 0, 0);
+$context->fillPreserve();
+$context->setSourceRgb(0, 1, 0);
+$context->setLineWidth(0.5);
+$context->stroke();
 
-$sur->writeToPng(dirname(__FILE__)  . "/random-intersection-php.png");
-?>
+$surface->writeToPng(dirname(__FILE__).'/random-intersections-php.png');

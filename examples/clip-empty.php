@@ -1,21 +1,28 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 10, 10);
-$con = new CairoContext($sur);
-$con->setSourceRgb(0,0,1);
-$con->paint();
 
-$con->resetClip();
-$con->clip();
+use Cairo\Context;
+use Cairo\FontSlant;
+use Cairo\FontWeight;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-$con->translate(0.5,0.5);
+$surface = new Image(ImageFormat::ARGB32, 10, 10);
+$context = new Context($surface);
+$context->setSourceRgb(0, 0, 1);
+$context->paint();
 
-$con->setSourceRgb(0,1,0);
-$con->rectangle(0,0,10,10);
-$con->fillPreserve();
-$con->setSourceRgb(1,0,0);
-$con->stroke();
-$con->selectFontFace("Bitstream Vera Sans", CairoFontSlant::NORMAL, CairoFontWeight::NORMAL);
-$con->moveTo(0,10);
-$con->showText("cairo");
-$sur->writeToPng(dirname(__FILE__)  . "/clip-empty-php.png");
-?>
+$context->resetClip();
+$context->clip();
+
+$context->translate(0.5, 0.5);
+
+$context->setSourceRgb(0, 1, 0);
+$context->rectangle(0, 0, 10, 10);
+$context->fillPreserve();
+$context->setSourceRgb(1, 0, 0);
+$context->stroke();
+$context->selectFontFace('Bitstream Vera Sans', FontSlant::NORMAL, FontWeight::NORMAL);
+$context->moveTo(0, 10);
+$context->showText('cairo');
+$surface->writeToPng(dirname(__FILE__).'/clip-empty-php.png');
+

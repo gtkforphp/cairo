@@ -1,60 +1,69 @@
 <?php
-$sur = new CairoImageSurface(CairoFormat::ARGB32, 32, 32);
-$con = new CairoContext($sur);
 
-$data="";
+use Cairo\Context;
+use Cairo\Filter;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
 
-for($i=0; $i<2;$i++) {
-$data.=chr(0x80);
-$data.=chr(0x80);
-$data.=chr(0x80);
-$data.=chr(0x80);
+$surface = new Image(ImageFormat::ARGB32, 32, 32);
+$context = new Context($surface);
 
-$data.=chr(0x80);
-$data.=chr(0x80);
-$data.=chr(0x80);
-$data.=chr(0x80);
+$data = '';
 
-$data.=chr(0x00);
-$data.=chr(0x00);
-$data.=chr(0x80);
-$data.=chr(0x80);
-
-$data.=chr(0x00);
-$data.=chr(0x00);
-$data.=chr(0x80);
-$data.=chr(0x80);
+for ($i = 0; $i < 2; $i++)
+{
+	$data .= chr(0x80);
+	$data .= chr(0x80);
+	$data .= chr(0x80);
+	$data .= chr(0x80);
+	
+	$data .= chr(0x80);
+	$data .= chr(0x80);
+	$data .= chr(0x80);
+	$data .= chr(0x80);
+	
+	$data .= chr(0x00);
+	$data .= chr(0x00);
+	$data .= chr(0x80);
+	$data .= chr(0x80);
+	
+	$data .= chr(0x00);
+	$data .= chr(0x00);
+	$data .= chr(0x80);
+	$data .= chr(0x80);
 }
 
-for($i=0; $i<2;$i++) {
-$data.=chr(0x00);
-$data.=chr(0x80);
-$data.=chr(0x00);
-$data.=chr(0x80);
-
-$data.=chr(0x00);
-$data.=chr(0x80);
-$data.=chr(0x00);
-$data.=chr(0x80);
-
-$data.=chr(0x80);
-$data.=chr(0x00);
-$data.=chr(0x00);
-$data.=chr(0x80);
-
-$data.=chr(0x80);
-$data.=chr(0x00);
-$data.=chr(0x00);
-$data.=chr(0x80);
+for ($i = 0; $i < 2; $i++)
+{
+	$data .= chr(0x00);
+	$data .= chr(0x80);
+	$data .= chr(0x00);
+	$data .= chr(0x80);
+	
+	$data .= chr(0x00);
+	$data .= chr(0x80);
+	$data .= chr(0x00);
+	$data .= chr(0x80);
+	
+	$data .= chr(0x80);
+	$data .= chr(0x00);
+	$data .= chr(0x00);
+	$data .= chr(0x80);
+	
+	$data .= chr(0x80);
+	$data .= chr(0x00);
+	$data .= chr(0x00);
+	$data .= chr(0x80);
 }
+
 echo $data;
-$s = new CairoImageSurface(CairoFormat::ARGB32, 100,100);
-$s->createForData($data, CairoFormat::ARGB32, 4, 4, 16);
-$con->scale(4,4);
-$con->setSourceSurface($s,2,2);
-$pat = $con->getSource();
-$pat->setFilter( CairoFilter::NEAREST);
-$con->paint();
 
-$sur->writeToPng(dirname(__FILE__)  . "/paint-source-alpha-php.png");
-?>
+$s = new Image(ImageFormat::ARGB32, 100, 100);
+$s->createForData($data, ImageFormat::ARGB32, 4, 4, 16);
+$context->scale(4, 4);
+$context->setSurface($s, 2, 2);
+$pat = $context->getPattern();
+$pat->setFilter(Filter::NEAREST);
+$context->paint();
+
+$surface->writeToPng(dirname(__FILE__).'/paint-source-alpha-php.png');

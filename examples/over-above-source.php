@@ -1,28 +1,33 @@
 <?php
+
+use Cairo\Context;
+use Cairo\Operator;
+use Cairo\Surface\Image;
+use Cairo\Surface\ImageFormat;
+
 $size = 40;
 $pad = 2;
 $width = ($pad + $size + $pad);
 $height = $width;
-$sur = new CairoImageSurface(CairoFormat::ARGB32,$width,$height);
-$con = new CairoContext($sur);
 
-$con->translate($pad, $pad);
-$con->moveTo($size/2, $size/2);
-$con->relLineTo($size/2, 0);
-$con->relLineTo($size/-2, $size/2);
-$con->closePath();
+$surface = new Image(ImageFormat::ARGB32, $width, $height);
+$context = new Context($surface);
 
-$con->setOperator(CairoOperator::SOURCE);
-$con->setSourceRgba(1,0,0,0.5);
+$context->translate($pad, $pad);
+$context->moveTo($size / 2, $size / 2);
+$context->relLineTo($size / 2, 0);
+$context->relLineTo($size / -2, $size / 2);
+$context->closePath();
 
-$con->fill();
+$context->setOperator(Operator::SOURCE);
+$context->setSourceRgba(1, 0, 0, 0.5);
 
-$con->arc($size/2, $size/2, $size/4, 0, 2*M_PI);
-$con->setOperator(CairoOperator::OVER);
-$con->setSourceRgba(0,1,0,0.5);
+$context->fill();
 
-$con->fill();
+$context->arc($size / 2, $size / 2, $size / 4, 0, 2 * M_PI);
+$context->setOperator(Operator::OVER);
+$context->setSourceRgba(0, 1, 0, 0.5);
 
-$sur->writeToPng(dirname(__FILE__)  . "/over-above-source-php.png");
-?>
+$context->fill();
 
+$surface->writeToPng(dirname(__FILE__).'/over-above-source-php.png');
