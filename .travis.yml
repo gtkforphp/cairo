@@ -17,6 +17,15 @@ php:
 env: 
   - REPORT_EXIT_STATUS=1 NO_INTERACTION=1 TEST_PHP_ARGS="--show-diff -q" 
 
+before_script:
+  - git clone https://github.com/eosforphp/datastructures.git
+  - cd datastructures
+  - phpize
+  - ./configure
+  - make
+  - make install
+  echo "extension=eos_datastructures.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  
 install:
   - phpize
   - ./configure
