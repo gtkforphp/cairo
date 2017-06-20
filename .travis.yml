@@ -1,0 +1,30 @@
+sudo: false
+
+language: php
+
+addons:
+  apt:
+    packages:
+      - libcairo2-dev
+      - libfreetype6-dev
+      - fontconfig
+
+php:
+  - 7.0
+  - 7.1
+  - nightly
+ 
+env: 
+  - REPORT_EXIT_STATUS=1 NO_INTERACTION=1 TEST_PHP_ARGS="--show-diff -q" 
+
+install:
+  - phpize
+  - ./configure
+  - make
+
+script: 
+  make test
+
+notifications:
+  email:
+    auroraeosrose@gmail.com
