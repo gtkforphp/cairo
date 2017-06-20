@@ -24,7 +24,7 @@ before_script:
   - ./configure
   - make
   - make install
-  echo "extension=eos_datastructures.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension=eos_datastructures.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   
 install:
   - phpize
