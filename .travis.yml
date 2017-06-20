@@ -17,7 +17,7 @@ php:
   - nightly
  
 env: 
-  - REPORT_EXIT_STATUS=1 NO_INTERACTION=1 TEST_PHP_ARGS="--show-diff -q" 
+  - REPORT_EXIT_STATUS=1 NO_INTERACTION=1 TEST_PHP_ARGS="--show-diff -q -d extension=eos_datastructures.so" 
 
 before_install:
   - git clone https://github.com/eosforphp/datastructures.git
