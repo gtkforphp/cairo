@@ -19,12 +19,13 @@ env:
 
 before_install:
   - git clone https://github.com/eosforphp/datastructures.git
-  - cd datastructures
+  - pushd datastructures
   - phpize
   - ./configure
   - make
   - make install
   - echo "extension=eos_datastructures.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - popd
   
 install:
   - phpize
