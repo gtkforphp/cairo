@@ -1,14 +1,19 @@
+version: '{branch}.{build}'
+branches:
+  only:
+  - php7
+
 environment:
   matrix:
-  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_ts.zip
-    OUTDIR: Release_TS
-    V8_ASSETS: cairo-1.14.6-%Platform%.zip
+#  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_ts.zip
+#    OUTDIR: Release_TS
+#    V8_ASSETS: cairo-1.14.6-%Platform%.zip
   - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_nts.zip
     OUTDIR: Release
     CONFIGURE_EXTRA: --disable-zts
     V8_ASSETS: cairo-1.14.6-%Platform%.zip
 
-  PHP_VERSION: 7.0.18
+  PHP_VERSION: 7.1.8
   PHP_SDK: c:\projects\php-sdk
 
 os: Windows Server 2012
@@ -16,9 +21,12 @@ clone_folder: c:\projects\php-sdk\cairo-ci\vc14\%Platform%\php\ext\cairo
 
 platform:
   - x64
-  - x86
+  # - x86
 
 install:
+  - cd
+  - for /R %%f in (*.phpt) do perl -pi.bak -e "undef $/; s/--EXTENSIONS--\neos_datastructures\n//gi" %%f
+  - del *.phpt.bak /s > nul
   - cd %PHP_SDK%
   - curl -fSL -o php-sdk-binary-tools-20110915.zip "http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip"
   - 7z.exe x php-sdk-binary-tools-20110915.zip
@@ -40,8 +48,10 @@ install:
   - 7z.exe x php-%PHP_VERSION%.tar.gz -y
   - 7z.exe x php-%PHP_VERSION%.tar -y | find /v "Extracting"
   - cd php-%PHP_VERSION%
-  - IF "%Platform%" == "x64" SET OUTDIR=x64\%OUTDIR%
+  - cd
   - mkdir %OUTDIR%
+  - mkdir \projects\%OUTDIR%
+  - xcopy ..\deps\bin\*.dll \projects\%OUTDIR%\
   - move ..\deps\bin\*.dll %OUTDIR%\
 
 build_script:
@@ -57,16 +67,25 @@ build_script:
   - echo Building PHP [%PHP_VERSION%]
   - '%PHP_SDK%\bin\phpsdk_setvars'
   - buildconf
-  - configure --disable-all --enable-cli --enable-zlib --enable-eos_datastructures=shared --with-cairo=shared %CONFIGURE_EXTRA%
+  - configure --disable-all --enable-cli --enable-zlib --enable-eos_datastructures=shared --with-cairo=shared --with-prefix=C:\projects\%OUTDIR% %CONFIGURE_EXTRA%
   - nmake
-
-after_build:
-  - cd %OUTDIR%
-  - 7z a %ARTIFACT_NAME% cairo.dll php_cairo.dll php_eos_datastructures.dll
-  - ps: Push-AppveyorArtifact $env:ARTIFACT_NAME
-
+  - nmake install
+  - cd C:\projects\%OUTDIR%
+  - cd
+  - echo [PHP] > php.ini
+  - echo extension_dir = "ext" >> php.ini
+  - echo extension=php_eos_datastructures.dll >> php.ini
+  - echo extension=php_cairo.dll >> php.ini
+  - set TEST_PHP_EXECUTABLE=%cd%\php.exe
+  - php -v
+  - php -m
+  - dir
+  - dir ext
 test_script:
+- cmd: php.exe /projects/php-sdk/cairo-ci/vc14/%Platform%/php-%PHP_VERSION%/run-tests.php /projects/php-sdk/cairo-ci/vc14/%Platform%/php-%PHP_VERSION%/ext/cairo -q --show-diff
 
 on_finish:
+  - 7z a -r %ARTIFACT_NAME% *
+  - ps: Push-AppveyorArtifact $env:ARTIFACT_NAME
 
 deploy:
