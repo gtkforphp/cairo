@@ -85,5 +85,7 @@ test_script:
 - cmd: php.exe /projects/php-sdk/cairo-ci/vc14/%Platform%/php-%PHP_VERSION%/run-tests.php /projects/php-sdk/cairo-ci/vc14/%Platform%/php-%PHP_VERSION%/ext/cairo -q --show-diff
 
 on_finish:
+  - 7z a -r %ARTIFACT_NAME% *
+  - ps: Push-AppveyorArtifact $env:ARTIFACT_NAME
 
 deploy:
