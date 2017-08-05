@@ -62,6 +62,7 @@ build_script:
 
 after_build:
   - cd %OUTDIR%
+  - cd
   - 7z a %ARTIFACT_NAME% cairo.dll php_cairo.dll php_eos_datastructures.dll
   - ps: Push-AppveyorArtifact $env:ARTIFACT_NAME
 
