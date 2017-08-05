@@ -5,13 +5,13 @@ branches:
 
 environment:
   matrix:
-  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_ts.zip
-    OUTDIR: Release_TS
-    V8_ASSETS: cairo-1.14.6-%Platform%.zip
-#  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_nts.zip
-#    OUTDIR: Release
-#    CONFIGURE_EXTRA: --disable-zts
+#  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_ts.zip
+#    OUTDIR: Release_TS
 #    V8_ASSETS: cairo-1.14.6-%Platform%.zip
+  - ARTIFACT_NAME: cairo_vc14_php7_%Platform%_nts.zip
+    OUTDIR: Release
+    CONFIGURE_EXTRA: --disable-zts
+    V8_ASSETS: cairo-1.14.6-%Platform%.zip
 
   PHP_VERSION: 7.1.8
   PHP_SDK: c:\projects\php-sdk
