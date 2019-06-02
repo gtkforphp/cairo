@@ -20,8 +20,8 @@ try {
 --EXPECTF--
 array(2) {
   [0]=>
-  long(0)
+  int(0)
   [1]=>
-  long(1)
+  int(1)
 }
 Cairo\Surface\Svg::getVersions() expects exactly 0 parameters, 1 given

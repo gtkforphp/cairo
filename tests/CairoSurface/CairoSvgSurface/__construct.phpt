@@ -53,7 +53,7 @@ try {
 try {
     new Cairo\Surface\Svg(array(), 1, 1);
     trigger_error('We should bomb here');
-} catch (TypeError $e) {
+} catch (Cairo\Exception $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
