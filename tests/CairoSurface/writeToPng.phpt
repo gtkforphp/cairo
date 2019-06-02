@@ -19,7 +19,7 @@ $surface->writeToPng($fp);
 try {
     $surface->writeToPng();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -27,7 +27,7 @@ try {
 try {
     $surface->writeToPng('', 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -35,7 +35,7 @@ try {
 try {
     $surface->writeToPng(array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>

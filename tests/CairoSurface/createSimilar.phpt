@@ -16,7 +16,7 @@ var_dump($newsurface);
 try {
     $surface->createSimilar();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -24,7 +24,7 @@ try {
 try {
     $surface->createSimilar(Cairo\Surface\Content::COLOR);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -32,7 +32,7 @@ try {
 try {
     $surface->createSimilar(Cairo\Surface\Content::COLOR, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -40,7 +40,7 @@ try {
 try {
     $surface->createSimilar(Cairo\Surface\Content::COLOR, 10, 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -48,7 +48,7 @@ try {
 try {
     $surface->createSimilar(array(), 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -56,7 +56,7 @@ try {
 try {
     $surface->createSimilar(Cairo\Surface\Content::COLOR, array(), 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -64,7 +64,7 @@ try {
 try {
     $surface->createSimilar(Cairo\Surface\Content::COLOR, 10, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -77,6 +77,6 @@ Cairo\Surface::createSimilar() expects exactly 3 parameters, 0 given
 Cairo\Surface::createSimilar() expects exactly 3 parameters, 1 given
 Cairo\Surface::createSimilar() expects exactly 3 parameters, 2 given
 Cairo\Surface::createSimilar() expects exactly 3 parameters, 4 given
-Cairo\Surface::createSimilar() expects parameter 1 to be long, array given
-Cairo\Surface::createSimilar() expects parameter 2 to be double, array given
-Cairo\Surface::createSimilar() expects parameter 3 to be double, array given
+Cairo\Surface::createSimilar() expects parameter 1 to be int, array given
+Cairo\Surface::createSimilar() expects parameter 2 to be float, array given
+Cairo\Surface::createSimilar() expects parameter 3 to be float, array given

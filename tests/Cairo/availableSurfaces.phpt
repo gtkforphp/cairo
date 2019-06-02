@@ -14,7 +14,7 @@ var_dump($surfaces[0]);
 try {
     Cairo::availableSurfaces('foo');
     trigger_error('Cairo::availableSurfaces should take no arguments');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>

@@ -15,12 +15,12 @@ var_dump($surface->getContent());
 try {
     $surface->getContent('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-int(12288)
+long(12288)
 Cairo\Surface::getContent() expects exactly 0 parameters, 1 given

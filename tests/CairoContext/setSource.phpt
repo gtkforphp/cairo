@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->setSource() method
+Cairo\Context->setSource() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = new Cairo\Surface\Image(CAIRO_FORMAT_ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 $pattern = new CairoSolidPattern(0.3, 0.3, 0.3);
@@ -30,7 +30,7 @@ var_dump($context->getSource()->getRGBA());
 try {
     $context->setSource();
     trigger_error('setSource requires only one arg');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -38,7 +38,7 @@ try {
 try {
     $context->setSource($pattern, 1);
     trigger_error('setSource requires only one arg');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -46,7 +46,7 @@ try {
 try {
     $context->setSource(array());
     trigger_error('setSource expects instanceof CairoPattern');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -56,7 +56,7 @@ die;
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
 object(CairoSolidPattern)#%d (0) {
 }
@@ -82,6 +82,6 @@ array(4) {
   ["alpha"]=>
   float(1)
 }
-CairoContext::setSource() expects exactly 1 parameter, 0 given
-CairoContext::setSource() expects exactly 1 parameter, 2 given
-CairoContext::setSource() expects parameter 1 to be CairoPattern, array given
+Cairo\Context::setSource() expects exactly 1 parameter, 0 given
+Cairo\Context::setSource() expects exactly 1 parameter, 2 given
+Cairo\Context::setSource() expects parameter 1 to be CairoPattern, array given

@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->getAntialias() method
+Cairo\Context->getAntialias() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 var_dump($context->getAntialias());
@@ -18,14 +18,14 @@ var_dump($context->getAntialias());
 try {
     $context->getAntialias('foobar');
     trigger_error('getAntialias requires no args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
-int(0)
-CairoContext::getAntialias() expects exactly 0 parameters, 1 given
+long(0)
+Cairo\Context::getAntialias() expects exactly 0 parameters, 1 given

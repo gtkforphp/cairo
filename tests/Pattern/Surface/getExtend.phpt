@@ -33,16 +33,16 @@ object(Cairo\Extend)#%d (2) {
   ["__elements"]=>
   array(4) {
     ["NONE"]=>
-    int(0)
+    long(0)
     ["REPEAT"]=>
-    int(1)
+    long(1)
     ["REFLECT"]=>
-    int(2)
+    long(2)
     ["PAD"]=>
-    int(3)
+    long(3)
   }
   ["__value"]=>
-  int(0)
+  long(0)
 }
 bool(true)
 Cairo\Pattern::getExtend() expects exactly 0 parameters, 1 given

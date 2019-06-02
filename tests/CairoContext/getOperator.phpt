@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->getOperator() function
+Cairo\Context->getOperator() function
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 $context->setOperator(CAIRO_FORMAT_ARGB32);
@@ -17,9 +17,9 @@ var_dump($context->getOperator());
 
 try {
     $context->getOperator(1);
-    trigger_error('CairoContext->getOperator expects 0 parameters.');
+    trigger_error('Cairo\Context->getOperator expects 0 parameters.');
 } 
-catch (CairoException $ex) {
+catch (TypeError $ex) {
 	echo $ex->getMessage(), PHP_EOL;
 }
 
@@ -27,7 +27,7 @@ catch (CairoException $ex) {
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
-int(0)
-CairoContext::getOperator() expects exactly 0 parameters, 1 given
+long(0)
+Cairo\Context::getOperator() expects exactly 0 parameters, 1 given

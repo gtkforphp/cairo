@@ -13,15 +13,15 @@ var_dump(Cairo\Surface\Svg::getVersions());
 try {
     Cairo\Surface\Svg::getVersions('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 array(2) {
   [0]=>
-  int(0)
+  long(0)
   [1]=>
-  int(1)
+  long(1)
 }
 Cairo\Surface\Svg::getVersions() expects exactly 0 parameters, 1 given

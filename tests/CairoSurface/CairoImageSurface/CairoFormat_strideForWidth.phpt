@@ -13,7 +13,7 @@ echo Cairo\Surface\ImageFormat::strideForWidth(1, 5), PHP_EOL;
 try {
     Cairo\Surface\ImageFormat::strideForWidth();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -21,7 +21,7 @@ try {
 try {
     Cairo\Surface\ImageFormat::strideForWidth(1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -29,7 +29,7 @@ try {
 try {
     Cairo\Surface\ImageFormat::strideForWidth(1, 1, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -37,7 +37,7 @@ try {
 try {
     Cairo\Surface\ImageFormat::strideForWidth(array(), 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -45,7 +45,7 @@ try {
 try {
     Cairo\Surface\ImageFormat::strideForWidth(1, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -54,5 +54,5 @@ try {
 Cairo\Surface\ImageFormat::strideForWidth() expects exactly 2 parameters, 0 given
 Cairo\Surface\ImageFormat::strideForWidth() expects exactly 2 parameters, 1 given
 Cairo\Surface\ImageFormat::strideForWidth() expects exactly 2 parameters, 3 given
-Cairo\Surface\ImageFormat::strideForWidth() expects parameter 1 to be long, array given
-Cairo\Surface\ImageFormat::strideForWidth() expects parameter 2 to be long, array given
+Cairo\Surface\ImageFormat::strideForWidth() expects parameter 1 to be int, array given
+Cairo\Surface\ImageFormat::strideForWidth() expects parameter 2 to be int, array given

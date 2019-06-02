@@ -15,7 +15,7 @@ class test2 extends CairoSubSurface {
 try {
 	$surface = new test();
 	echo 'Attempting to use constructor should throw an exception';
-} catch (CairoException $e) {
+} catch (TypeError $e) {
 	echo $e->getMessage();
 }
 

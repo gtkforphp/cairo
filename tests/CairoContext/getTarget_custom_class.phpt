@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->getTarget() should return custom classes derived from Cairo\Surface\Image
+Cairo\Context->getTarget() should return custom classes derived from Cairo\Surface\Image
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -13,7 +13,7 @@ class TestSurface extends Cairo\Surface\Image {
 }
 
 $t = new TestSurface(Cairo\Surface\ImageFormat::ARGB32, 500, 500);
-$c = new CairoContext($t);
+$c = new Cairo\Context($t);
 var_dump($c->getTarget() instanceof TestSurface);
 var_dump($c->getTarget() instanceof TestSurface);
 unset($t);

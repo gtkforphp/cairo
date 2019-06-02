@@ -34,5 +34,5 @@ try {
 ?>
 --EXPECT--
 invalid operation during mesh pattern construction
-int(1)
+long(1)
 Cairo\Pattern\Mesh::endPatch() expects exactly 0 parameters, 1 given

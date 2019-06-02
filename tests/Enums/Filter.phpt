@@ -18,18 +18,18 @@ object(Cairo\Filter)#%d (2) {
   ["__elements"]=>
   array(6) {
     ["FAST"]=>
-    int(0)
+    long(0)
     ["GOOD"]=>
-    int(1)
+    long(1)
     ["BEST"]=>
-    int(2)
+    long(2)
     ["NEAREST"]=>
-    int(3)
+    long(3)
     ["BILINEAR"]=>
-    int(4)
+    long(4)
     ["GAUSSIAN"]=>
-    int(5)
+    long(5)
   }
   ["__value"]=>
-  int(0)
+  long(0)
 }

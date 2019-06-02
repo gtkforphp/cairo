@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->popGroupToSource() method
+Cairo\Context->popGroupToSource() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 $context->pushGroup();
@@ -22,7 +22,7 @@ try {
 	$context->popGroupToSource(1);
 	trigger_error('popGroupToSource() expects 0 params');	
 }
-catch (CairoException $ex) {
+catch (TypeError $ex) {
 	echo $ex->getMessage(), PHP_EOL;
 }
 
@@ -30,8 +30,8 @@ catch (CairoException $ex) {
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
 object(Cairo\SurfacePattern)#%d (0) {
 }
-CairoContext::popGroupToSource() expects exactly 0 parameters, 1 given
+Cairo\Context::popGroupToSource() expects exactly 0 parameters, 1 given

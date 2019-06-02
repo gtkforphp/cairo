@@ -15,7 +15,7 @@ $surface->markDirty();
 try {
     $surface->markDirty('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>

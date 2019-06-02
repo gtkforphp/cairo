@@ -56,5 +56,5 @@ bool(true)
 bool(true)
 Cairo\Pattern::setExtend() expects exactly 1 parameter, 0 given
 Cairo\Pattern::setExtend() expects exactly 1 parameter, 2 given
-Cairo\Pattern::setExtend() expects parameter 1 to be integer, array given
+Cairo\Pattern::setExtend() expects parameter 1 to be int, array given
 Value 999 provided is not a const in enum Cairo\Extend

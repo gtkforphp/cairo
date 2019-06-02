@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->glyphPath() function
+Cairo\Context->glyphPath() function
 --SKIPIF--
 <?php
 die('skip - Cairo glyph support not available');

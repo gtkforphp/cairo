@@ -8,9 +8,9 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 <?php
 include(dirname(__FILE__) . '/create_toyfont.inc');
 var_dump($fontface);
-$matrix1 = new CairoMatrix(1);
-$matrix2 = new CairoMatrix(1,1);
-$fontoptions = new CairoFontOptions();
+$matrix1 = new Cairo\Matrix(1);
+$matrix2 = new Cairo\Matrix(1,1);
+$fontoptions = new Cairo\FontOptions();
 
 $scaled = new CairoScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
 var_dump($scaled);
@@ -19,7 +19,7 @@ var_dump($scaled);
 try {
     new CairoScaledFont();
     trigger_error('CairoScaled font requires 4 args, none given');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -27,7 +27,7 @@ try {
 try {
     new CairoScaledFont($fontface);
     trigger_error('CairoScaled font requires 4 args, 1 given');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -35,7 +35,7 @@ try {
 try {
     new CairoScaledFont($fontface, $matrix1);
     trigger_error('CairoScaled font requires 4 args, 2 given');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -43,7 +43,7 @@ try {
 try {
     new CairoScaledFont($fontface, $matrix1, $matrix2);
     trigger_error('CairoScaled font requires 4 args, 3 given');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -51,7 +51,7 @@ try {
 try {
     new CairoScaledFont($fontface, $matrix1, $matrix2, $fontoptions, 1);
     trigger_error('CairoScaled font requires 4 args, 5 given');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -59,7 +59,7 @@ try {
 try {
     new CairoScaledFont(array(), $matrix1, $matrix2, $fontoptions);
     trigger_error('CairoScaled font requires CairoFontFace as first parameter');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -67,7 +67,7 @@ try {
 try {
     new CairoScaledFont($fontface, array(), $matrix2, $fontoptions);
     trigger_error('CairoScaled font requires CairoFontFace as second parameter');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -75,7 +75,7 @@ try {
 try {
     new CairoScaledFont($fontface, $matrix1, array(), $fontoptions);
     trigger_error('CairoScaled font requires CairoFontFace as third parameter');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -83,7 +83,7 @@ try {
 try {
     new CairoScaledFont($fontface, $matrix1, $matrix2, array());
     trigger_error('CairoScaled font requires CairoFontFace as fourth parameter');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -98,6 +98,6 @@ CairoScaledFont::__construct() expects exactly 4 parameters, 2 given
 CairoScaledFont::__construct() expects exactly 4 parameters, 3 given
 CairoScaledFont::__construct() expects exactly 4 parameters, 5 given
 CairoScaledFont::__construct() expects parameter 1 to be CairoFontFace, array given
-CairoScaledFont::__construct() expects parameter 2 to be CairoMatrix, array given
-CairoScaledFont::__construct() expects parameter 3 to be CairoMatrix, array given
-CairoScaledFont::__construct() expects parameter 4 to be CairoFontOptions, array given
+CairoScaledFont::__construct() expects parameter 2 to be Cairo\Matrix, array given
+CairoScaledFont::__construct() expects parameter 3 to be Cairo\Matrix, array given
+CairoScaledFont::__construct() expects parameter 4 to be Cairo\FontOptions, array given

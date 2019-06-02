@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->identityMatrix() method
+Cairo\Context->identityMatrix() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 $context->identityMatrix();
@@ -18,13 +18,13 @@ $context->identityMatrix();
 try {
     $context->identityMatrix('foo');
     trigger_error('identityMatrix requires 0 args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
-CairoContext::identityMatrix() expects exactly 0 parameters, 1 given
+Cairo\Context::identityMatrix() expects exactly 0 parameters, 1 given

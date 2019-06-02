@@ -14,12 +14,12 @@ var_dump($fontface->getType());
 try {
     $fontface->getType('foo');
     trigger_error('CairoFontFace->getType requires no arguments');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage();
 }
 ?>
 --EXPECTF--
 object(CairoToyFontFace)#%d (0) {
 }
-int(0)
+long(0)
 CairoFontFace::getType() expects exactly 0 parameters, 1 given

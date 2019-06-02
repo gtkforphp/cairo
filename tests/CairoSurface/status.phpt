@@ -18,13 +18,13 @@ var_dump($status == CairoStatus::SUCCESS);
 try {
     $surface->status('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-int(0)
+long(0)
 bool(true)
 Cairo\Surface::status() expects exactly 0 parameters, 1 given

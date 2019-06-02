@@ -1,41 +1,41 @@
 --TEST--
-CairoPsSurface::levelToString() method
+Cairo\Surface\Ps::levelToString() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 if(!in_array('PS', Cairo::availableSurfaces())) die('skip - PS surface not available');
-if(!method_exists('CairoPsSurface', 'levelToString')) die('skip - CairoPsSurface::levelToString not available');
+if(!method_exists('Cairo\Surface\Ps', 'levelToString')) die('skip - Cairo\Surface\Ps::levelToString not available');
 ?>
 --FILE--
 <?php
-echo CairoPsSurface::levelToString(CairoPsLevel::LEVEL_2), PHP_EOL;
+echo Cairo\Surface\Ps::levelToString(Cairo\Surface\Ps\Level::LEVEL_2), PHP_EOL;
 
 /* Wrong number args */
 try {
-    CairoPsSurface::levelToString();
+    Cairo\Surface\Ps::levelToString();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong number args 2 */
 try {
-    CairoPsSurface::levelToString(1, 1);
+    Cairo\Surface\Ps::levelToString(1, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong arg type */
 try {
-    CairoPsSurface::levelToString(array());
+    Cairo\Surface\Ps::levelToString(array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 PS Level 2
-CairoPsSurface::levelToString() expects exactly 1 parameter, 0 given
-CairoPsSurface::levelToString() expects exactly 1 parameter, 2 given
-CairoPsSurface::levelToString() expects parameter 1 to be long, array given
+Cairo\Surface\Ps::levelToString() expects exactly 1 parameter, 0 given
+Cairo\Surface\Ps::levelToString() expects exactly 1 parameter, 2 given
+Cairo\Surface\Ps::levelToString() expects parameter 1 to be int, array given

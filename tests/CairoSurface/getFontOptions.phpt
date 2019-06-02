@@ -15,13 +15,13 @@ var_dump($surface->getFontOptions());
 try {
     $surface->getFontOptions('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoFontOptions)#%d (0) {
+object(Cairo\FontOptions)#%d (0) {
 }
 Cairo\Surface::getFontOptions() expects exactly 0 parameters, 1 given

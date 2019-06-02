@@ -25,7 +25,7 @@ var_dump($c);
 // We shouldn't accept 0 args
 try {
     $c = new CairoToyFontFace();
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     var_dump($e->getMessage());
 }
 var_dump($c);
@@ -38,7 +38,7 @@ var_dump($c);
 $o = array();
 try {
     $c = new CairoToyFontFace($o);
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     var_dump($e->getMessage());
 }
 var_dump($c);

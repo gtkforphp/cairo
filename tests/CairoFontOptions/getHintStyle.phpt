@@ -1,12 +1,12 @@
 --TEST--
-CairoFontOptions->getHintStyle() method
+Cairo\FontOptions->getHintStyle() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$options = new CairoFontOptions();
+$options = new Cairo\FontOptions();
 var_dump($options);
 
 var_dump($options->getHintStyle());
@@ -15,12 +15,12 @@ var_dump($options->getHintStyle());
 try {
     $options->getHintStyle('foo');
     trigger_error('getHintStyle requires no args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoFontOptions)#%d (0) {
+object(Cairo\FontOptions)#%d (0) {
 }
-int(0)
-CairoFontOptions::getHintStyle() expects exactly 0 parameters, 1 given
+long(0)
+Cairo\FontOptions::getHintStyle() expects exactly 0 parameters, 1 given

@@ -15,12 +15,12 @@ var_dump($surface->getStride());
 try {
     $surface->getStride('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-int(200)
+long(200)
 Cairo\Surface\Image::getStride() expects exactly 0 parameters, 1 given

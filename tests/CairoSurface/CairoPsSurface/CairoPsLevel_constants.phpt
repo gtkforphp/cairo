@@ -1,5 +1,5 @@
 --TEST--
-CairoPsLevel class constants
+Cairo\Surface\Ps\Level class constants
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -14,7 +14,7 @@ $constants = array(
 
 $error = false;
 foreach($constants as $name) {
-	$constant = 'CairoPsLevel::' . $name;
+	$constant = 'Cairo\Surface\Ps\Level::' . $name;
 	if (!defined($constant)) {
 		$error = true;
 		echo 'Missing Constant: ' . $constant . "\n";

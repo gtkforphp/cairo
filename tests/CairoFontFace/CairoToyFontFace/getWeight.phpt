@@ -15,5 +15,5 @@ $c = new CairoToyFontFace("sans-serif", CairoFontWeight::NORMAL, CairoFontWeight
 var_dump($c->getWeight());
 ?>
 --EXPECTF--
-int(0)
-int(1)
+long(0)
+long(1)

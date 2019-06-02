@@ -21,7 +21,7 @@ var_dump($surface);
 try {
     new Cairo\Surface\Svg();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -29,7 +29,7 @@ try {
 try {
     new Cairo\Surface\Svg(NULL);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -37,7 +37,7 @@ try {
 try {
     new Cairo\Surface\Svg(NULL, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -45,7 +45,7 @@ try {
 try {
     new Cairo\Surface\Svg(NULL, 1, 1, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -53,7 +53,7 @@ try {
 try {
     new Cairo\Surface\Svg(array(), 1, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -61,7 +61,7 @@ try {
 try {
     new Cairo\Surface\Svg(NULL, array(), 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -69,7 +69,7 @@ try {
 try {
     new Cairo\Surface\Svg(NULL, 1, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -90,5 +90,5 @@ Cairo\Surface\Svg::__construct() expects exactly 3 parameters, 1 given
 Cairo\Surface\Svg::__construct() expects exactly 3 parameters, 2 given
 Cairo\Surface\Svg::__construct() expects exactly 3 parameters, 4 given
 Cairo\Surface\Svg::__construct() expects parameter 1 to be null, a string, or a stream resource
-Cairo\Surface\Svg::__construct() expects parameter 2 to be double, array given
-Cairo\Surface\Svg::__construct() expects parameter 3 to be double, array given
+Cairo\Surface\Svg::__construct() expects parameter 2 to be float, array given
+Cairo\Surface\Svg::__construct() expects parameter 3 to be float, array given

@@ -16,7 +16,7 @@ $surface->setSize(10, 10);
 try {
     $surface->setSize();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -24,7 +24,7 @@ try {
 try {
     $surface->setSize(10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -32,7 +32,7 @@ try {
 try {
     $surface->setSize(10, 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -40,7 +40,7 @@ try {
 try {
     $surface->setSize(array(), 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -48,7 +48,7 @@ try {
 try {
     $surface->setSize(1, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -58,5 +58,5 @@ object(CairoPdfSurface)#%d (0) {
 CairoPdfSurface::setSize() expects exactly 2 parameters, 0 given
 CairoPdfSurface::setSize() expects exactly 2 parameters, 1 given
 CairoPdfSurface::setSize() expects exactly 2 parameters, 3 given
-CairoPdfSurface::setSize() expects parameter 1 to be double, array given
-CairoPdfSurface::setSize() expects parameter 2 to be double, array given
+CairoPdfSurface::setSize() expects parameter 1 to be float, array given
+CairoPdfSurface::setSize() expects parameter 2 to be float, array given

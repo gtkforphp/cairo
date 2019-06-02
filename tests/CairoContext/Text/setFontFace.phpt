@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->setFontFace() method
+Cairo\Context->setFontFace() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 include(dirname(__FILE__) . '/create_toyfont.inc');
@@ -31,21 +31,21 @@ var_dump($fontface1 === $fontface);
 try {
     $context->setFontFace();
     trigger_error('setFontFace requires one arg');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 try {
     $context->setFontFace(1, 1);
     trigger_error('setFontFace requires only one arg');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 try {
     $context->setFontFace(1);
     trigger_error('setFontFace requires instanceof CairoFontFace');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -54,7 +54,7 @@ die; // DO NOT REMOVE THIS - fixes issue in 5.3 with GC giving bogus memleak rep
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
 object(CairoToyFontFace)#%d (0) {
 }
@@ -62,6 +62,6 @@ bool(true)
 object(CairoToyFontFace)#%d (0) {
 }
 bool(true)
-CairoContext::setFontFace() expects exactly 1 parameter, 0 given
-CairoContext::setFontFace() expects exactly 1 parameter, 2 given
-CairoContext::setFontFace() expects parameter 1 to be CairoFontFace, integer given
+Cairo\Context::setFontFace() expects exactly 1 parameter, 0 given
+Cairo\Context::setFontFace() expects exactly 1 parameter, 2 given
+Cairo\Context::setFontFace() expects parameter 1 to be CairoFontFace, integer given

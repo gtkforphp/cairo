@@ -15,7 +15,7 @@ $surface->setFallbackResolution(10, 10);
 try {
     $surface->setFallbackResolution();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -23,7 +23,7 @@ try {
 try {
     $surface->setFallbackResolution(10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -31,7 +31,7 @@ try {
 try {
     $surface->setFallbackResolution(10, 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -39,7 +39,7 @@ try {
 try {
     $surface->setFallbackResolution(array(), 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -47,7 +47,7 @@ try {
 try {
     $surface->setFallbackResolution(10, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -57,5 +57,5 @@ object(Cairo\Surface\Image)#%d (0) {
 Cairo\Surface::setFallbackResolution() expects exactly 2 parameters, 0 given
 Cairo\Surface::setFallbackResolution() expects exactly 2 parameters, 1 given
 Cairo\Surface::setFallbackResolution() expects exactly 2 parameters, 3 given
-Cairo\Surface::setFallbackResolution() expects parameter 1 to be double, array given
-Cairo\Surface::setFallbackResolution() expects parameter 2 to be double, array given
+Cairo\Surface::setFallbackResolution() expects parameter 1 to be float, array given
+Cairo\Surface::setFallbackResolution() expects parameter 2 to be float, array given

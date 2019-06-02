@@ -1,5 +1,5 @@
 --TEST--
-CairoContext->setAntialias() method
+Cairo\Context->setAntialias() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 $context->setAntialias(CairoAntialias::MODE_GRAY);
@@ -19,7 +19,7 @@ var_dump($context->getAntialias());
 try {
     $context->setAntialias(1, 1);
     trigger_error('setAntialias requires 0 or 1 args');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -27,15 +27,15 @@ try {
 try {
     $context->setAntialias(array());
     trigger_error('setAntialias requires int');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
-int(2)
-CairoContext::setAntialias() expects at most 1 parameter, 2 given
-CairoContext::setAntialias() expects parameter 1 to be long, array given
+long(2)
+Cairo\Context::setAntialias() expects at most 1 parameter, 2 given
+Cairo\Context::setAntialias() expects parameter 1 to be int, array given

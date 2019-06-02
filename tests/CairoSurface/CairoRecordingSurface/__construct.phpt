@@ -18,7 +18,7 @@ var_dump($surface);
 try {
     new CairoRecordingSurface();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -26,7 +26,7 @@ try {
 try {
     new CairoRecordingSurface(NULL, 1, 1, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -34,7 +34,7 @@ try {
 try {
     new CairoRecordingSurface(array(), 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -42,7 +42,7 @@ try {
 try {
     new CairoRecordingSurface(NULL, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -53,5 +53,5 @@ object(CairoRecordingSurface)#%d (0) {
 }
 CairoRecordingSurface::__construct() expects at least 1 parameter, 0 given
 CairoRecordingSurface::__construct() expects at most 2 parameters, 4 given
-CairoRecordingSurface::__construct() expects parameter 1 to be long, array given
+CairoRecordingSurface::__construct() expects parameter 1 to be int, array given
 CairoRecordingSurface::__construct() expects parameter 2 to be array, integer given

@@ -15,5 +15,5 @@ $c = new CairoToyFontFace("sans-serif", CairoFontSlant::ITALIC, CairoFontWeight:
 var_dump($c->getSlant());
 ?>
 --EXPECTF--
-int(0)
-int(1)
+long(0)
+long(1)

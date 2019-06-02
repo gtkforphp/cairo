@@ -14,7 +14,7 @@ class test2 extends CairoFontFace {
 try {
 	$pattern = new test();
 	echo 'Attempting to use constructor should throw an exception';
-} catch (CairoException $e) {
+} catch (TypeError $e) {
 	echo $e->getMessage();
 }
 

@@ -10,13 +10,13 @@ if(!in_array('SVG', Cairo::availableSurfaces())) die('skip - SVG surface not ava
 $surface = new Cairo\Surface\Svg(NULL, 50, 50);
 var_dump($surface);
 
-$surface->restrictToVersion(CairoSvgVersion::VERSION_1_1);
+$surface->restrictToVersion(Cairo\Surface\Svg\Version::VERSION_1_1);
 
 /* Wrong number args */
 try {
     $surface->restrictToVersion();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -24,7 +24,7 @@ try {
 try {
     $surface->restrictToVersion(1, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -32,7 +32,7 @@ try {
 try {
     $surface->restrictToVersion(array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -41,4 +41,4 @@ object(Cairo\Surface\Svg)#%d (0) {
 }
 Cairo\Surface\Svg::restrictToVersion() expects exactly 1 parameter, 0 given
 Cairo\Surface\Svg::restrictToVersion() expects exactly 1 parameter, 2 given
-Cairo\Surface\Svg::restrictToVersion() expects parameter 1 to be long, array given
+Cairo\Surface\Svg::restrictToVersion() expects parameter 1 to be int, array given

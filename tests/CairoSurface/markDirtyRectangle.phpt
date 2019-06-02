@@ -15,7 +15,7 @@ $surface->markDirtyRectangle(10, 10, 10, 10);
 try {
     $surface->markDirtyRectangle();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -23,7 +23,7 @@ try {
 try {
     $surface->markDirtyRectangle(10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -31,7 +31,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -39,7 +39,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -47,7 +47,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10, 10, 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -55,7 +55,7 @@ try {
 try {
     $surface->markDirtyRectangle(array(), 10, 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -63,7 +63,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, array(), 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -71,7 +71,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10, array(), 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -79,7 +79,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10, 10, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -91,7 +91,7 @@ Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 1 given
 Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 2 given
 Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 2 given
 Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 5 given
-Cairo\Surface::markDirtyRectangle() expects parameter 1 to be double, array given
-Cairo\Surface::markDirtyRectangle() expects parameter 2 to be double, array given
-Cairo\Surface::markDirtyRectangle() expects parameter 3 to be double, array given
-Cairo\Surface::markDirtyRectangle() expects parameter 4 to be double, array given
+Cairo\Surface::markDirtyRectangle() expects parameter 1 to be float, array given
+Cairo\Surface::markDirtyRectangle() expects parameter 2 to be float, array given
+Cairo\Surface::markDirtyRectangle() expects parameter 3 to be float, array given
+Cairo\Surface::markDirtyRectangle() expects parameter 4 to be float, array given
