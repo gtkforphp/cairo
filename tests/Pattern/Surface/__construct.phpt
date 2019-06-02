@@ -43,4 +43,4 @@ object(Cairo\Pattern\Surface)#%d (0) {
 }
 Cairo\Pattern\Surface::__construct() expects exactly 1 parameter, 0 given
 Cairo\Pattern\Surface::__construct() expects exactly 1 parameter, 2 given
-Argument 1 passed to Cairo\Pattern\Surface::__construct() must be an instance of Cairo\Surface, integer given
+Argument 1 passed to Cairo\Pattern\Surface::__construct() must be an instance of Cairo\Surface, int given

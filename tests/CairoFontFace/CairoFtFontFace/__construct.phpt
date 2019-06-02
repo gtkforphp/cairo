@@ -20,7 +20,7 @@ var_dump($c);
 // We shouldn't accept 0 args
 try {
     $c = new CairoFtFontFace();
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     var_dump($e->getMessage());
 }
 var_dump($c);
@@ -28,7 +28,7 @@ var_dump($c);
 // Test with 1 param
 try {
     $c = new CairoFtFontFace("NotARealFont");
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     var_dump($e->getMessage());
 }
 var_dump($c);
@@ -36,7 +36,7 @@ var_dump($c);
 // Test with a silly param
 try {
     $c = new CairoFtFontFace(array());
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     var_dump($e->getMessage());
 }
 var_dump($c); 
@@ -44,7 +44,7 @@ var_dump($c);
 // Test with a broken font
 try {
     $c = new CairoFtFontFace(dirname(__FILE__) . '/broken.ttf');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     var_dump($e->getMessage());
 }
 var_dump($c);

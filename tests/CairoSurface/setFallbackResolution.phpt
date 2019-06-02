@@ -1,12 +1,12 @@
 --TEST--
-CairoSurface->setFallbackResolution() method
+Cairo\Surface->setFallbackResolution() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
 $surface->setFallbackResolution(10, 10);
@@ -15,7 +15,7 @@ $surface->setFallbackResolution(10, 10);
 try {
     $surface->setFallbackResolution();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -23,7 +23,7 @@ try {
 try {
     $surface->setFallbackResolution(10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -31,7 +31,7 @@ try {
 try {
     $surface->setFallbackResolution(10, 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -39,7 +39,7 @@ try {
 try {
     $surface->setFallbackResolution(array(), 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -47,15 +47,15 @@ try {
 try {
     $surface->setFallbackResolution(10, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-CairoSurface::setFallbackResolution() expects exactly 2 parameters, 0 given
-CairoSurface::setFallbackResolution() expects exactly 2 parameters, 1 given
-CairoSurface::setFallbackResolution() expects exactly 2 parameters, 3 given
-CairoSurface::setFallbackResolution() expects parameter 1 to be double, array given
-CairoSurface::setFallbackResolution() expects parameter 2 to be double, array given
+Cairo\Surface::setFallbackResolution() expects exactly 2 parameters, 0 given
+Cairo\Surface::setFallbackResolution() expects exactly 2 parameters, 1 given
+Cairo\Surface::setFallbackResolution() expects exactly 2 parameters, 3 given
+Cairo\Surface::setFallbackResolution() expects parameter 1 to be float, array given
+Cairo\Surface::setFallbackResolution() expects parameter 2 to be float, array given

@@ -193,7 +193,7 @@ PHP_METHOD(CairoContext, __construct)
 	cairo_context_object *context_object;
 	cairo_surface_object *surface_object;
 
-        if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "|o", &surface_zval) == FAILURE) {
+        if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "o", &surface_zval) == FAILURE) {
 		return;
 	}
         

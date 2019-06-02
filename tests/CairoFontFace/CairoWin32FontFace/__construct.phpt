@@ -25,14 +25,14 @@ var_dump($f);
 // Test with incorrect param
 try {
 	$f = new CairoWin32FontFace('not an array');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
 	echo $e->getMessage(), PHP_EOL;
 }
 
 // Test with too many params
 try {
 	$f = new CairoWin32FontFace($f_opts, '2nd param');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
 	echo $e->getMessage(), PHP_EOL;
 }
 ?>

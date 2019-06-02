@@ -25,6 +25,10 @@
 #include "php_cairo_internal.h"
 
 #if defined(CAIRO_HAS_QUARTZ_FONT)
+
+#include <cairo-quartz.h>
+#include <ApplicationServices/ApplicationServices.h>
+
 	zend_class_entry *ce_cairo_quartzfont;
 	zend_class_entry *ce_cairo_quartzatsufontnamecode;
 	zend_class_entry *ce_cairo_quartzatsufontnameplatform;
@@ -115,7 +119,7 @@ PHP_METHOD(CairoQuartzFontFace, createForCgfont)
 /* {{{ cairo_quartz_font_methods[] */
 const zend_function_entry cairo_quartz_font_methods[] = {
 	PHP_ME(CairoQuartzFontFace, createForCgfont, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(CairoQuartzFontFace, createForAtsuiFontId, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(CairoQuartzFontFace, createForAtsuFontId, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FE_END
 };
 /* }}} */

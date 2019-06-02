@@ -1,12 +1,12 @@
 --TEST--
-CairoSurface->markDirtyRectangle() method
+Cairo\Surface->markDirtyRectangle() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
 $surface->markDirtyRectangle(10, 10, 10, 10);
@@ -15,7 +15,7 @@ $surface->markDirtyRectangle(10, 10, 10, 10);
 try {
     $surface->markDirtyRectangle();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -23,7 +23,7 @@ try {
 try {
     $surface->markDirtyRectangle(10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -31,7 +31,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -39,7 +39,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -47,7 +47,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10, 10, 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -55,7 +55,7 @@ try {
 try {
     $surface->markDirtyRectangle(array(), 10, 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -63,7 +63,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, array(), 10, 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -71,7 +71,7 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10, array(), 10);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -79,19 +79,19 @@ try {
 try {
     $surface->markDirtyRectangle(10, 10, 10, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-CairoSurface::markDirtyRectangle() expects exactly 4 parameters, 0 given
-CairoSurface::markDirtyRectangle() expects exactly 4 parameters, 1 given
-CairoSurface::markDirtyRectangle() expects exactly 4 parameters, 2 given
-CairoSurface::markDirtyRectangle() expects exactly 4 parameters, 2 given
-CairoSurface::markDirtyRectangle() expects exactly 4 parameters, 5 given
-CairoSurface::markDirtyRectangle() expects parameter 1 to be double, array given
-CairoSurface::markDirtyRectangle() expects parameter 2 to be double, array given
-CairoSurface::markDirtyRectangle() expects parameter 3 to be double, array given
-CairoSurface::markDirtyRectangle() expects parameter 4 to be double, array given
+Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 0 given
+Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 1 given
+Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 2 given
+Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 2 given
+Cairo\Surface::markDirtyRectangle() expects exactly 4 parameters, 5 given
+Cairo\Surface::markDirtyRectangle() expects parameter 1 to be float, array given
+Cairo\Surface::markDirtyRectangle() expects parameter 2 to be float, array given
+Cairo\Surface::markDirtyRectangle() expects parameter 3 to be float, array given
+Cairo\Surface::markDirtyRectangle() expects parameter 4 to be float, array given

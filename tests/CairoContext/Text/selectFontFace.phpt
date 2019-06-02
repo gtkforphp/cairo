@@ -1,15 +1,15 @@
 --TEST--
-CairoContext->selectFontFace() method
+Cairo\Context->selectFontFace() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 $context->selectFontFace('sans-serif');
@@ -20,15 +20,15 @@ var_dump($fontface);
 try {
     $context->selectFontFace();
     trigger_error('selectFontFace requires at least one arg');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong number args - too many */
 try {
-    $context->selectFontFace('sans-serif', CairoFontSlant::NORMAL, CairoFontWeight::NORMAL, 1);
+    $context->selectFontFace('sans-serif', Cairo\FontSlant::NORMAL, Cairo\FontWeight::NORMAL, 1);
     trigger_error('selectFontFace requires at least one arg');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -36,7 +36,7 @@ try {
 try {
     $context->selectFontFace(array());
     trigger_error('selectFontFace requires a string font name');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -44,27 +44,27 @@ try {
 try {
     $context->selectFontFace('sans-serif', array());
     trigger_error('selectFontFace requires an int font slant');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong arg type - int */
 try {
-    $context->selectFontFace('sans-serif', CairoFontSlant::NORMAL, array());
+    $context->selectFontFace('sans-serif', Cairo\FontSlant::NORMAL, array());
     trigger_error('selectFontFace requires an int font weight');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
-object(CairoToyFontFace)#%d (0) {
+object(Cairo\FontFace\Toy)#%d (0) {
 }
-CairoContext::selectFontFace() expects at least 1 parameter, 0 given
-CairoContext::selectFontFace() expects at most 3 parameters, 4 given
-CairoContext::selectFontFace() expects parameter 1 to be string, array given
-CairoContext::selectFontFace() expects parameter 2 to be long, array given
-CairoContext::selectFontFace() expects parameter 3 to be long, array given
+Cairo\Context::selectFontFace() expects at least 1 parameter, 0 given
+Cairo\Context::selectFontFace() expects at most 3 parameters, 4 given
+Cairo\Context::selectFontFace() expects parameter 1 to be string, array given
+Cairo\Context::selectFontFace() expects parameter 2 to be int, array given
+Cairo\Context::selectFontFace() expects parameter 3 to be int, array given

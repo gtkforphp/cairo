@@ -23,7 +23,7 @@
 #include "php_cairo.h"
 
 zend_class_entry *ce_cairo_region;
-zend_class_entry *ce_cairo_rectangle;
+extern zend_class_entry *ce_cairo_rectangle;
 zend_class_entry *ce_cairo_region_overlap;
 
 static zend_object_handlers cairo_region_object_handlers;

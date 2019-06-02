@@ -1,58 +1,58 @@
 --TEST--
-CairoFormat::strideForWidth() method
+Cairo\Surface\ImageFormat::strideForWidth() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!method_exists('CairoFormat', 'strideForWidth')) die('skip - CairoFormat::strideForWidth not available');
+if(!method_exists('Cairo\Surface\ImageFormat', 'strideForWidth')) die('skip - Cairo\Surface\ImageFormat::strideForWidth not available');
 ?>
 --FILE--
 <?php
-echo CairoFormat::strideForWidth(1, 5), PHP_EOL;
+echo Cairo\Surface\ImageFormat::strideForWidth(1, 5), PHP_EOL;
 
 /* Wrong number args */
 try {
-    CairoFormat::strideForWidth();
+    Cairo\Surface\ImageFormat::strideForWidth();
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong number args 2 */
 try {
-    CairoFormat::strideForWidth(1);
+    Cairo\Surface\ImageFormat::strideForWidth(1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong number args 3 */
 try {
-    CairoFormat::strideForWidth(1, 1, 1);
+    Cairo\Surface\ImageFormat::strideForWidth(1, 1, 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong arg type */
 try {
-    CairoFormat::strideForWidth(array(), 1);
+    Cairo\Surface\ImageFormat::strideForWidth(array(), 1);
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong arg type */
 try {
-    CairoFormat::strideForWidth(1, array());
+    Cairo\Surface\ImageFormat::strideForWidth(1, array());
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
 20
-CairoFormat::strideForWidth() expects exactly 2 parameters, 0 given
-CairoFormat::strideForWidth() expects exactly 2 parameters, 1 given
-CairoFormat::strideForWidth() expects exactly 2 parameters, 3 given
-CairoFormat::strideForWidth() expects parameter 1 to be long, array given
-CairoFormat::strideForWidth() expects parameter 2 to be long, array given
+Cairo\Surface\ImageFormat::strideForWidth() expects exactly 2 parameters, 0 given
+Cairo\Surface\ImageFormat::strideForWidth() expects exactly 2 parameters, 1 given
+Cairo\Surface\ImageFormat::strideForWidth() expects exactly 2 parameters, 3 given
+Cairo\Surface\ImageFormat::strideForWidth() expects parameter 1 to be int, array given
+Cairo\Surface\ImageFormat::strideForWidth() expects parameter 2 to be int, array given

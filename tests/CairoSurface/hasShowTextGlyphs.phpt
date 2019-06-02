@@ -1,13 +1,13 @@
 --TEST--
-CairoSurface->hasShowTextGlyphs() method
+Cairo\Surface->hasShowTextGlyphs() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
-if(!method_exists('CairoSurface', 'hasShowTextGlyphs')) die('skip - CairoSurface->hasShowTextGlyphs not available');
+if(!method_exists('Cairo\Surface', 'hasShowTextGlyphs')) die('skip - Cairo\Surface->hasShowTextGlyphs not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
 var_dump($surface->hasShowTextGlyphs());
@@ -16,12 +16,12 @@ var_dump($surface->hasShowTextGlyphs());
 try {
     $surface->hasShowTextGlyphs('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
 bool(false)
-CairoSurface::hasShowTextGlyphs() expects exactly 0 parameters, 1 given
+Cairo\Surface::hasShowTextGlyphs() expects exactly 0 parameters, 1 given

@@ -1,5 +1,5 @@
 --TEST--
-CairoFormat class constants
+Cairo\Surface\ImageFormat class constants
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -15,7 +15,7 @@ $constants = array(
 
 $error = false;
 foreach($constants as $name) {
-	$constant = 'CairoFormat::' . $name;
+	$constant = 'Cairo\Surface\ImageFormat::' . $name;
 	if (!defined($constant)) {
 		$error = true;
 		echo 'Missing Constant: ' . $constant . "\n";

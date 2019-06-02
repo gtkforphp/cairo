@@ -17,6 +17,11 @@
 #include <php.h>
 #include <cairo.h>
 
+#if defined(CAIRO_HAS_QUARTZ_FONT)
+#include <cairo-quartz.h>
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+
 extern zend_class_entry *ce_cairo_exception;
 extern zend_class_entry *ce_cairo_status;
 extern zend_class_entry *ce_cairo_matrix;
@@ -117,9 +122,12 @@ extern cairo_status_t php_cairo_read_func(void *closure, const unsigned char *da
 /* Font + FontFace */
 typedef struct _cairo_font_face_object {
 	cairo_font_face_t *font_face;
-        stream_closure *closure;
+	#if defined(CAIRO_HAS_QUARTZ_FONT)
+	CGFontRef quartzref;
+	#endif
+	stream_closure *closure;
 	cairo_user_data_key_t key;
-        zend_object std;
+	zend_object std;
 } cairo_font_face_object;
 
 extern zend_object* cairo_font_face_create_object(zend_class_entry *ce);

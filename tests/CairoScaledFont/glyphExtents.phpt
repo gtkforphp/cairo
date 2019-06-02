@@ -1,5 +1,5 @@
 --TEST--
-CairoScaledFont->glyphExtents() method
+Cairo\ScaledFont->glyphExtents() method
 --SKIPIF--
 <?php
 die('skip - Cairo glyph support not complete');
@@ -8,11 +8,11 @@ die('skip - Cairo glyph support not complete');
 <?php
 include(dirname(__FILE__) . '/create_toyfont.inc');
 var_dump($fontface);
-$matrix1 = new CairoMatrix(1);
-$matrix2 = new CairoMatrix(1,1);
-$fontoptions = new CairoFontOptions();
+$matrix1 = new Cairo\Matrix(1);
+$matrix2 = new Cairo\Matrix(1,1);
+$fontoptions = new Cairo\FontOptions();
 
-$scaled = new CairoScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
+$scaled = new Cairo\ScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
 var_dump($scaled);
 ?>
 --EXPECTF--

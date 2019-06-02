@@ -1,5 +1,5 @@
 --TEST--
-CairoContent class constants
+Cairo\Surface\Content class constants
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -14,7 +14,7 @@ $constants = array(
 
 $error = false;
 foreach($constants as $name) {
-	$constant = 'CairoContent::' . $name;
+	$constant = 'Cairo\Surface\Content::' . $name;
 	if (!defined($constant)) {
 		$error = true;
 		echo 'Missing Constant: ' . $constant . "\n";

@@ -60,7 +60,7 @@ object(Cairo\Rectangle)#%d (4) {
   int(0)
 }
 Cairo\Rectangle::__construct() expects at most 4 parameters, 5 given
-Cairo\Rectangle::__construct() expects parameter 1 to be integer, array given
-Cairo\Rectangle::__construct() expects parameter 2 to be integer, array given
-Cairo\Rectangle::__construct() expects parameter 3 to be integer, array given
-Cairo\Rectangle::__construct() expects parameter 4 to be integer, array given
+Cairo\Rectangle::__construct() expects parameter 1 to be int, array given
+Cairo\Rectangle::__construct() expects parameter 2 to be int, array given
+Cairo\Rectangle::__construct() expects parameter 3 to be int, array given
+Cairo\Rectangle::__construct() expects parameter 4 to be int, array given

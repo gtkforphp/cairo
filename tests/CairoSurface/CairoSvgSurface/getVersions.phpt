@@ -1,5 +1,5 @@
 --TEST--
-CairoSvgSurface::getVersions() method
+Cairo\Surface\Svg::getVersions() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -7,13 +7,13 @@ if(!in_array('SVG', Cairo::availableSurfaces())) die('skip - SVG surface not ava
 ?>
 --FILE--
 <?php
-var_dump(CairoSvgSurface::getVersions());
+var_dump(Cairo\Surface\Svg::getVersions());
 
 /* Wrong number args */
 try {
-    CairoSvgSurface::getVersions('foo');
+    Cairo\Surface\Svg::getVersions('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
@@ -24,4 +24,4 @@ array(2) {
   [1]=>
   int(1)
 }
-CairoSvgSurface::getVersions() expects exactly 0 parameters, 1 given
+Cairo\Surface\Svg::getVersions() expects exactly 0 parameters, 1 given

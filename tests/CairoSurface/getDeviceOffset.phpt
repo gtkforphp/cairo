@@ -1,12 +1,12 @@
 --TEST--
-CairoSurface->getDeviceOffset() method
+Cairo\Surface->getDeviceOffset() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
 var_dump($surface->getDeviceOffset());
@@ -15,12 +15,12 @@ var_dump($surface->getDeviceOffset());
 try {
     $surface->getDeviceOffset('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
 array(2) {
   [0]=>
@@ -28,4 +28,4 @@ array(2) {
   [1]=>
   float(0)
 }
-CairoSurface::getDeviceOffset() expects exactly 0 parameters, 1 given
+Cairo\Surface::getDeviceOffset() expects exactly 0 parameters, 1 given

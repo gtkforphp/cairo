@@ -52,18 +52,18 @@ object(Cairo\Extend)#3 (2) {
   ["__elements"]=>
   array(4) {
     ["NONE"]=>
-    int(0)
+    long(0)
     ["REPEAT"]=>
-    int(1)
+    long(1)
     ["REFLECT"]=>
-    int(2)
+    long(2)
     ["PAD"]=>
-    int(3)
+    long(3)
   }
   ["__value"]=>
-  int(3)
+  long(3)
 }
 bool(true)
 Cairo\Pattern::setExtend() expects exactly 1 parameter, 0 given
 Cairo\Pattern::setExtend() expects exactly 1 parameter, 2 given
-Cairo\Pattern::setExtend() expects parameter 1 to be integer, array given
+Cairo\Pattern::setExtend() expects parameter 1 to be int, array given

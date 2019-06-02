@@ -32,6 +32,6 @@ try {
 }
 ?>
 --EXPECT--
-int(0)
-int(3)
+long(0)
+long(3)
 Cairo\Pattern\Gradient::getColorStopCount() expects exactly 0 parameters, 1 given

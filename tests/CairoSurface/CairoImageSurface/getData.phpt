@@ -1,12 +1,12 @@
 --TEST--
-CairoImageSurface->getData() method
+Cairo\Surface\Image->getData() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
 var_dump(strlen($surface->getData()));
@@ -15,12 +15,12 @@ var_dump(strlen($surface->getData()));
 try {
     $surface->getData('foo');
     trigger_error('We should bomb here');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-int(10000)
-CairoImageSurface::getData() expects exactly 0 parameters, 1 given
+long(10000)
+Cairo\Surface\Image::getData() expects exactly 0 parameters, 1 given

@@ -1,5 +1,5 @@
 --TEST--
-CairoFontFace->getType() method
+Cairo\FontFace->getType() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -13,13 +13,13 @@ var_dump($fontface->getType());
 
 try {
     $fontface->getType('foo');
-    trigger_error('CairoFontFace->getType requires no arguments');
-} catch (CairoException $e) {
+    trigger_error('Cairo\FontFace->getType requires no arguments');
+} catch (TypeError $e) {
     echo $e->getMessage();
 }
 ?>
 --EXPECTF--
-object(CairoToyFontFace)#%d (0) {
+object(Cairo\FontFace\Toy)#%d (0) {
 }
-int(0)
-CairoFontFace::getType() expects exactly 0 parameters, 1 given
+long(0)
+Cairo\FontFace::getType() expects exactly 0 parameters, 1 given

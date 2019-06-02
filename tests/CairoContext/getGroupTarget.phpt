@@ -1,15 +1,15 @@
 --TEST--
-CairoContext->getGroupTarget() method
+Cairo\Context->getGroupTarget() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
-$context = new CairoContext($surface);
+$context = new Cairo\Context($surface);
 var_dump($context);
 
 $surface2 = $context->getGroupTarget();
@@ -22,16 +22,16 @@ try {
 	$context->getGroupTarget(1);
 	trigger_error('getGroupTarget() expects 0 params');	
 }
-catch (CairoException $ex) {
+catch (TypeError $ex) {
 	echo $ex->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-object(CairoContext)#%d (0) {
+object(Cairo\Context)#%d (0) {
 }
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
 bool(true)
-CairoContext::getGroupTarget() expects exactly 0 parameters, 1 given
+Cairo\Context::getGroupTarget() expects exactly 0 parameters, 1 given

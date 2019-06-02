@@ -74,5 +74,5 @@ object(Cairo\Matrix)#%d (6) {
 Cairo\Matrix::multiply() expects exactly 2 parameters, 0 given
 Cairo\Matrix::multiply() expects exactly 2 parameters, 1 given
 Cairo\Matrix::multiply() expects exactly 2 parameters, 3 given
-Cairo\Matrix::multiply() expects parameter 1 to be Cairo\Matrix, integer given
-Cairo\Matrix::multiply() expects parameter 2 to be Cairo\Matrix, integer given
+Cairo\Matrix::multiply() expects parameter 1 to be Cairo\Matrix, int given
+Cairo\Matrix::multiply() expects parameter 2 to be Cairo\Matrix, int given

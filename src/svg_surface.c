@@ -71,7 +71,7 @@ PHP_METHOD(CairoSvgSurface, __construct)
 		} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE) {
 			php_stream_from_zval(stream, stream_zval);	
 		} else {
-			zend_throw_exception(ce_cairo_exception, "CairoSvgSurface::__construct() expects parameter 1 to be null, a string, or a stream resource", 0);
+			zend_throw_exception(ce_cairo_exception, "Cairo\\Surface\\Svg::__construct() expects parameter 1 to be null, a string, or a stream resource", 0);
 			return;
 		}
 

@@ -104,7 +104,7 @@ object(Cairo\Status)#%d (2) {
     ["JBIG2_GLOBAL_MISSING"]=>
     int(38)
     ["LAST_STATUS"]=>
-    int(39)
+    int(43)
   }
   ["__value"]=>
   int(0)

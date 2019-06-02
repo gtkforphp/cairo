@@ -1,29 +1,29 @@
 --TEST--
-CairoFontOptions->setSubpixelOrder() method
+Cairo\FontOptions->setSubpixelOrder() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$options = new CairoFontOptions();
+$options = new Cairo\FontOptions();
 var_dump($options);
 
-$options->setSubpixelOrder(CairoSubpixelOrder::ORDER_RGB);
+$options->setSubpixelOrder(Cairo\SubPixelOrder::ORDER_RGB);
 
 /* Wrong number args 1*/
 try {
     $options->setSubpixelOrder();
     trigger_error('setSubpixelOrder requires 1 arg');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
 /* Wrong number args 2 */
 try {
-    $options->setSubpixelOrder(CairoSubpixelOrder::ORDER_RGB, 1);
+    $options->setSubpixelOrder(Cairo\SubPixelOrder::ORDER_RGB, 1);
     trigger_error('setSubpixelOrder requires only 1 arg');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 
@@ -31,13 +31,13 @@ try {
 try {
     $options->setSubpixelOrder(array());
     trigger_error('setSubpixelOrder requires int');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
 --EXPECTF--
-object(CairoFontOptions)#%d (0) {
+object(Cairo\FontOptions)#%d (0) {
 }
-CairoFontOptions::setSubpixelOrder() expects exactly 1 parameter, 0 given
-CairoFontOptions::setSubpixelOrder() expects exactly 1 parameter, 2 given
-CairoFontOptions::setSubpixelOrder() expects parameter 1 to be long, array given
+Cairo\FontOptions::setSubpixelOrder() expects exactly 1 parameter, 0 given
+Cairo\FontOptions::setSubpixelOrder() expects exactly 1 parameter, 2 given
+Cairo\FontOptions::setSubpixelOrder() expects parameter 1 to be int, array given

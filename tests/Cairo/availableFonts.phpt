@@ -14,7 +14,7 @@ var_dump($fonts[0]);
 try {
     Cairo::availableFonts('foo');
     trigger_error('Cairo::availableFonts should take no arguments');
-} catch (CairoException $e) {
+} catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>

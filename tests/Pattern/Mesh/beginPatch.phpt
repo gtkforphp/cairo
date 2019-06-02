@@ -37,7 +37,7 @@ try {
 }
 ?>
 --EXPECT--
-int(0)
-int(1)
+long(0)
+long(1)
 invalid operation during mesh pattern construction
 Cairo\Pattern\Mesh::beginPatch() expects exactly 0 parameters, 1 given

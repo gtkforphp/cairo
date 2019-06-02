@@ -127,9 +127,9 @@ PHP_METHOD(CairoMatrix, __construct)
 	/* read defaults from object */
 	double xx = cairo_matrix_get_property_value(getThis(), "xx");
 	double yx = cairo_matrix_get_property_value(getThis(), "yx");
-        double xy = cairo_matrix_get_property_value(getThis(), "xy");
+	double xy = cairo_matrix_get_property_value(getThis(), "xy");
 	double yy = cairo_matrix_get_property_value(getThis(), "yy");
-        double x0 = cairo_matrix_get_property_value(getThis(), "x0");
+	double x0 = cairo_matrix_get_property_value(getThis(), "x0");
 	double y0 = cairo_matrix_get_property_value(getThis(), "y0");
 
 	/* overwrite with constructor if desired */
@@ -658,11 +658,11 @@ PHP_MINIT_FUNCTION(cairo_matrix)
 	ce.create_object = cairo_matrix_create_object;
 	ce_cairo_matrix = zend_register_internal_class(&ce);
 
-	zend_declare_property_long(ce_cairo_matrix, "xx", sizeof("xx")-1, 1, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(ce_cairo_matrix, "xx", sizeof("xx")-1, 0, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(ce_cairo_matrix, "xy", sizeof("xy")-1, 0, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(ce_cairo_matrix, "x0", sizeof("x0")-1, 0, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(ce_cairo_matrix, "yx", sizeof("yx")-1, 0, ZEND_ACC_PUBLIC);
-	zend_declare_property_long(ce_cairo_matrix, "yy", sizeof("yy")-1, 1, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(ce_cairo_matrix, "yy", sizeof("yy")-1, 0, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(ce_cairo_matrix, "y0", sizeof("y0")-1, 0, ZEND_ACC_PUBLIC);
 
 	return SUCCESS;
