@@ -16,6 +16,8 @@
 #endif
 
 #include <cairo.h>
+#include <cairo-quartz.h>
+#include <ApplicationServices/ApplicationServices.h>
 #include <php.h>
 #include <zend_exceptions.h>
 
@@ -115,7 +117,7 @@ PHP_METHOD(CairoQuartzFontFace, createForCgfont)
 /* {{{ cairo_quartz_font_methods[] */
 const zend_function_entry cairo_quartz_font_methods[] = {
 	PHP_ME(CairoQuartzFontFace, createForCgfont, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(CairoQuartzFontFace, createForAtsuiFontId, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(CairoQuartzFontFace, createForAtsuFontId, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FE_END
 };
 /* }}} */
