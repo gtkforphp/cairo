@@ -6,7 +6,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new Cairo\Surface\Image(CAIRO_FORMAT_ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
 $context = new Cairo\Context($surface);
@@ -43,4 +43,4 @@ object(Cairo\Context)#%d (0) {
 }
 Cairo\Context::__construct() expects exactly 1 parameter, 0 given
 Cairo\Context::__construct() expects exactly 1 parameter, 2 given
-Cairo\Context::__construct() expects parameter 1 to be Cairo\Surface, integer given
+Argument 1 passed to Cairo\Context::__construct() must be an instance of Cairo\Surface, int given
