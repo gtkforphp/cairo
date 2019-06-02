@@ -289,7 +289,7 @@ PHP_METHOD(CairoImageSurface, createFromPng)
 	} else if(Z_TYPE_P(stream_zval) == IS_RESOURCE)  {
 		php_stream_from_zval(stream, stream_zval);	
 	} else {
-		zend_throw_exception(ce_cairo_exception, "CairoImageSurface::createFromPng() expects parameter 1 to be a string or a stream resource", 0);
+		zend_throw_exception(ce_cairo_exception, "Cairo\\Surface\\Image::createFromPng() expects parameter 1 to be a string or a stream resource", 0);
 		return;
 	}
 

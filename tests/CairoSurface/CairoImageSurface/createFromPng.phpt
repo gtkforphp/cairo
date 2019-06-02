@@ -35,7 +35,7 @@ try {
 try {
     Cairo\Surface\Image::createFromPng(array());
     trigger_error('We should bomb here');
-} catch (TypeError $e) {
+} catch (Cairo\Exception $e) {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
