@@ -1,14 +1,14 @@
 --TEST--
-new CairoSurface [ __construct method ]
+new Cairo\Surface [ __construct method ]
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-class test extends CairoSurface {}
+class test extends Cairo\Surface {}
 
-class test2 extends CairoSurface {
+class test2 extends Cairo\Surface {
 	public function __construct() {}
 }
 
@@ -24,5 +24,5 @@ $surface->finish();
 echo 'First call to any method should throw a fatal error';
 ?>
 --EXPECTF--
-CairoSurface cannot be constructed
+Cairo\Surface cannot be constructed
 Fatal error: Internal surface object missing in test2 wrapper, you must call parent::__construct in extended classes in %s on line %d

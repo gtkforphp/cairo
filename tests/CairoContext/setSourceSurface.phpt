@@ -6,7 +6,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CAIRO_FORMAT_ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(CAIRO_FORMAT_ARGB32, 50, 50);
 var_dump($surface);
 
 $context = new CairoContext($surface);
@@ -17,7 +17,7 @@ var_dump($pattern);
 
 $context->setSource($pattern);
 
-$surface2 = new CairoImageSurface(CAIRO_FORMAT_ARGB32, 50, 50);
+$surface2 = new Cairo\Surface\Image(CAIRO_FORMAT_ARGB32, 50, 50);
 var_dump($surface2);
 
 $context->setSourceSurface($surface2, 5, 5);
@@ -64,18 +64,18 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
 object(CairoSolidPattern)#%d (0) {
 }
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
 CairoContext::setSourceSurface() expects at least 1 parameter, 0 given
 CairoContext::setSourceSurface() expects at most 3 parameters, 4 given
-CairoContext::setSourceSurface() expects parameter 1 to be CairoSurface, array given
+CairoContext::setSourceSurface() expects parameter 1 to be Cairo\Surface, array given
 CairoContext::setSourceSurface() expects parameter 2 to be double, array given
 CairoContext::setSourceSurface() expects parameter 3 to be double, array given

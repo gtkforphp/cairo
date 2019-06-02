@@ -2,7 +2,7 @@
 if(function_exists('cairo_toy_font_face_create')) {
     $fontface = new CairoToyFontFace('sans-serif');
 } else {
-    //$surface = new CairoImageSurface(CAIRO_FORMAT_ARGB32, 50, 50);
+    //$surface = new Cairo\Surface\Image(CAIRO_FORMAT_ARGB32, 50, 50);
     //$context = new CairoContext($surface);
     //$context->selectFontFace('sans-serif');
     //$fontface = $context->getFontFace();

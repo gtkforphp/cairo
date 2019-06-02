@@ -6,7 +6,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CAIRO_FORMAT_ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(CAIRO_FORMAT_ARGB32, 50, 50);
 var_dump($surface);
 
 $context = new CairoContext($surface);
@@ -39,7 +39,7 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }

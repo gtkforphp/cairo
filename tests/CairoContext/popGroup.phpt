@@ -6,7 +6,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
 $context = new CairoContext($surface);
@@ -25,10 +25,10 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
 object(CairoContext)#%d (0) {
 }
-object(CairoSurfacePattern)#%d (0) {
+object(Cairo\SurfacePattern)#%d (0) {
 }
 CairoContext::popGroup() expects exactly 0 parameters, 1 given

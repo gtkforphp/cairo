@@ -7,11 +7,11 @@ if(!in_array('RECORDING', Cairo::availableSurfaces())) die('skip - SVG surface n
 ?>
 --FILE--
 <?php
-$surface = new CairoRecordingSurface(CairoContent::COLOR_ALPHA);
+$surface = new CairoRecordingSurface(Cairo\Surface\Content::COLOR_ALPHA);
 var_dump($surface);
 
 $extents = array('x' => 0, 'y' => 0, 'width' => 400, 'height' => 400);
-$surface = new CairoRecordingSurface(CairoContent::COLOR_ALPHA, $extents);
+$surface = new CairoRecordingSurface(Cairo\Surface\Content::COLOR_ALPHA, $extents);
 var_dump($surface);
 
 /* Wrong number args - 1 */

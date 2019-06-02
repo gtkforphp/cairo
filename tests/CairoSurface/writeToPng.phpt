@@ -1,5 +1,5 @@
 --TEST--
-CairoSurface::writeToPng() method
+Cairo\Surface::writeToPng() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -7,7 +7,7 @@ if(!in_array('PNG', cairo_available_surfaces())) die('skip - PNG support not ava
 ?>
 --FILE--
 <?php
-$surface = new CairoImageSurface(CairoFormat::ARGB32, 50, 50);
+$surface = new Cairo\Surface\Image(Cairo\Surface\ImageFormat::ARGB32, 50, 50);
 var_dump($surface);
 
 $surface->writeToPng(dirname(__FILE__) . '/test.png');
@@ -45,8 +45,8 @@ unlink(dirname(__FILE__) . '/test.png');
 unlink(dirname(__FILE__) . '/stream.png');
 ?>
 --EXPECTF--
-object(CairoImageSurface)#%d (0) {
+object(Cairo\Surface\Image)#%d (0) {
 }
-CairoSurface::writeToPng() expects exactly 1 parameter, 0 given
-CairoSurface::writeToPng() expects exactly 1 parameter, 2 given
-CairoSurface::writeToPng() expects parameter 1 to be a string or a stream resource
+Cairo\Surface::writeToPng() expects exactly 1 parameter, 0 given
+Cairo\Surface::writeToPng() expects exactly 1 parameter, 2 given
+Cairo\Surface::writeToPng() expects parameter 1 to be a string or a stream resource

@@ -1,5 +1,5 @@
 --TEST--
-CairoSvgSurface->restrictToVersion() method
+Cairo\Surface\Svg->restrictToVersion() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -7,7 +7,7 @@ if(!in_array('SVG', Cairo::availableSurfaces())) die('skip - SVG surface not ava
 ?>
 --FILE--
 <?php
-$surface = new CairoSvgSurface(NULL, 50, 50);
+$surface = new Cairo\Surface\Svg(NULL, 50, 50);
 var_dump($surface);
 
 $surface->restrictToVersion(CairoSvgVersion::VERSION_1_1);
@@ -37,8 +37,8 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoSvgSurface)#%d (0) {
+object(Cairo\Surface\Svg)#%d (0) {
 }
-CairoSvgSurface::restrictToVersion() expects exactly 1 parameter, 0 given
-CairoSvgSurface::restrictToVersion() expects exactly 1 parameter, 2 given
-CairoSvgSurface::restrictToVersion() expects parameter 1 to be long, array given
+Cairo\Surface\Svg::restrictToVersion() expects exactly 1 parameter, 0 given
+Cairo\Surface\Svg::restrictToVersion() expects exactly 1 parameter, 2 given
+Cairo\Surface\Svg::restrictToVersion() expects parameter 1 to be long, array given
