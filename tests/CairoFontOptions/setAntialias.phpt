@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $options = new Cairo\FontOptions();
 var_dump($options);
 
-$options->setAntialias(CairoAntialias::MODE_SUBPIXEL);
+$options->setAntialias(Cairo\Antialias::MODE_SUBPIXEL);
 
 /* Wrong number args 1*/
 try {
@@ -21,7 +21,7 @@ try {
 
 /* Wrong number args 2 */
 try {
-    $options->setAntialias(CairoAntialias::MODE_SUBPIXEL, 1);
+    $options->setAntialias(Cairo\Antialias::MODE_SUBPIXEL, 1);
     trigger_error('setAntialias requires only 1 arg');
 } catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;

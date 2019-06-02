@@ -12,14 +12,14 @@ var_dump($surface);
 $context = new Cairo\Context($surface);
 var_dump($context);
 
-$pattern = new CairoSolidPattern(0.3, 0.3, 0.3);
+$pattern = new Cairo\Pattern\Solid(0.3, 0.3, 0.3);
 var_dump($pattern);
 
 $context->setSource($pattern);
 
 var_dump($context->getSource()->getRGBA());
 
-$pattern = new CairoSolidPattern(0.3, 0.3, 0.3);
+$pattern = new Cairo\Pattern\Solid(0.3, 0.3, 0.3);
 var_dump($pattern);
 
 $context->setSource($pattern);
@@ -58,7 +58,7 @@ object(Cairo\Surface\Image)#%d (0) {
 }
 object(Cairo\Context)#%d (0) {
 }
-object(CairoSolidPattern)#%d (0) {
+object(Cairo\Pattern\Solid)#%d (0) {
 }
 array(4) {
   ["red"]=>
@@ -70,7 +70,7 @@ array(4) {
   ["alpha"]=>
   float(1)
 }
-object(CairoSolidPattern)#%d (0) {
+object(Cairo\Pattern\Solid)#%d (0) {
 }
 array(4) {
   ["red"]=>

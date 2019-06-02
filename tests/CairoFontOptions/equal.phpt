@@ -42,4 +42,4 @@ object(Cairo\FontOptions)#%d (0) {
 bool(true)
 Cairo\FontOptions::equal() expects exactly 1 parameter, 0 given
 Cairo\FontOptions::equal() expects exactly 1 parameter, 2 given
-Cairo\FontOptions::equal() expects parameter 1 to be Cairo\FontOptions, integer given
+Cairo\FontOptions::equal() expects parameter 1 to be Cairo\FontOptions, int given

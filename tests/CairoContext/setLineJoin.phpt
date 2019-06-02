@@ -12,7 +12,7 @@ var_dump($surface);
 $context = new Cairo\Context($surface);
 var_dump($context);
 
-$context->setLineJoin(CairoLineJoin::BEVEL);
+$context->setLineJoin(Cairo\LineJoin::BEVEL);
 var_dump($context->getLineJoin());
 
 /* Wrong number args - 1 */

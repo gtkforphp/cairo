@@ -12,7 +12,7 @@ var_dump($surface);
 $context = new Cairo\Context($surface);
 var_dump($context);
 
-$context->setLineCap(CairoLineCap::SQUARE);
+$context->setLineCap(Cairo\LineCap::SQUARE);
 var_dump($context->getLineCap());
 
 /* Wrong number args - 1 */

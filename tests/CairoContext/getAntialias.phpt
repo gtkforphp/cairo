@@ -27,5 +27,25 @@ object(Cairo\Surface\Image)#%d (0) {
 }
 object(Cairo\Context)#%d (0) {
 }
-long(0)
+object(Cairo\Antialias)#3 (2) {
+  ["__elements"]=>
+  array(7) {
+    ["DEFAULT"]=>
+    int(0)
+    ["NONE"]=>
+    int(1)
+    ["GRAY"]=>
+    int(2)
+    ["SUBPIXEL"]=>
+    int(3)
+    ["FAST"]=>
+    int(4)
+    ["GOOD"]=>
+    int(5)
+    ["BEST"]=>
+    int(6)
+  }
+  ["__value"]=>
+  int(0)
+}
 Cairo\Context::getAntialias() expects exactly 0 parameters, 1 given

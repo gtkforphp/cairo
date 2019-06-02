@@ -26,88 +26,88 @@ object(Cairo\Status)#%d (2) {
   ["__elements"]=>
   array(40) {
     ["SUCCESS"]=>
-    long(0)
+    int(0)
     ["NO_MEMORY"]=>
-    long(1)
+    int(1)
     ["INVALID_RESTORE"]=>
-    long(2)
+    int(2)
     ["INVALID_POP_GROUP"]=>
-    long(3)
+    int(3)
     ["NO_CURRENT_POINT"]=>
-    long(4)
+    int(4)
     ["INVALID_MATRIX"]=>
-    long(5)
+    int(5)
     ["INVALID_STATUS"]=>
-    long(6)
+    int(6)
     ["NULL_POINTER"]=>
-    long(7)
+    int(7)
     ["INVALID_STRING"]=>
-    long(8)
+    int(8)
     ["INVALID_PATH_DATA"]=>
-    long(9)
+    int(9)
     ["READ_ERROR"]=>
-    long(10)
+    int(10)
     ["WRITE_ERROR"]=>
-    long(11)
+    int(11)
     ["SURFACE_FINISHED"]=>
-    long(12)
+    int(12)
     ["SURFACE_TYPE_MISMATCH"]=>
-    long(13)
+    int(13)
     ["PATTERN_TYPE_MISMATCH"]=>
-    long(14)
+    int(14)
     ["INVALID_CONTENT"]=>
-    long(15)
+    int(15)
     ["INVALID_FORMAT"]=>
-    long(16)
+    int(16)
     ["INVALID_VISUAL"]=>
-    long(17)
+    int(17)
     ["FILE_NOT_FOUND"]=>
-    long(18)
+    int(18)
     ["INVALID_DASH"]=>
-    long(19)
+    int(19)
     ["INVALID_DSC_COMMENT"]=>
-    long(20)
+    int(20)
     ["INVALID_INDEX"]=>
-    long(21)
+    int(21)
     ["CLIP_NOT_REPRESENTABLE"]=>
-    long(22)
+    int(22)
     ["TEMP_FILE_ERROR"]=>
-    long(23)
+    int(23)
     ["INVALID_STRIDE"]=>
-    long(24)
+    int(24)
     ["FONT_TYPE_MISMATCH"]=>
-    long(25)
+    int(25)
     ["USER_FONT_IMMUTABLE"]=>
-    long(26)
+    int(26)
     ["USER_FONT_ERROR"]=>
-    long(27)
+    int(27)
     ["NEGATIVE_COUNT"]=>
-    long(28)
+    int(28)
     ["INVALID_CLUSTERS"]=>
-    long(29)
+    int(29)
     ["INVALID_SLANT"]=>
-    long(30)
+    int(30)
     ["INVALID_WEIGHT"]=>
-    long(31)
+    int(31)
     ["INVALID_SIZE"]=>
-    long(32)
+    int(32)
     ["USER_FONT_NOT_IMPLEMENTED"]=>
-    long(33)
+    int(33)
     ["DEVICE_TYPE_MISMATCH"]=>
-    long(34)
+    int(34)
     ["DEVICE_ERROR"]=>
-    long(35)
+    int(35)
     ["INVALID_MESH_CONSTRUCTION"]=>
-    long(36)
+    int(36)
     ["DEVICE_FINISHED"]=>
-    long(37)
+    int(37)
     ["JBIG2_GLOBAL_MISSING"]=>
-    long(38)
+    int(38)
     ["LAST_STATUS"]=>
-    long(39)
+    int(43)
   }
   ["__value"]=>
-  long(0)
+  int(0)
 }
 string(21) "no error has occurred"
 Cairo\Status::getMessage() expects exactly 0 parameters, 1 given

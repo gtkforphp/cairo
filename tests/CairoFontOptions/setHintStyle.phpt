@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $options = new Cairo\FontOptions();
 var_dump($options);
 
-$options->setHintStyle(CairoHintStyle::STYLE_FULL);
+$options->setHintStyle(Cairo\HintStyle::STYLE_FULL);
 
 /* Wrong number args 1*/
 try {
@@ -21,7 +21,7 @@ try {
 
 /* Wrong number args 2 */
 try {
-    $options->setHintStyle(CairoHintStyle::STYLE_FULL, 1);
+    $options->setHintStyle(Cairo\HintStyle::STYLE_FULL, 1);
     trigger_error('setHintStyle requires only 1 arg');
 } catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;

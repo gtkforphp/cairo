@@ -127,9 +127,9 @@ PHP_METHOD(CairoMatrix, __construct)
 	/* read defaults from object */
 	double xx = cairo_matrix_get_property_value(getThis(), "xx");
 	double yx = cairo_matrix_get_property_value(getThis(), "yx");
-        double xy = cairo_matrix_get_property_value(getThis(), "xy");
+	double xy = cairo_matrix_get_property_value(getThis(), "xy");
 	double yy = cairo_matrix_get_property_value(getThis(), "yy");
-        double x0 = cairo_matrix_get_property_value(getThis(), "x0");
+	double x0 = cairo_matrix_get_property_value(getThis(), "x0");
 	double y0 = cairo_matrix_get_property_value(getThis(), "y0");
 
 	/* overwrite with constructor if desired */

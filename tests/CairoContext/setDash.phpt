@@ -74,6 +74,6 @@ array(2) {
 }
 Cairo\Context::setDash() expects at least 1 parameter, 0 given
 Cairo\Context::setDash() expects at most 2 parameters, 3 given
-Cairo\Context::setDash() expects parameter 1 to be array, integer given
+Cairo\Context::setDash() expects parameter 1 to be array, int given
 invalid value for a dash setting
 Cairo\Context::setDash() expects parameter 2 to be float, string given

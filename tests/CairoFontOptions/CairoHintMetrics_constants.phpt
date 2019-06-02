@@ -1,5 +1,5 @@
 --TEST--
-CairoHintMetrics class constants
+Cairo\HintMetrics class constants
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -13,7 +13,7 @@ $constants = array(
 	);
 
 foreach($constants as $name) {
-	var_dump(defined('CairoHintMetrics::' . $name));
+	var_dump(defined('Cairo\HintMetrics::' . $name));
 }
 ?>
 --EXPECT--

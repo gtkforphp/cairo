@@ -41,4 +41,4 @@ object(Cairo\FontOptions)#%d (0) {
 }
 Cairo\FontOptions::merge() expects exactly 1 parameter, 0 given
 Cairo\FontOptions::merge() expects exactly 1 parameter, 2 given
-Cairo\FontOptions::merge() expects parameter 1 to be Cairo\FontOptions, integer given
+Cairo\FontOptions::merge() expects parameter 1 to be Cairo\FontOptions, int given

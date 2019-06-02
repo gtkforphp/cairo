@@ -46,8 +46,8 @@ object(Cairo\Surface\Image)#%d (0) {
 }
 object(Cairo\Context)#%d (0) {
 }
-object(CairoPath)#%d (0) {
+object(Cairo\Path)#%d (0) {
 }
 Cairo\Context::appendPath() expects exactly 1 parameter, 0 given
 Cairo\Context::appendPath() expects exactly 1 parameter, 2 given
-Cairo\Context::appendPath() expects parameter 1 to be CairoPath, integer given
+Cairo\Context::appendPath() expects parameter 1 to be Cairo\Path, int given

@@ -12,7 +12,7 @@ var_dump($surface);
 $context = new Cairo\Context($surface);
 var_dump($context);
 
-$pattern = new CairoSolidPattern(0.3, 0.3, 0.3);
+$pattern = new Cairo\Pattern\Solid(0.3, 0.3, 0.3);
 $context->mask($pattern);
 
 /* wrong params */

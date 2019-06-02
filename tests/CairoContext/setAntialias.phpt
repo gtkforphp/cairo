@@ -12,7 +12,7 @@ var_dump($surface);
 $context = new Cairo\Context($surface);
 var_dump($context);
 
-$context->setAntialias(CairoAntialias::MODE_GRAY);
+$context->setAntialias(Cairo\Antialias::MODE_GRAY);
 var_dump($context->getAntialias());
 
 /* Wrong number args - 1 */

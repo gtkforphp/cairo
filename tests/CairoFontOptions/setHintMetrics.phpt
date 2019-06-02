@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $options = new Cairo\FontOptions();
 var_dump($options);
 
-$options->setHintMetrics(CairoHintMetrics::METRICS_ON);
+$options->setHintMetrics(Cairo\HintMetrics::METRICS_ON);
 
 /* Wrong number args 1*/
 try {
@@ -21,7 +21,7 @@ try {
 
 /* Wrong number args 2 */
 try {
-    $options->setHintMetrics(CairoHintMetrics::METRICS_ON, 1);
+    $options->setHintMetrics(Cairo\HintMetrics::METRICS_ON, 1);
     trigger_error('setHintMetrics requires only 1 arg');
 } catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;

@@ -1,5 +1,5 @@
 --TEST--
-CairoScaledFont->getFontOptions() method
+Cairo\ScaledFont->getFontOptions() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -12,7 +12,7 @@ $matrix1 = new Cairo\Matrix(1);
 $matrix2 = new Cairo\Matrix(1,1);
 $fontoptions = new Cairo\FontOptions();
 
-$scaled = new CairoScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
+$scaled = new Cairo\ScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
 var_dump($scaled);
 
 $options2 = $scaled->getFontOptions();
@@ -29,11 +29,11 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoToyFontFace)#%d (0) {
+object(Cairo\FontFace\Toy)#%d (0) {
 }
-object(CairoScaledFont)#%d (0) {
+object(Cairo\ScaledFont)#%d (0) {
 }
 object(Cairo\FontOptions)#%d (0) {
 }
 bool(true)
-CairoScaledFont::getFontOptions() expects exactly 0 parameters, 1 given
+Cairo\ScaledFont::getFontOptions() expects exactly 0 parameters, 1 given

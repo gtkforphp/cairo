@@ -9,7 +9,7 @@ if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
 $options = new Cairo\FontOptions();
 var_dump($options);
 
-$options->setSubpixelOrder(CairoSubpixelOrder::ORDER_RGB);
+$options->setSubpixelOrder(Cairo\SubPixelOrder::ORDER_RGB);
 
 /* Wrong number args 1*/
 try {
@@ -21,7 +21,7 @@ try {
 
 /* Wrong number args 2 */
 try {
-    $options->setSubpixelOrder(CairoSubpixelOrder::ORDER_RGB, 1);
+    $options->setSubpixelOrder(Cairo\SubPixelOrder::ORDER_RGB, 1);
     trigger_error('setSubpixelOrder requires only 1 arg');
 } catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;

@@ -1,5 +1,5 @@
 --TEST--
-CairoScaledFont->textExtents() method
+Cairo\ScaledFont->textExtents() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -12,7 +12,7 @@ $matrix1 = new Cairo\Matrix(1);
 $matrix2 = new Cairo\Matrix(1,1);
 $fontoptions = new Cairo\FontOptions();
 
-$scaled = new CairoScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
+$scaled = new Cairo\ScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
 var_dump($scaled);
 
 var_dump($scaled->textExtents('foobar'));
@@ -42,9 +42,9 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoToyFontFace)#%d (0) {
+object(Cairo\FontFace\Toy)#%d (0) {
 }
-object(CairoScaledFont)#%d (0) {
+object(Cairo\ScaledFont)#%d (0) {
 }
 array(6) {
   ["x_bearing"]=>
@@ -60,6 +60,6 @@ array(6) {
   ["y_advance"]=>
   float(%f)
 }
-CairoScaledFont::textExtents() expects exactly 1 parameter, 0 given
-CairoScaledFont::textExtents() expects exactly 1 parameter, 2 given
-CairoScaledFont::textExtents() expects parameter 1 to be string, array given
+Cairo\ScaledFont::textExtents() expects exactly 1 parameter, 0 given
+Cairo\ScaledFont::textExtents() expects exactly 1 parameter, 2 given
+Cairo\ScaledFont::textExtents() expects parameter 1 to be string, array given

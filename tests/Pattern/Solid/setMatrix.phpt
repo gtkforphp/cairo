@@ -52,5 +52,5 @@ try {
 bool(true)
 bool(true)
 Cairo\Pattern::setMatrix() expects exactly 1 parameter, 0 given
-Argument 1 passed to Cairo\Pattern::setMatrix() must be an instance of Cairo\Matrix, integer given
-Argument 1 passed to Cairo\Pattern::setMatrix() must be an instance of Cairo\Matrix, integer given
+Argument 1 passed to Cairo\Pattern::setMatrix() must be an instance of Cairo\Matrix, int given
+Argument 1 passed to Cairo\Pattern::setMatrix() must be an instance of Cairo\Matrix, int given

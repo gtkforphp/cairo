@@ -50,4 +50,4 @@ object(Cairo\Matrix)#%d (0) {
 }
 Cairo\Context::transform() expects exactly 1 parameter, 0 given
 Cairo\Context::transform() expects exactly 1 parameter, 2 given
-Cairo\Context::transform() expects parameter 1 to be Cairo\Matrix, integer given
+Cairo\Context::transform() expects parameter 1 to be Cairo\Matrix, int given

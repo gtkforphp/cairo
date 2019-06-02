@@ -1,5 +1,5 @@
 --TEST--
-CairoFontFace->status() method
+Cairo\FontFace->status() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -23,8 +23,8 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoToyFontFace)#%d (0) {
+object(Cairo\FontFace\Toy)#%d (0) {
 }
 long(0)
 bool(true)
-CairoFontFace::status() expects exactly 0 parameters, 1 given
+Cairo\FontFace::status() expects exactly 0 parameters, 1 given

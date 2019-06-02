@@ -60,4 +60,4 @@ bool(true)
 bool(true)
 Cairo\Context::setFontOptions() expects exactly 1 parameter, 0 given
 Cairo\Context::setFontOptions() expects exactly 1 parameter, 2 given
-Cairo\Context::setFontOptions() expects parameter 1 to be Cairo\FontOptions, integer given
+Cairo\Context::setFontOptions() expects parameter 1 to be Cairo\FontOptions, int given

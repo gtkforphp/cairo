@@ -26,7 +26,7 @@ try {
 
 /* Wrong number args - too many */
 try {
-    $context->selectFontFace('sans-serif', CairoFontSlant::NORMAL, CairoFontWeight::NORMAL, 1);
+    $context->selectFontFace('sans-serif', Cairo\FontSlant::NORMAL, Cairo\FontWeight::NORMAL, 1);
     trigger_error('selectFontFace requires at least one arg');
 } catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
@@ -50,7 +50,7 @@ try {
 
 /* Wrong arg type - int */
 try {
-    $context->selectFontFace('sans-serif', CairoFontSlant::NORMAL, array());
+    $context->selectFontFace('sans-serif', Cairo\FontSlant::NORMAL, array());
     trigger_error('selectFontFace requires an int font weight');
 } catch (TypeError $e) {
     echo $e->getMessage(), PHP_EOL;
@@ -61,7 +61,7 @@ object(Cairo\Surface\Image)#%d (0) {
 }
 object(Cairo\Context)#%d (0) {
 }
-object(CairoToyFontFace)#%d (0) {
+object(Cairo\FontFace\Toy)#%d (0) {
 }
 Cairo\Context::selectFontFace() expects at least 1 parameter, 0 given
 Cairo\Context::selectFontFace() expects at most 3 parameters, 4 given

@@ -20,7 +20,7 @@ $matrix1 = new Cairo\Matrix(1);
 $matrix2 = new Cairo\Matrix(1,1);
 $fontoptions = new Cairo\FontOptions();
 
-$scaled = new CairoScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
+$scaled = new Cairo\ScaledFont($fontface, $matrix1, $matrix2, $fontoptions);
 
 $context->setScaledFont($scaled);
 var_dump($context->getScaledFont());
@@ -39,8 +39,8 @@ object(Cairo\Surface\Image)#%d (0) {
 }
 object(Cairo\Context)#%d (0) {
 }
-object(CairoScaledFont)#%d (0) {
+object(Cairo\ScaledFont)#%d (0) {
 }
-object(CairoScaledFont)#%d (0) {
+object(Cairo\ScaledFont)#%d (0) {
 }
 Cairo\Context::getScaledFont() expects exactly 0 parameters, 1 given

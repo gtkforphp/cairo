@@ -27,6 +27,6 @@ object(Cairo\Surface\Image)#%d (0) {
 }
 object(Cairo\Context)#%d (0) {
 }
-object(CairoPath)#%d (0) {
+object(Cairo\Path)#%d (0) {
 }
 Cairo\Context::copyPath() expects exactly 0 parameters, 1 given

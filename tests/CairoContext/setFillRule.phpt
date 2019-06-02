@@ -12,7 +12,7 @@ var_dump($surface);
 $context = new Cairo\Context($surface);
 var_dump($context);
 
-$context->setFillRule(CairoFillRule::EVEN_ODD);
+$context->setFillRule(Cairo\FillRule::EVEN_ODD);
 var_dump($context->getFillRule());
 
 /* Wrong number args - 1 */

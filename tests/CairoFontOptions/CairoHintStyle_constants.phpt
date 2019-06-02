@@ -1,5 +1,5 @@
 --TEST--
-CairoHintStyle class constants
+Cairo\HintStyle class constants
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -15,7 +15,7 @@ $constants = array(
 	);
 
 foreach($constants as $name) {
-	var_dump(defined('CairoHintStyle::' . $name));
+	var_dump(defined('Cairo\HintStyle::' . $name));
 }
 ?>
 --EXPECT--

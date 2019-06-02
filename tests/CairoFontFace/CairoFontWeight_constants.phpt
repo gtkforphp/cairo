@@ -1,5 +1,5 @@
 --TEST--
-CairoFontWeight class constants
+Cairo\FontWeight class constants
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -13,9 +13,9 @@ $constants = array(
 
 $error = false;
 foreach($constants as $name) {
-	if (!defined('CairoFontWeight::' . $name)) {
+	if (!defined('Cairo\FontWeight::' . $name)) {
 		$error = true;
-		echo 'Missing Constant: CairoFontWeight::' . $name . "\n";
+		echo 'Missing Constant: Cairo\FontWeight::' . $name . "\n";
 	}
 }
 
