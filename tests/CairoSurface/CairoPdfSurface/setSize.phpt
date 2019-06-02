@@ -1,5 +1,5 @@
 --TEST--
-CairoPdfSurface->setSize() method
+Cairo\Surface\Pdf->setSize() method
 --SKIPIF--
 <?php
 if(!extension_loaded('cairo')) die('skip - Cairo extension not available');
@@ -7,7 +7,7 @@ if(!in_array('PDF', Cairo::availableSurfaces())) die('skip - PDF surface not ava
 ?>
 --FILE--
 <?php
-$surface = new CairoPdfSurface(NULL, 50, 50);
+$surface = new Cairo\Surface\Pdf(NULL, 50, 50);
 var_dump($surface);
 
 $surface->setSize(10, 10);
@@ -53,10 +53,10 @@ try {
 }
 ?>
 --EXPECTF--
-object(CairoPdfSurface)#%d (0) {
+object(Cairo\Surface\Pdf)#%d (0) {
 }
-CairoPdfSurface::setSize() expects exactly 2 parameters, 0 given
-CairoPdfSurface::setSize() expects exactly 2 parameters, 1 given
-CairoPdfSurface::setSize() expects exactly 2 parameters, 3 given
-CairoPdfSurface::setSize() expects parameter 1 to be float, array given
-CairoPdfSurface::setSize() expects parameter 2 to be float, array given
+Cairo\Surface\Pdf::setSize() expects exactly 2 parameters, 0 given
+Cairo\Surface\Pdf::setSize() expects exactly 2 parameters, 1 given
+Cairo\Surface\Pdf::setSize() expects exactly 2 parameters, 3 given
+Cairo\Surface\Pdf::setSize() expects parameter 1 to be float, array given
+Cairo\Surface\Pdf::setSize() expects parameter 2 to be float, array given
