@@ -16,8 +16,6 @@
 #endif
 
 #include <cairo.h>
-#include <cairo-quartz.h>
-#include <ApplicationServices/ApplicationServices.h>
 #include <php.h>
 #include <zend_exceptions.h>
 
@@ -27,6 +25,10 @@
 #include "php_cairo_internal.h"
 
 #if defined(CAIRO_HAS_QUARTZ_FONT)
+
+#include <cairo-quartz.h>
+#include <ApplicationServices/ApplicationServices.h>
+
 	zend_class_entry *ce_cairo_quartzfont;
 	zend_class_entry *ce_cairo_quartzatsufontnamecode;
 	zend_class_entry *ce_cairo_quartzatsufontnameplatform;

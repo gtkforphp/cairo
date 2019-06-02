@@ -17,6 +17,11 @@
 #include <php.h>
 #include <cairo.h>
 
+#if defined(CAIRO_HAS_QUARTZ_FONT)
+#include <cairo-quartz.h>
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+
 extern zend_class_entry *ce_cairo_exception;
 extern zend_class_entry *ce_cairo_status;
 extern zend_class_entry *ce_cairo_matrix;
